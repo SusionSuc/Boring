@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@color/white">
+
+    <ImageView
+        android:layout_centerVertical="true"
+        android:id="@+id/image"
+        android:layout_marginLeft="15dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@mipmap/music_blue"/>
+
+    <LinearLayout
+        android:layout_toRightOf="@id/image"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/item_music_search_tv_song_name"
+            android:gravity="center_vertical"
+            android:textColor="@color/colorPrimaryText"
+            android:text="演员"
+            android:textSize="13sp"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp" />
+
+
+        <TextView
+            android:id="@+id/item_music_search_tv_art_album"
+            android:text="薛之谦-绅士"
+            android:gravity="center_vertical"
+            android:textColor="@color/colorSecondaryText"
+            android:textSize="13sp"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/item_music_search_iv_music_operate"
+        android:layout_marginRight="15dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@mipmap/music_operate"/>
+
+
+</RelativeLayout>

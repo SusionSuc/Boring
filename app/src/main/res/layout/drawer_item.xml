@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:background="@color/white">
+
+    <ImageView
+        android:layout_marginLeft="15sp"
+        android:id="@+id/drawer_item_image"
+        android:layout_centerVertical="true"
+        android:layout_width="20dp"
+        android:layout_height="20dp" />
+
+
+    <TextView
+        android:layout_toRightOf="@id/drawer_item_image"
+        android:textSize="15sp"
+        android:text="我的消息"
+        android:layout_marginLeft="15dp"
+        android:id="@+id/drawer_item_title"
+        android:textColor="@color/colorPrimaryText"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+</RelativeLayout>
