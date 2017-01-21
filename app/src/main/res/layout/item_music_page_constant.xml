@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <ImageView
+        android:id="@+id/item_music_page_constant_iv_icon"
+        android:layout_margin="15dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp" />
+
+    <TextView
+        android:id="@+id/item_music_page_constant_tv_item"
+        android:layout_toRightOf="@id/item_music_page_constant_iv_icon"
+        android:text="本地音乐"
+        android:textSize="16sp"
+        android:textColor="@color/colorPrimaryText"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+    <ImageView
+        android:id="@+id/item_music_page_constant_iv_more"
+        android:layout_margin="15dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@mipmap/icon_more"/>
+
+    <TextView
+        android:id="@+id/item_music_page_constant_tv_append_dec"
+        android:textSize="16sp"
+        android:text="15"
+        android:textColor="@color/colorPrimaryText"
+        android:layout_toLeftOf="@id/item_music_page_constant_iv_more"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

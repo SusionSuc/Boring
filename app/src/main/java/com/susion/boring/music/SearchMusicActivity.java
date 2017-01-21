@@ -63,7 +63,6 @@ public class SearchMusicActivity extends Activity {
                                 if (musicSearchResult.code != APIHelper.REQUEST_SUCCESSS) {
                                     return;
                                 }
-
                                 setData(musicSearchResult);
                             }
                         }

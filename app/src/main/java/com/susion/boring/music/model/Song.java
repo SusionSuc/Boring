@@ -1,11 +1,12 @@
 package com.susion.boring.music.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by susion on 17/1/20.
  */
-public class Song {
+public class Song implements Serializable{
     public String id;
     public String name;
     public List<Singer> artists;

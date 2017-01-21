@@ -1,10 +1,12 @@
 package com.susion.boring.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.susion.boring.R;
 
@@ -14,17 +16,23 @@ import com.susion.boring.R;
 public class SToolBar extends LinearLayout implements View.OnClickListener{
 
     private Context mContext;
-    private ImageView mMenu;
+    private ImageView mLeftIcon;
+    private ImageView mRightIcon;
     private ImageView mInteresting;
     private ImageView mPlayer;
     private ImageView mMusic;
-
-    private OnItemClickListener listener;
 
     private int mCurrentSelectItem = 1;
     public static final int ITEM_MUSIC = 1;
     public static final int ITEM_PLAYER = 2;
     public static final int ITEM_INTERESTING = 3;
+
+    private boolean isMainPage = true;
+    private String title;
+
+    private OnItemClickListener listener;
+    private OnRightIconClickListener rightIconClickListener;
+    private TextView mTvTitle;
 
     public SToolBar(Context context) {
         super(context);
@@ -48,16 +56,31 @@ public class SToolBar extends LinearLayout implements View.OnClickListener{
         View.inflate(mContext, R.layout.view_tool_bar, this);
         findView();
         setSelectedItem(mCurrentSelectItem);
-        mMenu.setSelected(true);
+        mLeftIcon.setSelected(true);
+
+        isShowTitle();
+    }
+
+    private void isShowTitle() {
+        if (isMainPage) {
+            findViewById(R.id.toolbar_main_menu).setVisibility(VISIBLE);
+            mTvTitle.setVisibility(GONE);
+        } else {
+            findViewById(R.id.toolbar_main_menu).setVisibility(GONE);
+            mTvTitle.setVisibility(VISIBLE);
+        }
     }
 
     private void findView() {
-        mMenu = (ImageView) findViewById(R.id.toolbar_menu);
+        mLeftIcon = (ImageView) findViewById(R.id.toolbar_left_icon);
+        mRightIcon = (ImageView) findViewById(R.id.toolbar_right_icon);
+        mTvTitle = (TextView) findViewById(R.id.toolbar_title);
         mMusic = (ImageView) findViewById(R.id.toolbar_music);
         mPlayer = (ImageView) findViewById(R.id.toolbar_player);
         mInteresting = (ImageView) findViewById(R.id.toolbar_interesting);
 
-        mMenu.setOnClickListener(this);
+        mRightIcon.setOnClickListener(this);
+        mLeftIcon.setOnClickListener(this);
         mMusic.setOnClickListener(this);
         mPlayer.setOnClickListener(this);
         mInteresting.setOnClickListener(this);
@@ -70,10 +93,17 @@ public class SToolBar extends LinearLayout implements View.OnClickListener{
         int clickId = view.getId();
 
         switch (clickId){
-            case R.id.toolbar_menu:
-                if (listener != null) {
-                    listener.onMenuItemClick(view);
+            case R.id.toolbar_left_icon:
+                if (isMainPage) {
+                    if (listener != null) {
+                        listener.onMenuItemClick(view);
+                    }
+                } else {
+                    if (mContext instanceof Activity) {
+                        ((Activity) mContext).finish();
+                    }
                 }
+
                 break;
             case R.id.toolbar_music:
                 mCurrentSelectItem = ITEM_MUSIC;
@@ -84,6 +114,10 @@ public class SToolBar extends LinearLayout implements View.OnClickListener{
             case R.id.toolbar_interesting:
                 mCurrentSelectItem = ITEM_INTERESTING;
                 break;
+            case R.id.toolbar_right_icon:
+                if (rightIconClickListener != null) {
+                    rightIconClickListener.onRightIconClick();
+                }
         }
 
         setSelectedItem(mCurrentSelectItem);
@@ -128,12 +162,37 @@ public class SToolBar extends LinearLayout implements View.OnClickListener{
         mPlayer.setSelected(false);
     }
 
-    public int getmCurrentSelectItem() {
+    public void setLeftIcon(int resId){
+        mLeftIcon.setVisibility(VISIBLE);
+        mLeftIcon.setImageResource(resId);
+    }
+
+    public void setRightIcon(int resId){
+        mRightIcon.setVisibility(VISIBLE);
+        mRightIcon.setImageResource(resId);
+    }
+
+    public int getCurrentSelectItem() {
         return mCurrentSelectItem;
     }
 
     public void setItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
+    }
+
+    public void setRightIconClickListener(OnRightIconClickListener rightIconClickListener) {
+        this.rightIconClickListener = rightIconClickListener;
+    }
+
+
+    public void setMainPage(boolean mainPage) {
+        isMainPage = mainPage;
+        isShowTitle();
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+        mTvTitle.setText(title);
     }
 
     public interface OnItemClickListener{
@@ -143,4 +202,7 @@ public class SToolBar extends LinearLayout implements View.OnClickListener{
         void onInterestingItemClick(View v);
     }
 
+    public interface OnRightIconClickListener{
+        void onRightIconClick();
+    }
 }

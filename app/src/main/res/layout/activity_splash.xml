@@ -7,6 +7,15 @@
     tools:context=".splash.SplashActivity">
 
 
+    <ImageView
+        android:visibility="gone"
+        android:id="@+id/ac_splash_iv_image"
+        android:src="@mipmap/logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="200dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp" />
+
 
     <LinearLayout
         android:layout_marginBottom="20dp"

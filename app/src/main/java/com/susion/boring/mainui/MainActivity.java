@@ -55,6 +55,7 @@ public class MainActivity extends BaseActivity implements IMainUIView{
         mToolBar = (SToolBar) findViewById(R.id.toolbar);
         mDrawerList = (RecyclerView) findViewById(R.id.list_view);
 
+        mToolBar.setLeftIcon(R.drawable.select_toolbar_menu);
         mDrawerList.setLayoutManager(RVUtils.getLayoutManager(this, LinearLayoutManager.VERTICAL));
         mDrawerList.addItemDecoration(RVUtils.getItemDecorationDivider(this, R.color.white, UIUtils.dp2Px(10)));
     }
@@ -89,7 +90,7 @@ public class MainActivity extends BaseActivity implements IMainUIView{
     }
 
     private void showCurrentSelectedFragment() {
-        mPresenter.showFragment(R.id.main_frame, mToolBar.getmCurrentSelectItem(), this);
+        mPresenter.showFragment(R.id.main_frame, mToolBar.getCurrentSelectItem(), this);
     }
 
 }

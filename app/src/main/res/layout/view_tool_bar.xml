@@ -6,46 +6,70 @@
     android:orientation="horizontal">
 
     <ImageView
-        android:id="@+id/toolbar_menu"
+        android:id="@+id/toolbar_left_icon"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="15dp"
         android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:background="@drawable/select_toolbar_menu" />
+        android:layout_height="30dp" />
 
 
-    <LinearLayout
+    <FrameLayout
         android:layout_centerInParent="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/toolbar_music"
-            android:layout_gravity="center_vertical"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="@drawable/select_toolbar_music" />
+        <LinearLayout
+            android:id="@+id/toolbar_main_menu"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/toolbar_player"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="30dp"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="@drawable/select_toolbar_player" />
+            <ImageView
+                android:id="@+id/toolbar_music"
+                android:layout_gravity="center_vertical"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/select_toolbar_music" />
 
-        <ImageView
-            android:id="@+id/toolbar_interesting"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="30dp"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="@drawable/select_toolbar_interseting" />
+            <ImageView
+                android:id="@+id/toolbar_player"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="30dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/select_toolbar_player" />
 
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/toolbar_interesting"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="30dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/select_toolbar_interseting" />
 
+        </LinearLayout>
+
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/toolbar_title"
+            android:textSize="17sp"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </FrameLayout>
+
+
+    <ImageView
+        android:id="@+id/toolbar_right_icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginRight="15dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"/>
 
 
 </RelativeLayout>

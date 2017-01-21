@@ -33,14 +33,14 @@ public class SplashActivity extends Activity implements ISplashView {
     }
 
     private void findView() {
-//        mIvCenterImage = (ImageView) findViewById(R.id.ac_splash_iv_image);
+        mIvCenterImage = (ImageView) findViewById(R.id.ac_splash_iv_image);
         mTvDescText = (TextView) findViewById(R.id.ac_splash_tv_desc);
         mTvAuthor = (TextView) findViewById(R.id.ac_splash_tv_author);
     }
 
     @Override
     public void setCenterImageAndDescText(int imageId, int textId) {
-//        mIvCenterImage.setImageResource(imageId);
+        mIvCenterImage.setImageResource(imageId);
         mTvDescText.setText(textId);
     }
 
