@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@android:color/transparent">
+
+    <RelativeLayout
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:id="@+id/view_music_player_pattern"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="15dp"
+            android:src="@mipmap/music_player_single_cycle"
+            android:layout_width="35dp"
+            android:layout_height="35dp" />
+
+
+        <RelativeLayout
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@id/view_music_player_pattern"
+            android:layout_toLeftOf="@id/view_music_player_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <ImageView
+                android:id="@+id/view_music_player_pre"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="15dp"
+                android:src="@mipmap/music_player_pre"
+                android:layout_width="35dp"
+                android:layout_height="35dp" />
+
+            <ImageView
+                android:id="@+id/view_music_player_start_or_stop"
+                android:src="@mipmap/music_player_stop"
+                android:layout_centerInParent="true"
+                android:layout_width="40dp"
+                android:layout_height="40dp" />
+
+
+            <ImageView
+                android:id="@+id/view_music_player_next"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="15dp"
+                android:src="@mipmap/music_player_next"
+                android:layout_width="35dp"
+                android:layout_height="35dp" />
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/view_music_player_list"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:src="@mipmap/music_player_list"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
+
+
+    </RelativeLayout>
+
+
+</LinearLayout>

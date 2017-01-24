@@ -8,7 +8,16 @@
         <item name="android:colorAccent">@color/colorAccent</item>
 
         <item name="android:windowContentTransitions">true</item>
-
     </style>
 
+
+    <declare-styleable name="MediaSeekBar">
+        <attr name="hasPlayColor" format="color|reference"/>
+        <attr name="originBackgroundColor" format="color|reference"/>
+        <attr name="hasBufferColor" format="color|reference"/>
+        <attr name="maxProgress" format="integer|reference"/>
+        <attr name="progressWidth" format="dimension|reference"/>
+        <attr name="customThumb"  format="reference"/>
+        <attr name="canClickProgress"  format="boolean"/>
+    </declare-styleable>
 </resources>

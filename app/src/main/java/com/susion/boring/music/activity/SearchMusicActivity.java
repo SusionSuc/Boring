@@ -1,4 +1,4 @@
-package com.susion.boring.music;
+package com.susion.boring.music.activity;
 
 import android.app.Activity;
 import android.os.Bundle;

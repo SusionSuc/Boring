@@ -7,7 +7,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.susion.boring.R;
 import com.susion.boring.base.SimpleItemHandler;
 import com.susion.boring.base.ViewHolder;
-import com.susion.boring.music.PlayMusicActivity;
+import com.susion.boring.music.activity.PlayMusicActivity;
 import com.susion.boring.music.model.Song;
 import com.susion.boring.utils.ToastUtils;
 

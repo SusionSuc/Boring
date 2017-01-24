@@ -21,4 +21,14 @@
 
     <color name="transparent_white">#A9FFFAFA</color>
 
+
+    <color name="has_play_color">#FF5468</color>
+    <color name="origin_background_color">#70ffffff</color>
+    <color name="has_buffer_color">#ffffff</color>
+
+
+    <color name="white">#ffffff</color>
+    <color name="transparent">#00000000</color>
+    <color name="thumb_out">#70ffffff</color>
+
 </resources>
