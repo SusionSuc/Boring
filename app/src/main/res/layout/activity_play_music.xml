@@ -10,10 +10,18 @@
     android:orientation="vertical">
 
     <com.susion.boring.view.SToolBar
+        android:layout_marginTop="@dimen/status_bar_height"
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     </com.susion.boring.view.SToolBar>
+
+    <View
+        android:layout_marginRight="70dp"
+        android:layout_marginLeft="70dp"
+        android:background="@drawable/gradual_white"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"></View>
 
 
     <com.susion.boring.music.view.WaterWaveRotateImageView
@@ -64,6 +72,7 @@
 
 
     <com.susion.boring.music.view.MusicPlayControlView
+        android:layout_marginBottom="20dp"
         android:id="@+id/control_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"

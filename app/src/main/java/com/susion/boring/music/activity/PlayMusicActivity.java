@@ -3,8 +3,11 @@ package com.susion.boring.music.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 
 import com.susion.boring.R;
@@ -15,6 +18,7 @@ import com.susion.boring.music.view.IPlayMusicView;
 import com.susion.boring.music.view.MediaSeekBar;
 import com.susion.boring.music.view.MusicPlayControlView;
 import com.susion.boring.music.view.WaterWaveRotateImageView;
+import com.susion.boring.utils.StatusBarUtil;
 import com.susion.boring.view.SToolBar;
 
 public class PlayMusicActivity extends Activity implements IPlayMusicView{
@@ -91,6 +95,11 @@ public class PlayMusicActivity extends Activity implements IPlayMusicView{
         });
 
         mPresenter.setBackground(mSong.album.picUrl, mLl, this);
+
+        getWindow().setStatusBarColor(Color.TRANSPARENT);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
     }
 
     @Override

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@android:color/transparent">
 
@@ -13,6 +13,7 @@
 
         <ImageView
             android:id="@+id/view_music_player_pattern"
+            android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="15dp"
             android:src="@mipmap/music_player_single_cycle"
@@ -21,6 +22,7 @@
 
         <ImageView
             android:layout_marginRight="15dp"
+            android:layout_centerVertical="true"
             android:id="@+id/view_music_player_list"
             android:layout_alignParentRight="true"
             android:src="@mipmap/music_player_list"
@@ -34,12 +36,13 @@
             android:layout_toRightOf="@id/view_music_player_pattern"
             android:layout_toLeftOf="@id/view_music_player_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
 
             <ImageView
                 android:id="@+id/view_music_player_pre"
                 android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
                 android:layout_marginLeft="15dp"
                 android:src="@mipmap/music_player_pre"
                 android:layout_width="35dp"
@@ -48,12 +51,13 @@
             <ImageView
                 android:id="@+id/view_music_player_start_or_stop"
                 android:src="@mipmap/music_player_stop"
-                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
                 android:layout_width="45dp"
                 android:layout_height="45dp" />
 
 
             <ImageView
+                android:layout_centerVertical="true"
                 android:id="@+id/view_music_player_next"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="15dp"

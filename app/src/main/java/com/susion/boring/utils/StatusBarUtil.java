@@ -14,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 
 import com.susion.boring.R;
+import com.susion.boring.music.activity.PlayMusicActivity;
 
 /**
  * Created by Jaeger on 16/2/14.
@@ -26,6 +27,7 @@ public class StatusBarUtil {
     public static final int DEFAULT_STATUS_BAR_ALPHA = 112;
     public static final int FAKE_STATUS_BAR_VIEW_ID = R.id.statusbarutil_fake_status_bar_view;
     public static final int FAKE_TRANSLUCENT_VIEW_ID = R.id.statusbarutil_translucent_view;
+
 
     /**
      * 设置状态栏颜色
@@ -290,6 +292,7 @@ public class StatusBarUtil {
         setDrawerLayoutProperty(drawerLayout, contentLayout);
         addTranslucentView(activity, statusBarAlpha);
     }
+
 
     /**
      * 设置 DrawerLayout 属性
@@ -661,4 +664,5 @@ public class StatusBarUtil {
         blue = (int) (blue * a + 0.5);
         return 0xff << 24 | red << 16 | green << 8 | blue;
     }
+
 }
