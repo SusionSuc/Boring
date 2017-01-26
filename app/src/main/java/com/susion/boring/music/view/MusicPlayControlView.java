@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.susion.boring.R;
+import com.susion.boring.utils.ToastUtils;
 
 /**
  * Created by susion on 17/1/23.
@@ -19,6 +20,8 @@ public class MusicPlayControlView extends LinearLayout implements View.OnClickLi
     private ImageView mIvNext;
     private ImageView mIvPre;
     private ImageView mIVPattern;
+
+    private boolean mIsPlay;
 
     private MusicPlayerControlViewItemClickListener listener;
     public MusicPlayControlView(Context context) {
@@ -39,6 +42,8 @@ public class MusicPlayControlView extends LinearLayout implements View.OnClickLi
         mContext = context;
         View.inflate(mContext, R.layout.view_music_play_control, this);
         findView();
+
+        mIsPlay = false;
     }
 
     private void findView() {
@@ -55,13 +60,41 @@ public class MusicPlayControlView extends LinearLayout implements View.OnClickLi
         mIVPattern.setOnClickListener(this);
     }
 
+
+    public boolean ismIsPlay() {
+        return mIsPlay;
+    }
+
     @Override
     public void onClick(View view) {
+
+        int id = view.getId();
+        switch (id){
+            case R.id.view_music_player_list:
+
+                break;
+            case R.id.view_music_player_next:
+
+                break;
+            case R.id.view_music_player_pattern:
+
+                break;
+            case R.id.view_music_player_pre:
+
+                break;
+            case R.id.view_music_player_start_or_stop:
+                mIsPlay = !mIsPlay;
+                break;
+        }
+
+        notifyListener(id);
+        ToastUtils.showShort(id+"click");
+    }
+
+    private void notifyListener(int id) {
         if (listener == null) {
             return;
         }
-
-        int id = view.getId();
         switch (id){
             case R.id.view_music_player_list:
                 listener.onMoreItemClick();
@@ -76,23 +109,22 @@ public class MusicPlayControlView extends LinearLayout implements View.OnClickLi
                 listener.onPreItemClick();
                 break;
             case R.id.view_music_player_start_or_stop:
-                listener.onStartOrStartItemClick();
+                listener.onStartOrStartItemClick(mIsPlay);
                 break;
         }
     }
+
 
     public interface MusicPlayerControlViewItemClickListener{
         void onMoreItemClick();
         void onNextItemClick();
         void onPreItemClick();
         void onPatternItemClick();
-        void onStartOrStartItemClick();
+        void onStartOrStartItemClick(boolean isPlay);
 
     }
 
-    void setOnControlItemClickListener(MusicPlayerControlViewItemClickListener listener){
+    public void setOnControlItemClickListener(MusicPlayerControlViewItemClickListener listener){
         this.listener = listener;
     }
-
-
 }

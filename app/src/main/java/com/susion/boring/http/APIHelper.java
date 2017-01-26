@@ -69,6 +69,8 @@ public class APIHelper {
         return getInstance().getService(MusicServices.class);
     }
 
-
+    public static ImageService getImageServices(){
+        return getInstance().getService(ImageService.class);
+    }
 
 }

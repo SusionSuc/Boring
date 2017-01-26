@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.susion.boring.R;
@@ -13,7 +14,7 @@ import com.susion.boring.R;
 /**
  * Created by susion on 17/1/17.
  */
-public class SToolBar extends LinearLayout implements View.OnClickListener{
+public class SToolBar extends RelativeLayout implements View.OnClickListener{
 
     private Context mContext;
     private ImageView mLeftIcon;
@@ -57,7 +58,7 @@ public class SToolBar extends LinearLayout implements View.OnClickListener{
         findView();
         setSelectedItem(mCurrentSelectItem);
         mLeftIcon.setSelected(true);
-
+        setBackgroundColor(mContext.getResources().getColor(R.color.colorPrimary));
         isShowTitle();
     }
 
@@ -171,6 +172,7 @@ public class SToolBar extends LinearLayout implements View.OnClickListener{
         mRightIcon.setVisibility(VISIBLE);
         mRightIcon.setImageResource(resId);
     }
+
 
     public int getCurrentSelectItem() {
         return mCurrentSelectItem;

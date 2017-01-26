@@ -19,6 +19,14 @@
             android:layout_width="35dp"
             android:layout_height="35dp" />
 
+        <ImageView
+            android:layout_marginRight="15dp"
+            android:id="@+id/view_music_player_list"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/music_player_list"
+            android:layout_width="35dp"
+            android:layout_height="35dp" />
+
 
         <RelativeLayout
             android:layout_marginRight="15dp"
@@ -40,9 +48,9 @@
             <ImageView
                 android:id="@+id/view_music_player_start_or_stop"
                 android:src="@mipmap/music_player_stop"
-                android:layout_centerInParent="true"
-                android:layout_width="40dp"
-                android:layout_height="40dp" />
+                android:layout_centerHorizontal="true"
+                android:layout_width="45dp"
+                android:layout_height="45dp" />
 
 
             <ImageView
@@ -54,15 +62,6 @@
                 android:layout_height="35dp" />
 
         </RelativeLayout>
-
-        <ImageView
-            android:id="@+id/view_music_player_list"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="15dp"
-            android:src="@mipmap/music_player_list"
-            android:layout_width="30dp"
-            android:layout_height="30dp" />
-
 
     </RelativeLayout>
 

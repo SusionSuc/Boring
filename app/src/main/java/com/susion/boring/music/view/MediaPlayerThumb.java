@@ -8,6 +8,8 @@ import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
+import com.susion.boring.R;
+
 /**
  * Created by susion on 16/11/9.
  */
