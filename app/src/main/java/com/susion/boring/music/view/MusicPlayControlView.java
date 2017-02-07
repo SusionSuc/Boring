@@ -21,7 +21,7 @@ public class MusicPlayControlView extends LinearLayout implements View.OnClickLi
     private ImageView mIvPre;
     private ImageView mIVPattern;
 
-    private boolean mIsPlay;
+    private boolean mIsPlay = false;
 
     private MusicPlayerControlViewItemClickListener listener;
     public MusicPlayControlView(Context context) {
@@ -65,6 +65,20 @@ public class MusicPlayControlView extends LinearLayout implements View.OnClickLi
         return mIsPlay;
     }
 
+    public void setIsPlay(boolean mIsPlay) {
+        this.mIsPlay = mIsPlay;
+        setPlayBtn();
+    }
+
+    private void setPlayBtn() {
+        if (mIsPlay) {
+            mIvStartStop.setImageResource(R.mipmap.music_player_play);
+        } else {
+            mIvStartStop.setImageResource(R.mipmap.music_player_stop);
+        }
+    }
+
+
     @Override
     public void onClick(View view) {
 
@@ -84,11 +98,11 @@ public class MusicPlayControlView extends LinearLayout implements View.OnClickLi
                 break;
             case R.id.view_music_player_start_or_stop:
                 mIsPlay = !mIsPlay;
+                setPlayBtn();
                 break;
         }
 
         notifyListener(id);
-        ToastUtils.showShort(id+"click");
     }
 
     private void notifyListener(int id) {
@@ -114,14 +128,12 @@ public class MusicPlayControlView extends LinearLayout implements View.OnClickLi
         }
     }
 
-
     public interface MusicPlayerControlViewItemClickListener{
         void onMoreItemClick();
         void onNextItemClick();
         void onPreItemClick();
         void onPatternItemClick();
         void onStartOrStartItemClick(boolean isPlay);
-
     }
 
     public void setOnControlItemClickListener(MusicPlayerControlViewItemClickListener listener){

@@ -18,9 +18,14 @@ public class ImageUtils {
                 .createDefault(context);
         ImageLoader load = ImageLoader.getInstance();
         load.init(configuration);
+
         load.loadImage(uri, new SimpleImageLoadingListener(){
+
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                if (listener == null) {
+                    return;
+                }
                 listener.loadImageFinish(imageUri, view, loadedImage);
             }
         });
@@ -28,5 +33,6 @@ public class ImageUtils {
 
     public interface OnLoadFinishLoadImage{
         void loadImageFinish(String imageUri, View view, Bitmap loadedImage);
+
     }
 }

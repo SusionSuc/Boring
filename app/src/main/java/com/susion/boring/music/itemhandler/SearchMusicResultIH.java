@@ -2,6 +2,7 @@ package com.susion.boring.music.itemhandler;
 
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.susion.boring.R;
@@ -15,6 +16,12 @@ import com.susion.boring.utils.ToastUtils;
  * Created by susion on 17/1/20.
  */
 public class SearchMusicResultIH extends SimpleItemHandler<Song>{
+
+
+    @Override
+    public void onCreateItemHandler(ViewHolder vh, ViewGroup parent) {
+        super.onCreateItemHandler(vh, parent);
+    }
 
     @Override
     public void onBindDataView(ViewHolder vh, Song data, int position) {

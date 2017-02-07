@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,6 +31,8 @@ public class SplashActivity extends Activity implements ISplashView {
         mPresenter.setImageAndDescText(R.mipmap.logo, R.string.splash_desc);
         mPresenter.skipToMainActivity(this, getWindow().getDecorView());
         mPresenter.setAuthorInfo(this, -1, R.string.author_info);
+
+        Log.d("SplashActivity", "SplashActivity..onCreate");
     }
 
     private void findView() {

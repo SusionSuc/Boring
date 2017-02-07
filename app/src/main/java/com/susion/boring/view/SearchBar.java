@@ -128,6 +128,14 @@ public class SearchBar extends LinearLayout {
         mBtSearch.setVisibility(visible);
     }
 
+    public void disableSearchBt() {
+        mBtSearch.setEnabled(false);
+    }
+
+    public void enableSearchBt(){
+        mBtSearch.setEnabled(true);
+    }
+
     public interface OnSearchButtonClickListener{
         void doSearch(String searchContent);
     }

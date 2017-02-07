@@ -25,6 +25,7 @@ public class MediaSeekBar extends View {
 
     private Context context;
     private MediaSeekBarListener listener;
+    private OnProgressListener progressListener;
 
     int maxProgress;
     int hasBufferProgress;
@@ -58,8 +59,6 @@ public class MediaSeekBar extends View {
     private boolean isStartDrawThumb = false;
     private int PROGRESS_CLICK_RANGE = 15;
     private boolean canClickProgress = false;
-
-
 
 
     public MediaSeekBar(Context context) {
@@ -166,9 +165,6 @@ public class MediaSeekBar extends View {
         setMeasuredDimension(width, height);
     }
 
-
-
-
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -180,7 +176,6 @@ public class MediaSeekBar extends View {
         drawThumb(canvas);
         canvas.save();
     }
-
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -228,12 +223,20 @@ public class MediaSeekBar extends View {
 
                 if(currentTouchState == CLICK_PROGRESS){
                     notifyListener(getCurrentProgress());
+
+                    if (progressListener != null) {
+                        progressListener.onSeekToNewProgress(getCurrentProgress());
+                    }
                 }
 
                 if(isStartDrawThumb && currentTouchState == DRAGGING_THUMB){
                     isStartDrawThumb = false;
                     currentTouchState = STOP_DRAG_THUMB;
                     notifyListener(getCurrentProgress());
+
+                    if (progressListener != null) {
+                        progressListener.onSeekToNewProgress(getCurrentProgress());
+                    }
                 }
 
                 if(currentTouchState == CLICK_THUMB){
@@ -253,7 +256,7 @@ public class MediaSeekBar extends View {
         if(listener == null) return;
 
         if(currentTouchState == CLICK_THUMB){
-            listener.onThumbClick();
+//            listener.onThumbClick();
         }
 
         if(currentTouchState == CLICK_PROGRESS){
@@ -408,6 +411,15 @@ public class MediaSeekBar extends View {
         this.canClickProgress = canClickProgress;
     }
 
+    public int getMaxProgress() {
+        return maxProgress;
+    }
+
+    public void setProgressListener(OnProgressListener progressListener) {
+        this.progressListener = progressListener;
+    }
+
+
     public  Bitmap getBitmapFromDrawable(Drawable drawable) {
         Bitmap bitmap;
 
@@ -432,11 +444,14 @@ public class MediaSeekBar extends View {
 
 
     public interface  MediaSeekBarListener{
-        void onThumbClick();
         void onStartDragThumb(int currentProgress);
         void onDraggingThumb(int currentProgress);
         void onStopDragThumb(int currentProgress);
         void onProgressChange(int currentProgress);  // call at click progress drag thumb
+    }
+
+    public interface OnProgressListener{
+        void onSeekToNewProgress(int newProgress);
     }
 
 }

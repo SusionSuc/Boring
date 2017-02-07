@@ -43,6 +43,11 @@ public abstract class BaseRVAdapter extends RecyclerView.Adapter{
         initHandlers();
     }
 
+    public void refreshData(List<?> data){
+        mData = data;
+        notifyDataSetChanged();
+    }
+
     public void registerItemHandler(int viewType, ItemHandlerFactory itemHandlerFactory) {
         mItemHandlerHashMap.put(viewType, itemHandlerFactory);
     }

@@ -33,6 +33,7 @@
                 android:layout_height="match_parent">
 
                 <ImageView
+                    android:id="@+id/ac_search_iv_holder_image"
                     android:layout_centerInParent="true"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
@@ -49,9 +50,6 @@
                     android:layout_height="20dp" />
 
             </RelativeLayout>
-
-
-
 
     </FrameLayout>
 

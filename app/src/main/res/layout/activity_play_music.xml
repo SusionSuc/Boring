@@ -2,12 +2,13 @@
 <LinearLayout
     android:id="@+id/ll"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".music.activity.PlayMusicActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@mipmap/blur_play_music">
 
     <com.susion.boring.view.SToolBar
         android:layout_marginTop="@dimen/status_bar_height"
@@ -40,7 +41,7 @@
         android:layout_height="0dp">
 
         <TextView
-            android:id="@+id/tv_curr_time"
+            android:id="@+id/tv_has_play_time"
             android:layout_alignParentLeft="true"
             android:text="00:00"
             android:textColor="@color/white"
@@ -51,7 +52,7 @@
         <TextView
             android:text="05:00"
             android:textColor="@color/white"
-            android:id="@+id/tv_total_time"
+            android:id="@+id/tv_left_time"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_width="wrap_content"
@@ -62,11 +63,12 @@
             android:layout_centerInParent="true"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_toRightOf="@id/tv_curr_time"
-            android:layout_toLeftOf="@id/tv_total_time"
+            android:layout_toRightOf="@id/tv_has_play_time"
+            android:layout_toLeftOf="@id/tv_left_time"
             android:id="@+id/seek_bar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            app:customThumb="@drawable/play_music_thumb"/>
 
     </RelativeLayout>
 

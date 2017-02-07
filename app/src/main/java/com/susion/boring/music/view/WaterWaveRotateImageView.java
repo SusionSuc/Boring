@@ -1,6 +1,7 @@
 package com.susion.boring.music.view;
 
 import android.content.Context;
+import android.os.Debug;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;

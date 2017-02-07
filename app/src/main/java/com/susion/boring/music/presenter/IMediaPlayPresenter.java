@@ -6,14 +6,19 @@ import android.view.ViewGroup;
 /**
  * Created by susion on 17/1/23.
  */
-public interface IPlayMusicPresenter {
+public interface IMediaPlayPresenter {
 
-    void startPlayMusic(String musicUri);
+    void initMediaPlayer(String mediaUri, boolean autoPlay) throws Exception;
+    boolean startPlay();
+    void pausePlay();
+    void stopPlay();
+    void releaseResource();
+    void seekTo(int pos);
+
+
     void stopPlayMusic();
     void reStartPlayMusic();
     void preMusic();
     void nextMusic();
-
-    void setBackground(String imageUri, ViewGroup view, Context context);
 
 }
