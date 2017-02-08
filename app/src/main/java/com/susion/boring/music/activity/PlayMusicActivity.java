@@ -5,25 +5,27 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.susion.boring.R;
+import com.susion.boring.http.APIHelper;
+import com.susion.boring.music.model.LyricResult;
 import com.susion.boring.music.model.Song;
-import com.susion.boring.music.presenter.IMediaPlayPresenter;
-import com.susion.boring.music.presenter.MediaPlayPresenter;
+import com.susion.boring.music.presenter.IPlayMusicPresenter;
+import com.susion.boring.music.presenter.PlayMusicPresenter;
 import com.susion.boring.music.view.IMediaPlayView;
+import com.susion.boring.music.view.LyricView;
 import com.susion.boring.music.view.MediaSeekBar;
 import com.susion.boring.music.view.MusicPlayControlView;
-import com.susion.boring.utils.FastBlurUtil;
 import com.susion.boring.utils.ImageUtils;
 import com.susion.boring.utils.MediaUtils;
 import com.susion.boring.view.SToolBar;
+
+import rx.Observer;
 
 public class PlayMusicActivity extends Activity implements IMediaPlayView{
     private static final String TO_PLAY_MUSIC_INFO = "played_music";
@@ -32,11 +34,12 @@ public class PlayMusicActivity extends Activity implements IMediaPlayView{
     private MediaSeekBar mSeekBar;
     private MusicPlayControlView mPlayControlView;
     private LinearLayout mLl;
-    private IMediaPlayPresenter mPresenter;
+    private IPlayMusicPresenter mPresenter;
 
     private Song mSong;
     private TextView mTvPlayedTime;
     private TextView mTvLeftTime;
+    private LyricView mLyricView;
 
     public static void start(Context context, Song song) {
         Intent intent = new Intent();
@@ -49,7 +52,7 @@ public class PlayMusicActivity extends Activity implements IMediaPlayView{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_music);
-        mPresenter = new MediaPlayPresenter(this);
+        mPresenter = new PlayMusicPresenter(this);
         findView();
         initData();
         initView();
@@ -62,10 +65,32 @@ public class PlayMusicActivity extends Activity implements IMediaPlayView{
         mLl = (LinearLayout) findViewById(R.id.ll);
         mTvPlayedTime = (TextView) findViewById(R.id.tv_has_play_time);
         mTvLeftTime = (TextView) findViewById(R.id.tv_left_time);
+        mLyricView = (LyricView) findViewById(R.id.lyric_view);
     }
 
     private void initData() {
         mSong = (Song) getIntent().getSerializableExtra(TO_PLAY_MUSIC_INFO);
+        loadLyric();
+    }
+
+    private void loadLyric() {
+        APIHelper.subscribeSimpleRequest(APIHelper.getMusicServices().getMusicLyric(mSong.id), new Observer<LyricResult>() {
+            @Override
+            public void onCompleted() {
+                int b = 0;
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                int a = 0;
+            }
+
+            @Override
+            public void onNext(LyricResult s) {
+                mLyricView.setLyrics(s.lrc.lyric);
+            }
+        });
+
     }
 
     private void initView() {
@@ -93,13 +118,10 @@ public class PlayMusicActivity extends Activity implements IMediaPlayView{
         ImageUtils.LoadImage(this, mSong.album.picUrl, new ImageUtils.OnLoadFinishLoadImage() {
             @Override
             public void loadImageFinish(String imageUri, View view, Bitmap loadedImage) {
-                loadedImage = loadedImage.copy(loadedImage.getConfig(), true);
-                mLl.setBackground(new BitmapDrawable(FastBlurUtil.doBlur(loadedImage, 200, true)));
+                mLl.setBackground(mPresenter.getBackgroundBlurImage(loadedImage));
             }
-
         });
     }
-
 
     private void initListener() {
         mPlayControlView.setOnControlItemClickListener(new MusicPlayControlView.MusicPlayerControlViewItemClickListener() {
@@ -147,6 +169,9 @@ public class PlayMusicActivity extends Activity implements IMediaPlayView{
 
             @Override
             public void onStopDragThumb(int currentProgress) {
+                if (!mPlayControlView.ismIsPlay()) {
+                    mPlayControlView.setIsPlay(true);
+                }
                 mPresenter.startPlay();
                 mPresenter.seekTo(currentProgress);
             }
@@ -177,10 +202,11 @@ public class PlayMusicActivity extends Activity implements IMediaPlayView{
     }
 
     @Override
-    public void updatePlayProgress(int curPos, int duration) {
+    public void updatePlayProgress(int curPos, int left) {
         mTvPlayedTime.setText(MediaUtils.getDurationString(curPos, false));
-        mTvLeftTime.setText(MediaUtils.getDurationString(duration-curPos, true));
+        mTvLeftTime.setText(MediaUtils.getDurationString(left, true));
         mSeekBar.setCurrentProgress(curPos);
+        mLyricView.setCurrentLyricByTime(MediaUtils.getDurationString(curPos, false));
     }
 
 
@@ -191,31 +217,9 @@ public class PlayMusicActivity extends Activity implements IMediaPlayView{
         mPresenter.releaseResource();
     }
 
-
-    @Override
-    public void initMusicInfoUI() {
-
-    }
-
-    @Override
-    public void startMusicPlayAnimation() {
-
-    }
-
-    @Override
-    public void stopMusicPlayAnimation() {
-
-    }
-
-    @Override
-    public void changPlayModule() {
-
-    }
-
     @Override
     public void initMediaProgress(String duration) {
 
     }
-
 
 }

@@ -14,11 +14,4 @@ public interface IMediaPlayPresenter {
     void stopPlay();
     void releaseResource();
     void seekTo(int pos);
-
-
-    void stopPlayMusic();
-    void reStartPlayMusic();
-    void preMusic();
-    void nextMusic();
-
 }

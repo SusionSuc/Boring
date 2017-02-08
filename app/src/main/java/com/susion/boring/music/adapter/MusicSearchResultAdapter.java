@@ -25,12 +25,7 @@ public class MusicSearchResultAdapter extends BaseRVAdapter{
 
     @Override
     protected void initHandlers() {
-        registerItemHandler(ITEM_MUSIC_SEARCH_RESULT, new ItemHandlerFactory() {
-            @Override
-            public ItemHandler newInstant(int viewType) {
-                return new SearchMusicResultIH();
-            }
-        });
+
     }
 
     @Override

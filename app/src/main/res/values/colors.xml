@@ -30,5 +30,6 @@
     <color name="white">#ffffff</color>
     <color name="transparent">#00000000</color>
     <color name="thumb_out">#70ffffff</color>
+    <color name="lyric_color">#000000</color>
 
 </resources>

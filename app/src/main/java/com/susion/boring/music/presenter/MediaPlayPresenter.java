@@ -96,6 +96,7 @@ public class MediaPlayPresenter implements IMediaPlayPresenter, MediaPlayer.OnPr
         if (mPlayer == null || !mPlayer.isPlaying()) {
             return;
         }
+
         mPlayer.pause();
         mUpdateProgressHandler.removeCallbacks(mProgressUpdateRun);
     }
@@ -126,7 +127,6 @@ public class MediaPlayPresenter implements IMediaPlayPresenter, MediaPlayer.OnPr
             mUpdateProgressHandler = null;
         }
     }
-
 
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
@@ -159,27 +159,6 @@ public class MediaPlayPresenter implements IMediaPlayPresenter, MediaPlayer.OnPr
         } else {
             mPlayer.setDataSource(mContext, mSource);
         }
-    }
-
-
-    @Override
-    public void stopPlayMusic() {
-
-    }
-
-    @Override
-    public void reStartPlayMusic() {
-
-    }
-
-    @Override
-    public void preMusic() {
-
-    }
-
-    @Override
-    public void nextMusic() {
-
     }
 
     @Override

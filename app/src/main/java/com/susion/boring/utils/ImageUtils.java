@@ -20,7 +20,6 @@ public class ImageUtils {
         load.init(configuration);
 
         load.loadImage(uri, new SimpleImageLoadingListener(){
-
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                 if (listener == null) {

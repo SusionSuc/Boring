@@ -1,5 +1,6 @@
 package com.susion.boring.utils;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 
@@ -25,5 +26,15 @@ public class UIUtils {
     public static int dp2Px(float dp){
         final float scale = getDisplayMetrics() != null ? getDisplayMetrics().density : 1;
         return (int) (dp * scale + 0.5f);
+    }
+
+    /*设备屏幕宽度*/
+    public static int getScreenWidth() {
+        return getDisplayMetrics().widthPixels;
+    }
+
+    /*设备屏幕高度*/
+    public static int getScreenHeight() {
+        return getDisplayMetrics().heightPixels;
     }
 }

@@ -17,6 +17,7 @@ import com.susion.boring.utils.ToastUtils;
  */
 public class SearchMusicResultIH extends SimpleItemHandler<Song>{
 
+    private SimpleDraweeView ivPic;
 
     @Override
     public void onCreateItemHandler(ViewHolder vh, ViewGroup parent) {
@@ -31,8 +32,8 @@ public class SearchMusicResultIH extends SimpleItemHandler<Song>{
         if (!data.artists.isEmpty()) {
             vh.getTextView(R.id.item_music_search_tv_art_album).setText(data.artists.get(0).name+"-"+data.album.name);
         }
-        SimpleDraweeView ivPic = vh.get(R.id.item_music_search_siv_pic);
-        ivPic.setImageURI(data.album.picUrl);
+        ivPic = vh.get(R.id.item_music_search_siv_pic);
+        ivPic.setImageURI(data.album.picUrl);  //the image size may to big
     }
 
     @Override

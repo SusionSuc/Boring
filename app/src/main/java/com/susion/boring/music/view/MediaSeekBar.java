@@ -61,6 +61,7 @@ public class MediaSeekBar extends View {
     private boolean canClickProgress = false;
 
 
+
     public MediaSeekBar(Context context) {
         super(context);
         this.context = context;
@@ -190,7 +191,7 @@ public class MediaSeekBar extends View {
                 }
 
                 if(canClickProgress){
-                    if(isClickProgress(x, y)){
+                    if(isClickProgress(x, y) && currentTouchState != CLICK_THUMB){
                         currentTouchState = CLICK_PROGRESS;
                         setCurrentProgress(translateXtoProgress(x));
                     }
@@ -217,6 +218,7 @@ public class MediaSeekBar extends View {
                         }
                     }
                 }
+
                 break;
 
             case MotionEvent.ACTION_UP:
