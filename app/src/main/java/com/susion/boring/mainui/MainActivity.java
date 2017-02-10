@@ -3,6 +3,10 @@ package com.susion.boring.mainui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
+
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,8 +28,8 @@ public class MainActivity extends BaseActivity implements IMainUIView{
     private SToolBar mToolBar;
     private LinearLayout mDrawerMenu;
     private RecyclerView mDrawerList;
+    private ViewPager mViewPager;
 
-    private IMainUIPresenter mPresenter;
 
     public static void start(Context srcContext){
         Intent intent = new Intent();
@@ -44,7 +48,7 @@ public class MainActivity extends BaseActivity implements IMainUIView{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         findView();
-        initListener();
+        initViewAndListener();
         init();
     }
 
@@ -54,13 +58,44 @@ public class MainActivity extends BaseActivity implements IMainUIView{
         mDrawerMenu = (LinearLayout) findViewById(R.id.drawer);
         mToolBar = (SToolBar) findViewById(R.id.toolbar);
         mDrawerList = (RecyclerView) findViewById(R.id.list_view);
+        mViewPager = (ViewPager) findViewById(R.id.view_pager);
 
         mToolBar.setLeftIcon(R.drawable.select_toolbar_menu);
         mDrawerList.setLayoutManager(RVUtils.getLayoutManager(this, LinearLayoutManager.VERTICAL));
         mDrawerList.addItemDecoration(RVUtils.getItemDecorationDivider(this, R.color.white, UIUtils.dp2Px(10)));
     }
 
-    private void initListener() {
+    private void initViewAndListener() {
+
+        mViewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
+            @Override
+            public Fragment getItem(int position) {
+                return FragmentFactory.getMainUIFragments().get(position);
+            }
+
+            @Override
+            public int getCount() {
+                return FragmentFactory.getMainUIFragments().size();
+            }
+        });
+
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mToolBar.setSelectedItem(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
         mToolBar.setItemClickListener(new SToolBar.OnItemClickListener() {
             @Override
             public void onMenuItemClick(View v) {
@@ -85,12 +120,11 @@ public class MainActivity extends BaseActivity implements IMainUIView{
 
     private void init() {
         mDrawerList.setAdapter(new MainDrawerAdapter(this, DrawerData.getData()));
-        mPresenter = new MainUIPresenter(this);
         showCurrentSelectedFragment();
     }
 
     private void showCurrentSelectedFragment() {
-        mPresenter.showFragment(R.id.main_frame, mToolBar.getCurrentSelectItem(), this);
+        mViewPager.setCurrentItem(mToolBar.getCurrentSelectItem());
     }
 
 }

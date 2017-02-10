@@ -1,14 +1,15 @@
 package com.susion.boring.mainui;
 
 import android.app.Activity;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
+
 
 /**
  * Created by susion on 17/1/19.
  */
 public interface IMainUIPresenter {
 
-    Fragment getPageFragment(int fragmentId);
+    int getFragmentCount();
 
-    void showFragment(int fragmentId, int fragmentMusic, Activity context);
+    Fragment getPageFragmentByPos(int pos);
 }

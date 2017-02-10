@@ -14,7 +14,7 @@ import com.susion.boring.R;
 /**
  * Created by susion on 17/1/17.
  */
-public class SToolBar extends RelativeLayout implements View.OnClickListener{
+public class SToolBar extends RelativeLayout implements View.OnClickListener, MainUIFragmentIndex{
 
     private Context mContext;
     private ImageView mLeftIcon;
@@ -23,10 +23,7 @@ public class SToolBar extends RelativeLayout implements View.OnClickListener{
     private ImageView mPlayer;
     private ImageView mMusic;
 
-    private int mCurrentSelectItem = 1;
-    public static final int ITEM_MUSIC = 1;
-    public static final int ITEM_PLAYER = 2;
-    public static final int ITEM_INTERESTING = 3;
+    private int mCurrentSelectItem = 0;
 
     private boolean isMainPage = true;
     private String title;

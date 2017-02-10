@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<com.susion.boring.base.view.NestScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".music.activity.SearchMusicActivity"
-    android:orientation="vertical"
-    android:background="@color/white">
+    android:orientation="vertical">
 
     <com.susion.boring.view.SearchBar
         android:id="@+id/search_bar"
@@ -14,43 +11,42 @@
         android:layout_height="wrap_content">
     </com.susion.boring.view.SearchBar>
 
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-            <com.susion.boring.base.view.LoadMoreRecyclerView
-                android:id="@+id/list_view"
-                android:visibility="invisible"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            </com.susion.boring.base.view.LoadMoreRecyclerView>
+        <com.susion.boring.base.view.LoadMoreRecycleView
+            android:id="@+id/list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible">
+        </com.susion.boring.base.view.LoadMoreRecycleView>
+
+        <RelativeLayout
+            android:id="@+id/place_holder_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/ac_search_iv_holder_image"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/music_mutil_color" />
 
 
-            <RelativeLayout
-                android:id="@+id/place_holder_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="15dp"
+                android:text="搜索支持 : 网易云音乐"
+                android:textColor="@color/colorSecondaryText" />
 
-                <ImageView
-                    android:id="@+id/ac_search_iv_holder_image"
-                    android:layout_centerInParent="true"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@mipmap/music_mutil_color"/>
-
-
-                <TextView
-                    android:textColor="@color/colorSecondaryText"
-                    android:layout_marginBottom="15dp"
-                    android:text="搜索支持 : 网易云音乐"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp" />
-
-            </RelativeLayout>
+        </RelativeLayout>
 
     </FrameLayout>
 
-</LinearLayout>
+</com.susion.boring.base.view.NestScrollView>
+

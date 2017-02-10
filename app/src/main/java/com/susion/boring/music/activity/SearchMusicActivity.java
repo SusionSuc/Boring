@@ -2,8 +2,8 @@ package com.susion.boring.music.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
@@ -13,7 +13,7 @@ import com.susion.boring.R;
 import com.susion.boring.base.BaseRVAdapter;
 import com.susion.boring.base.ItemHandler;
 import com.susion.boring.base.ItemHandlerFactory;
-import com.susion.boring.base.view.LoadMoreRecyclerView;
+import com.susion.boring.base.view.LoadMoreRecycleView;
 import com.susion.boring.base.view.LoadMoreView;
 import com.susion.boring.http.APIHelper;
 import com.susion.boring.music.itemhandler.SearchMusicResultIH;
@@ -28,16 +28,18 @@ import java.util.List;
 
 import rx.Observer;
 
-public class SearchMusicActivity extends Activity {
+public class SearchMusicActivity extends Activity implements OnLastItemVisibleListener{
 
     private SearchBar mSearchBar;
-    private LoadMoreRecyclerView mRV;
+    private LoadMoreRecycleView mRV;
     private View mHolderView;
     private ImageView mTvHolderImageView;
 
     private List<Song> mData = new ArrayList<>();
     private boolean mIsNewSearch;
     private int mPage = 0;
+    private String mSearchContent;
+    private int PAGE_SIZE = 20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +48,12 @@ public class SearchMusicActivity extends Activity {
         findView();
         initView();
         initListener();
+
     }
 
     private void findView() {
         mSearchBar = (SearchBar) findViewById(R.id.search_bar);
-        mRV = (LoadMoreRecyclerView) findViewById(R.id.list_view);
+        mRV = (LoadMoreRecycleView) findViewById(R.id.list_view);
         mHolderView = findViewById(R.id.place_holder_view);
         mTvHolderImageView = (ImageView) findViewById(R.id.ac_search_iv_holder_image);
     }
@@ -60,6 +63,7 @@ public class SearchMusicActivity extends Activity {
         mSearchBar.setJumpToSearchPage(false);
         mSearchBar.setSearchButtonVisible(View.VISIBLE);
         mRV.setLayoutManager(RVUtils.getLayoutManager(this, LinearLayoutManager.VERTICAL));
+
 
         mRV.setAdapter(new BaseRVAdapter(this, mData) {
             @Override
@@ -78,7 +82,7 @@ public class SearchMusicActivity extends Activity {
         });
 
         mRV.addItemDecoration(RVUtils.getItemDecorationDivider(this, R.color.divider, 1));
-        mRV.setLoadStatus(LoadMoreView.NO_LOAD);
+        mRV.setOnLastItemVisibleListener(this);
     }
 
     private void initListener() {
@@ -88,47 +92,12 @@ public class SearchMusicActivity extends Activity {
                 mSearchBar.disableSearchBt();
                 showWaitAnimation();
                 mIsNewSearch = true;
-
-                APIHelper.subscribeSimpleRequest(APIHelper.getMusicServices().searchMusic(searchContent, 10, 1, mPage),
-                        new Observer<MusicSearchResult>() {
-                            @Override
-                            public void onCompleted() {
-
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-
-                            }
-
-                            @Override
-                            public void onNext(MusicSearchResult musicSearchResult) {
-                                if (musicSearchResult.code != APIHelper.REQUEST_SUCCESSS) {
-                                    return;
-                                }
-
-                                if (mIsNewSearch) {
-                                    mSearchBar.enableSearchBt();
-                                    mTvHolderImageView.clearAnimation();
-                                    mRV.setVisibility(View.VISIBLE);
-                                    mHolderView.setVisibility(View.INVISIBLE);
-                                    SystemOperationUtils.closeSystemKeyBoard(SearchMusicActivity.this);
-                                    mIsNewSearch = false;
-
-                                    mData.clear();
-                                    mData.addAll(musicSearchResult.result.songs);
-                                } else {
-                                    mData.addAll(musicSearchResult.result.songs);
-                                }
-
-                                mRV.getAdapter().notifyDataSetChanged();
-                            }
-                        }
-                );
+                mSearchContent = searchContent;
+                mPage = 0;
+                loadData();
             }
         });
     }
-
 
     private void showWaitAnimation() {
         mHolderView.setVisibility(View.VISIBLE);
@@ -139,5 +108,56 @@ public class SearchMusicActivity extends Activity {
         mTvHolderImageView.startAnimation(animation);
     }
 
+    @Override
+    public void onLastItemVisible() {
+        mPage++;
+        mRV.setLoadStatus(LoadMoreView.LOADING);
+        loadData();
+    }
 
+    private void loadData() {
+        APIHelper.subscribeSimpleRequest(APIHelper.getMusicServices().searchMusic(mSearchContent, PAGE_SIZE, 1, mPage * PAGE_SIZE),
+                new Observer<MusicSearchResult>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mRV.setLoadStatus(LoadMoreView.LOAD_FAILED);
+                    }
+
+                    @Override
+                    public void onNext(MusicSearchResult musicSearchResult) {
+
+                        if (musicSearchResult.result.songCount <= 0) {
+                            mRV.setLoadStatus(LoadMoreView.NO_DATA);
+                        }
+
+                        mRV.setLoadStatus(LoadMoreView.NO_LOAD);
+
+                        if (musicSearchResult.code != APIHelper.REQUEST_SUCCESSS) {
+                            return;
+                        }
+
+                        if (mIsNewSearch) {
+                            mSearchBar.enableSearchBt();
+                            mTvHolderImageView.clearAnimation();
+                            mRV.setVisibility(View.VISIBLE);
+                            mHolderView.setVisibility(View.INVISIBLE);
+                            SystemOperationUtils.closeSystemKeyBoard(SearchMusicActivity.this);
+                            mIsNewSearch = false;
+
+                            mData.clear();
+                            mData.addAll(musicSearchResult.result.songs);
+                        } else {
+                            mData.addAll(musicSearchResult.result.songs);
+                        }
+
+                        mRV.getAdapter().notifyDataSetChanged();
+                    }
+                }
+        );
+    }
 }

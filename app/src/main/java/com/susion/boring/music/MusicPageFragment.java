@@ -8,6 +8,7 @@ import android.view.View;
 import com.susion.boring.R;
 import com.susion.boring.base.BaseFragment;
 import com.susion.boring.music.adapter.MusicPageAdapter;
+import com.susion.boring.music.itemhandler.MusicPageConstantIH;
 import com.susion.boring.music.model.MusicPageConstantItem;
 import com.susion.boring.utils.RVUtils;
 import com.susion.boring.utils.UIUtils;
@@ -55,8 +56,8 @@ public class MusicPageFragment extends BaseFragment {
     }
 
     private void initConstantItem() {
-        mData.add(new MusicPageConstantItem(R.mipmap.icon_local_music, "本地音乐", "100"));
-        mData.add(new MusicPageConstantItem(R.mipmap.icon_my_collect, "我的收藏", "100"));
+        mData.add(new MusicPageConstantItem(R.mipmap.icon_local_music, "本地音乐", MusicPageConstantIH.LOCAL_MUSIC));
+        mData.add(new MusicPageConstantItem(R.mipmap.icon_my_collect, "我的收藏", MusicPageConstantIH.MY_COLLECT));
     }
 
 }

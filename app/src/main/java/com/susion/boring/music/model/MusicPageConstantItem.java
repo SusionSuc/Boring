@@ -7,10 +7,11 @@ public class MusicPageConstantItem {
     public int iconId;
     public String item;
     public String appendDesc;
+    public int type;
 
-    public MusicPageConstantItem(int iconId, String item, String appendDesc) {
+    public MusicPageConstantItem(int iconId, String item, int type) {
         this.iconId = iconId;
         this.item = item;
-        this.appendDesc = appendDesc;
+        this.type = type;
     }
 }
