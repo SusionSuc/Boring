@@ -22,13 +22,17 @@ public abstract class BaseRVAdapter extends RecyclerView.Adapter{
     protected List<?> mData;
 
     protected Activity mActivity;
-    protected SparseArray<ItemHandlerFactory> mItemHandlerHashMap = new SparseArray<>();
+    public SparseArray<ItemHandlerFactory> mItemHandlerHashMap = new SparseArray<>();
 
     public Object getItem(int position) {
         return mData != null && mData.size() > position && position >= 0 ? mData.get(position) : null;
     }
 
     protected abstract void initHandlers();
+
+    public BaseRVAdapter() {
+        initHandlers();
+    }
 
     public BaseRVAdapter(Activity activity, List<?> data) {
         mData = data;
@@ -83,8 +87,10 @@ public abstract class BaseRVAdapter extends RecyclerView.Adapter{
         if (itemHandler == null) {
             throw new RuntimeException(mData.get(position).getClass() + "  缺少ItemHandler 类,导致不能绑定数据");
         } else {
-            itemHandler.onBindView(this, (ViewHolder) holder.itemView.getTag(R.id.item_tag_id), mData.get(position), position);
-            ((ViewHolder) holder.itemView.getTag(R.id.item_tag_id)).position = position;
+            if (mData != null) {
+                itemHandler.onBindView(this, (ViewHolder) holder.itemView.getTag(R.id.item_tag_id), mData.get(position), position);
+                ((ViewHolder) holder.itemView.getTag(R.id.item_tag_id)).position = position;
+            }
         }
 
     }

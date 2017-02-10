@@ -3,6 +3,7 @@ package com.susion.boring.music.view;
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.susion.boring.R;
@@ -22,13 +24,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import retrofit2.http.Path;
+
 /**
  * Created by susion on 17/2/6.
  *
  * the each line of lyric format must is
  *   [00:00.00] 作词 : 吴梦奇/胡海泉/胥文雅 (aka 文雅) \n
  */
-public class LyricView extends LinearLayout{
+public class LyricView2 extends LinearLayout{
 
     private String mLyrics;
     private Activity mContext;
@@ -41,35 +45,30 @@ public class LyricView extends LinearLayout{
     private int mLyricHeight;
 
     private ListView mLyricContainer;
-    private BaseAdapter mAdapter;
 
-    public LyricView(Context context) {
+    public LyricView2(Context context) {
         super(context);
         init(context);
     }
 
-    public LyricView(Context context, AttributeSet attrs) {
+    public LyricView2(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
-    public LyricView(Context context, AttributeSet attrs, int defStyleAttr, Activity mContext) {
-        super(context, attrs, defStyleAttr);
-        init(context);
-    }
-    public LyricView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes, Activity mContext) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        init(context);
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        super.onLayout(changed, l, t, r, b);
+        mPaddingTop = getHeight() / 3;
+        mLyricContainer.layout(l, t + mPaddingTop, r, b);
     }
 
     private void init(Context context) {
         mContext = (Activity) context;
+
         mLyricContainer = new ListView(mContext);
         LinearLayout.LayoutParams containerParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         mLyricContainer.setLayoutParams(containerParams);
-        mLyricContainer.setDivider(null);
-        mLyricContainer.setVerticalScrollBarEnabled(false);
-        mLyricContainer.setScrollbarFadingEnabled(false);
         addView(mLyricContainer);
     }
 
@@ -80,7 +79,7 @@ public class LyricView extends LinearLayout{
 
     private void initLyricView() {
 
-        mAdapter = new BaseAdapter() {
+        mLyricContainer.setAdapter(new BaseAdapter() {
             @Override
             public int getCount() {
                 return mData.size();
@@ -110,19 +109,15 @@ public class LyricView extends LinearLayout{
 
                 return convertView;
             }
-        };
-        mLyricContainer.setAdapter(mAdapter);
+        });
 
         post(new Runnable() {
             @Override
             public void run() {
-                View listItem = mAdapter.getView(0, null, mLyricContainer);
-                int widthSpec = MeasureSpec.makeMeasureSpec(mLyricContainer.getWidth(), MeasureSpec.AT_MOST);
-                if (listItem.getLayoutParams() == null) {
-                    listItem.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                for (int i=0; i<mData.size(); i++) {
+                    TextView tv = (TextView) mLyricContainer.getChildAt(i);
+                    mData.get(i).height = tv.getHeight();
                 }
-                listItem.measure(widthSpec, 0);
-                mLyricHeight = listItem.getMeasuredHeight();
             }
         });
     }
@@ -142,7 +137,15 @@ public class LyricView extends LinearLayout{
     public void setCurrentLyricByTime(String currentTime){
         Lyric lyric = mLyricMap.get(currentTime);
         if (lyric != null) {
-            mLyricContainer.smoothScrollToPosition(lyric.pos);
+            if (lyric.height != Lyric.NO_MEASURE) {
+                if (mPaddingTop >= 0) {
+                    mLyricContainer.layout(mLyricContainer.getLeft(), mLyricContainer.getTop()-lyric.height,
+                            mLyricContainer.getRight(), mLyricContainer.getBottom());
+                    mPaddingTop -= lyric.height;
+                } else {
+                    mLyricContainer.scrollBy(0, lyric.height);
+                }
+            }
         }
     }
 

@@ -16,7 +16,7 @@ public interface MusicServices {
 
     @GET(BaseURL.MUSIC+"/search/get/")
     Observable<MusicSearchResult> searchMusic(@Query("s") String musicName, @Query("limit") int limit,
-                                              @Query("type") int type, @Query("offset") int offset);
+                                              @Query("type") int type, @Query("offset") int page);
 
     @GET(BaseURL.MUSIC_SEARCH_LYRIC+"/api/song/lyric?os=pc&kv=-1&tv=-1&lv=-1")
     Observable<LyricResult> getMusicLyric(@Query("id") String songId);

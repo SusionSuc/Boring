@@ -3,7 +3,6 @@ package com.susion.boring.music.activity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.animation.Animation;
@@ -14,8 +13,9 @@ import com.susion.boring.R;
 import com.susion.boring.base.BaseRVAdapter;
 import com.susion.boring.base.ItemHandler;
 import com.susion.boring.base.ItemHandlerFactory;
+import com.susion.boring.base.view.LoadMoreRecyclerView;
+import com.susion.boring.base.view.LoadMoreView;
 import com.susion.boring.http.APIHelper;
-import com.susion.boring.music.adapter.MusicSearchResultAdapter;
 import com.susion.boring.music.itemhandler.SearchMusicResultIH;
 import com.susion.boring.music.model.MusicSearchResult;
 import com.susion.boring.music.model.Song;
@@ -31,11 +31,13 @@ import rx.Observer;
 public class SearchMusicActivity extends Activity {
 
     private SearchBar mSearchBar;
-    private RecyclerView mRV;
+    private LoadMoreRecyclerView mRV;
     private View mHolderView;
     private ImageView mTvHolderImageView;
+
     private List<Song> mData = new ArrayList<>();
     private boolean mIsNewSearch;
+    private int mPage = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +50,7 @@ public class SearchMusicActivity extends Activity {
 
     private void findView() {
         mSearchBar = (SearchBar) findViewById(R.id.search_bar);
-        mRV = (RecyclerView) findViewById(R.id.list_view);
+        mRV = (LoadMoreRecyclerView) findViewById(R.id.list_view);
         mHolderView = findViewById(R.id.place_holder_view);
         mTvHolderImageView = (ImageView) findViewById(R.id.ac_search_iv_holder_image);
     }
@@ -74,7 +76,9 @@ public class SearchMusicActivity extends Activity {
                 return 0;
             }
         });
+
         mRV.addItemDecoration(RVUtils.getItemDecorationDivider(this, R.color.divider, 1));
+        mRV.setLoadStatus(LoadMoreView.NO_LOAD);
     }
 
     private void initListener() {
@@ -85,7 +89,7 @@ public class SearchMusicActivity extends Activity {
                 showWaitAnimation();
                 mIsNewSearch = true;
 
-                APIHelper.subscribeSimpleRequest(APIHelper.getMusicServices().searchMusic(searchContent, 10, 1, 0),
+                APIHelper.subscribeSimpleRequest(APIHelper.getMusicServices().searchMusic(searchContent, 10, 1, mPage),
                         new Observer<MusicSearchResult>() {
                             @Override
                             public void onCompleted() {
@@ -132,7 +136,7 @@ public class SearchMusicActivity extends Activity {
         RotateAnimation animation = new RotateAnimation(0f, 360f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         animation.setDuration(1000);
         animation.setRepeatCount(1000);
-         mTvHolderImageView.startAnimation(animation);
+        mTvHolderImageView.startAnimation(animation);
     }
 
 
