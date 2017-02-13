@@ -24,6 +24,7 @@ public class MusicPlayerService extends Service implements IMediaPlayView{
 
     private ServiceMusicReceiver mReceiver;
     private IMediaPlayPresenter mPresenter;
+    public static final String SERVICE_ACTION = "MUSIC_SERVICE";
 
     @Override
     public void onCreate() {
@@ -45,11 +46,13 @@ public class MusicPlayerService extends Service implements IMediaPlayView{
     }
 
     private void initMusicInfo(Intent intent) {
-        Song mSong = (Song) intent.getSerializableExtra(MusicInstruction.CLIENT_ACTION_MUSIC_INFO);
-        try {
-            mPresenter.initMediaPlayer(mSong.audio, false);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (intent != null) {
+            Song mSong = (Song) intent.getSerializableExtra(MusicInstruction.CLIENT_ACTION_MUSIC_INFO);
+            try {
+                mPresenter.initMediaPlayer(mSong.audio, false);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

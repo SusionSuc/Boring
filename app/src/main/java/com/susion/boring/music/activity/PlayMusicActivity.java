@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.media.MediaPlayer;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -19,6 +18,7 @@ import com.susion.boring.music.model.LyricResult;
 import com.susion.boring.music.model.Song;
 import com.susion.boring.music.presenter.IPlayMusicPresenter;
 import com.susion.boring.music.presenter.PlayMusicPresenter;
+import com.susion.boring.music.service.InteractProtocol;
 import com.susion.boring.music.service.MusicInstruction;
 import com.susion.boring.music.service.MusicPlayerService;
 import com.susion.boring.music.view.IMediaPlayView;
@@ -227,7 +227,7 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
     }
 
-    class ClientMusicReceiver extends BroadcastReceiver{
+    class ClientMusicReceiver extends BroadcastReceiver implements InteractProtocol {
 
         IntentFilter getIntentFilter(){
             IntentFilter filter = new IntentFilter();
