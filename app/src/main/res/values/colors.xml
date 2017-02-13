@@ -26,6 +26,7 @@
     <color name="origin_background_color">#70ffffff</color>
     <color name="has_buffer_color">#ffffff</color>
 
+    <color name="whiteChild">#F0F8FF</color>
 
     <color name="white">#ffffff</color>
     <color name="transparent">#00000000</color>

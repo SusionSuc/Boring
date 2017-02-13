@@ -24,12 +24,10 @@ public abstract  class BaseFragment extends Fragment {
         restoreShowStates(savedInstanceState);
     }
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
         if (mView == null) {
             mView = initContentView(inflater);
             initListener();
@@ -39,14 +37,12 @@ public abstract  class BaseFragment extends Fragment {
                 ((ViewGroup) (mView.getParent())).removeView(mView);
             }
         }
-
         return mView;
     }
 
     public abstract View initContentView(LayoutInflater inflater);
     public abstract void initListener();
     public abstract void initData();
-
 
     //resolve fragment overlap issue
     private void restoreShowStates(Bundle savedInstanceState) {

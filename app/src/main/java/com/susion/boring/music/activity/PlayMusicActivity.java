@@ -18,7 +18,7 @@ import com.susion.boring.music.model.LyricResult;
 import com.susion.boring.music.model.Song;
 import com.susion.boring.music.presenter.IPlayMusicPresenter;
 import com.susion.boring.music.presenter.PlayMusicPresenter;
-import com.susion.boring.music.service.InteractProtocol;
+
 import com.susion.boring.music.service.MusicInstruction;
 import com.susion.boring.music.service.MusicPlayerService;
 import com.susion.boring.music.view.IMediaPlayView;
@@ -227,7 +227,7 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
     }
 
-    class ClientMusicReceiver extends BroadcastReceiver implements InteractProtocol {
+    class ClientMusicReceiver extends BroadcastReceiver{
 
         IntentFilter getIntentFilter(){
             IntentFilter filter = new IntentFilter();

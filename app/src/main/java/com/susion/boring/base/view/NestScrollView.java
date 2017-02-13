@@ -82,15 +82,14 @@ public class NestScrollView extends LinearLayout implements NestedScrollingParen
 
     @Override
     public void onNestedPreScroll(View target, int dx, int dy, int[] consumed) {
-
         boolean hiddenTop = dy > 0 && getScrollY() < mTopViewHeight;
         boolean showTop = dy < 0 && getScrollY() >= 0 && !ViewCompat.canScrollVertically(target, -1);
-
         if (hiddenTop || showTop)
         {
             scrollBy(0, dy);
             consumed[1] = dy;
         }
+
     }
 
 

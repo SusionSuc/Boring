@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/whiteChild"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:orientation="vertical">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/view_music_control_sdv_album"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="15dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp" />
+
+    <LinearLayout
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/view_music_control_sdv_album"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/view_music_control_tv_song_name"
+            android:text="绅士"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/view_music_control_tv_song_artist"
+            android:text="薛之谦"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+
+    <ImageView
+        android:layout_centerVertical="true"
+        android:layout_marginRight="15dp"
+        android:src="@mipmap/little_next"
+        android:layout_alignParentRight="true"
+        android:id="@+id/view_music_control_iv_next"
+        android:layout_width="28dp"
+        android:layout_height="28dp" />
+
+    <ImageView
+        android:layout_centerVertical="true"
+        android:src="@mipmap/little_play"
+        android:layout_marginRight="15dp"
+        android:layout_toLeftOf="@id/view_music_control_iv_next"
+        android:id="@+id/view_music_control_iv_play"
+        android:layout_width="33dp"
+        android:layout_height="33dp" />
+
+</RelativeLayout>

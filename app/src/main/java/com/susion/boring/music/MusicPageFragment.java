@@ -10,7 +10,10 @@ import com.susion.boring.base.BaseFragment;
 import com.susion.boring.music.adapter.MusicPageAdapter;
 import com.susion.boring.music.itemhandler.MusicPageConstantIH;
 import com.susion.boring.music.model.MusicPageConstantItem;
+import com.susion.boring.music.model.Song;
+import com.susion.boring.music.view.MusicControlView;
 import com.susion.boring.utils.RVUtils;
+import com.susion.boring.utils.SPUtils;
 import com.susion.boring.utils.UIUtils;
 import com.susion.boring.view.SearchBar;
 
@@ -22,9 +25,12 @@ import java.util.List;
  */
 public class MusicPageFragment extends BaseFragment {
 
+    private List<Object> mData = new ArrayList<>();
+
     private SearchBar mSearchBar;
     private RecyclerView mRV;
-    private List<Object> mData = new ArrayList<>();
+    private MusicControlView mControlView;
+    private Song mSong;
 
     @Override
     public View initContentView(LayoutInflater inflater) {
@@ -40,11 +46,24 @@ public class MusicPageFragment extends BaseFragment {
 
         mRV = (RecyclerView) mView.findViewById(R.id.list_view);
         mRV.setLayoutManager(RVUtils.getLayoutManager(getActivity(), LinearLayoutManager.VERTICAL));
+
+        mControlView = (MusicControlView)mView.findViewById(R.id.music_control_view);
+
     }
 
     @Override
     public void initListener() {
+        mControlView.seMusicControlListener(new MusicControlView.MusicControlViewListener() {
+            @Override
+            public void onPlayClick() {
 
+            }
+
+            @Override
+            public void onNextClick() {
+
+            }
+        });
     }
 
     @Override
@@ -53,6 +72,14 @@ public class MusicPageFragment extends BaseFragment {
         MusicPageAdapter mAdapter = new MusicPageAdapter(getActivity(), mData);
         mRV.setAdapter(mAdapter);
         mRV.addItemDecoration(RVUtils.getItemDecorationDivider(getActivity(), R.color.divider, 1, 2, UIUtils.dp2Px(60)));
+
+        mSong = SPUtils.getGson().fromJson(SPUtils.getStringFromMusicConfig(SPUtils.MUSIC_CONFIG_LAST_PLAY_MUSIC, getActivity()),
+                Song.class);
+        if (mSong != null) {
+            mControlView.setPlay(false);
+            mControlView.setAlbum(mSong.album.picUrl);
+            mControlView.setSongInfo(mSong.artists.get(0).name, mSong.name);
+        }
     }
 
     private void initConstantItem() {

@@ -5,17 +5,20 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.google.gson.Gson;
 import com.susion.boring.music.model.Song;
 import com.susion.boring.music.presenter.IMediaPlayPresenter;
 import com.susion.boring.music.presenter.MediaPlayPresenter;
 import com.susion.boring.music.view.IMediaPlayView;
 import com.susion.boring.utils.BroadcastUtils;
+import com.susion.boring.utils.SPUtils;
 
 /**
  * Created by susion on 17/2/13.
@@ -25,6 +28,7 @@ public class MusicPlayerService extends Service implements IMediaPlayView{
     private ServiceMusicReceiver mReceiver;
     private IMediaPlayPresenter mPresenter;
     public static final String SERVICE_ACTION = "MUSIC_SERVICE";
+    private Song mSong;
 
     @Override
     public void onCreate() {
@@ -47,7 +51,7 @@ public class MusicPlayerService extends Service implements IMediaPlayView{
 
     private void initMusicInfo(Intent intent) {
         if (intent != null) {
-            Song mSong = (Song) intent.getSerializableExtra(MusicInstruction.CLIENT_ACTION_MUSIC_INFO);
+            mSong = (Song) intent.getSerializableExtra(MusicInstruction.CLIENT_ACTION_MUSIC_INFO);
             try {
                 mPresenter.initMediaPlayer(mSong.audio, false);
             } catch (Exception e) {
@@ -91,12 +95,30 @@ public class MusicPlayerService extends Service implements IMediaPlayView{
 
     }
 
+    //用长按home调出最近运行历史，在这里面清除软件,可能会调用
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        super.onTaskRemoved(rootIntent);
+        clear();
+    }
+
+    //手动停止, 会被调用
     @Override
     public void onDestroy() {
         super.onDestroy();
+        clear();
+    }
+
+    private void clear() {
+        saveLastPlayMusic();
         mPresenter.releaseResource();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
     }
+
+    private void saveLastPlayMusic() {
+        SPUtils.writeStringToMusicConfig(SPUtils.MUSIC_CONFIG_LAST_PLAY_MUSIC, SPUtils.getGson().toJson(mSong),this);
+    }
+
 
     class ServiceMusicReceiver extends BroadcastReceiver{
 
@@ -105,6 +127,7 @@ public class MusicPlayerService extends Service implements IMediaPlayView{
             filter.addAction(MusicInstruction.SERVICE_RECEIVER_PLAY_MUSIC);
             filter.addAction(MusicInstruction.SERVICE_RECEIVER_PAUSE_MUSIC);
             filter.addAction(MusicInstruction.SERVICE_RECEIVER_SEEK_TO);
+            filter.addAction(MusicInstruction.SERVICE_SAVE_LAST_PLAY_MUSIC);
             return filter;
         }
 
@@ -120,6 +143,9 @@ public class MusicPlayerService extends Service implements IMediaPlayView{
                     break;
                 case MusicInstruction.SERVICE_RECEIVER_SEEK_TO:
                     mPresenter.seekTo(intent.getIntExtra(MusicInstruction.SERVICE_PARAM_SEEK_TO_POS, 0));
+                    break;
+                case MusicInstruction.SERVICE_SAVE_LAST_PLAY_MUSIC:
+                    saveLastPlayMusic();
                     break;
             }
         }

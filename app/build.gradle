@@ -24,14 +24,14 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.facebook.fresco:fresco:1.0.0'
-    compile "com.android.support:recyclerview-v7:24.2.1"
-    compile "com.android.support:design:24.2.1"
-    compile "com.yanzhenjie:permission:1.0.5"
-
+    compile 'com.android.support:recyclerview-v7:24.2.1'
+    compile 'com.android.support:design:24.2.1'
+    compile 'com.yanzhenjie:permission:1.0.5'
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'io.reactivex:rxjava:1.1.6'
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
     compile files('libs/universal-image-loader-1.9.5.jar')
+    compile 'com.google.code.gson:gson:2.8.0'
 }

@@ -10,6 +10,7 @@ public class MusicInstruction {
     public static final String SERVICE_RECEIVER_PAUSE_MUSIC = "SERVICE_RECEIVER_PAUSE_MUSIC";
     public static final String SERVICE_RECEIVER_SEEK_TO = "SERVICE_RECEIVER_SEEK_TO";
     public static final String SERVICE_PARAM_SEEK_TO_POS = "SERVICE_PARAM_SEEK_TO_POS";
+    public static final String SERVICE_SAVE_LAST_PLAY_MUSIC = "SERVICE_SAVE_LAST_PLAY_MUSIC";
 
     //client
     public static final String CLIENT_ACTION_MUSIC_INFO = "CLIENT_ACTION_MUSIC_INFO";
@@ -20,5 +21,6 @@ public class MusicInstruction {
     public static final String CLIENT_PARAM_PLAY_PROGRESS_CUR_POS = "CLIENT_PARAM_PLAY_PROGRESS_CUR_POS";
     public static final String CLIENT_PARAM_PLAY_PROGRESS_DURATION = "CLIENT_PARAM_PLAY_PROGRESS__DURATION";
     public static final String CLIENT_PARAM_PREPARED_TOTAL_DURATION = "CLIENT_PARAM_PREPARED_TOTAL_DURATION";
+
 
 }

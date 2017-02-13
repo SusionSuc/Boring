@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +18,7 @@ import com.susion.boring.R;
 import com.susion.boring.base.BaseActivity;
 import com.susion.boring.base.DrawerData;
 import com.susion.boring.mainui.drawer.MainDrawerAdapter;
+import com.susion.boring.music.service.MusicInstruction;
 import com.susion.boring.utils.RVUtils;
 import com.susion.boring.utils.StatusBarUtil;
 import com.susion.boring.utils.UIUtils;
@@ -127,4 +129,10 @@ public class MainActivity extends BaseActivity implements IMainUIView{
         mViewPager.setCurrentItem(mToolBar.getCurrentSelectItem());
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Intent intent = new Intent(MusicInstruction.SERVICE_SAVE_LAST_PLAY_MUSIC);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
 }
