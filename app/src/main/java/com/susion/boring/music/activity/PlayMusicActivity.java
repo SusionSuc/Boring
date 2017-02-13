@@ -18,6 +18,8 @@ import com.susion.boring.music.model.LyricResult;
 import com.susion.boring.music.model.Song;
 import com.susion.boring.music.presenter.IPlayMusicPresenter;
 import com.susion.boring.music.presenter.PlayMusicPresenter;
+import com.susion.boring.music.service.MusicInstruction;
+import com.susion.boring.music.service.MusicPlayerService;
 import com.susion.boring.music.view.IMediaPlayView;
 import com.susion.boring.music.view.LyricView;
 import com.susion.boring.music.view.MediaSeekBar;
@@ -25,6 +27,8 @@ import com.susion.boring.music.view.MusicPlayControlView;
 import com.susion.boring.utils.ImageUtils;
 import com.susion.boring.utils.MediaUtils;
 import com.susion.boring.view.SToolBar;
+
+import java.io.Serializable;
 
 import rx.Observer;
 
@@ -47,14 +51,6 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
         intent.putExtra(TO_PLAY_MUSIC_INFO, song);
         intent.setClass(context, PlayMusicActivity.class);
         context.startActivity(intent);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        findView();
-        initData();
-        initView();
     }
 
     @Override
@@ -94,6 +90,7 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
 
         }
     }
+
     @Override
     public void initListener() {
         mPlayControlView.setOnControlItemClickListener(new MusicPlayControlView.MusicPlayerControlViewItemClickListener() {
@@ -160,6 +157,11 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
         mSong = (Song) getIntent().getSerializableExtra(TO_PLAY_MUSIC_INFO);
         mPresenter = new PlayMusicPresenter(this);
         loadLyric();
+
+        //start service to play music
+        Intent intent = new Intent(this, MusicPlayerService.class);
+        intent.putExtra(MusicInstruction.CLIENT_ACTION_MUSIC_INFO, mSong);
+        startService(intent);
     }
 
     private void loadLyric() {
