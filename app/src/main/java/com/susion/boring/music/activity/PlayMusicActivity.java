@@ -1,12 +1,13 @@
 package com.susion.boring.music.activity;
 
-import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.MediaPlayer;
-import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,11 +25,10 @@ import com.susion.boring.music.view.IMediaPlayView;
 import com.susion.boring.music.view.LyricView;
 import com.susion.boring.music.view.MediaSeekBar;
 import com.susion.boring.music.view.MusicPlayControlView;
+import com.susion.boring.utils.BroadcastUtils;
 import com.susion.boring.utils.ImageUtils;
 import com.susion.boring.utils.MediaUtils;
 import com.susion.boring.view.SToolBar;
-
-import java.io.Serializable;
 
 import rx.Observer;
 
@@ -157,6 +157,14 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
         mSong = (Song) getIntent().getSerializableExtra(TO_PLAY_MUSIC_INFO);
         mPresenter = new PlayMusicPresenter(this);
         loadLyric();
+        initBroadcastAndService();
+    }
+
+    private void initBroadcastAndService() {
+        ClientMusicReceiver mReceiver = new ClientMusicReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(MusicInstruction.CLIENT_RECEIVER_PLAYER_PREPARED);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, filter);
 
         //start service to play music
         Intent intent = new Intent(this, MusicPlayerService.class);
@@ -228,7 +236,23 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
     @Override
     protected void onPause() {
         super.onPause();
-
-
     }
+
+
+    class ClientMusicReceiver extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            switch (action){
+                case MusicInstruction.CLIENT_RECEIVER_PLAYER_PREPARED:
+                    BroadcastUtils.sendIntentAction(PlayMusicActivity.this, MusicInstruction.SERVICE_RECEIVER_PLAY_MUSIC);
+                    break;
+
+            }
+        }
+    }
+
+
+
 }

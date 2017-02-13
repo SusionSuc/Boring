@@ -70,9 +70,6 @@ public class MediaPlayPresenter implements IMediaPlayPresenter, MediaPlayer.OnPr
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
         mIsPrepared = true;
-        if (mAutoPlay) {
-            startPlay();
-        }
         mView.preparedPlay(mPlayer);
     }
 
