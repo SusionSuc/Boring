@@ -6,7 +6,6 @@ import android.media.MediaPlayer;
  * Created by susion on 17/1/23.
  */
 public interface IMediaPlayView {
-    void initMediaProgress(String duration);
     void updateBufferedProgress(int percent);
     void updatePlayProgress(int curPos, int duration);
     void preparedPlay(MediaPlayer mPlayer);

@@ -69,7 +69,6 @@ public class MediaPlayPresenter implements IMediaPlayPresenter, MediaPlayer.OnPr
 
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
-        mView.initMediaProgress(MediaUtils.getDurationString(0, false));
         mIsPrepared = true;
         if (mAutoPlay) {
             startPlay();

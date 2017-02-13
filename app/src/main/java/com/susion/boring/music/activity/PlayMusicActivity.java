@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.susion.boring.R;
+import com.susion.boring.base.BaseActivity;
 import com.susion.boring.http.APIHelper;
 import com.susion.boring.music.model.LyricResult;
 import com.susion.boring.music.model.Song;
@@ -27,7 +28,7 @@ import com.susion.boring.view.SToolBar;
 
 import rx.Observer;
 
-public class PlayMusicActivity extends Activity implements IMediaPlayView{
+public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
     private static final String TO_PLAY_MUSIC_INFO = "played_music";
 
     private SToolBar mToolBar;
@@ -51,14 +52,18 @@ public class PlayMusicActivity extends Activity implements IMediaPlayView{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_play_music);
-        mPresenter = new PlayMusicPresenter(this);
         findView();
         initData();
         initView();
     }
 
-    private void findView(){
+    @Override
+    public int getLayoutId() {
+        return R.layout.activity_play_music;
+    }
+
+    @Override
+    public void findView(){
         mToolBar = (SToolBar) findViewById(R.id.toolbar);
         mSeekBar = (MediaSeekBar) findViewById(R.id.seek_bar);
         mPlayControlView = (MusicPlayControlView) findViewById(R.id.control_view);
@@ -68,32 +73,8 @@ public class PlayMusicActivity extends Activity implements IMediaPlayView{
         mLyricView = (LyricView) findViewById(R.id.lyric_view);
     }
 
-    private void initData() {
-        mSong = (Song) getIntent().getSerializableExtra(TO_PLAY_MUSIC_INFO);
-        loadLyric();
-    }
-
-    private void loadLyric() {
-        APIHelper.subscribeSimpleRequest(APIHelper.getMusicServices().getMusicLyric(mSong.id), new Observer<LyricResult>() {
-            @Override
-            public void onCompleted() {
-                int b = 0;
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                int a = 0;
-            }
-
-            @Override
-            public void onNext(LyricResult s) {
-                mLyricView.setLyrics(s.lrc.lyric);
-            }
-        });
-
-    }
-
-    private void initView() {
+    @Override
+    public void initView() {
         mToolBar.setMainPage(false);
         mToolBar.setTitle(mSong.name);
         mToolBar.setLeftIcon(R.mipmap.tool_bar_back);
@@ -113,17 +94,8 @@ public class PlayMusicActivity extends Activity implements IMediaPlayView{
 
         }
     }
-
-    private void setBlurBackground() {
-        ImageUtils.LoadImage(this, mSong.album.picUrl, new ImageUtils.OnLoadFinishLoadImage() {
-            @Override
-            public void loadImageFinish(String imageUri, View view, Bitmap loadedImage) {
-                mLl.setBackground(mPresenter.getBackgroundBlurImage(loadedImage));
-            }
-        });
-    }
-
-    private void initListener() {
+    @Override
+    public void initListener() {
         mPlayControlView.setOnControlItemClickListener(new MusicPlayControlView.MusicPlayerControlViewItemClickListener() {
             @Override
             public void onMoreItemClick() {
@@ -183,6 +155,39 @@ public class PlayMusicActivity extends Activity implements IMediaPlayView{
         });
     }
 
+    @Override
+    public void initData() {
+        mSong = (Song) getIntent().getSerializableExtra(TO_PLAY_MUSIC_INFO);
+        mPresenter = new PlayMusicPresenter(this);
+        loadLyric();
+    }
+
+    private void loadLyric() {
+        APIHelper.subscribeSimpleRequest(APIHelper.getMusicServices().getMusicLyric(mSong.id), new Observer<LyricResult>() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @Override
+            public void onNext(LyricResult s) {
+                mLyricView.setLyrics(s.lrc.lyric);
+            }
+        });
+
+    }
+
+    private void setBlurBackground() {
+        ImageUtils.LoadImage(this, mSong.album.picUrl, new ImageUtils.OnLoadFinishLoadImage() {
+            @Override
+            public void loadImageFinish(String imageUri, View view, Bitmap loadedImage) {
+                mLl.setBackground(mPresenter.getBackgroundBlurImage(loadedImage));
+            }
+        });
+    }
 
     @Override
     public void preparedPlay(MediaPlayer player) {
@@ -209,7 +214,6 @@ public class PlayMusicActivity extends Activity implements IMediaPlayView{
         mLyricView.setCurrentLyricByTime(MediaUtils.getDurationString(curPos, false));
     }
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -217,9 +221,12 @@ public class PlayMusicActivity extends Activity implements IMediaPlayView{
         mPresenter.releaseResource();
     }
 
+
+    //start background play
     @Override
-    public void initMediaProgress(String duration) {
+    protected void onPause() {
+        super.onPause();
+
 
     }
-
 }
