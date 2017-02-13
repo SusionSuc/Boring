@@ -12,4 +12,5 @@ public interface ISplashPresenter {
     public void skipToMainActivity(Activity context, View view);
     public void initConfig();
     public void setAuthorInfo(Context context, int iconId, int textId);
+    void requestPermission(Activity activity);
 }

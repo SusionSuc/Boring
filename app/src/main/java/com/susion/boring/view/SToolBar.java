@@ -2,6 +2,8 @@ package com.susion.boring.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -35,28 +37,38 @@ public class SToolBar extends RelativeLayout implements View.OnClickListener, Ma
     public SToolBar(Context context) {
         super(context);
         mContext = context;
-        init();
+        init(null);
     }
 
     public SToolBar(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
-        init();
+        init(attrs);
     }
 
     public SToolBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mContext = context;
-        init();
+        init(attrs);
     }
 
-    private void init() {
+    private void init(AttributeSet attrs) {
         View.inflate(mContext, R.layout.view_tool_bar, this);
         findView();
         setSelectedItem(mCurrentSelectItem);
         mLeftIcon.setSelected(true);
         setBackgroundColor(mContext.getResources().getColor(R.color.colorPrimary));
-        isShowTitle();
+        setAttrs(attrs);
+    }
+
+    private void setAttrs(AttributeSet attrs) {
+        if(attrs != null){
+            TypedArray ta = getContext().obtainStyledAttributes(attrs, R.styleable.SToolBar);
+            isMainPage = !ta.getBoolean(R.styleable.SToolBar_showTitle, false);
+            isShowTitle();
+            ta.recycle();
+        }
+
     }
 
     private void isShowTitle() {

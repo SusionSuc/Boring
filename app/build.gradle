@@ -26,6 +26,7 @@ dependencies {
     compile 'com.facebook.fresco:fresco:1.0.0'
     compile "com.android.support:recyclerview-v7:24.2.1"
     compile "com.android.support:design:24.2.1"
+    compile "com.yanzhenjie:permission:1.0.5"
 
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'io.reactivex:rxjava:1.1.6'

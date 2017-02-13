@@ -3,4 +3,5 @@
     <string name="splash_desc">susion for graduation project</string>
     <string name="author_info">copyright@susion</string>
     <string name="transition_name_search_bar">transition_name_search_bar</string>
+    <string name="transition_name_tool_bar">transition_name_tool_bar</string>
 </resources>

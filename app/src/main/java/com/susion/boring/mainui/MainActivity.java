@@ -25,7 +25,6 @@ import com.susion.boring.view.SToolBar;
 public class MainActivity extends BaseActivity implements IMainUIView{
 
     private DrawerLayout mDrawerLayout;
-    private SToolBar mToolBar;
     private LinearLayout mDrawerMenu;
     private RecyclerView mDrawerList;
     private ViewPager mViewPager;
@@ -44,28 +43,23 @@ public class MainActivity extends BaseActivity implements IMainUIView{
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        findView();
-        initViewAndListener();
-        init();
+    public int getLayoutId() {
+        return R.layout.activity_main;
     }
 
-
-    private void findView() {
+    @Override
+    public void findView() {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerMenu = (LinearLayout) findViewById(R.id.drawer);
-        mToolBar = (SToolBar) findViewById(R.id.toolbar);
         mDrawerList = (RecyclerView) findViewById(R.id.list_view);
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
+    }
 
+    @Override
+    public void initView() {
         mToolBar.setLeftIcon(R.drawable.select_toolbar_menu);
         mDrawerList.setLayoutManager(RVUtils.getLayoutManager(this, LinearLayoutManager.VERTICAL));
         mDrawerList.addItemDecoration(RVUtils.getItemDecorationDivider(this, R.color.white, UIUtils.dp2Px(10)));
-    }
-
-    private void initViewAndListener() {
 
         mViewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
@@ -78,7 +72,10 @@ public class MainActivity extends BaseActivity implements IMainUIView{
                 return FragmentFactory.getMainUIFragments().size();
             }
         });
+    }
 
+    @Override
+    public void initListener() {
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -116,11 +113,14 @@ public class MainActivity extends BaseActivity implements IMainUIView{
                 showCurrentSelectedFragment();
             }
         });
-    }
 
-    private void init() {
         mDrawerList.setAdapter(new MainDrawerAdapter(this, DrawerData.getData()));
         showCurrentSelectedFragment();
+    }
+
+    @Override
+    public void initData() {
+
     }
 
     private void showCurrentSelectedFragment() {

@@ -1,5 +1,6 @@
 package com.susion.boring.splash;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -7,6 +8,7 @@ import android.view.View;
 
 import com.susion.boring.mainui.MainActivity;
 import com.susion.boring.utils.UIUtils;
+import com.yanzhenjie.permission.AndPermission;
 
 /**
  * Created by susion on 17/1/17.
@@ -57,6 +59,14 @@ public class SplashPresenter implements ISplashPresenter{
         }
 
         mSplashView.setAuthorInfo(null, textId);
+    }
+
+    @Override
+    public void requestPermission(Activity activity) {
+        AndPermission.with(activity)
+                .requestCode(100)
+                .permission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                .send();
     }
 
 }

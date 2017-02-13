@@ -31,6 +31,7 @@ public class SplashActivity extends Activity implements ISplashView {
         mPresenter.setImageAndDescText(R.mipmap.logo, R.string.splash_desc);
         mPresenter.skipToMainActivity(this, getWindow().getDecorView());
         mPresenter.setAuthorInfo(this, -1, R.string.author_info);
+        mPresenter.requestPermission(this);
 
         Log.d("SplashActivity", "SplashActivity..onCreate");
     }
