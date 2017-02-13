@@ -8,7 +8,7 @@ import android.media.MediaPlayer;
 public interface IMediaPlayView {
     void updateBufferedProgress(int percent);
     void updatePlayProgress(int curPos, int duration);
-    void preparedPlay(MediaPlayer mPlayer);
+    void preparedPlay(int duration);
     void completionPlay();
 
 }

@@ -70,7 +70,7 @@ public class MediaPlayPresenter implements IMediaPlayPresenter, MediaPlayer.OnPr
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
         mIsPrepared = true;
-        mView.preparedPlay(mPlayer);
+        mView.preparedPlay(mPlayer.getDuration());
     }
 
     @Override
@@ -137,6 +137,7 @@ public class MediaPlayPresenter implements IMediaPlayPresenter, MediaPlayer.OnPr
         if (mPlayer == null) return;
         mPlayer.seekTo(pos);
     }
+
 
     private void setSourceForMultiType() throws IOException {
         if (mSource.getScheme() != null &&

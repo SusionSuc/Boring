@@ -6,6 +6,6 @@ import android.graphics.drawable.Drawable;
 /**
  * Created by susion on 17/2/8.
  */
-public interface IPlayMusicPresenter extends IMediaPlayPresenter{
+public interface IPlayMusicPresenter{
     Drawable getBackgroundBlurImage(Bitmap bitmap);
 }

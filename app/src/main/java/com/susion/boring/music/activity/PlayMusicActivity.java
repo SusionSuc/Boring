@@ -45,6 +45,7 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
     private TextView mTvPlayedTime;
     private TextView mTvLeftTime;
     private LyricView mLyricView;
+    private ClientMusicReceiver mReceiver;
 
     public static void start(Context context, Song song) {
         Intent intent = new Intent();
@@ -71,6 +72,8 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
 
     @Override
     public void initView() {
+        mSong = (Song) getIntent().getSerializableExtra(TO_PLAY_MUSIC_INFO);
+        mPresenter = new PlayMusicPresenter(this);
         mToolBar.setMainPage(false);
         mToolBar.setTitle(mSong.name);
         mToolBar.setLeftIcon(R.mipmap.tool_bar_back);
@@ -83,12 +86,6 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
         initListener();
 
         mPlayControlView.setIsPlay(true);
-
-        try{
-            mPresenter.initMediaPlayer(mSong.audio, mPlayControlView.ismIsPlay());
-        }catch(Exception e){
-
-        }
     }
 
     @Override
@@ -117,9 +114,9 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
             @Override
             public void onStartOrStartItemClick(boolean isPlay) {
                 if (isPlay) {
-                    mPlayControlView.setIsPlay(mPresenter.startPlay());
+                    BroadcastUtils.sendIntentAction(PlayMusicActivity.this, MusicInstruction.SERVICE_RECEIVER_PAUSE_MUSIC);
                 } else {
-                    mPresenter.pausePlay();
+                    BroadcastUtils.sendIntentAction(PlayMusicActivity.this, MusicInstruction.SERVICE_RECEIVER_PLAY_MUSIC);
                 }
             }
         });
@@ -128,45 +125,44 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
         mSeekBar.setMediaSeekBarListener(new MediaSeekBar.MediaSeekBarListener() {
             @Override
             public void onStartDragThumb(int currentProgress) {
-                mPresenter.pausePlay();
+                mPlayControlView.setIsPlay(false);
             }
 
             @Override
             public void onDraggingThumb(int currentProgress) {
-
             }
 
             @Override
             public void onStopDragThumb(int currentProgress) {
+                Intent intent = new Intent(MusicInstruction.SERVICE_RECEIVER_SEEK_TO);
+                intent.putExtra(MusicInstruction.SERVICE_PARAM_SEEK_TO_POS, currentProgress);
+                LocalBroadcastManager.getInstance(PlayMusicActivity.this).sendBroadcast(intent);
                 if (!mPlayControlView.ismIsPlay()) {
                     mPlayControlView.setIsPlay(true);
                 }
-                mPresenter.startPlay();
-                mPresenter.seekTo(currentProgress);
             }
 
             @Override
             public void onProgressChange(int currentProgress) {
-                mPresenter.seekTo(currentProgress);
+                Intent intent = new Intent(MusicInstruction.SERVICE_RECEIVER_SEEK_TO);
+                intent.putExtra(MusicInstruction.SERVICE_PARAM_SEEK_TO_POS, currentProgress);
+                LocalBroadcastManager.getInstance(PlayMusicActivity.this).sendBroadcast(intent);
             }
         });
     }
 
+
+
     @Override
     public void initData() {
-        mSong = (Song) getIntent().getSerializableExtra(TO_PLAY_MUSIC_INFO);
-        mPresenter = new PlayMusicPresenter(this);
         loadLyric();
         initBroadcastAndService();
     }
 
     private void initBroadcastAndService() {
-        ClientMusicReceiver mReceiver = new ClientMusicReceiver();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(MusicInstruction.CLIENT_RECEIVER_PLAYER_PREPARED);
-        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, filter);
+        mReceiver = new ClientMusicReceiver();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, mReceiver.getIntentFilter());
 
-        //start service to play music
         Intent intent = new Intent(this, MusicPlayerService.class);
         intent.putExtra(MusicInstruction.CLIENT_ACTION_MUSIC_INFO, mSong);
         startService(intent);
@@ -176,6 +172,7 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
         APIHelper.subscribeSimpleRequest(APIHelper.getMusicServices().getMusicLyric(mSong.id), new Observer<LyricResult>() {
             @Override
             public void onCompleted() {
+
             }
 
             @Override
@@ -200,9 +197,9 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
     }
 
     @Override
-    public void preparedPlay(MediaPlayer player) {
+    public void preparedPlay(int duration) {
         mSeekBar.setCurrentProgress(0);
-        mSeekBar.setMaxProgress(player.getDuration());
+        mSeekBar.setMaxProgress(duration);
     }
 
     @Override
@@ -227,28 +224,34 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mPresenter.stopPlay();
-        mPresenter.releaseResource();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
     }
-
-
-    //start background play
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
 
     class ClientMusicReceiver extends BroadcastReceiver{
+
+        IntentFilter getIntentFilter(){
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(MusicInstruction.CLIENT_RECEIVER_PLAYER_PREPARED);
+            filter.addAction(MusicInstruction.CLIENT_RECEIVER_UPDATE_BUFFERED_PROGRESS);
+            filter.addAction(MusicInstruction.CLIENT_RECEIVER_UPDATE_PLAY_PROGRESS);
+            return filter;
+        }
 
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             switch (action){
                 case MusicInstruction.CLIENT_RECEIVER_PLAYER_PREPARED:
+                    preparedPlay(intent.getIntExtra(MusicInstruction.CLIENT_PARAM_PREPARED_TOTAL_DURATION, 0));
                     BroadcastUtils.sendIntentAction(PlayMusicActivity.this, MusicInstruction.SERVICE_RECEIVER_PLAY_MUSIC);
                     break;
-
+                case MusicInstruction.CLIENT_RECEIVER_UPDATE_BUFFERED_PROGRESS:
+                    updateBufferedProgress(intent.getIntExtra(MusicInstruction.CLIENT_PARAM_BUFFERED_PROGRESS, 0));
+                    break;
+                case MusicInstruction.CLIENT_RECEIVER_UPDATE_PLAY_PROGRESS:
+                    updatePlayProgress(intent.getIntExtra(MusicInstruction.CLIENT_PARAM_PLAY_PROGRESS_CUR_POS, 0),
+                            intent.getIntExtra(MusicInstruction.CLIENT_PARAM_PLAY_PROGRESS_DURATION, 0));
+                    break;
             }
         }
     }
