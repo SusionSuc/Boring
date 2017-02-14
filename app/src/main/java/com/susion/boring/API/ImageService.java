@@ -1,11 +1,7 @@
-package com.susion.boring.http;
+package com.susion.boring.API;
 
 import android.graphics.Bitmap;
 
-import com.susion.boring.music.model.MusicSearchResult;
-
-import retrofit2.http.GET;
-import retrofit2.http.Query;
 import rx.Observable;
 
 /**

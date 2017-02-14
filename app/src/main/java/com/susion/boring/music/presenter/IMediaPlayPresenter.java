@@ -8,10 +8,14 @@ import android.view.ViewGroup;
  */
 public interface IMediaPlayPresenter {
 
-    void initMediaPlayer(String mediaUri, boolean autoPlay) throws Exception;
+    void initMediaPlayer(String mediaUri) throws Exception;
     boolean startPlay();
     void pausePlay();
     void stopPlay();
     void releaseResource();
     void seekTo(int pos);
+
+    boolean isPrepared();
+
+    int getDuration();
 }

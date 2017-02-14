@@ -21,6 +21,7 @@ public class NestScrollView extends LinearLayout implements NestedScrollingParen
     private Context mContext;
     private View mTopView;
     private View mSecondView;
+
     private int mTopViewHeight;
     private OverScroller mScroller;
 
@@ -77,7 +78,7 @@ public class NestScrollView extends LinearLayout implements NestedScrollingParen
 
     @Override
     public boolean onStartNestedScroll(View child, View target, int nestedScrollAxes) {
-        return (nestedScrollAxes & ViewCompat.SCROLL_AXIS_VERTICAL) != 0;
+        return (nestedScrollAxes & ViewCompat.SCROLL_AXIS_VERTICAL) != 0;   //只要是竖直滑动, 就拦截
     }
 
     @Override

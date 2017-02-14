@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.susion.boring.R;
 import com.susion.boring.base.BaseActivity;
-import com.susion.boring.http.APIHelper;
+import com.susion.boring.API.APIHelper;
 import com.susion.boring.music.model.LyricResult;
 import com.susion.boring.music.model.Song;
 import com.susion.boring.music.presenter.IPlayMusicPresenter;
@@ -34,6 +34,7 @@ import rx.Observer;
 
 public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
     private static final String TO_PLAY_MUSIC_INFO = "played_music";
+    private static final String IS_PLAY = "is_play";
 
     private SToolBar mToolBar;
     private MediaSeekBar mSeekBar;
@@ -47,9 +48,10 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
     private LyricView mLyricView;
     private ClientMusicReceiver mReceiver;
 
-    public static void start(Context context, Song song) {
+    public static void start(Context context, Song song, boolean mIsPlay) {
         Intent intent = new Intent();
         intent.putExtra(TO_PLAY_MUSIC_INFO, song);
+        intent.putExtra(IS_PLAY, mIsPlay);
         intent.setClass(context, PlayMusicActivity.class);
         context.startActivity(intent);
     }
@@ -72,7 +74,10 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
 
     @Override
     public void initView() {
+        mReceiver = new ClientMusicReceiver();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, mReceiver.getIntentFilter());
         mSong = (Song) getIntent().getSerializableExtra(TO_PLAY_MUSIC_INFO);
+
         mPresenter = new PlayMusicPresenter(this);
         mToolBar.setMainPage(false);
         mToolBar.setTitle(mSong.name);
@@ -85,7 +90,7 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
         setBlurBackground();
         initListener();
 
-        mPlayControlView.setIsPlay(true);
+        mPlayControlView.setIsPlay(false);
     }
 
     @Override
@@ -114,9 +119,9 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
             @Override
             public void onStartOrStartItemClick(boolean isPlay) {
                 if (isPlay) {
-                    BroadcastUtils.sendIntentAction(PlayMusicActivity.this, MusicInstruction.SERVICE_RECEIVER_PAUSE_MUSIC);
-                } else {
                     BroadcastUtils.sendIntentAction(PlayMusicActivity.this, MusicInstruction.SERVICE_RECEIVER_PLAY_MUSIC);
+                } else {
+                    BroadcastUtils.sendIntentAction(PlayMusicActivity.this, MusicInstruction.SERVICE_RECEIVER_PAUSE_MUSIC);
                 }
             }
         });
@@ -151,21 +156,16 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
         });
     }
 
-
-
     @Override
     public void initData() {
         loadLyric();
-        initBroadcastAndService();
+        BroadcastUtils.sendIntentAction(PlayMusicActivity.this, MusicInstruction.SERVICE_RECEIVER_QUERY_CURRENT_STATE);  //查询当前的播放状态
     }
 
-    private void initBroadcastAndService() {
-        mReceiver = new ClientMusicReceiver();
-        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, mReceiver.getIntentFilter());
-
-        Intent intent = new Intent(this, MusicPlayerService.class);
-        intent.putExtra(MusicInstruction.CLIENT_ACTION_MUSIC_INFO, mSong);
-        startService(intent);
+    private void loadMusic() {
+        Intent intent = new Intent(MusicInstruction.SERVICE_LOAD_MUSIC_INFO);
+        intent.putExtra(MusicInstruction.SERVICE_PARAM_PLAY_SONG, mSong);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
     private void loadLyric() {
@@ -194,6 +194,12 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
                 mLl.setBackground(mPresenter.getBackgroundBlurImage(loadedImage));
             }
         });
+    }
+
+    private void tryToChangeMusic() {
+        Intent intent = new Intent(MusicInstruction.SERVER_RECEIVER_CHANGE_MUSIC);
+        intent.putExtra(MusicInstruction.SERVICE_PARAM_CHANGE_MUSIC, mSong);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
     @Override
@@ -227,13 +233,15 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
     }
 
-    class ClientMusicReceiver extends BroadcastReceiver{
+    public class ClientMusicReceiver extends BroadcastReceiver{
 
-        IntentFilter getIntentFilter(){
+        public IntentFilter getIntentFilter(){
             IntentFilter filter = new IntentFilter();
             filter.addAction(MusicInstruction.CLIENT_RECEIVER_PLAYER_PREPARED);
             filter.addAction(MusicInstruction.CLIENT_RECEIVER_UPDATE_BUFFERED_PROGRESS);
             filter.addAction(MusicInstruction.CLIENT_RECEIVER_UPDATE_PLAY_PROGRESS);
+            filter.addAction(MusicInstruction.CLIENT_RECEIVER_CURRENT_SERVER_STATE);
+            filter.addAction(MusicInstruction.CLIENT_RECEIVER_SET_DURATION);
             return filter;
         }
 
@@ -252,10 +260,19 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
                     updatePlayProgress(intent.getIntExtra(MusicInstruction.CLIENT_PARAM_PLAY_PROGRESS_CUR_POS, 0),
                             intent.getIntExtra(MusicInstruction.CLIENT_PARAM_PLAY_PROGRESS_DURATION, 0));
                     break;
+                case MusicInstruction.CLIENT_RECEIVER_CURRENT_SERVER_STATE:
+                    boolean serverState = intent.getBooleanExtra(MusicInstruction.CLIENT_PARAM_SERVER_STATE, false);
+                    if (serverState) {  //繁忙状态
+                        tryToChangeMusic();
+                    } else {  //空闲状态
+                        loadMusic();
+                    }
+                    break;
+                case MusicInstruction.CLIENT_RECEIVER_SET_DURATION:
+                    mSeekBar.setMaxProgress(intent.getIntExtra(MusicInstruction.CLIENT_PARAM_MEDIA_DURATION, 0));
+                    break;
             }
         }
     }
-
-
 
 }

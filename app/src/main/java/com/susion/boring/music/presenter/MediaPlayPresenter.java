@@ -52,17 +52,19 @@ public class MediaPlayPresenter implements IMediaPlayPresenter, MediaPlayer.OnPr
     }
 
     @Override
-    public void initMediaPlayer(String mediaUri, boolean autoPlay) throws Exception{
+    public void initMediaPlayer(String mediaUri) throws Exception{
         if (mPlayer == null) {
             mPlayer = new MediaPlayer();
+            mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mPlayer.setOnPreparedListener(this);
+            mPlayer.setOnBufferingUpdateListener(this);
+            mPlayer.setOnCompletionListener(this);
+            mPlayer.setLooping(false);  // after play finish not remain at start state, and will call OnCompletionListener
         }
-        mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        mPlayer.setOnPreparedListener(this);
-        mPlayer.setOnBufferingUpdateListener(this);
-        mPlayer.setOnCompletionListener(this);
+
+        mPlayer.reset(); // reset for change music
 
         mSource = Uri.parse(mediaUri);
-        mAutoPlay = autoPlay;
         setSourceForMultiType();
         mPlayer.prepareAsync();
     }
@@ -99,6 +101,7 @@ public class MediaPlayPresenter implements IMediaPlayPresenter, MediaPlayer.OnPr
 
     @Override
     public void stopPlay() {
+        mIsPrepared = false;
         if (mPlayer == null) return;
         try {
             mPlayer.stop();
@@ -129,13 +132,25 @@ public class MediaPlayPresenter implements IMediaPlayPresenter, MediaPlayer.OnPr
         if (mUpdateProgressHandler != null)
             mUpdateProgressHandler.removeCallbacks(mProgressUpdateRun);
         mView.completionPlay();
-
     }
 
     @Override
     public void seekTo(int pos) {
         if (mPlayer == null) return;
         mPlayer.seekTo(pos);
+    }
+
+    @Override
+    public boolean isPrepared() {
+        return mIsPrepared;
+    }
+
+    @Override
+    public int getDuration() {
+        if (mIsPrepared) {
+            return mPlayer.getDuration();
+        }
+        return 0;
     }
 
 
@@ -162,10 +177,5 @@ public class MediaPlayPresenter implements IMediaPlayPresenter, MediaPlayer.OnPr
     public void onBufferingUpdate(MediaPlayer mediaPlayer, int percent) {
         mView.updateBufferedProgress(percent);
     }
-
-    public boolean isIsPrepared() {
-        return mIsPrepared;
-    }
-
 
 }

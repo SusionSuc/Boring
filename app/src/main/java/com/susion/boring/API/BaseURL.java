@@ -1,4 +1,4 @@
-package com.susion.boring.http;
+package com.susion.boring.API;
 
 /**
  * Created by susion on 17/1/20.

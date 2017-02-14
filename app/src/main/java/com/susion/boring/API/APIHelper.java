@@ -1,10 +1,9 @@
-package com.susion.boring.http;
+package com.susion.boring.API;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;

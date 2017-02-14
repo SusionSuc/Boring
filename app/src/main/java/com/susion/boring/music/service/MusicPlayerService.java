@@ -20,6 +20,8 @@ import com.susion.boring.music.view.IMediaPlayView;
 import com.susion.boring.utils.BroadcastUtils;
 import com.susion.boring.utils.SPUtils;
 
+import java.io.Serializable;
+
 /**
  * Created by susion on 17/2/13.
  */
@@ -38,10 +40,8 @@ public class MusicPlayerService extends Service implements IMediaPlayView{
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        initMusicInfo(intent);
         return super.onStartCommand(intent, flags, startId);
     }
-
 
     private void init() {
         mPresenter = new MediaPlayPresenter(this, this);
@@ -49,21 +49,41 @@ public class MusicPlayerService extends Service implements IMediaPlayView{
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, mReceiver.getIntentFilter());
     }
 
-    private void initMusicInfo(Intent intent) {
-        if (intent != null) {
-            mSong = (Song) intent.getSerializableExtra(MusicInstruction.CLIENT_ACTION_MUSIC_INFO);
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    private void loadMusicInfo(Song song) {
+        if (song != null) {
+            mSong = song;
             try {
-                mPresenter.initMediaPlayer(mSong.audio, false);
+                mPresenter.initMediaPlayer(mSong.audio);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
+    private void tryToChangeMusic(Song song) {
+        if (song.id.equals(mSong.id) && mPresenter.isPrepared()) {
+            notifyMediaDuration();
+            return;
+        }
+
+        mSong = song;
+        try {
+            mPresenter.initMediaPlayer(mSong.audio);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void notifyMediaDuration() {
+        Intent intent = new Intent(MusicInstruction.CLIENT_RECEIVER_SET_DURATION);
+        intent.putExtra(MusicInstruction.CLIENT_PARAM_MEDIA_DURATION, mPresenter.getDuration());
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
 
@@ -87,7 +107,33 @@ public class MusicPlayerService extends Service implements IMediaPlayView{
         Intent intent = new Intent(MusicInstruction.CLIENT_RECEIVER_PLAYER_PREPARED);
         intent.putExtra(MusicInstruction.CLIENT_PARAM_PREPARED_TOTAL_DURATION, duration);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
 
+    private void informCurrentState() {
+        Intent intent = new Intent(MusicInstruction.CLIENT_RECEIVER_CURRENT_SERVER_STATE);
+        if (mPresenter.isPrepared()) {
+            intent.putExtra(MusicInstruction.CLIENT_PARAM_SERVER_STATE, true);
+        } else {
+            intent.putExtra(MusicInstruction.CLIENT_PARAM_SERVER_STATE, false);
+        }
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
+    private void informCurrentPlayMusic() {
+        Intent intent = new Intent(MusicInstruction.CLIENT_RECEIVER_CURRENT_PLAY_MUSIC);
+        Song song;
+        if (mSong == null) {
+            song = SPUtils.getGson().fromJson(SPUtils.getStringFromMusicConfig(SPUtils.MUSIC_CONFIG_LAST_PLAY_MUSIC, this),
+                    Song.class);
+        } else {
+            song = mSong;
+        }
+        intent.putExtra(MusicInstruction.CLIENT_PARAM_CURRENT_PLAY_MUSIC, song);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
+    private void saveLastPlayMusic() {
+        SPUtils.writeStringToMusicConfig(SPUtils.MUSIC_CONFIG_LAST_PLAY_MUSIC, SPUtils.getGson().toJson(mSong),this);
     }
 
     @Override
@@ -115,10 +161,6 @@ public class MusicPlayerService extends Service implements IMediaPlayView{
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
     }
 
-    private void saveLastPlayMusic() {
-        SPUtils.writeStringToMusicConfig(SPUtils.MUSIC_CONFIG_LAST_PLAY_MUSIC, SPUtils.getGson().toJson(mSong),this);
-    }
-
 
     class ServiceMusicReceiver extends BroadcastReceiver{
 
@@ -128,6 +170,10 @@ public class MusicPlayerService extends Service implements IMediaPlayView{
             filter.addAction(MusicInstruction.SERVICE_RECEIVER_PAUSE_MUSIC);
             filter.addAction(MusicInstruction.SERVICE_RECEIVER_SEEK_TO);
             filter.addAction(MusicInstruction.SERVICE_SAVE_LAST_PLAY_MUSIC);
+            filter.addAction(MusicInstruction.SERVICE_CURRENT_PLAY_MUSIC);
+            filter.addAction(MusicInstruction.SERVICE_LOAD_MUSIC_INFO);
+            filter.addAction(MusicInstruction.SERVER_RECEIVER_CHANGE_MUSIC);
+            filter.addAction(MusicInstruction.SERVICE_RECEIVER_QUERY_CURRENT_STATE);
             return filter;
         }
 
@@ -135,6 +181,12 @@ public class MusicPlayerService extends Service implements IMediaPlayView{
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             switch (action){
+                case MusicInstruction.SERVICE_RECEIVER_QUERY_CURRENT_STATE:
+                    informCurrentState();
+                    break;
+                case MusicInstruction.SERVICE_LOAD_MUSIC_INFO:
+                    loadMusicInfo((Song) intent.getSerializableExtra(MusicInstruction.SERVICE_PARAM_PLAY_SONG));
+                    break;
                 case MusicInstruction.SERVICE_RECEIVER_PLAY_MUSIC:
                     mPresenter.startPlay();
                     break;
@@ -146,6 +198,12 @@ public class MusicPlayerService extends Service implements IMediaPlayView{
                     break;
                 case MusicInstruction.SERVICE_SAVE_LAST_PLAY_MUSIC:
                     saveLastPlayMusic();
+                    break;
+                case MusicInstruction.SERVICE_CURRENT_PLAY_MUSIC:
+                    informCurrentPlayMusic();
+                    break;
+                case MusicInstruction.SERVER_RECEIVER_CHANGE_MUSIC:
+                    tryToChangeMusic((Song) intent.getSerializableExtra(MusicInstruction.SERVICE_PARAM_CHANGE_MUSIC));
                     break;
             }
         }

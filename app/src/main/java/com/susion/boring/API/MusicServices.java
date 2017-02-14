@@ -1,11 +1,10 @@
-package com.susion.boring.http;
+package com.susion.boring.API;
 
 
 import com.susion.boring.music.model.LyricResult;
 import com.susion.boring.music.model.MusicSearchResult;
 
 import retrofit2.http.GET;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
 

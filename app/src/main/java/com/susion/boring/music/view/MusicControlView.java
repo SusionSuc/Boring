@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.susion.boring.R;
+import com.susion.boring.music.activity.PlayMusicActivity;
+import com.susion.boring.music.model.Song;
 
 /**
  * Created by susion on 17/2/13.
@@ -22,6 +24,7 @@ public class MusicControlView extends LinearLayout{
     private ImageView mIvPlay;
     private ImageView mIvNext;
     private boolean mIsPlay;
+    private Song mSong;
 
     private MusicControlViewListener mListener;
 
@@ -67,7 +70,7 @@ public class MusicControlView extends LinearLayout{
             public void onClick(View view) {
                 setPlay(!mIsPlay);
                 if (mListener != null) {
-                    mListener.onPlayClick();
+                    mListener.onPlayClick(mIsPlay);
                 }
             }
         });
@@ -77,6 +80,16 @@ public class MusicControlView extends LinearLayout{
             public void onClick(View view) {
                 if (mListener != null) {
                     mListener.onNextClick();
+                }
+            }
+        });
+
+        setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mSong != null) {
+                    //跳转到音乐界面
+                    PlayMusicActivity.start(mContext, mSong, mIsPlay);
                 }
             }
         });
@@ -91,6 +104,11 @@ public class MusicControlView extends LinearLayout{
         }
     }
 
+    public void setMusic(Song song){
+        mSong = song;
+        setAlbum(song.album.picUrl);
+        setSongInfo(song.artists.get(0).name, song.name);
+    }
 
     public void setAlbum(String uri){
         mSdvAlbum.setImageURI(uri);
@@ -106,7 +124,7 @@ public class MusicControlView extends LinearLayout{
     }
 
     public interface MusicControlViewListener{
-        void onPlayClick();
+        void onPlayClick(boolean isPlay);
         void onNextClick();
     }
 
