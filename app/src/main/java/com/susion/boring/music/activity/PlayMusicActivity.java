@@ -48,10 +48,9 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
     private LyricView mLyricView;
     private ClientMusicReceiver mReceiver;
 
-    public static void start(Context context, Song song, boolean mIsPlay) {
+    public static void start(Context context, Song song) {
         Intent intent = new Intent();
         intent.putExtra(TO_PLAY_MUSIC_INFO, song);
-        intent.putExtra(IS_PLAY, mIsPlay);
         intent.setClass(context, PlayMusicActivity.class);
         context.startActivity(intent);
     }
@@ -159,7 +158,7 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
     @Override
     public void initData() {
         loadLyric();
-        BroadcastUtils.sendIntentAction(PlayMusicActivity.this, MusicInstruction.SERVICE_RECEIVER_QUERY_CURRENT_STATE);  //查询当前的播放状态
+        BroadcastUtils.sendIntentAction(PlayMusicActivity.this, MusicInstruction.SERVICE_RECEIVER_QUERY_IS_PLAYING);  //查询当前的播放状态
     }
 
     private void loadMusic() {
@@ -252,6 +251,7 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
                 case MusicInstruction.CLIENT_RECEIVER_PLAYER_PREPARED:
                     preparedPlay(intent.getIntExtra(MusicInstruction.CLIENT_PARAM_PREPARED_TOTAL_DURATION, 0));
                     BroadcastUtils.sendIntentAction(PlayMusicActivity.this, MusicInstruction.SERVICE_RECEIVER_PLAY_MUSIC);
+                    mPlayControlView.setIsPlay(true);
                     break;
                 case MusicInstruction.CLIENT_RECEIVER_UPDATE_BUFFERED_PROGRESS:
                     updateBufferedProgress(intent.getIntExtra(MusicInstruction.CLIENT_PARAM_BUFFERED_PROGRESS, 0));
@@ -264,12 +264,16 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
                     boolean serverState = intent.getBooleanExtra(MusicInstruction.CLIENT_PARAM_SERVER_STATE, false);
                     if (serverState) {  //繁忙状态
                         tryToChangeMusic();
+                        mPlayControlView.setIsPlay(true);
                     } else {  //空闲状态
                         loadMusic();
                     }
                     break;
                 case MusicInstruction.CLIENT_RECEIVER_SET_DURATION:
                     mSeekBar.setMaxProgress(intent.getIntExtra(MusicInstruction.CLIENT_PARAM_MEDIA_DURATION, 0));
+                    break;
+                case MusicInstruction.CLIENT_RECEIVER_CURRENT_IS_PALING:  //查询当前是否在播放
+                    mPlayControlView.setIsPlay(intent.getBooleanExtra(MusicInstruction.CLIENT_PARAM_IS_PLAYING, false));
                     break;
             }
         }

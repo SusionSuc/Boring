@@ -63,6 +63,7 @@ public class MusicControlView extends LinearLayout{
         mIvPlay = (ImageView) findViewById(R.id.view_music_control_iv_play);
         mIvNext = (ImageView) findViewById(R.id.view_music_control_iv_next);
     }
+
     private void initListener() {
 
         mIvPlay.setOnClickListener(new OnClickListener() {
@@ -89,7 +90,7 @@ public class MusicControlView extends LinearLayout{
             public void onClick(View view) {
                 if (mSong != null) {
                     //跳转到音乐界面
-                    PlayMusicActivity.start(mContext, mSong, mIsPlay);
+                    PlayMusicActivity.start(mContext, mSong);
                 }
             }
         });
@@ -98,9 +99,9 @@ public class MusicControlView extends LinearLayout{
     public void setPlay(boolean isPlay){
         mIsPlay = isPlay;
         if (mIsPlay) {
-            mIvPlay.setImageResource(R.mipmap.little_play);
-        } else {
             mIvPlay.setImageResource(R.mipmap.little_stop);
+        } else {
+            mIvPlay.setImageResource(R.mipmap.little_play);
         }
     }
 

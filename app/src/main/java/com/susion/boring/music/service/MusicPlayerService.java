@@ -86,7 +86,6 @@ public class MusicPlayerService extends Service implements IMediaPlayView{
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
-
     @Override
     public void updateBufferedProgress(int percent) {
         Intent intent = new Intent(MusicInstruction.CLIENT_RECEIVER_UPDATE_BUFFERED_PROGRESS);
@@ -132,6 +131,17 @@ public class MusicPlayerService extends Service implements IMediaPlayView{
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
+    private void informCurrentIfPlaying() {
+        Intent intent = new Intent(MusicInstruction.CLIENT_RECEIVER_CURRENT_IS_PALING);
+        if (mPresenter.isPrepared() && mPresenter.isPlaying()) {
+            intent.putExtra(MusicInstruction.CLIENT_PARAM_IS_PLAYING, true);
+        } else {
+            intent.putExtra(MusicInstruction.CLIENT_PARAM_IS_PLAYING, false);
+        }
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
+
     private void saveLastPlayMusic() {
         SPUtils.writeStringToMusicConfig(SPUtils.MUSIC_CONFIG_LAST_PLAY_MUSIC, SPUtils.getGson().toJson(mSong),this);
     }
@@ -174,6 +184,7 @@ public class MusicPlayerService extends Service implements IMediaPlayView{
             filter.addAction(MusicInstruction.SERVICE_LOAD_MUSIC_INFO);
             filter.addAction(MusicInstruction.SERVER_RECEIVER_CHANGE_MUSIC);
             filter.addAction(MusicInstruction.SERVICE_RECEIVER_QUERY_CURRENT_STATE);
+            filter.addAction(MusicInstruction.SERVICE_RECEIVER_QUERY_IS_PLAYING);
             return filter;
         }
 
@@ -204,6 +215,9 @@ public class MusicPlayerService extends Service implements IMediaPlayView{
                     break;
                 case MusicInstruction.SERVER_RECEIVER_CHANGE_MUSIC:
                     tryToChangeMusic((Song) intent.getSerializableExtra(MusicInstruction.SERVICE_PARAM_CHANGE_MUSIC));
+                    break;
+                case MusicInstruction.SERVICE_RECEIVER_QUERY_IS_PLAYING:
+                    informCurrentIfPlaying();
                     break;
             }
         }

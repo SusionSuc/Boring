@@ -18,4 +18,6 @@ public interface IMediaPlayPresenter {
     boolean isPrepared();
 
     int getDuration();
+
+    boolean isPlaying();
 }

@@ -103,7 +103,7 @@ public class MusicPageFragment extends BaseFragment {
         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
 
         //query play state
-        BroadcastUtils.sendIntentAction(getActivity(), MusicInstruction.SERVICE_RECEIVER_QUERY_CURRENT_STATE);  //查询当前的播放状态
+        BroadcastUtils.sendIntentAction(getActivity(), MusicInstruction.SERVICE_RECEIVER_QUERY_IS_PLAYING);  //查询当前的播放状态
     }
 
     private void initConstantItem() {
@@ -120,6 +120,7 @@ public class MusicPageFragment extends BaseFragment {
             IntentFilter filter = new IntentFilter();
             filter.addAction(MusicInstruction.CLIENT_RECEIVER_CURRENT_PLAY_MUSIC);
             filter.addAction(MusicInstruction.CLIENT_RECEIVER_CURRENT_SERVER_STATE);
+            filter.addAction(MusicInstruction.CLIENT_RECEIVER_CURRENT_IS_PALING);
             return filter;
         }
 
@@ -134,8 +135,8 @@ public class MusicPageFragment extends BaseFragment {
                         mControlView.setMusic(mSong);
                     }
                     break;
-                case MusicInstruction.CLIENT_RECEIVER_CURRENT_SERVER_STATE:
-                    mControlView.setPlay(intent.getBooleanExtra(MusicInstruction.CLIENT_PARAM_SERVER_STATE, false));
+                case MusicInstruction.CLIENT_RECEIVER_CURRENT_IS_PALING:
+                    mControlView.setPlay(intent.getBooleanExtra(MusicInstruction.CLIENT_PARAM_IS_PLAYING, false));
                     break;
             }
         }
