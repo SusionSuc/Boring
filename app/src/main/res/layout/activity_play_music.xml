@@ -67,6 +67,7 @@
             android:id="@+id/seek_bar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:progressWidth="1.5dp"
             app:customThumb="@drawable/play_music_thumb"/>
 
     </RelativeLayout>

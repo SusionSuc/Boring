@@ -72,7 +72,8 @@ public class MusicPageFragment extends BaseFragment {
             }
             @Override
             public void onNextClick() {
-
+                mControlView.setPlay(false);
+                mControlView.setMusic(mSong);
             }
         });
     }
@@ -84,7 +85,7 @@ public class MusicPageFragment extends BaseFragment {
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, mReceiver.getIntentFilter());
         MusicInstruction.startMusicPlayService(getActivity());
 
-        getCurrentPlayMusic();
+        loadPLayHistory();
 
         initConstantItem();
         MusicPageAdapter mAdapter = new MusicPageAdapter(getActivity(), mData);
@@ -92,18 +93,26 @@ public class MusicPageFragment extends BaseFragment {
         mRV.addItemDecoration(RVUtils.getItemDecorationDivider(getActivity(), R.color.divider, 1, 2, UIUtils.dp2Px(60)));
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
         getCurrentPlayMusic();
     }
 
+    private void loadPLayHistory() {
+        mSong = SPUtils.getGson().fromJson(SPUtils.getStringFromMusicConfig(SPUtils.MUSIC_CONFIG_LAST_PLAY_MUSIC, getActivity()),
+                    Song.class);
+        if (mSong != null) {
+            mControlView.setMusic(mSong);
+            mControlView.setPlay(false);
+        }
+    }
+
     private void getCurrentPlayMusic() {
         Intent intent = new Intent(MusicInstruction.SERVICE_CURRENT_PLAY_MUSIC);
+        BroadcastUtils.sendIntentAction(getActivity(), MusicInstruction.SERVICE_RECEIVER_QUERY_IS_PLAYING);
         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
-
-        //query play state
-        BroadcastUtils.sendIntentAction(getActivity(), MusicInstruction.SERVICE_RECEIVER_QUERY_IS_PLAYING);  //查询当前的播放状态
     }
 
     private void initConstantItem() {
@@ -111,6 +120,12 @@ public class MusicPageFragment extends BaseFragment {
         mData.add(new MusicPageConstantItem(R.mipmap.icon_my_collect, "我的收藏", MusicPageConstantIH.MY_COLLECT));
     }
 
+    private void loadMusic(boolean autoPlay) {
+        Intent intent = new Intent(MusicInstruction.SERVICE_LOAD_MUSIC_INFO);
+        intent.putExtra(MusicInstruction.SERVICE_PARAM_PLAY_SONG, mSong);
+        intent.putExtra(MusicInstruction.SERVICE_PARAM_PLAY_SONG_AUTO_PLAY, autoPlay);
+        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+    }
     public class ClientMusicReceiver extends BroadcastReceiver {
 
         public ClientMusicReceiver() {
@@ -131,12 +146,16 @@ public class MusicPageFragment extends BaseFragment {
                 case MusicInstruction.CLIENT_RECEIVER_CURRENT_PLAY_MUSIC:
                     mSong = (Song) intent.getSerializableExtra(MusicInstruction.CLIENT_PARAM_CURRENT_PLAY_MUSIC);
                     if (mSong != null) {
-                        mControlView.setPlay(false);
                         mControlView.setMusic(mSong);
                     }
                     break;
                 case MusicInstruction.CLIENT_RECEIVER_CURRENT_IS_PALING:
-                    mControlView.setPlay(intent.getBooleanExtra(MusicInstruction.CLIENT_PARAM_IS_PLAYING, false));
+                    boolean playStatus = intent.getBooleanExtra(MusicInstruction.CLIENT_PARAM_IS_PLAYING, false);
+                    boolean needLoadMusic = intent.getBooleanExtra(MusicInstruction.CLIENT_PARAM_NEED_LOAD_MUSIC, false);
+                    mControlView.setPlay(playStatus);
+                    if (!playStatus && needLoadMusic){
+                        loadMusic(false);
+                    }
                     break;
             }
         }

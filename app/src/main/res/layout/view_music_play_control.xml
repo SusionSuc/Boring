@@ -12,6 +12,7 @@
 
 
         <ImageView
+            android:visibility="invisible"
             android:id="@+id/view_music_player_pattern"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
@@ -21,6 +22,7 @@
             android:layout_height="35dp" />
 
         <ImageView
+            android:visibility="invisible"
             android:layout_marginRight="15dp"
             android:layout_centerVertical="true"
             android:id="@+id/view_music_player_list"

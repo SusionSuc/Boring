@@ -9,6 +9,7 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 
 import com.susion.boring.R;
+import com.susion.boring.base.BaseActivity;
 import com.susion.boring.base.BaseRVAdapter;
 import com.susion.boring.base.ItemHandler;
 import com.susion.boring.base.ItemHandlerFactory;
@@ -27,7 +28,7 @@ import java.util.List;
 
 import rx.Observer;
 
-public class SearchMusicActivity extends Activity implements OnLastItemVisibleListener{
+public class SearchMusicActivity extends BaseActivity implements OnLastItemVisibleListener{
 
     private SearchBar mSearchBar;
     private LoadMoreRecycleView mRV;
@@ -40,24 +41,22 @@ public class SearchMusicActivity extends Activity implements OnLastItemVisibleLi
     private String mSearchContent;
     private int PAGE_SIZE = 20;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_music);
-        findView();
-        initView();
-        initListener();
 
+    @Override
+    public int getLayoutId() {
+        return R.layout.activity_search_music;
     }
 
-    private void findView() {
+    @Override
+    public void findView() {
         mSearchBar = (SearchBar) findViewById(R.id.search_bar);
         mRV = (LoadMoreRecycleView) findViewById(R.id.list_view);
         mHolderView = findViewById(R.id.place_holder_view);
         mTvHolderImageView = (ImageView) findViewById(R.id.ac_search_iv_holder_image);
     }
 
-    private void initView() {
+    @Override
+    public void initView() {
         mSearchBar.setBackground(R.color.colorPrimary);
         mSearchBar.setJumpToSearchPage(false);
         mSearchBar.setSearchButtonVisible(View.VISIBLE);
@@ -84,7 +83,8 @@ public class SearchMusicActivity extends Activity implements OnLastItemVisibleLi
         mRV.setOnLastItemVisibleListener(this);
     }
 
-    private void initListener() {
+    @Override
+    public void initListener() {
         mSearchBar.setSearchButtonClickListener(new SearchBar.OnSearchButtonClickListener() {
             @Override
             public void doSearch(String searchContent) {
@@ -96,6 +96,11 @@ public class SearchMusicActivity extends Activity implements OnLastItemVisibleLi
                 loadData();
             }
         });
+    }
+
+    @Override
+    public void initData() {
+
     }
 
     private void showWaitAnimation() {

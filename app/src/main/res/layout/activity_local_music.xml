@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.susion.boring.music.activity.LocalMusicActivity">
 
     <com.susion.boring.view.SToolBar
@@ -14,6 +15,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     </com.susion.boring.view.SToolBar>
+
+
+    <com.susion.boring.base.view.LoadMoreRecycleView
+        android:id="@+id/list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </com.susion.boring.base.view.LoadMoreRecycleView>
 
 
 </LinearLayout>

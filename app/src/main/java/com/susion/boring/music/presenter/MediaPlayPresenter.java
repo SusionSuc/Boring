@@ -158,6 +158,11 @@ public class MediaPlayPresenter implements IMediaPlayPresenter, MediaPlayer.OnPr
         return mPlayer.isPlaying();
     }
 
+    @Override
+    public int getCurrentProgress() {
+        return mPlayer.getCurrentPosition();
+    }
+
 
     private void setSourceForMultiType() throws IOException {
         if (mSource.getScheme() != null &&

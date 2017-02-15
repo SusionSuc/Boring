@@ -3,6 +3,8 @@ package com.susion.boring.mainui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 
@@ -32,10 +34,17 @@ public class MainActivity extends BaseActivity implements IMainUIView{
     private ViewPager mViewPager;
 
 
+
     public static void start(Context srcContext){
         Intent intent = new Intent();
         intent.setClass(srcContext, MainActivity.class);
         srcContext.startActivity(intent);
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getSwipeBackLayout().setEnableGesture(false);
     }
 
     @Override

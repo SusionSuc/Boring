@@ -5,22 +5,15 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.media.MediaPlayer;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 
-import com.google.gson.Gson;
 import com.susion.boring.music.model.Song;
 import com.susion.boring.music.presenter.IMediaPlayPresenter;
 import com.susion.boring.music.presenter.MediaPlayPresenter;
 import com.susion.boring.music.view.IMediaPlayView;
-import com.susion.boring.utils.BroadcastUtils;
 import com.susion.boring.utils.SPUtils;
-
-import java.io.Serializable;
 
 /**
  * Created by susion on 17/2/13.
@@ -31,6 +24,7 @@ public class MusicPlayerService extends Service implements IMediaPlayView{
     private IMediaPlayPresenter mPresenter;
     public static final String SERVICE_ACTION = "MUSIC_SERVICE";
     private Song mSong;
+    private boolean mAutoPlay;
 
     @Override
     public void onCreate() {
@@ -55,7 +49,8 @@ public class MusicPlayerService extends Service implements IMediaPlayView{
         return null;
     }
 
-    private void loadMusicInfo(Song song) {
+    private void loadMusicInfo(Song song, boolean autoPlay) {
+        mAutoPlay = autoPlay;
         if (song != null) {
             mSong = song;
             try {
@@ -67,6 +62,7 @@ public class MusicPlayerService extends Service implements IMediaPlayView{
     }
 
     private void tryToChangeMusic(Song song) {
+        mAutoPlay = true;
         if (song.id.equals(mSong.id) && mPresenter.isPrepared()) {
             notifyMediaDuration();
             return;
@@ -103,18 +99,12 @@ public class MusicPlayerService extends Service implements IMediaPlayView{
 
     @Override
     public void preparedPlay(int duration) {
+        if (mAutoPlay) {
+            mPresenter.startPlay();
+        }
+
         Intent intent = new Intent(MusicInstruction.CLIENT_RECEIVER_PLAYER_PREPARED);
         intent.putExtra(MusicInstruction.CLIENT_PARAM_PREPARED_TOTAL_DURATION, duration);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-    }
-
-    private void informCurrentState() {
-        Intent intent = new Intent(MusicInstruction.CLIENT_RECEIVER_CURRENT_SERVER_STATE);
-        if (mPresenter.isPrepared()) {
-            intent.putExtra(MusicInstruction.CLIENT_PARAM_SERVER_STATE, true);
-        } else {
-            intent.putExtra(MusicInstruction.CLIENT_PARAM_SERVER_STATE, false);
-        }
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
@@ -133,14 +123,28 @@ public class MusicPlayerService extends Service implements IMediaPlayView{
 
     private void informCurrentIfPlaying() {
         Intent intent = new Intent(MusicInstruction.CLIENT_RECEIVER_CURRENT_IS_PALING);
-        if (mPresenter.isPrepared() && mPresenter.isPlaying()) {
-            intent.putExtra(MusicInstruction.CLIENT_PARAM_IS_PLAYING, true);
+        if (mPresenter.isPrepared()) {
+            if (mPresenter.isPlaying()) {
+                intent.putExtra(MusicInstruction.CLIENT_PARAM_IS_PLAYING, true);
+            } else {
+                intent.putExtra(MusicInstruction.CLIENT_PARAM_IS_PLAYING, false);
+            }
+            intent.putExtra(MusicInstruction.CLIENT_PARAM_NEED_LOAD_MUSIC, false);
         } else {
+            intent.putExtra(MusicInstruction.CLIENT_PARAM_NEED_LOAD_MUSIC, true);
             intent.putExtra(MusicInstruction.CLIENT_PARAM_IS_PLAYING, false);
         }
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
+    private void informCurrentIfPlayProgress() {
+        if (mPresenter.isPrepared()) {
+            Intent intent = new Intent(MusicInstruction.CLIENT_RECEIVER_CURRENT_PLAY_PROGRESS);
+            intent.putExtra(MusicInstruction.CLIENT_PARAM_CURRENT_PLAY_PROGRESS, mPresenter.getCurrentProgress());
+            intent.putExtra(MusicInstruction.CLIENT_PARAM_MEDIA_DURATION, mPresenter.getDuration());
+            LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+        }
+    }
 
     private void saveLastPlayMusic() {
         SPUtils.writeStringToMusicConfig(SPUtils.MUSIC_CONFIG_LAST_PLAY_MUSIC, SPUtils.getGson().toJson(mSong),this);
@@ -185,6 +189,7 @@ public class MusicPlayerService extends Service implements IMediaPlayView{
             filter.addAction(MusicInstruction.SERVER_RECEIVER_CHANGE_MUSIC);
             filter.addAction(MusicInstruction.SERVICE_RECEIVER_QUERY_CURRENT_STATE);
             filter.addAction(MusicInstruction.SERVICE_RECEIVER_QUERY_IS_PLAYING);
+            filter.addAction(MusicInstruction.SERVICE_RECEIVER_GET_PLAY_PROGRESS);
             return filter;
         }
 
@@ -192,13 +197,15 @@ public class MusicPlayerService extends Service implements IMediaPlayView{
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             switch (action){
-                case MusicInstruction.SERVICE_RECEIVER_QUERY_CURRENT_STATE:
-                    informCurrentState();
-                    break;
                 case MusicInstruction.SERVICE_LOAD_MUSIC_INFO:
-                    loadMusicInfo((Song) intent.getSerializableExtra(MusicInstruction.SERVICE_PARAM_PLAY_SONG));
+                    loadMusicInfo((Song) intent.getSerializableExtra(MusicInstruction.SERVICE_PARAM_PLAY_SONG),
+                            intent.getBooleanExtra(MusicInstruction.SERVICE_PARAM_PLAY_SONG_AUTO_PLAY, false));
                     break;
                 case MusicInstruction.SERVICE_RECEIVER_PLAY_MUSIC:
+                    if (!mPresenter.isPrepared()) {
+                        mAutoPlay = true;
+                        return;
+                    }
                     mPresenter.startPlay();
                     break;
                 case MusicInstruction.SERVICE_RECEIVER_PAUSE_MUSIC:
@@ -218,6 +225,9 @@ public class MusicPlayerService extends Service implements IMediaPlayView{
                     break;
                 case MusicInstruction.SERVICE_RECEIVER_QUERY_IS_PLAYING:
                     informCurrentIfPlaying();
+                    break;
+                case MusicInstruction.SERVICE_RECEIVER_GET_PLAY_PROGRESS:
+                    informCurrentIfPlayProgress();
                     break;
             }
         }

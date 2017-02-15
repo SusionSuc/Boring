@@ -90,7 +90,7 @@ public class MusicControlView extends LinearLayout{
             public void onClick(View view) {
                 if (mSong != null) {
                     //跳转到音乐界面
-                    PlayMusicActivity.start(mContext, mSong);
+                    PlayMusicActivity.startFromLittlePanel(mContext, mSong);
                 }
             }
         });

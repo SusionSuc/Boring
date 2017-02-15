@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -28,29 +29,43 @@ import com.susion.boring.music.view.MusicPlayControlView;
 import com.susion.boring.utils.BroadcastUtils;
 import com.susion.boring.utils.ImageUtils;
 import com.susion.boring.utils.MediaUtils;
+import com.susion.boring.utils.ToastUtils;
 import com.susion.boring.view.SToolBar;
+
+import java.util.logging.LogRecord;
 
 import rx.Observer;
 
 public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
     private static final String TO_PLAY_MUSIC_INFO = "played_music";
-    private static final String IS_PLAY = "is_play";
+    private static final String FROM_LITTLE_PANEL = "from_little_panel";
 
     private SToolBar mToolBar;
     private MediaSeekBar mSeekBar;
     private MusicPlayControlView mPlayControlView;
     private LinearLayout mLl;
     private IPlayMusicPresenter mPresenter;
-
-    private Song mSong;
     private TextView mTvPlayedTime;
     private TextView mTvLeftTime;
     private LyricView mLyricView;
+
+    private Song mSong;
     private ClientMusicReceiver mReceiver;
+    private boolean mIsFromLittlePanel;
+
+    private Handler mHandler = new Handler();
 
     public static void start(Context context, Song song) {
         Intent intent = new Intent();
         intent.putExtra(TO_PLAY_MUSIC_INFO, song);
+        intent.setClass(context, PlayMusicActivity.class);
+        context.startActivity(intent);
+    }
+
+    public static void startFromLittlePanel(Context context, Song song) {
+        Intent intent = new Intent();
+        intent.putExtra(TO_PLAY_MUSIC_INFO, song);
+        intent.putExtra(FROM_LITTLE_PANEL, true);
         intent.setClass(context, PlayMusicActivity.class);
         context.startActivity(intent);
     }
@@ -73,14 +88,12 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
 
     @Override
     public void initView() {
-        mReceiver = new ClientMusicReceiver();
-        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, mReceiver.getIntentFilter());
-        mSong = (Song) getIntent().getSerializableExtra(TO_PLAY_MUSIC_INFO);
-
+        getParamAndInitReceiver();
         mPresenter = new PlayMusicPresenter(this);
         mToolBar.setMainPage(false);
         mToolBar.setTitle(mSong.name);
         mToolBar.setLeftIcon(R.mipmap.tool_bar_back);
+        mToolBar.setRightIcon(R.mipmap.download);
         mToolBar.setBackgroundColor(getResources().getColor(R.color.transparent));
 
         getWindow().setStatusBarColor(Color.TRANSPARENT);
@@ -90,6 +103,15 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
         initListener();
 
         mPlayControlView.setIsPlay(false);
+    }
+
+    private void getParamAndInitReceiver() {
+        mSong = (Song) getIntent().getSerializableExtra(TO_PLAY_MUSIC_INFO);
+        mIsFromLittlePanel = getIntent().getBooleanExtra(FROM_LITTLE_PANEL, false);
+        mReceiver = new ClientMusicReceiver();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, mReceiver.getIntentFilter());
+
+        BroadcastUtils.sendIntentAction(PlayMusicActivity.this, MusicInstruction.SERVICE_RECEIVER_QUERY_IS_PLAYING);
     }
 
     @Override
@@ -153,17 +175,24 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
                 LocalBroadcastManager.getInstance(PlayMusicActivity.this).sendBroadcast(intent);
             }
         });
+
+        mToolBar.setRightIconClickListener(new SToolBar.OnRightIconClickListener() {
+            @Override
+            public void onRightIconClick() {
+                ToastUtils.showShort("未获得授权! 暂时不能下载");
+            }
+        });
     }
 
     @Override
     public void initData() {
         loadLyric();
-        BroadcastUtils.sendIntentAction(PlayMusicActivity.this, MusicInstruction.SERVICE_RECEIVER_QUERY_IS_PLAYING);  //查询当前的播放状态
     }
 
-    private void loadMusic() {
+    private void loadMusic(boolean autoPlay) {
         Intent intent = new Intent(MusicInstruction.SERVICE_LOAD_MUSIC_INFO);
         intent.putExtra(MusicInstruction.SERVICE_PARAM_PLAY_SONG, mSong);
+        intent.putExtra(MusicInstruction.SERVICE_PARAM_PLAY_SONG_AUTO_PLAY, autoPlay);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
@@ -239,8 +268,9 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
             filter.addAction(MusicInstruction.CLIENT_RECEIVER_PLAYER_PREPARED);
             filter.addAction(MusicInstruction.CLIENT_RECEIVER_UPDATE_BUFFERED_PROGRESS);
             filter.addAction(MusicInstruction.CLIENT_RECEIVER_UPDATE_PLAY_PROGRESS);
-            filter.addAction(MusicInstruction.CLIENT_RECEIVER_CURRENT_SERVER_STATE);
             filter.addAction(MusicInstruction.CLIENT_RECEIVER_SET_DURATION);
+            filter.addAction(MusicInstruction.CLIENT_RECEIVER_CURRENT_IS_PALING);
+            filter.addAction(MusicInstruction.CLIENT_RECEIVER_CURRENT_PLAY_PROGRESS);
             return filter;
         }
 
@@ -250,8 +280,6 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
             switch (action){
                 case MusicInstruction.CLIENT_RECEIVER_PLAYER_PREPARED:
                     preparedPlay(intent.getIntExtra(MusicInstruction.CLIENT_PARAM_PREPARED_TOTAL_DURATION, 0));
-                    BroadcastUtils.sendIntentAction(PlayMusicActivity.this, MusicInstruction.SERVICE_RECEIVER_PLAY_MUSIC);
-                    mPlayControlView.setIsPlay(true);
                     break;
                 case MusicInstruction.CLIENT_RECEIVER_UPDATE_BUFFERED_PROGRESS:
                     updateBufferedProgress(intent.getIntExtra(MusicInstruction.CLIENT_PARAM_BUFFERED_PROGRESS, 0));
@@ -260,20 +288,35 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
                     updatePlayProgress(intent.getIntExtra(MusicInstruction.CLIENT_PARAM_PLAY_PROGRESS_CUR_POS, 0),
                             intent.getIntExtra(MusicInstruction.CLIENT_PARAM_PLAY_PROGRESS_DURATION, 0));
                     break;
-                case MusicInstruction.CLIENT_RECEIVER_CURRENT_SERVER_STATE:
-                    boolean serverState = intent.getBooleanExtra(MusicInstruction.CLIENT_PARAM_SERVER_STATE, false);
-                    if (serverState) {  //繁忙状态
-                        tryToChangeMusic();
-                        mPlayControlView.setIsPlay(true);
-                    } else {  //空闲状态
-                        loadMusic();
-                    }
-                    break;
                 case MusicInstruction.CLIENT_RECEIVER_SET_DURATION:
                     mSeekBar.setMaxProgress(intent.getIntExtra(MusicInstruction.CLIENT_PARAM_MEDIA_DURATION, 0));
                     break;
-                case MusicInstruction.CLIENT_RECEIVER_CURRENT_IS_PALING:  //查询当前是否在播放
-                    mPlayControlView.setIsPlay(intent.getBooleanExtra(MusicInstruction.CLIENT_PARAM_IS_PLAYING, false));
+                case MusicInstruction.CLIENT_RECEIVER_CURRENT_IS_PALING:
+                    boolean playStatus = intent.getBooleanExtra(MusicInstruction.CLIENT_PARAM_IS_PLAYING, false);
+//                    boolean needLoadMusic = intent.getBooleanExtra(MusicInstruction.CLIENT_PARAM_NEED_LOAD_MUSIC, false);
+                    if (!mIsFromLittlePanel) {
+                        tryToChangeMusic();
+                        mPlayControlView.setIsPlay(true);
+                        return;
+                    }
+
+//                    if (!playStatus && needLoadMusic){
+//                        loadMusic(false);
+//                        return;
+//                    }
+                    mPlayControlView.setIsPlay(playStatus);
+                    BroadcastUtils.sendIntentAction(PlayMusicActivity.this, MusicInstruction.SERVICE_RECEIVER_GET_PLAY_PROGRESS);
+                    break;
+                case MusicInstruction.CLIENT_RECEIVER_CURRENT_PLAY_PROGRESS:
+                    final int curPos = intent.getIntExtra(MusicInstruction.CLIENT_PARAM_CURRENT_PLAY_PROGRESS, 0);
+                    final int left = intent.getIntExtra(MusicInstruction.CLIENT_PARAM_MEDIA_DURATION, 0);
+
+                    mSeekBar.setMaxProgress(left);
+                    mSeekBar.setCurrentProgress(curPos);
+                    mTvPlayedTime.setText(MediaUtils.getDurationString(curPos, false));
+                    mTvLeftTime.setText(MediaUtils.getDurationString(left, true));
+                    mLyricView.setCurrentLyricByTime(MediaUtils.getDurationString(curPos, false));
+
                     break;
             }
         }

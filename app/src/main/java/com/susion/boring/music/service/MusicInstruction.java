@@ -25,6 +25,8 @@ public class MusicInstruction {
     public static final String SERVER_RECEIVER_CHANGE_MUSIC = "SERVER_RECEIVER_CHANGE_MUSIC";
     public static final String SERVICE_PARAM_CHANGE_MUSIC = "SERVICE_PARAM_CHANGE_MUSIC";
     public static final String SERVICE_RECEIVER_QUERY_IS_PLAYING = "SERVICE_RECEIVER_QUERY_IS_PLAYING";
+    public static final String SERVICE_RECEIVER_GET_PLAY_PROGRESS = "SERVICE_RECEIVER_GET_PLAY_PROGRESS";
+    public static final String SERVICE_PARAM_PLAY_SONG_AUTO_PLAY = "SERVICE_PARAM_PLAY_SONG_AUTO_PLAY";
 
     //client
     public static final String CLIENT_ACTION_MUSIC_INFO = "CLIENT_ACTION_MUSIC_INFO";
@@ -43,6 +45,10 @@ public class MusicInstruction {
     public static final String CLIENT_PARAM_MEDIA_DURATION = "CLIENT_PARAM_MEDIA_DURATION";
     public static final String CLIENT_RECEIVER_CURRENT_IS_PALING = "CLIENT_RECEIVER_CURRENT_IS_PALING";
     public static final String CLIENT_PARAM_IS_PLAYING = "CLIENT_PARAM_IS_PLAYING";
+    public static final String CLIENT_RECEIVER_CURRENT_PLAY_PROGRESS = "CLIENT_RECEIVER_CURRENT_PLAY_PROGRESS";
+    public static final String CLIENT_PARAM_CURRENT_PLAY_PROGRESS = "CLIENT_PARAM_CURRENT_PLAY_PROGRESS";
+    public static final String CLIENT_PARAM_NEED_LOAD_MUSIC = "CLIENT_PARAM_NEED_LOAD_MUSIC";
+
 
 
     public static void startMusicPlayService(Context ctx) {

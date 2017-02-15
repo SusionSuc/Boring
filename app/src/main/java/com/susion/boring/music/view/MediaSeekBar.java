@@ -93,7 +93,7 @@ public class MediaSeekBar extends View {
         hasBufferColor = resources.getColor(R.color.has_buffer_color);
         maxProgress = 100;
         progressLineWidth = dpToPx(2);
-        thumb = (new MediaPlayerThumb( dpToPx(30), dpToPx(30) , context)).getBitmap();
+        thumb = (new MediaPlayerThumb( dpToPx(20), dpToPx(20) , context)).getBitmap();
     }
 
 
@@ -320,7 +320,8 @@ public class MediaSeekBar extends View {
 
 
     private void drawThumb(Canvas canvas) {
-        float leftX = thumbPos - halfThumbWidth;
+        float leftX = (float) ((currentProgress * 1.0 / maxProgress) * (width - thumb.getWidth()) + halfThumbWidth) - halfThumbWidth;
+//        float leftX = thumbPos - halfThumbWidth;
         int top =  thumb.getHeight() / 2 * -1;
 
         canvas.drawBitmap(thumb, getThumbLeft(leftX), top, paint);
@@ -370,6 +371,7 @@ public class MediaSeekBar extends View {
         }
 
         thumbPos = (float) ((currentProgress * 1.0 / maxProgress) * (width - thumb.getWidth()) + halfThumbWidth);
+        int a = 0;
     }
 
     private int translateXtoProgress(float x) {

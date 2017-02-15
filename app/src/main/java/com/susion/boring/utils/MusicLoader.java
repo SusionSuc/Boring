@@ -8,6 +8,7 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.database.Cursor;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.provider.MediaStore.Audio.Media;
 
 import java.util.ArrayList;
@@ -21,6 +22,16 @@ public class MusicLoader {
 
     //Uri，指向external的database
     private Uri contentUri = Media.EXTERNAL_CONTENT_URI;
+
+    private static final String[ ] PROJECTION_ALBUM = new String[ ] { MediaStore.Audio.Albums._ID,
+            MediaStore.Audio.Albums.ALBUM, MediaStore.Audio.Albums.ALBUM_KEY,
+            MediaStore.Audio.Albums.ALBUM_ART, MediaStore.Audio.Albums.NUMBER_OF_SONGS,
+            MediaStore.Audio.AudioColumns.ARTIST_ID, MediaStore.Audio.Albums.ARTIST,
+            MediaStore.Audio.AudioColumns.ARTIST_KEY };
+
+    private static final String WHERE_IS_MUSIC = new StringBuilder( MediaStore.Audio.Media.IS_MUSIC )
+            .append( "=1" ).toString( );
+
     private String[] projection = {
             Media._ID,
             Media.DISPLAY_NAME,
@@ -46,7 +57,7 @@ public class MusicLoader {
     }
 
     private void loadMusic(){                                                                                                             //利用ContentResolver的query函数来查询数据，然后将得到的结果放到MusicInfo对象中，最后放到数组中
-        Cursor cursor = contentResolver.query(contentUri, null, null, null, null);
+        Cursor cursor = contentResolver.query(contentUri, null, WHERE_IS_MUSIC, null, MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
         if(cursor == null){
 
         }else if(!cursor.moveToFirst()){

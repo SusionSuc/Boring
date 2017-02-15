@@ -20,4 +20,6 @@ public interface IMediaPlayPresenter {
     int getDuration();
 
     boolean isPlaying();
+
+    int getCurrentProgress();
 }

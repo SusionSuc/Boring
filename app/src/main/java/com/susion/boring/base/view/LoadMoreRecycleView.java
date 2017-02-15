@@ -118,7 +118,12 @@ public class LoadMoreRecycleView extends RecyclerView {
 
         @Override
         public int getItemCount() {
-            return mAdapter.getItemCount() + 1;
+
+            if (hasLastListener) {
+                return mAdapter.getItemCount() + 1;
+            }
+
+            return mAdapter.getItemCount();
         }
 
         public void setLoadStatus(int status) {
