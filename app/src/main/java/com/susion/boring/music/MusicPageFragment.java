@@ -118,6 +118,7 @@ public class MusicPageFragment extends BaseFragment {
     private void initConstantItem() {
         mData.add(new MusicPageConstantItem(R.mipmap.icon_local_music, "本地音乐", MusicPageConstantIH.LOCAL_MUSIC));
         mData.add(new MusicPageConstantItem(R.mipmap.icon_my_collect, "我的收藏", MusicPageConstantIH.MY_COLLECT));
+        mData.add(new MusicPageConstantItem(R.mipmap.icon_my_collect, "下载列表", MusicPageConstantIH.DOWNLOAD_LIST));
     }
 
     private void loadMusic(boolean autoPlay) {

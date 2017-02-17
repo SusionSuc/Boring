@@ -1,4 +1,4 @@
-package com.susion.boring.music.presenter;
+package com.susion.boring.music.presenter.itf;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;

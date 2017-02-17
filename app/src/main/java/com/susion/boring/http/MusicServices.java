@@ -1,4 +1,4 @@
-package com.susion.boring.API;
+package com.susion.boring.http;
 
 
 import com.susion.boring.music.model.LyricResult;

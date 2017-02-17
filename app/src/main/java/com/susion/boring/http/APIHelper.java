@@ -1,4 +1,4 @@
-package com.susion.boring.API;
+package com.susion.boring.http;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -17,8 +17,9 @@ import rx.schedulers.Schedulers;
  */
 public class APIHelper {
 
-    public static final int REQUEST_SUCCESSS = 200;
+    public static final int REQUEST_SUCCESS = 200;
     private static Retrofit mRetrofit;
+    private static OkHttpClient mClient;
     private HashMap<Class, Object> mServicesMap = new HashMap<>();
     private static APIHelper sInstance;
 
@@ -48,7 +49,8 @@ public class APIHelper {
         builder.connectTimeout(15, TimeUnit.SECONDS);
         builder.writeTimeout(15, TimeUnit.SECONDS);
         builder.readTimeout(20, TimeUnit.SECONDS);
-        return  builder.build();
+        mClient = builder.build();
+        return mClient;
     }
 
 

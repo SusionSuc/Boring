@@ -14,14 +14,13 @@ import android.widget.TextView;
 
 import com.susion.boring.R;
 import com.susion.boring.base.BaseActivity;
-import com.susion.boring.API.APIHelper;
+import com.susion.boring.http.APIHelper;
 import com.susion.boring.music.model.LyricResult;
 import com.susion.boring.music.model.Song;
-import com.susion.boring.music.presenter.IPlayMusicPresenter;
+import com.susion.boring.music.presenter.itf.IPlayMusicPresenter;
 import com.susion.boring.music.presenter.PlayMusicPresenter;
 
 import com.susion.boring.music.service.MusicInstruction;
-import com.susion.boring.music.service.MusicPlayerService;
 import com.susion.boring.music.view.IMediaPlayView;
 import com.susion.boring.music.view.LyricView;
 import com.susion.boring.music.view.MediaSeekBar;
@@ -31,8 +30,6 @@ import com.susion.boring.utils.ImageUtils;
 import com.susion.boring.utils.MediaUtils;
 import com.susion.boring.utils.ToastUtils;
 import com.susion.boring.view.SToolBar;
-
-import java.util.logging.LogRecord;
 
 import rx.Observer;
 

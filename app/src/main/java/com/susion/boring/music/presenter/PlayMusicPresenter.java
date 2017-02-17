@@ -1,12 +1,12 @@
 package com.susion.boring.music.presenter;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
+import com.susion.boring.music.presenter.itf.IPlayMusicPresenter;
 import com.susion.boring.music.view.IMediaPlayView;
 import com.susion.boring.utils.FastBlurUtil;
 import com.susion.boring.utils.UIUtils;

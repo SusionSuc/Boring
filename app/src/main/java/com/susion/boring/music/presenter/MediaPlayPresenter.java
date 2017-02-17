@@ -6,8 +6,10 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
+
+import com.susion.boring.music.presenter.itf.IMediaPlayPresenter;
 import com.susion.boring.music.view.IMediaPlayView;
-import com.susion.boring.utils.MediaUtils;
+
 import java.io.IOException;
 
 /**

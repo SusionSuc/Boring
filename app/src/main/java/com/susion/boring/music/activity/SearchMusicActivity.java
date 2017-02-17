@@ -1,7 +1,5 @@
 package com.susion.boring.music.activity;
 
-import android.app.Activity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.view.animation.Animation;
@@ -15,7 +13,7 @@ import com.susion.boring.base.ItemHandler;
 import com.susion.boring.base.ItemHandlerFactory;
 import com.susion.boring.base.view.LoadMoreRecycleView;
 import com.susion.boring.base.view.LoadMoreView;
-import com.susion.boring.API.APIHelper;
+import com.susion.boring.http.APIHelper;
 import com.susion.boring.music.itemhandler.SearchMusicResultIH;
 import com.susion.boring.music.model.MusicSearchResult;
 import com.susion.boring.music.model.Song;
@@ -141,7 +139,7 @@ public class SearchMusicActivity extends BaseActivity implements OnLastItemVisib
 
                         mRV.setLoadStatus(LoadMoreView.NO_LOAD);
 
-                        if (musicSearchResult.code != APIHelper.REQUEST_SUCCESSS) {
+                        if (musicSearchResult.code != APIHelper.REQUEST_SUCCESS) {
                             return;
                         }
 

@@ -1,4 +1,4 @@
-package com.susion.boring.music.presenter;
+package com.susion.boring.music.presenter.itf;
 
 import android.content.Context;
 import android.view.ViewGroup;

@@ -9,6 +9,7 @@ import com.susion.boring.R;
 import com.susion.boring.base.SimpleItemHandler;
 import com.susion.boring.base.ViewHolder;
 import com.susion.boring.music.activity.LocalMusicActivity;
+import com.susion.boring.music.activity.MusicDownLoadListActivity;
 import com.susion.boring.music.activity.MyMusicCollectActivity;
 import com.susion.boring.music.model.MusicPageConstantItem;
 import com.susion.boring.utils.MusicLoader;
@@ -27,6 +28,7 @@ public class MusicPageConstantIH extends SimpleItemHandler<MusicPageConstantItem
 
     public static final int LOCAL_MUSIC = 1;
     public static final int MY_COLLECT = 2;
+    public static final int DOWNLOAD_LIST = 3;
     private MusicPageConstantItem mData;
     private TextView tvItem;
 
@@ -77,13 +79,19 @@ public class MusicPageConstantIH extends SimpleItemHandler<MusicPageConstantItem
 
     @Override
     public void onClick(View view) {
-        if (mData.type == LOCAL_MUSIC) {
-            LocalMusicActivity.start((Activity) mContext);
+
+        switch (mData.type){
+            case LOCAL_MUSIC:
+                LocalMusicActivity.start((Activity) mContext);
+                break;
+            case MY_COLLECT:
+                MyMusicCollectActivity.start(mContext);
+                break;
+            case DOWNLOAD_LIST:
+                MusicDownLoadListActivity.start(mContext);
+                break;
         }
 
-        if (mData.type == MY_COLLECT) {
-            MyMusicCollectActivity.start(mContext);
-        }
     }
 
 
