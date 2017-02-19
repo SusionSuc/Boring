@@ -1,8 +1,11 @@
 package com.susion.boring.splash;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.WindowManager;
@@ -32,7 +35,7 @@ public class SplashActivity extends Activity implements ISplashView {
         mPresenter.skipToMainActivity(this, getWindow().getDecorView());
         mPresenter.setAuthorInfo(this, -1, R.string.author_info);
         mPresenter.requestPermission(this);
-
+        sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
         Log.d("SplashActivity", "SplashActivity..onCreate");
     }
 

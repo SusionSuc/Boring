@@ -58,10 +58,13 @@ public class MusicPlayerService extends Service implements IMediaPlayView{
 
     private void tryToChangeMusic(Song song) {
         mAutoPlay = true;
-        if (song.id.equals(mSong.id) && mPresenter.isPrepared()) {
-            notifyMediaDuration();
-            return;
+        if (mSong != null) {
+            if (song.id.equals(mSong.id) && mPresenter.isPrepared()) {
+                notifyMediaDuration();
+                return;
+            }
         }
+
 
         mSong = song;
         try {

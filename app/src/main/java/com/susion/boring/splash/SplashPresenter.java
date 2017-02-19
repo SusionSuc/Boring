@@ -65,7 +65,9 @@ public class SplashPresenter implements ISplashPresenter{
     public void requestPermission(Activity activity) {
         AndPermission.with(activity)
                 .requestCode(100)
-                .permission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                .permission(Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.INTERNET, Manifest.permission.MEDIA_CONTENT_CONTROL)
                 .send();
     }
 

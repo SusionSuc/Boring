@@ -1,11 +1,17 @@
 package com.susion.boring.music.presenter;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.FileCallback;
+import com.susion.boring.music.model.DownTask;
 import com.susion.boring.music.presenter.itf.IFileDownLoadPresenter;
 import com.susion.boring.music.presenter.itf.IFileDownLoadView;
+import com.susion.boring.utils.FileUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -27,7 +33,7 @@ public class FileDownloadPresenter implements IFileDownLoadPresenter {
     private boolean mIsDowning;
 
     private static FileDownloadPresenter mInstance;
-    private List<IFileDownLoadView> mViews;
+    private List<IFileDownLoadView> mViews = new ArrayList<>();
 
     private FileDownloadPresenter(){
 
@@ -60,6 +66,11 @@ public class FileDownloadPresenter implements IFileDownLoadPresenter {
 
     @Override
     public boolean removeDownTask(DownTask task) {
+
+        if (mTasks.isEmpty()) {
+            return false;
+        }
+
         if (task.uri.equals(mCurrentTask.uri)) {
             OkGo.getInstance().cancelTag(task.uri);
             mTasks.remove(mCurrentTask);
@@ -97,6 +108,18 @@ public class FileDownloadPresenter implements IFileDownLoadPresenter {
         return true;
     }
 
+    @Override
+    public boolean isDowning(DownTask task) {
+        if (mTasks.isEmpty()) {
+            return false;
+        }
+
+        if (mCurrentTask.uri.equals(task.uri)) {
+            return true;
+        }
+        return false;
+    }
+
 
     private void startDownTask() {
         while (!mIsDowning && !mTasks.isEmpty()) {
@@ -109,14 +132,18 @@ public class FileDownloadPresenter implements IFileDownLoadPresenter {
                         public void onSuccess(File file, Call call, Response response) {
                             mCurrentTask.downStatus = DownTask.DOWN_SUCCESS;
                             mTasks.remove(mCurrentTask);
+                            mUris.remove(mCurrentTask.uri);
                             mIsDowning = false;
+
+                            if (FileUtils.saveFile(file, FileUtils.SD_MUSIC_DIR)) {
+
+                            }
 
                             if (!mViews.isEmpty()) {
                                 for (IFileDownLoadView view : mViews) {
                                     view.successDownTask(mCurrentTask);
                                 }
                             }
-
 
                             startDownTask();
                         }

@@ -15,8 +15,11 @@ import android.widget.TextView;
 import com.susion.boring.R;
 import com.susion.boring.base.BaseActivity;
 import com.susion.boring.http.APIHelper;
+import com.susion.boring.music.model.DownTask;
 import com.susion.boring.music.model.LyricResult;
 import com.susion.boring.music.model.Song;
+import com.susion.boring.music.presenter.FileDownloadPresenter;
+import com.susion.boring.music.presenter.itf.IFileDownLoadPresenter;
 import com.susion.boring.music.presenter.itf.IPlayMusicPresenter;
 import com.susion.boring.music.presenter.PlayMusicPresenter;
 
@@ -176,7 +179,15 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
         mToolBar.setRightIconClickListener(new SToolBar.OnRightIconClickListener() {
             @Override
             public void onRightIconClick() {
-                ToastUtils.showShort("未获得授权! 暂时不能下载");
+                FileDownloadPresenter downManager = FileDownloadPresenter.getInstance();
+                DownTask task = new DownTask(mSong.audio);
+
+                if (downManager.isDowning(task)) {
+                    ToastUtils.showShort("当前任务正在下载!!");
+                    return;
+                }
+
+                downManager.addDownTask(task);
             }
         });
     }

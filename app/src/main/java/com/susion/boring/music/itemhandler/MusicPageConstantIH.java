@@ -12,6 +12,7 @@ import com.susion.boring.music.activity.LocalMusicActivity;
 import com.susion.boring.music.activity.MusicDownLoadListActivity;
 import com.susion.boring.music.activity.MyMusicCollectActivity;
 import com.susion.boring.music.model.MusicPageConstantItem;
+import com.susion.boring.music.presenter.FileDownloadPresenter;
 import com.susion.boring.utils.MusicLoader;
 import com.susion.boring.utils.TransitionHelper;
 
@@ -69,6 +70,11 @@ public class MusicPageConstantIH extends SimpleItemHandler<MusicPageConstantItem
             vh.getTextView(R.id.item_music_page_constant_tv_append_dec).setText("15");
         }
 
+        if (data.type == DOWNLOAD_LIST) {
+            vh.getTextView(R.id.item_music_page_constant_tv_append_dec)
+                    .setText(FileDownloadPresenter.getInstance().getTaskList().size()+"");
+        }
+
 
     }
 
@@ -79,7 +85,6 @@ public class MusicPageConstantIH extends SimpleItemHandler<MusicPageConstantItem
 
     @Override
     public void onClick(View view) {
-
         switch (mData.type){
             case LOCAL_MUSIC:
                 LocalMusicActivity.start((Activity) mContext);
@@ -91,7 +96,6 @@ public class MusicPageConstantIH extends SimpleItemHandler<MusicPageConstantItem
                 MusicDownLoadListActivity.start(mContext);
                 break;
         }
-
     }
 
 

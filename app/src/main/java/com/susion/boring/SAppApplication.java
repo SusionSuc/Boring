@@ -3,10 +3,13 @@ package com.susion.boring;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Environment;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.lzy.okgo.OkGo;
 import com.susion.boring.music.service.MusicPlayerService;
+import com.susion.boring.utils.FileUtils;
 
 /**
  * Created by susion on 17/1/17.
@@ -20,6 +23,7 @@ public class SAppApplication extends Application {
         super.onCreate();
         Fresco.initialize(this);
         OkGo.init(this);
+        FileUtils.initAppDir();
     }
 
     @Override

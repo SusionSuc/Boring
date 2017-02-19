@@ -17,6 +17,7 @@ import com.susion.boring.music.adapter.MusicPageAdapter;
 import com.susion.boring.music.itemhandler.MusicPageConstantIH;
 import com.susion.boring.music.model.MusicPageConstantItem;
 import com.susion.boring.music.model.Song;
+import com.susion.boring.music.presenter.FileDownloadPresenter;
 import com.susion.boring.music.service.MusicInstruction;
 import com.susion.boring.music.view.MusicControlView;
 import com.susion.boring.utils.BroadcastUtils;
@@ -98,6 +99,21 @@ public class MusicPageFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         getCurrentPlayMusic();
+        updateDownList();
+    }
+
+    private void updateDownList() {
+        for(int i=0; i<mData.size(); i++){
+            Object o = mData.get(i);
+            if (o instanceof MusicPageConstantItem) {
+                MusicPageConstantItem item = (MusicPageConstantItem) o;
+
+                if (item.type == MusicPageConstantIH.DOWNLOAD_LIST) {
+                    item.appendDesc = FileDownloadPresenter.getInstance().getTaskList().size()+"";
+                    mRV.getAdapter().notifyItemChanged(i);
+                }
+            }
+        }
     }
 
     private void loadPLayHistory() {
@@ -127,6 +143,7 @@ public class MusicPageFragment extends BaseFragment {
         intent.putExtra(MusicInstruction.SERVICE_PARAM_PLAY_SONG_AUTO_PLAY, autoPlay);
         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
     }
+
     public class ClientMusicReceiver extends BroadcastReceiver {
 
         public ClientMusicReceiver() {
