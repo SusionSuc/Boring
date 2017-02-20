@@ -26,7 +26,7 @@ import com.susion.boring.utils.StatusBarUtil;
 import com.susion.boring.utils.UIUtils;
 import com.susion.boring.view.SToolBar;
 
-public class MainActivity extends BaseActivity implements IMainUIView{
+public class MainActivity extends BaseActivity{
 
     private DrawerLayout mDrawerLayout;
     private LinearLayout mDrawerMenu;

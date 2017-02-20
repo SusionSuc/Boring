@@ -16,12 +16,11 @@ import com.yanzhenjie.permission.AndPermission;
 /**
  * Created by susion on 17/1/17.
  */
-public class SplashPresenter implements ISplashPresenter{
+public class SplashPresenter implements SplashContract.Presenter{
 
+    SplashContract.View mSplashView;
 
-    ISplashView mSplashView;
-
-    public SplashPresenter(ISplashView mSplashView) {
+    public SplashPresenter(SplashContract.View mSplashView) {
         this.mSplashView = mSplashView;
     }
 
@@ -42,12 +41,10 @@ public class SplashPresenter implements ISplashPresenter{
     }
 
 
-
     @Override
     public void initConfig() {
 
     }
-
 
     /*
     * -1 means no icon

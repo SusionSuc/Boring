@@ -10,4 +10,8 @@ public class Album implements Serializable{
     public String name;
     public Singer artist;
     public String picUrl;
+
+    public Album(String name) {
+        this.name = name;
+    }
 }

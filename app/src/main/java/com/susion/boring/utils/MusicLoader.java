@@ -11,12 +11,15 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Audio.Media;
 
+import com.susion.boring.music.model.Album;
+import com.susion.boring.music.model.Song;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class MusicLoader {
 
-    private static List<MusicInfo> musicList = new ArrayList<>();
+    private static List<Song> musicList = new ArrayList<>();
     private static MusicLoader musicLoader;
     private static ContentResolver contentResolver;
 
@@ -79,18 +82,20 @@ public class MusicLoader {
                 String artist = cursor.getString(artistCol);
                 String url = cursor.getString(urlCol);
 
-                MusicInfo musicInfo = new MusicInfo(id, title);
-                musicInfo.album = album;
+                Song musicInfo = new Song();
+                musicInfo.name = title;
+                musicInfo.album = new Album(album);
                 musicInfo.duration = duration;
                 musicInfo.size = size;
                 musicInfo.artist = artist;
                 musicInfo.url = url;
+                musicInfo.localMusicId = id;
                 musicList.add(musicInfo);
             }while(cursor.moveToNext());
         }
     }
 
-    public List<MusicInfo> getMusicList(){
+    public List<Song> getMusicList(){
         if (musicList.isEmpty()) {
             loadMusic();
         }
@@ -100,25 +105,5 @@ public class MusicLoader {
     public Uri getMusicUriById(long id){
         Uri uri = ContentUris.withAppendedId(contentUri, id);
         return uri;
-    }
-
-    public static class MusicInfo{
-        public long id;
-        public String title;
-        public String album;
-        public int duration;
-        public long size;
-        public String artist;
-        public String url;
-
-        public MusicInfo(){
-
-        }
-
-        public MusicInfo(long pId, String pTitle){
-            id = pId;
-            title = pTitle;
-        }
-
     }
 }

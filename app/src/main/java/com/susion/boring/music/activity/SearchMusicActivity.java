@@ -2,8 +2,6 @@ package com.susion.boring.music.activity;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 
 import com.susion.boring.R;
@@ -11,6 +9,7 @@ import com.susion.boring.base.BaseActivity;
 import com.susion.boring.base.BaseRVAdapter;
 import com.susion.boring.base.ItemHandler;
 import com.susion.boring.base.ItemHandlerFactory;
+import com.susion.boring.base.OnLastItemVisibleListener;
 import com.susion.boring.base.view.LoadMoreRecycleView;
 import com.susion.boring.base.view.LoadMoreView;
 import com.susion.boring.http.APIHelper;
@@ -19,6 +18,7 @@ import com.susion.boring.music.model.MusicSearchResult;
 import com.susion.boring.music.model.Song;
 import com.susion.boring.utils.RVUtils;
 import com.susion.boring.utils.SystemOperationUtils;
+import com.susion.boring.utils.UIUtils;
 import com.susion.boring.view.SearchBar;
 
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ import java.util.List;
 
 import rx.Observer;
 
-public class SearchMusicActivity extends BaseActivity implements OnLastItemVisibleListener{
+public class SearchMusicActivity extends BaseActivity implements OnLastItemVisibleListener {
 
     private SearchBar mSearchBar;
     private LoadMoreRecycleView mRV;
@@ -104,10 +104,7 @@ public class SearchMusicActivity extends BaseActivity implements OnLastItemVisib
     private void showWaitAnimation() {
         mHolderView.setVisibility(View.VISIBLE);
         mRV.setVisibility(View.INVISIBLE);
-        RotateAnimation animation = new RotateAnimation(0f, 360f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        animation.setDuration(1000);
-        animation.setRepeatCount(1000);
-        mTvHolderImageView.startAnimation(animation);
+        UIUtils.startSimpleRotateAnimation(mTvHolderImageView);
     }
 
     @Override

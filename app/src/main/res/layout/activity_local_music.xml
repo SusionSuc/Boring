@@ -17,11 +17,46 @@
     </com.susion.boring.view.SToolBar>
 
 
-    <com.susion.boring.base.view.LoadMoreRecycleView
-        android:id="@+id/list_view"
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </com.susion.boring.base.view.LoadMoreRecycleView>
+
+
+        <com.susion.boring.base.view.LoadMoreRecycleView
+            android:id="@+id/list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </com.susion.boring.base.view.LoadMoreRecycleView>
+
+
+        <RelativeLayout
+            android:visibility="invisible"
+            android:id="@+id/refresh_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/refresh"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/refresh"
+                android:layout_width="40dp"
+                android:layout_height="40dp" />
+
+            <Button
+                android:id="@+id/local_music_bt_start_scan"
+                android:background="@color/colorLightPrimary"
+                android:layout_marginTop="10dp"
+                android:text="开始扫描"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/refresh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+
+    </FrameLayout>
+
 
 
 </LinearLayout>

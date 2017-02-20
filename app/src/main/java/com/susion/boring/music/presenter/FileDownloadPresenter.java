@@ -1,16 +1,11 @@
 package com.susion.boring.music.presenter;
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Environment;
 import android.support.annotation.Nullable;
 
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.FileCallback;
 import com.susion.boring.music.model.DownTask;
-import com.susion.boring.music.presenter.itf.IFileDownLoadPresenter;
-import com.susion.boring.music.presenter.itf.IFileDownLoadView;
+import com.susion.boring.music.presenter.itf.FileDownContract;
 import com.susion.boring.utils.FileUtils;
 
 import java.io.File;
@@ -25,7 +20,7 @@ import okhttp3.Response;
 /**
  * Created by susion on 17/2/17.
  */
-public class FileDownloadPresenter implements IFileDownLoadPresenter {
+public class FileDownloadPresenter implements FileDownContract.Presenter {
 
     private List<DownTask> mTasks = new ArrayList<>();
     private Set<String> mUris = new HashSet<>();
@@ -33,12 +28,11 @@ public class FileDownloadPresenter implements IFileDownLoadPresenter {
     private boolean mIsDowning;
 
     private static FileDownloadPresenter mInstance;
-    private List<IFileDownLoadView> mViews = new ArrayList<>();
+    private List<FileDownContract.View> mViews = new ArrayList<>();
 
     private FileDownloadPresenter(){
 
     }
-
 
     public static FileDownloadPresenter getInstance(){
         if (mInstance == null) {
@@ -50,7 +44,6 @@ public class FileDownloadPresenter implements IFileDownLoadPresenter {
         }
         return mInstance;
     }
-
 
 
     @Override
@@ -140,7 +133,7 @@ public class FileDownloadPresenter implements IFileDownLoadPresenter {
                             }
 
                             if (!mViews.isEmpty()) {
-                                for (IFileDownLoadView view : mViews) {
+                                for (FileDownContract.View  view : mViews) {
                                     view.successDownTask(mCurrentTask);
                                 }
                             }
@@ -150,9 +143,8 @@ public class FileDownloadPresenter implements IFileDownLoadPresenter {
                         @Override
                         public void downloadProgress(long currentSize, long totalSize, float progress, long networkSpeed) {
                             mCurrentTask.setDownInfo(currentSize, totalSize, progress, networkSpeed);
-
                             if (!mViews.isEmpty()) {
-                                for (IFileDownLoadView view : mViews) {
+                                for (FileDownContract.View  view : mViews) {
                                     view.updateDownTaskProgress(mCurrentTask);
                                 }
                             }
@@ -162,7 +154,7 @@ public class FileDownloadPresenter implements IFileDownLoadPresenter {
                             mCurrentTask.downStatus = DownTask.DOWN_ERROR;
                             mIsDowning = false;
                             if (!mViews.isEmpty()) {
-                                for (IFileDownLoadView view : mViews) {
+                                for (FileDownContract.View  view : mViews) {
                                     view.errorDownTask(mCurrentTask);
                                 }
                             }
@@ -171,7 +163,7 @@ public class FileDownloadPresenter implements IFileDownLoadPresenter {
         }
     }
 
-   public void addFileDownLoadView(IFileDownLoadView view){
+   public void addFileDownLoadView(FileDownContract.View view){
        mViews.add(view);
    }
 

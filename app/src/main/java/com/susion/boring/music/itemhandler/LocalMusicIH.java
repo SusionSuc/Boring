@@ -6,12 +6,13 @@ import android.view.ViewGroup;
 import com.susion.boring.R;
 import com.susion.boring.base.SimpleItemHandler;
 import com.susion.boring.base.ViewHolder;
+import com.susion.boring.music.model.Song;
 import com.susion.boring.utils.MusicLoader;
 
 /**
  * Created by susion on 17/2/15.
  */
-public class LocalMusicIH extends SimpleItemHandler<MusicLoader.MusicInfo> {
+public class LocalMusicIH extends SimpleItemHandler<Song> {
 
 
     @Override
@@ -20,9 +21,9 @@ public class LocalMusicIH extends SimpleItemHandler<MusicLoader.MusicInfo> {
     }
 
     @Override
-    public void onBindDataView(ViewHolder vh, MusicLoader.MusicInfo data, int position) {
-        vh.getTextView(R.id.item_local_music_tv_music_name).setText(data.title+"");
-        vh.getTextView(R.id.item_local_music_tv_artist_album).setText(data.artist+"-"+data.album);
+    public void onBindDataView(ViewHolder vh, Song data, int position) {
+        vh.getTextView(R.id.item_local_music_tv_music_name).setText(data.name+"");
+        vh.getTextView(R.id.item_local_music_tv_artist_album).setText(data.artist+"-"+data.album.name);
 
     }
 

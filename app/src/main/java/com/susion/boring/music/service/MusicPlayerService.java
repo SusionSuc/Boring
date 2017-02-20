@@ -10,18 +10,17 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.susion.boring.music.model.Song;
-import com.susion.boring.music.presenter.itf.IMediaPlayPresenter;
 import com.susion.boring.music.presenter.MediaPlayPresenter;
-import com.susion.boring.music.view.IMediaPlayView;
+import com.susion.boring.music.presenter.itf.MediaPlayerContract;
 import com.susion.boring.utils.SPUtils;
 
 /**
  * Created by susion on 17/2/13.
  */
-public class MusicPlayerService extends Service implements IMediaPlayView{
+public class MusicPlayerService extends Service implements MediaPlayerContract.View{
 
     private ServiceMusicReceiver mReceiver;
-    private IMediaPlayPresenter mPresenter;
+    private MediaPlayerContract.Presenter mPresenter;
     public static final String SERVICE_ACTION = "MUSIC_SERVICE";
     private Song mSong;
     private boolean mAutoPlay;

@@ -3,6 +3,10 @@ package com.susion.boring.utils;
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
+import android.widget.ImageView;
 
 /**
  * Created by susion on 17/1/17.
@@ -36,5 +40,12 @@ public class UIUtils {
     /*设备屏幕高度*/
     public static int getScreenHeight() {
         return getDisplayMetrics().heightPixels;
+    }
+
+    public static void startSimpleRotateAnimation(View view) {
+        RotateAnimation animation = new RotateAnimation(0f, 360f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        animation.setDuration(1000);
+        animation.setRepeatCount(1000);
+        view.startAnimation(animation);
     }
 }

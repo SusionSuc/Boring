@@ -1,6 +1,11 @@
 package com.susion.boring.utils;
 
+import android.media.MediaMetadataRetriever;
 import android.os.Environment;
+import android.text.TextUtils;
+
+import com.susion.boring.music.model.Album;
+import com.susion.boring.music.model.Song;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,6 +13,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by susion on 17/2/18.
@@ -16,6 +22,7 @@ public class FileUtils {
 
     public static final String SD_ROOT_DIR = Environment.getExternalStorageDirectory() + "/Boring/";
     public static final String SD_MUSIC_DIR = SD_ROOT_DIR + "music/";
+    private static final String UNKNOWN = "unknown";
 
     public static void initAppDir() {
         // 不存在SD卡
@@ -56,5 +63,42 @@ public class FileUtils {
     }
 
 
+    public static List<Song> scanLocalMusic() {
+        return null;
+    }
 
+    public static Song fileToMusic(File file) {
+        if (file.length() == 0) return null;
+
+        MediaMetadataRetriever metadataRetriever = new MediaMetadataRetriever();
+        metadataRetriever.setDataSource(file.getAbsolutePath());
+
+        final int duration;
+
+        String keyDuration = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+        // ensure the duration is a digit, otherwise return null song
+        if (keyDuration == null || !keyDuration.matches("\\d+")) return null;
+        duration = Integer.parseInt(keyDuration);
+
+        final String title = extractMetadata(metadataRetriever, MediaMetadataRetriever.METADATA_KEY_TITLE, file.getName());
+        final String displayName = extractMetadata(metadataRetriever, MediaMetadataRetriever.METADATA_KEY_TITLE, file.getName());
+        final String artist = extractMetadata(metadataRetriever, MediaMetadataRetriever.METADATA_KEY_ARTIST, UNKNOWN);
+        final String album = extractMetadata(metadataRetriever, MediaMetadataRetriever.METADATA_KEY_ALBUM, UNKNOWN);
+
+        final Song song = new Song();
+        song.title = title;
+        song.name = displayName;
+        song.artist = artist;
+        song.album = new Album(album);
+        song.duration = duration;
+        return song;
+    }
+
+    private static String extractMetadata(MediaMetadataRetriever retriever, int key, String defaultValue) {
+        String value = retriever.extractMetadata(key);
+        if (TextUtils.isEmpty(value)) {
+            value = defaultValue;
+        }
+        return value;
+    }
 }

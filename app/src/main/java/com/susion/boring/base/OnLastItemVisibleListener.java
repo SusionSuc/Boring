@@ -1,4 +1,4 @@
-package com.susion.boring.music.activity;
+package com.susion.boring.base;
 
 /**
  * Created by susion on 17/2/10.

@@ -24,12 +24,13 @@ import com.susion.boring.music.model.DownTask;
 import com.susion.boring.music.model.LyricResult;
 import com.susion.boring.music.model.Song;
 import com.susion.boring.music.presenter.FileDownloadPresenter;
-import com.susion.boring.music.presenter.itf.IFileDownLoadPresenter;
+
 import com.susion.boring.music.presenter.itf.IPlayMusicPresenter;
 import com.susion.boring.music.presenter.PlayMusicPresenter;
 
+import com.susion.boring.music.presenter.itf.MediaPlayerContract;
 import com.susion.boring.music.service.MusicInstruction;
-import com.susion.boring.music.view.IMediaPlayView;
+
 import com.susion.boring.music.view.LyricView;
 import com.susion.boring.music.view.MediaSeekBar;
 import com.susion.boring.music.view.MusicPlayControlView;
@@ -42,7 +43,7 @@ import com.susion.boring.view.SToolBar;
 
 import rx.Observer;
 
-public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
+public class PlayMusicActivity extends BaseActivity implements MediaPlayerContract.View{
     private static final String TO_PLAY_MUSIC_INFO = "played_music";
     private static final String FROM_LITTLE_PANEL = "from_little_panel";
 
@@ -205,7 +206,7 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
                     return;
                 }
 
-                task.taskName = mSong.name;
+                task.taskName = mSong.name + mSong.audio.substring(mSong.audio.lastIndexOf("."));
                 downManager.addDownTask(task);
             }
         });

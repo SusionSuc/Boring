@@ -7,7 +7,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 import com.susion.boring.music.presenter.itf.IPlayMusicPresenter;
-import com.susion.boring.music.view.IMediaPlayView;
+import com.susion.boring.music.presenter.itf.MediaPlayerContract;
 import com.susion.boring.utils.FastBlurUtil;
 import com.susion.boring.utils.UIUtils;
 
@@ -16,7 +16,7 @@ import com.susion.boring.utils.UIUtils;
  */
 public class PlayMusicPresenter extends MediaPlayPresenter implements IPlayMusicPresenter {
 
-    public PlayMusicPresenter(IMediaPlayView mView) {
+    public PlayMusicPresenter(MediaPlayerContract.View mView) {
         super(mView);
     }
 

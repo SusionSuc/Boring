@@ -10,7 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 
-import com.susion.boring.music.activity.OnLastItemVisibleListener;
+import com.susion.boring.base.OnLastItemVisibleListener;
 
 /**
  * Created by susion on 17/1/19.

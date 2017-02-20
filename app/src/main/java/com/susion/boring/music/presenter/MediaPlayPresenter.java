@@ -7,17 +7,16 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
 
-import com.susion.boring.music.presenter.itf.IMediaPlayPresenter;
-import com.susion.boring.music.view.IMediaPlayView;
+import com.susion.boring.music.presenter.itf.MediaPlayerContract;
 
 import java.io.IOException;
 
 /**
  * Created by susion on 17/1/25.
  */
-public class MediaPlayPresenter implements IMediaPlayPresenter, MediaPlayer.OnPreparedListener, MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnCompletionListener {
+public class MediaPlayPresenter implements MediaPlayerContract.Presenter, MediaPlayer.OnPreparedListener, MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnCompletionListener {
 
-    private IMediaPlayView mView;
+    private MediaPlayerContract.View mView;
     private Context mContext;
     private MediaPlayer mPlayer;
     private Uri mSource;
@@ -44,11 +43,11 @@ public class MediaPlayPresenter implements IMediaPlayPresenter, MediaPlayer.OnPr
         }
     };
 
-    public MediaPlayPresenter(IMediaPlayView mView) {
+    public MediaPlayPresenter(MediaPlayerContract.View mView) {
         this.mView = mView;
     }
 
-    public MediaPlayPresenter(IMediaPlayView mView, Context mContext) {
+    public MediaPlayPresenter(MediaPlayerContract.View mView, Context mContext) {
         this.mView = mView;
         this.mContext = mContext;
     }

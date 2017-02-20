@@ -14,4 +14,13 @@ public class Song implements Serializable{
     public String audio;
     public String djProgramId;
     public String page;
+
+
+    //local music info from media database
+    public String title;
+    public int duration;
+    public long size;
+    public String artist;
+    public String url;
+    public long localMusicId;
 }

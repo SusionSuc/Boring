@@ -23,11 +23,11 @@ import com.yanzhenjie.permission.PermissionListener;
 import java.util.List;
 
 
-public class SplashActivity extends Activity implements ISplashView {
+public class SplashActivity extends Activity implements SplashContract.View {
 
     private ImageView mIvCenterImage;
     private TextView mTvDescText;
-    private ISplashPresenter mPresenter;
+    private SplashContract.Presenter mPresenter;
     private TextView mTvAuthor;
 
     @Override

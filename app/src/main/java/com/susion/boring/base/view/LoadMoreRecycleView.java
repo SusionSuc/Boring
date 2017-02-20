@@ -3,13 +3,11 @@ package com.susion.boring.base.view;
 import android.content.Context;
 import android.support.annotation.IntDef;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.susion.boring.music.activity.OnLastItemVisibleListener;
-import com.susion.boring.music.activity.SearchMusicActivity;
+import com.susion.boring.base.OnLastItemVisibleListener;
 import com.susion.boring.utils.RVUtils;
 
 import java.lang.annotation.Retention;
