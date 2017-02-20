@@ -1,5 +1,6 @@
 package com.susion.boring.music.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
@@ -90,7 +91,7 @@ public class MusicControlView extends LinearLayout{
             public void onClick(View view) {
                 if (mSong != null) {
                     //跳转到音乐界面
-                    PlayMusicActivity.startFromLittlePanel(mContext, mSong);
+                    PlayMusicActivity.startFromLittlePanel((Activity) mContext, mSong);
                 }
             }
         });

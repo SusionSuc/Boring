@@ -1,5 +1,6 @@
 package com.susion.boring.music.activity;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -7,7 +8,11 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Handler;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.util.Pair;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -32,6 +37,7 @@ import com.susion.boring.utils.BroadcastUtils;
 import com.susion.boring.utils.ImageUtils;
 import com.susion.boring.utils.MediaUtils;
 import com.susion.boring.utils.ToastUtils;
+import com.susion.boring.utils.TransitionHelper;
 import com.susion.boring.view.SToolBar;
 
 import rx.Observer;
@@ -62,12 +68,23 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
         context.startActivity(intent);
     }
 
-    public static void startFromLittlePanel(Context context, Song song) {
+    public static void startFromLittlePanel(Activity activity, Song song) {
+        final Pair<View, String>[] pairs = TransitionHelper.createSafeTransitionParticipants(activity, true);
+        ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, pairs);
         Intent intent = new Intent();
         intent.putExtra(TO_PLAY_MUSIC_INFO, song);
         intent.putExtra(FROM_LITTLE_PANEL, true);
-        intent.setClass(context, PlayMusicActivity.class);
-        context.startActivity(intent);
+        intent.setClass(activity, PlayMusicActivity.class);
+        activity.startActivity(intent, transitionActivityOptions.toBundle());
+    }
+
+
+    @Override
+    public void initTransitionAnim() {
+        if (getIntent().getBooleanExtra(FROM_LITTLE_PANEL, false)) {
+            Transition transition = TransitionInflater.from(this).inflateTransition(R.transition.slide_from_bottom);
+            getWindow().setEnterTransition(transition);
+        }
     }
 
     @Override
@@ -99,6 +116,7 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
         getWindow().setStatusBarColor(Color.TRANSPARENT);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
         setBlurBackground();
         initListener();
 
@@ -187,6 +205,7 @@ public class PlayMusicActivity extends BaseActivity implements IMediaPlayView{
                     return;
                 }
 
+                task.taskName = mSong.name;
                 downManager.addDownTask(task);
             }
         });

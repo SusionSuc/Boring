@@ -1,9 +1,12 @@
 package com.susion.boring.splash;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -13,13 +16,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.susion.boring.R;
+import com.susion.boring.utils.FileUtils;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.PermissionListener;
+
+import java.util.List;
 
 
 public class SplashActivity extends Activity implements ISplashView {
 
     private ImageView mIvCenterImage;
     private TextView mTvDescText;
-    private SplashPresenter mPresenter;
+    private ISplashPresenter mPresenter;
     private TextView mTvAuthor;
 
     @Override
@@ -35,8 +43,7 @@ public class SplashActivity extends Activity implements ISplashView {
         mPresenter.skipToMainActivity(this, getWindow().getDecorView());
         mPresenter.setAuthorInfo(this, -1, R.string.author_info);
         mPresenter.requestPermission(this);
-        sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
-        Log.d("SplashActivity", "SplashActivity..onCreate");
+
     }
 
     private void findView() {

@@ -3,7 +3,10 @@ package com.susion.boring.splash;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Environment;
 import android.view.View;
 
 import com.susion.boring.mainui.MainActivity;
@@ -67,7 +70,7 @@ public class SplashPresenter implements ISplashPresenter{
                 .requestCode(100)
                 .permission(Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.INTERNET, Manifest.permission.MEDIA_CONTENT_CONTROL)
+                        Manifest.permission.INTERNET, Manifest.permission.MEDIA_CONTENT_CONTROL, Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS)
                 .send();
     }
 
