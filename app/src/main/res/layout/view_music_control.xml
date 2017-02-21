@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/whiteChild"
+    android:background="@color/white"
     android:paddingTop="5dp"
     android:paddingBottom="5dp"
     android:orientation="vertical">
@@ -42,8 +42,8 @@
         android:src="@mipmap/little_next"
         android:layout_alignParentRight="true"
         android:id="@+id/view_music_control_iv_next"
-        android:layout_width="28dp"
-        android:layout_height="28dp" />
+        android:layout_width="20dp"
+        android:layout_height="20dp" />
 
     <ImageView
         android:layout_centerVertical="true"
@@ -51,7 +51,7 @@
         android:layout_marginRight="15dp"
         android:layout_toLeftOf="@id/view_music_control_iv_next"
         android:id="@+id/view_music_control_iv_play"
-        android:layout_width="33dp"
-        android:layout_height="33dp" />
+        android:layout_width="25dp"
+        android:layout_height="25dp" />
 
 </RelativeLayout>

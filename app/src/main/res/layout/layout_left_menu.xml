@@ -6,62 +6,11 @@
     android:orientation="vertical">
 
 
-    <FrameLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-
-
-        <android.support.v7.widget.RecyclerView
-            android:paddingBottom="50dp"
-            android:id="@+id/list_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </android.support.v7.widget.RecyclerView>
-
-
-
-        <VideoView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/divider"/>
-        
-        
-        <LinearLayout
-            android:layout_gravity="bottom"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:orientation="horizontal"
-            android:background="@color/transparent_white">
-
-            <TextView
-                android:textSize="15sp"
-                android:textColor="@color/colorPrimaryText"
-                android:gravity="center"
-                android:text="设置"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent" />
-
-            <TextView
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/colorSecondaryText"
-                android:layout_width="1dp"
-                android:layout_height="match_parent" />
-
-            <TextView
-                android:textSize="15sp"
-                android:textColor="@color/colorPrimaryText"
-                android:gravity="center"
-                android:text="退出应用"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent" />
-
-        </LinearLayout>
-
-    </FrameLayout>
+    </android.support.v7.widget.RecyclerView>
 
 
 </LinearLayout>

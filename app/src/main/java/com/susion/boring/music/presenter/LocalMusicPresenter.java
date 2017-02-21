@@ -8,17 +8,22 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 
-import com.susion.boring.music.model.Song;
+import com.susion.boring.db.model.SimpleSong;
+import com.susion.boring.db.operate.DbBaseOperate;
 import com.susion.boring.music.presenter.itf.LocalMusicContract;
 import com.susion.boring.utils.FileUtils;
+import com.susion.boring.utils.Md5Utils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -53,9 +58,11 @@ public class LocalMusicPresenter implements LocalMusicContract.Presenter, Loader
     };
 
     private LocalMusicContract.View mView;
+    private DbBaseOperate<SimpleSong> mDbOperator;
 
-    public LocalMusicPresenter(LocalMusicContract.View mView) {
+    public LocalMusicPresenter(LocalMusicContract.View mView, DbBaseOperate<SimpleSong> dbOperator) {
         this.mView = mView;
+        mDbOperator = dbOperator;
     }
 
     @Override
@@ -80,24 +87,35 @@ public class LocalMusicPresenter implements LocalMusicContract.Presenter, Loader
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         Observable.just(cursor)
-                .flatMap(new Func1<Cursor, Observable<List<Song>>>() {
+                .flatMap(new Func1<Cursor, Observable<List<SimpleSong>>>() {
                     @Override
-                    public Observable<List<Song>> call(Cursor cursor) {
-                        List<Song> songs = new ArrayList<>();
+                    public Observable<List<SimpleSong>> call(Cursor cursor) {
+                        List<SimpleSong> songs = new ArrayList<>();
                         if (cursor != null && cursor.getCount() > 0) {
                             cursor.moveToFirst();
                             do {
-                                Song song = cursorToMusic(cursor);
+                                SimpleSong song = cursorToMusic(cursor);
+                                song.setId(Md5Utils.md5(song.getPath()));  // make sure primary unique
                                 songs.add(song);
                             } while (cursor.moveToNext());
                         }
 
-                       return Observable.just(songs);
+                        return mDbOperator.add(songs);
                     }
-                })
+                }).doOnNext(new Action1<List<SimpleSong>>() {
+                    @Override
+                    public void call(List<SimpleSong> simpleSongs) {
+                        Collections.sort(simpleSongs, new Comparator<SimpleSong>() {
+                            @Override
+                            public int compare(SimpleSong left, SimpleSong right) {
+                                return left.getDisplayName().compareTo(right.getDisplayName());
+                            }
+                        });
+                    }
+                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<Song>>() {
+                .subscribe(new Subscriber<List<SimpleSong>>() {
                     @Override
                     public void onStart() {
                         mView.startScanLocalMusic();
@@ -114,7 +132,7 @@ public class LocalMusicPresenter implements LocalMusicContract.Presenter, Loader
                     }
 
                     @Override
-                    public void onNext(List<Song> songs) {
+                    public void onNext(List<SimpleSong> songs) {
                         mView.showScanResult(songs);
                     }
                 });
@@ -125,10 +143,10 @@ public class LocalMusicPresenter implements LocalMusicContract.Presenter, Loader
         // Empty
     }
 
-    private Song cursorToMusic(Cursor cursor) {
+    private SimpleSong cursorToMusic(Cursor cursor) {
         String realPath = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));
         File songFile = new File(realPath);
-        Song song;
+        SimpleSong song;
         if (songFile.exists()) {
             // Using song parsed from file to avoid encoding problems
             song = FileUtils.fileToMusic(songFile);
@@ -136,17 +154,18 @@ public class LocalMusicPresenter implements LocalMusicContract.Presenter, Loader
                 return song;
             }
         }
-        song = new Song();
-        song.title = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE));
+        song = new SimpleSong();
+        song.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE)));
 
         String displayName = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME));
         if (displayName.endsWith(".mp3")) {
             displayName = displayName.substring(0, displayName.length() - 4);
         }
-        song.name = displayName;
-        song.album.name = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM));
-        song.artist = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
-        song.duration = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
+        song.setDisplayName(displayName);
+        song.setAlbum(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM)));
+        song.setArtist(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST)));
+        song.setDuration(cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)));
+        song.setPath(realPath);
         return song;
     }
 

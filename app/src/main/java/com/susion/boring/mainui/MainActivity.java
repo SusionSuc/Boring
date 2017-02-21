@@ -2,6 +2,7 @@ package com.susion.boring.mainui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
@@ -68,16 +69,15 @@ public class MainActivity extends BaseActivity{
 
     @Override
     public void initView() {
-        mToolBar.setLeftIcon(R.drawable.select_toolbar_menu);
+        mToolBar.setLeftIcon(R.mipmap.top_menu);
         mDrawerList.setLayoutManager(RVUtils.getLayoutManager(this, LinearLayoutManager.VERTICAL));
-        mDrawerList.addItemDecoration(RVUtils.getItemDecorationDivider(this, R.color.white, UIUtils.dp2Px(10)));
+        mDrawerList.addItemDecoration(RVUtils.getDrawerItemDecorationDivider(this, R.color.divider, new Rect(UIUtils.dp2Px(40), UIUtils.dp2Px(40), UIUtils.dp2Px(30), 0), DrawerData.getData()));
 
         mViewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
                 return FragmentFactory.getMainUIFragments().get(position);
             }
-
             @Override
             public int getCount() {
                 return FragmentFactory.getMainUIFragments().size();

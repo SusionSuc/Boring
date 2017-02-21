@@ -10,30 +10,22 @@ import java.util.List;
  */
 public class DrawerData{
 
-    public static List<Object> sData;
+    public static List<DividerMark> sData;
 
     private DrawerData(){
     }
 
-    public static List<Object> getData(){
+    public static List<DividerMark> getData(){
         if (sData == null) {
             sData = new ArrayList<>();
 
-            sData.add(new DrawerHeader("susion"));
+            sData.add(new DrawerHeader("susion", true));
 
-            sData.add(new DrawerItem("关于作者", R.mipmap.drawer_author));
-            sData.add(new DrawerItem("我的收藏", R.mipmap.drawer_collect));
-            sData.add(new DrawerItem("应用信息", R.mipmap.drawer_app_info));
-            sData.add(new DrawerItem("应用换肤", R.mipmap.drawer_change_skin));
+            sData.add(new DrawerItem("关于作者", R.mipmap.drawer_author, false));
+            sData.add(new DrawerItem("我的收藏", R.mipmap.drawer_collect,false));
+            sData.add(new DrawerItem("应用信息", R.mipmap.drawer_app_info, true));
 
-
-            sData.add(new DrawerItem("第三方开源库", -1));
-
-            sData.add(new DrawerItem("Fresco", R.mipmap.drawer_open_library));
-            sData.add(new DrawerItem("Retrofit", R.mipmap.drawer_open_library));
-            sData.add(new DrawerItem("RxJava", R.mipmap.drawer_open_library));
-            sData.add(new DrawerItem("MVP Design", R.mipmap.drawer_open_library));
-            sData.add(new DrawerItem("Event Bus", R.mipmap.drawer_open_library));
+            sData.add(new DrawerItem("设置", R.mipmap.drawer_setting, false));
 
         }
 
@@ -41,29 +33,31 @@ public class DrawerData{
     }
 
 
-    public static class DrawerHeader{
+    public static class DrawerHeader extends DividerMark{
         public String icon;
         public String username;
         public String background;
 
-        public DrawerHeader(String username) {
+        public DrawerHeader(String username, boolean needDivider) {
+            super(needDivider);
             this.username = username;
         }
     }
 
-    public static class DrawerItem{
+    public static class DrawerItem extends DividerMark{
         public int imageRes;
         public String item;
         public String appendDesc;
 
-        public DrawerItem(String item) {
-            this.item = item;
-        }
 
-        public DrawerItem(String item, int imageRes) {
+        public DrawerItem(String item, int imageRes, boolean needDivider) {
+            super(needDivider);
             this.item = item;
             this.imageRes = imageRes;
         }
+
+
+
     }
 
     public static class DrawerTitle{

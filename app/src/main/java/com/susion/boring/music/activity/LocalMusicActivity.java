@@ -16,25 +16,34 @@ import com.susion.boring.base.BaseRVAdapter;
 import com.susion.boring.base.ItemHandler;
 import com.susion.boring.base.ItemHandlerFactory;
 import com.susion.boring.base.view.LoadMoreRecycleView;
+import com.susion.boring.db.DbManager;
+import com.susion.boring.db.model.SimpleSong;
+import com.susion.boring.db.operate.DbBaseOperate;
 import com.susion.boring.music.itemhandler.LocalMusicIH;
 import com.susion.boring.music.model.Song;
 import com.susion.boring.music.presenter.itf.LocalMusicContract;
 import com.susion.boring.music.presenter.LocalMusicPresenter;
 import com.susion.boring.utils.RVUtils;
+import com.susion.boring.utils.ToastUtils;
 import com.susion.boring.utils.UIUtils;
 import com.susion.boring.view.SToolBar;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
 public class LocalMusicActivity extends BaseActivity implements LocalMusicContract.View{
 
     private LoadMoreRecycleView mRV;
-    private List<Song> mData = new ArrayList<>();
+    private List<SimpleSong> mData = new ArrayList<>();
     private ViewGroup mRefreshParent;
     private ImageView mRefreshView;
     private Button mBtScanStart;
     private LocalMusicContract.Presenter mPresenter;
+    private DbBaseOperate<SimpleSong> mMusicDbOperator;
 
     public static void start(Activity context) {
         Intent intent = new Intent(context, LocalMusicActivity.class);
@@ -56,7 +65,8 @@ public class LocalMusicActivity extends BaseActivity implements LocalMusicContra
 
     @Override
     public void initView() {
-        mPresenter = new LocalMusicPresenter(this);
+        mMusicDbOperator = new DbBaseOperate<>(DbManager.getLiteOrm(), this, SimpleSong.class);
+        mPresenter = new LocalMusicPresenter(this, mMusicDbOperator);
 
         mToolBar.setTitle("本地音乐");
         mToolBar.setLeftIcon(R.mipmap.tool_bar_back);
@@ -81,7 +91,6 @@ public class LocalMusicActivity extends BaseActivity implements LocalMusicContra
 
     }
 
-
     @Override
     public void initListener() {
         mToolBar.setRightIconClickListener(new SToolBar.OnRightIconClickListener() {
@@ -101,6 +110,22 @@ public class LocalMusicActivity extends BaseActivity implements LocalMusicContra
 
     @Override
     public void initData() {
+        mMusicDbOperator.getAll().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<List<SimpleSong>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                ToastUtils.showShort("加载数据出错");
+            }
+
+            @Override
+            public void onNext(List<SimpleSong> simpleSongs) {
+                mData.addAll(simpleSongs);
+            }
+        });
     }
 
 
@@ -127,7 +152,7 @@ public class LocalMusicActivity extends BaseActivity implements LocalMusicContra
     }
 
     @Override
-    public void showScanResult(List<Song> songs) {
+    public void showScanResult(List<SimpleSong> songs) {
         mData.clear();
         mData.addAll(songs);
         mRV.getAdapter().notifyDataSetChanged();
@@ -137,7 +162,6 @@ public class LocalMusicActivity extends BaseActivity implements LocalMusicContra
     public void showScanErrorUI() {
 
     }
-
 
     @Override
     public void startScanLocalMusic() {

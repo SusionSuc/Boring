@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.susion.boring.R;
 import com.susion.boring.base.BaseActivity;
 import com.susion.boring.http.APIHelper;
@@ -54,13 +55,14 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
     private IPlayMusicPresenter mPresenter;
     private TextView mTvPlayedTime;
     private TextView mTvLeftTime;
-    private LyricView mLyricView;
+
 
     private Song mSong;
     private ClientMusicReceiver mReceiver;
     private boolean mIsFromLittlePanel;
 
     private Handler mHandler = new Handler();
+    private SimpleDraweeView mSdvAlbym;
 
     public static void start(Context context, Song song) {
         Intent intent = new Intent();
@@ -101,7 +103,7 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
         mLl = (LinearLayout) findViewById(R.id.ll);
         mTvPlayedTime = (TextView) findViewById(R.id.tv_has_play_time);
         mTvLeftTime = (TextView) findViewById(R.id.tv_left_time);
-        mLyricView = (LyricView) findViewById(R.id.lyric_view);
+        mSdvAlbym = (SimpleDraweeView) findViewById(R.id.ac_play_music_sdv_album);
     }
 
     @Override
@@ -113,12 +115,12 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
         mToolBar.setLeftIcon(R.mipmap.tool_bar_back);
         mToolBar.setRightIcon(R.mipmap.download);
         mToolBar.setBackgroundColor(getResources().getColor(R.color.transparent));
+        mSdvAlbym.setImageURI(mSong.album.picUrl);
 
         getWindow().setStatusBarColor(Color.TRANSPARENT);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
-        setBlurBackground();
         initListener();
 
         mPlayControlView.setIsPlay(false);
@@ -237,7 +239,7 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
 
             @Override
             public void onNext(LyricResult s) {
-                mLyricView.setLyrics(s.lrc.lyric);
+
             }
         });
 
@@ -280,7 +282,7 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
         mTvPlayedTime.setText(MediaUtils.getDurationString(curPos, false));
         mTvLeftTime.setText(MediaUtils.getDurationString(left, true));
         mSeekBar.setCurrentProgress(curPos);
-        mLyricView.setCurrentLyricByTime(MediaUtils.getDurationString(curPos, false));
+
     }
 
     @Override
@@ -343,8 +345,6 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
                     mSeekBar.setCurrentProgress(curPos);
                     mTvPlayedTime.setText(MediaUtils.getDurationString(curPos, false));
                     mTvLeftTime.setText(MediaUtils.getDurationString(left, true));
-                    mLyricView.setCurrentLyricByTime(MediaUtils.getDurationString(curPos, false));
-
                     break;
             }
         }

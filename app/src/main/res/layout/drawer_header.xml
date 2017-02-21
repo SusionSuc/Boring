@@ -1,31 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@mipmap/bg_drawer_header"
+    android:background="@color/white"
     android:layout_width="match_parent"
-    android:layout_height="150dp">
+    android:paddingLeft="@dimen/drawer_left_padding"
+    android:layout_height="260dp">
 
 
     <LinearLayout
-        android:layout_alignParentBottom="true"
-        android:layout_marginLeft="15dp"
-        android:layout_marginBottom="15dp"
+        android:layout_centerVertical="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/drawer_header_user_icon"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             app:placeholderImage="@mipmap/icon"
             app:roundAsCircle="true"/>
 
-
         <TextView
-            android:textSize="16sp"
-            android:textColor="@color/white"
-            android:layout_gravity="center_horizontal"
+            android:textStyle="bold"
+            android:layout_marginLeft="20dp"
+            android:text="susion"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:layout_gravity="center_vertical"
             android:id="@+id/drawer_header_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -33,19 +34,6 @@
     </LinearLayout>
 
 
-
-
-    <TextView
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="15dp"
-        android:layout_marginBottom="15dp"
-        android:textSize="16sp"
-        android:textColor="@color/white"
-        android:text="extras"
-        android:id="@+id/drawer_header_extras"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
 
 </RelativeLayout>

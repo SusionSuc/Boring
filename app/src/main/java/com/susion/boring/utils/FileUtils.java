@@ -4,6 +4,7 @@ import android.media.MediaMetadataRetriever;
 import android.os.Environment;
 import android.text.TextUtils;
 
+import com.susion.boring.db.model.SimpleSong;
 import com.susion.boring.music.model.Album;
 import com.susion.boring.music.model.Song;
 
@@ -67,7 +68,7 @@ public class FileUtils {
         return null;
     }
 
-    public static Song fileToMusic(File file) {
+    public static SimpleSong fileToMusic(File file) {
         if (file.length() == 0) return null;
 
         MediaMetadataRetriever metadataRetriever = new MediaMetadataRetriever();
@@ -85,12 +86,13 @@ public class FileUtils {
         final String artist = extractMetadata(metadataRetriever, MediaMetadataRetriever.METADATA_KEY_ARTIST, UNKNOWN);
         final String album = extractMetadata(metadataRetriever, MediaMetadataRetriever.METADATA_KEY_ALBUM, UNKNOWN);
 
-        final Song song = new Song();
-        song.title = title;
-        song.name = displayName;
-        song.artist = artist;
-        song.album = new Album(album);
-        song.duration = duration;
+        final SimpleSong song = new SimpleSong();
+        song.setTitle(title);
+        song.setDisplayName(displayName);
+        song.setArtist(artist);
+        song.setAlbum(album);
+        song.setDuration(duration);
+        song.setPath(file.getPath());
         return song;
     }
 

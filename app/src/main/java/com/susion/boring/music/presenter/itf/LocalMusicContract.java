@@ -6,6 +6,7 @@ import android.content.Context;
 
 import com.susion.boring.base.BasePresenter;
 import com.susion.boring.base.BaseView;
+import com.susion.boring.db.model.SimpleSong;
 import com.susion.boring.music.model.Song;
 
 import java.util.List;
@@ -24,7 +25,7 @@ import java.util.List;
 
         LoaderManager getMyLoaderManager();
 
-        void showScanResult(List<Song> songs);
+        void showScanResult(List<SimpleSong> songs);
 
         void showScanErrorUI();
 

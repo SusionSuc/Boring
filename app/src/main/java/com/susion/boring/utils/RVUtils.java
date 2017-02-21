@@ -10,7 +10,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 
+import com.susion.boring.R;
+import com.susion.boring.base.DividerMark;
+import com.susion.boring.base.DrawerData;
 import com.susion.boring.base.OnLastItemVisibleListener;
+
+import java.util.List;
 
 /**
  * Created by susion on 17/1/19.
@@ -33,7 +38,9 @@ public class RVUtils {
         return new SimpleDividerDecoration(context, color, divideHeight, dividerNumber, leftMargin);
     }
 
-
+    public static RecyclerView.ItemDecoration getDrawerItemDecorationDivider(Context context, int color, Rect margin, List<DividerMark> data){
+        return new DrawerDividerDecoration(context, color, margin, data);
+    }
 
     public  static  class SimpleDividerDecoration extends RecyclerView.ItemDecoration {
         public Paint mDividerPaint;
@@ -43,11 +50,6 @@ public class RVUtils {
 
         public SimpleDividerDecoration(Context context, int colorId, int dividerHeight) {
             init(context, colorId, dividerHeight);
-        }
-
-        public SimpleDividerDecoration(Context context, int colorId, int dividerHeight, int dividerNumber) {
-            init(context, colorId, dividerHeight);
-            mDividerNumber = dividerNumber;
         }
 
         public SimpleDividerDecoration(Context context, int colorId, int dividerHeight, int dividerNumber, int leftMargin) {
@@ -101,6 +103,45 @@ public class RVUtils {
         }
     }
 
+    private static class DrawerDividerDecoration  extends RecyclerView.ItemDecoration  {
+        private List<DividerMark> mData;
+        private Rect mMargin;
+        public Paint mDividerPaint;
+        int mDividerHeight;
+
+        public DrawerDividerDecoration(Context context, int color, Rect margin, List<DividerMark> data) {
+            mDividerPaint = new Paint();
+            mDividerPaint.setColor(context.getResources().getColor(color));
+            mDividerHeight = 3;
+            mData = data;
+            mMargin = margin;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            super.getItemOffsets(outRect, view, parent, state);
+            outRect.bottom = mDividerHeight;
+        }
+
+        @Override
+        public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+            int childCount = parent.getChildCount();
+            int left, right;
+
+            left = mMargin.left > 0 ? parent.getPaddingLeft() + mMargin.left : parent.getPaddingLeft();
+            right = mMargin.right > 0 ? parent.getWidth() - parent.getPaddingRight() - mMargin.right : parent.getWidth() - parent.getPaddingRight();
+
+            for (int i = 0; i < childCount; i++) {
+                if (mData.get(i).needDivider) {
+                    View view = parent.getChildAt(i);
+                    float top = mMargin.top > 0 ? view.getBottom() + mMargin.top : view.getBottom();
+                    float bottom = top + mDividerHeight;
+                    c.drawRect(left, top, right, bottom, mDividerPaint);
+                }
+            }
+        }
+    }
+
     /**
      * 添加到底部的监听.
      */
@@ -148,6 +189,5 @@ public class RVUtils {
             }
         });
     }
-
 
 }
