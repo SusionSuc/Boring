@@ -9,4 +9,8 @@ public class Singer implements Serializable{
     public String id;
     public String name;
     public String picUrl;
+
+    public Singer(String name) {
+        this.name = name;
+    }
 }

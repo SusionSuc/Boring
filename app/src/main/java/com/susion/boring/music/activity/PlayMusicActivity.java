@@ -35,12 +35,15 @@ import com.susion.boring.music.service.MusicInstruction;
 import com.susion.boring.music.view.LyricView;
 import com.susion.boring.music.view.MediaSeekBar;
 import com.susion.boring.music.view.MusicPlayControlView;
+import com.susion.boring.utils.AlbumUtils;
 import com.susion.boring.utils.BroadcastUtils;
 import com.susion.boring.utils.ImageUtils;
 import com.susion.boring.utils.MediaUtils;
 import com.susion.boring.utils.ToastUtils;
 import com.susion.boring.utils.TransitionHelper;
 import com.susion.boring.view.SToolBar;
+
+import java.io.File;
 
 import rx.Observer;
 
@@ -63,6 +66,7 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
 
     private Handler mHandler = new Handler();
     private SimpleDraweeView mSdvAlbym;
+    private TextView mTvMusicName;
 
     public static void start(Context context, Song song) {
         Intent intent = new Intent();
@@ -104,6 +108,7 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
         mTvPlayedTime = (TextView) findViewById(R.id.tv_has_play_time);
         mTvLeftTime = (TextView) findViewById(R.id.tv_left_time);
         mSdvAlbym = (SimpleDraweeView) findViewById(R.id.ac_play_music_sdv_album);
+        mTvMusicName = (TextView) findViewById(R.id.ac_play_tv_music_name);
     }
 
     @Override
@@ -111,11 +116,17 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
         getParamAndInitReceiver();
         mPresenter = new PlayMusicPresenter(this);
         mToolBar.setMainPage(false);
-        mToolBar.setTitle(mSong.name);
+        mToolBar.setTitle("");
         mToolBar.setLeftIcon(R.mipmap.tool_bar_back);
-        mToolBar.setRightIcon(R.mipmap.download);
         mToolBar.setBackgroundColor(getResources().getColor(R.color.transparent));
-        mSdvAlbym.setImageURI(mSong.album.picUrl);
+
+        if (mSong.fromLocalMusic) {
+            mSdvAlbym.setImageBitmap(AlbumUtils.parseAlbum(new File(mSong.audio)));
+        } else {
+            mSdvAlbym.setImageURI(mSong.album.picUrl);
+        }
+
+        mTvMusicName.setText(mSong.name);
 
         getWindow().setStatusBarColor(Color.TRANSPARENT);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE

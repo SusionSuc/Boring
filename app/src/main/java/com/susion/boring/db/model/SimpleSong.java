@@ -8,7 +8,11 @@ import com.litesuits.orm.db.annotation.Table;
 import com.litesuits.orm.db.annotation.Unique;
 import com.litesuits.orm.db.enums.AssignType;
 import com.susion.boring.music.model.Album;
+import com.susion.boring.music.model.Singer;
 import com.susion.boring.music.model.Song;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created with Android Studio.
@@ -43,6 +47,18 @@ public class SimpleSong implements Parcelable {
 
     public SimpleSong() {
         // Empty
+    }
+
+    public static Song translateToSong(SimpleSong mSong) {
+        Song song = new Song();
+        song.audio = mSong.getPath();
+        song.fromLocalMusic = true;
+        song.name = mSong.getDisplayName();
+        song.id = mSong.getId();
+        List<Singer> artist = new ArrayList<>();
+        artist.add(new Singer(mSong.getArtist()));
+        song.artists = artist;
+        return song;
     }
 
     public SimpleSong(Parcel in) {

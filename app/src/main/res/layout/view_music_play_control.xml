@@ -25,16 +25,20 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="15dp"
                 android:src="@mipmap/music_player_pre"
-                android:layout_width="35dp"
-                android:layout_height="35dp" />
+                android:layout_width="30dp"
+                android:layout_height="30dp" />
 
             <ImageView
                 android:background="@drawable/gradient_circle"
                 android:id="@+id/view_music_player_start_or_stop"
                 android:src="@mipmap/music_player_stop"
                 android:layout_centerInParent="true"
-                android:layout_width="45dp"
-                android:layout_height="45dp" />
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:paddingRight="15dp"
+                android:paddingLeft="20dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp" />
 
 
             <ImageView
@@ -43,8 +47,8 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="15dp"
                 android:src="@mipmap/music_player_next"
-                android:layout_width="35dp"
-                android:layout_height="35dp" />
+                android:layout_width="30dp"
+                android:layout_height="30dp" />
 
         </RelativeLayout>
 

@@ -73,6 +73,7 @@ public class LocalMusicActivity extends BaseActivity implements LocalMusicContra
         mToolBar.setRightIcon(R.mipmap.scan_local_music);
 
         mRV.setLayoutManager(RVUtils.getLayoutManager(this, LinearLayoutManager.VERTICAL));
+        mRV.addItemDecoration(RVUtils.getItemDecorationDivider(this, R.color.red_divider, 2, -1, UIUtils.dp2Px(70)));
         mRV.setAdapter(new BaseRVAdapter(this, mData) {
             @Override
             protected void initHandlers() {
@@ -124,6 +125,7 @@ public class LocalMusicActivity extends BaseActivity implements LocalMusicContra
             @Override
             public void onNext(List<SimpleSong> simpleSongs) {
                 mData.addAll(simpleSongs);
+                mRV.getAdapter().notifyDataSetChanged();
             }
         });
     }

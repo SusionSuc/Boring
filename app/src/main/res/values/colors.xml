@@ -3,7 +3,7 @@
 
     <color name="black">#000000</color>
     <color name="colorPrimaryDark">@color/topBarColor</color>
-    <color name="colorPrimary">@color/topBarColor</color>
+    <color name="colorPrimary">@color/colorPrimaryDark</color>
     <color name="colorAccent">#00BCD4</color>
     <color name="colorLightPrimary">@color/topBarColorLow</color>
     <color name="colorPrimaryText">#212121</color>
@@ -38,6 +38,7 @@
     <color name="topBarColorLow">#F27979</color>
     <color name="red_divider">#e4e4e4</color>
     <color name="red_font_divider">#c7c7c7</color>
+    <color name="search_bar_text_color">#f49f9f</color>
 
 
 </resources>

@@ -4,18 +4,26 @@
     android:layout_height="40dp"
     android:orientation="horizontal">
 
-    <EditText
-        android:textSize="14sp"
-        android:textColor="@color/colorSecondaryText"
-        android:id="@+id/search_bar_tv_text"
-        android:background="@drawable/bg_search_bar_tv"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
+    <ImageView
         android:layout_gravity="center_vertical"
+        android:layout_marginLeft="30dp"
+        android:src="@mipmap/search"
+        android:layout_width="20dp"
+        android:layout_height="20dp" />
+
+    <EditText
+        android:layout_marginLeft="5dp"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:id="@+id/search_bar_tv_text"
+        android:layout_marginRight="50dp"
+        android:layout_gravity="bottom"
         android:layout_weight="1"
         android:layout_width="0dp"
-        android:layout_height="30dp"
-        android:gravity="center_vertical"
+        android:layout_height="match_parent"
+        android:hint="Search Music"
+        android:textColorHint="@color/search_bar_text_color"
+        android:backgroundTint="@color/search_bar_text_color"
         android:focusable="false" />
 
     <Button

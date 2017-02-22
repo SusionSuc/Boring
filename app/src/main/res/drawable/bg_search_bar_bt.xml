@@ -6,7 +6,7 @@
         android:radius="3dp"></corners>
 
     <solid
-        android:color="@color/colorGrey">
+        android:color="@color/search_bar_text_color">
     </solid>
 
 </shape>

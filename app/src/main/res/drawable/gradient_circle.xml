@@ -9,7 +9,7 @@
         android:color="@color/red_font_divider" />
 
     <stroke
-        android:width="2dp"
+        android:width="8dp"
         android:color="@color/red_divider" />
 
     <size android:width="20dp"

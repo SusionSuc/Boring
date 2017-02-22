@@ -101,6 +101,7 @@ public class DbBaseOperate<T>  implements DataBaseOperateContract.BaseOperate<T>
                     subscriber.onNext(false);
                 }
                 subscriber.onCompleted();
+
             }
         });
     }

@@ -15,4 +15,6 @@ public class Song implements Serializable{
     public String djProgramId;
     public String page;
 
+    public boolean fromLocalMusic;
+
 }

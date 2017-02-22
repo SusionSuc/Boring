@@ -16,10 +16,10 @@ public class MusicPlayControlView extends LinearLayout implements View.OnClickLi
 
     private Context mContext;
     private ImageView mIvStartStop;
-    private ImageView mIvMore;
+
     private ImageView mIvNext;
     private ImageView mIvPre;
-    private ImageView mIVPattern;
+
 
     private boolean mIsPlay = false;
 
@@ -48,16 +48,16 @@ public class MusicPlayControlView extends LinearLayout implements View.OnClickLi
 
     private void findView() {
         mIvStartStop = (ImageView) findViewById(R.id.view_music_player_start_or_stop);
-        mIvMore = (ImageView) findViewById(R.id.view_music_player_list);
+
         mIvNext = (ImageView) findViewById(R.id.view_music_player_next);
         mIvPre = (ImageView) findViewById(R.id.view_music_player_pre);
-        mIVPattern = (ImageView) findViewById(R.id.view_music_player_pattern);
 
-        mIvMore.setOnClickListener(this);
+
+
         mIvStartStop.setOnClickListener(this);
         mIvNext.setOnClickListener(this);
         mIvPre.setOnClickListener(this);
-        mIVPattern.setOnClickListener(this);
+
     }
 
 
@@ -84,13 +84,7 @@ public class MusicPlayControlView extends LinearLayout implements View.OnClickLi
 
         int id = view.getId();
         switch (id){
-            case R.id.view_music_player_list:
-
-                break;
             case R.id.view_music_player_next:
-
-                break;
-            case R.id.view_music_player_pattern:
 
                 break;
             case R.id.view_music_player_pre:
@@ -110,14 +104,8 @@ public class MusicPlayControlView extends LinearLayout implements View.OnClickLi
             return;
         }
         switch (id){
-            case R.id.view_music_player_list:
-                listener.onMoreItemClick();
-                break;
             case R.id.view_music_player_next:
                 listener.onNextItemClick();
-                break;
-            case R.id.view_music_player_pattern:
-                listener.onPatternItemClick();
                 break;
             case R.id.view_music_player_pre:
                 listener.onPreItemClick();

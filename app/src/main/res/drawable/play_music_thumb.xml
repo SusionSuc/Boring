@@ -4,10 +4,10 @@
 
     <size
         android:width="15dp"
-        android:height="4dp"></size>
+        android:height="6dp"></size>
 
     <corners
-        android:radius="2dp"></corners>
+        android:radius="3dp"></corners>
 
     <solid
         android:color="@color/topBarColor"></solid>

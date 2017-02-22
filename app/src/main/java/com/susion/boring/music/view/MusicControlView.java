@@ -12,6 +12,9 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.susion.boring.R;
 import com.susion.boring.music.activity.PlayMusicActivity;
 import com.susion.boring.music.model.Song;
+import com.susion.boring.utils.AlbumUtils;
+
+import java.io.File;
 
 /**
  * Created by susion on 17/2/13.
@@ -108,7 +111,12 @@ public class MusicControlView extends LinearLayout{
 
     public void setMusic(Song song){
         mSong = song;
-        setAlbum(song.album.picUrl);
+        if (song.fromLocalMusic) {
+            mSdvAlbum.setImageBitmap(AlbumUtils.parseAlbum(new File(mSong.audio)));
+        } else {
+            setAlbum(song.album.picUrl);
+        }
+
         setSongInfo(song.artists.get(0).name, song.name);
     }
 

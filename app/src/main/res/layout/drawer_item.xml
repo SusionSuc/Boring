@@ -2,10 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="40dp"
-    android:paddingLeft="@dimen/drawer_left_padding"
+    android:layout_marginTop="30dp"
     android:background="@color/white">
 
     <ImageView
+        android:layout_marginLeft="30dp"
         android:id="@+id/drawer_item_image"
         android:layout_centerVertical="true"
         android:layout_width="25dp"

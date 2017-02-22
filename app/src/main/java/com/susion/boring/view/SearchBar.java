@@ -56,7 +56,7 @@ public class SearchBar extends LinearLayout {
     }
 
     private void initView() {
-        setTextViewHintContent();
+//        setTextViewHintContent();
      }
 
     private void setTextViewHintContent() {
