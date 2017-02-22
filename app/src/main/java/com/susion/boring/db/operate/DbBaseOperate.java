@@ -35,7 +35,6 @@ public class DbBaseOperate<T>  implements DataBaseOperateContract.BaseOperate<T>
         return Observable.create(new Observable.OnSubscribe<List<T>>() {
             @Override
             public void call(Subscriber<? super List<T>> subscriber) {
-                List<T> insertSongs = new ArrayList<>();
                 for (T song : objects) {
                     mLiteOrm.save(song);
                 }
@@ -46,11 +45,26 @@ public class DbBaseOperate<T>  implements DataBaseOperateContract.BaseOperate<T>
     }
 
     @Override
-    public Observable<Boolean> add(final T song) {
+    public Observable<Boolean> add(final T t) {
         return Observable.create(new Observable.OnSubscribe<Boolean>() {
             @Override
             public void call(Subscriber<? super Boolean > subscriber) {
-                if (mLiteOrm.save(song) != -1) {
+                if (mLiteOrm.save(t) != -1) {
+                    subscriber.onNext(true);
+                } else {
+                    subscriber.onNext(false);
+                }
+                subscriber.onCompleted();
+            }
+        });
+    }
+
+    @Override
+    public Observable<Boolean> update(final T t) {
+        return Observable.create(new Observable.OnSubscribe<Boolean>() {
+            @Override
+            public void call(Subscriber<? super Boolean > subscriber) {
+                if (mLiteOrm.update(t) != -1) {
                     subscriber.onNext(true);
                 } else {
                     subscriber.onNext(false);
@@ -91,14 +105,15 @@ public class DbBaseOperate<T>  implements DataBaseOperateContract.BaseOperate<T>
     }
 
     @Override
-    public Observable<Boolean> query(final  String id) {
-        return Observable.create(new Observable.OnSubscribe<Boolean>() {
+    public Observable<SimpleSong> query(final  String id) {
+        return Observable.create(new Observable.OnSubscribe<SimpleSong>() {
             @Override
-            public void call(Subscriber<? super Boolean > subscriber) {
-                if (mLiteOrm.queryById(id,mClass) != null) {
-                    subscriber.onNext(true);
+            public void call(Subscriber<? super SimpleSong > subscriber) {
+                SimpleSong song = (SimpleSong) mLiteOrm.queryById(id, mClass);
+                if ( song != null) {
+                    subscriber.onNext(song);
                 } else {
-                    subscriber.onNext(false);
+                    subscriber.onNext(null);
                 }
                 subscriber.onCompleted();
 

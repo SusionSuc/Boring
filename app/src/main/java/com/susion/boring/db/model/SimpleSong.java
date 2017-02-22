@@ -7,7 +7,6 @@ import com.litesuits.orm.db.annotation.PrimaryKey;
 import com.litesuits.orm.db.annotation.Table;
 import com.litesuits.orm.db.annotation.Unique;
 import com.litesuits.orm.db.enums.AssignType;
-import com.susion.boring.music.model.Album;
 import com.susion.boring.music.model.Singer;
 import com.susion.boring.music.model.Song;
 
@@ -15,11 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created with Android Studio.
- * User: ryan.hoo.j@gmail.com
- * Date: 9/2/16
- * Time: 4:01 PM
- * Desc: Song
+    store in local database
  */
 @Table("simple_song")
 public class SimpleSong implements Parcelable {
@@ -49,15 +44,16 @@ public class SimpleSong implements Parcelable {
         // Empty
     }
 
-    public static Song translateToSong(SimpleSong mSong) {
+    public  Song translateToSong() {
         Song song = new Song();
-        song.audio = mSong.getPath();
+        song.audio = path;
         song.fromLocalMusic = true;
-        song.name = mSong.getDisplayName();
-        song.id = mSong.getId();
+        song.name = displayName;
+        song.id = id;
         List<Singer> artist = new ArrayList<>();
-        artist.add(new Singer(mSong.getArtist()));
+        artist.add(new Singer(getArtist()));
         song.artists = artist;
+        song.favorite = favorite;
         return song;
     }
 

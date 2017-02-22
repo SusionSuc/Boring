@@ -6,6 +6,7 @@
 
 
     <ImageView
+        android:id="@+id/view_play_operator_iv_circle"
         android:src="@mipmap/play_operator_circle"
         android:layout_centerVertical="true"
         android:layout_marginLeft="60dp"
@@ -14,6 +15,7 @@
         android:layout_height="20dp" />
 
     <ImageView
+        android:id="@+id/view_play_operator_iv_down"
         android:src="@mipmap/play_operator_down"
         android:layout_centerVertical="true"
         android:layout_marginRight="60dp"
@@ -31,12 +33,14 @@
         android:orientation="horizontal">
 
         <ImageView
+            android:id="@+id/view_play_operator_iv_random"
             android:src="@mipmap/play_operator_random"
             android:layout_gravity="center_vertical"
             android:layout_width="20dp"
             android:layout_height="20dp" />
 
         <ImageView
+            android:id="@+id/view_play_operator_iv_like"
             android:src="@mipmap/play_operator_love"
             android:layout_marginLeft="60dp"
             android:layout_gravity="center_vertical"

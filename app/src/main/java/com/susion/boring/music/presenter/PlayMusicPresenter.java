@@ -1,49 +1,96 @@
 package com.susion.boring.music.presenter;
 
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
+import android.content.Context;
 
-import com.susion.boring.music.presenter.itf.IPlayMusicPresenter;
+import com.susion.boring.db.model.SimpleSong;
+import com.susion.boring.db.operate.DbBaseOperate;
+import com.susion.boring.music.model.DownTask;
+import com.susion.boring.music.model.Song;
 import com.susion.boring.music.presenter.itf.MediaPlayerContract;
-import com.susion.boring.utils.FastBlurUtil;
-import com.susion.boring.utils.UIUtils;
+import com.susion.boring.utils.SPUtils;
+import com.susion.boring.utils.ToastUtils;
+
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by susion on 17/2/8.
  */
-public class PlayMusicPresenter extends MediaPlayPresenter implements IPlayMusicPresenter {
+public class PlayMusicPresenter extends MediaPlayPresenter implements MediaPlayerContract.PlayMusicControlPresenter {
 
-    public PlayMusicPresenter(MediaPlayerContract.View mView) {
+    private DbBaseOperate<SimpleSong> mDbOperator;
+
+    public PlayMusicPresenter(MediaPlayerContract.BaseView mView) {
         super(mView);
     }
 
+    public PlayMusicPresenter(MediaPlayerContract.BaseView mView, Context context) {
+        super(mView, context);
+    }
+    public PlayMusicPresenter(MediaPlayerContract.BaseView mView, Context context, DbBaseOperate<SimpleSong> operator){
+        super(mView, context);
+        mDbOperator = operator;
+    }
+
     @Override
-    public Drawable getBackgroundBlurImage(Bitmap bitmap) {
-        /*得到屏幕的宽高比，以便按比例切割图片一部分*/
-        final float widthHeightSize = (float) (UIUtils.getScreenWidth()
-                * 1.0 / UIUtils.getScreenHeight() * 1.0);
+    public void downMusic(Song song) {
+        if (song.fromLocalMusic) {
+            ToastUtils.showShort("歌曲已经下载!");
+            return;
+        }
 
-        int cropBitmapWidth = (int) (widthHeightSize * bitmap.getHeight());
-        int cropBitmapWidthX = (int) ((bitmap.getWidth() - cropBitmapWidth) / 2.0);
+        FileDownloadPresenter downManager = FileDownloadPresenter.getInstance();
+        DownTask task = new DownTask(song.audio);
 
-        /*切割部分图片*/
-        Bitmap cropBitmap = Bitmap.createBitmap(bitmap, cropBitmapWidthX, 0, cropBitmapWidth,
-                bitmap.getHeight());
-        /*缩小图片*/
-        Bitmap scaleBitmap = Bitmap.createScaledBitmap(cropBitmap, bitmap.getWidth() / 50, bitmap
-                .getHeight() / 50, false);
-        /*模糊化*/
-        final Bitmap blurBitmap = FastBlurUtil.doBlur(scaleBitmap, 8, true);
+        if (downManager.isDowning(task)) {
+            ToastUtils.showShort("当前任务正在下载!!");
+            return;
+        }
 
-        final Drawable foregroundDrawable = new BitmapDrawable(blurBitmap);
-        /*加入灰色遮罩层，避免图片过亮影响其他控件*/
-        foregroundDrawable.setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
-        return foregroundDrawable;
+        task.taskName = song.name + song.audio.substring(song.audio.lastIndexOf("."));
+        downManager.addDownTask(task);
     }
 
 
+    @Override
+    public void randomPlayMusic() {
+
+    }
+
+    @Override
+    public void circlePlayMusic() {
+
+    }
+
+    @Override
+    public void likeMusic(Song song) {
+        song.favorite = !song.favorite;
+        mDbOperator.update(song.translateToSimpleSong())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Boolean>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        ToastUtils.showShort("喜欢失败");
+                    }
+
+                    @Override
+                    public void onNext(Boolean aBoolean) {
+                        ToastUtils.showShort("喜欢成功");
+                    }
+                });
+    }
+
+
+    @Override
+    public void saveLastPlayMusic(Song song, Context c) {
+        SPUtils.writeStringToMusicConfig(SPUtils.MUSIC_CONFIG_LAST_PLAY_MUSIC, song.id, c);
+    }
 
 }

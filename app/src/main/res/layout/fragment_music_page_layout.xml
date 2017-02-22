@@ -23,11 +23,11 @@
         android:background="@color/red_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"></View>
-    <com.susion.boring.music.view.MusicControlView
+    <com.susion.boring.music.view.MusicControlPanel
         android:id="@+id/music_control_view"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    </com.susion.boring.music.view.MusicControlView>
+    </com.susion.boring.music.view.MusicControlPanel>
 
 </LinearLayout>

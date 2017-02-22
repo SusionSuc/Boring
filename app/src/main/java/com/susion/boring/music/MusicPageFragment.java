@@ -12,14 +12,16 @@ import android.view.View;
 
 import com.susion.boring.R;
 import com.susion.boring.base.BaseFragment;
-import com.susion.boring.music.activity.PlayMusicActivity;
+import com.susion.boring.db.DbManager;
+import com.susion.boring.db.model.SimpleSong;
+import com.susion.boring.db.operate.DbBaseOperate;
 import com.susion.boring.music.adapter.MusicPageAdapter;
 import com.susion.boring.music.itemhandler.MusicPageConstantIH;
 import com.susion.boring.music.model.MusicPageConstantItem;
 import com.susion.boring.music.model.Song;
 import com.susion.boring.music.presenter.FileDownloadPresenter;
 import com.susion.boring.music.service.MusicInstruction;
-import com.susion.boring.music.view.MusicControlView;
+import com.susion.boring.music.view.MusicControlPanel;
 import com.susion.boring.utils.BroadcastUtils;
 import com.susion.boring.utils.RVUtils;
 import com.susion.boring.utils.SPUtils;
@@ -28,6 +30,10 @@ import com.susion.boring.view.SearchBar;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by susion on 17/1/19.
@@ -38,9 +44,10 @@ public class MusicPageFragment extends BaseFragment {
 
     private SearchBar mSearchBar;
     private RecyclerView mRV;
-    private MusicControlView mControlView;
+    private MusicControlPanel mControlView;
     private Song mSong;
     private ClientMusicReceiver mReceiver;
+
 
     @Override
     public View initContentView(LayoutInflater inflater) {
@@ -57,12 +64,12 @@ public class MusicPageFragment extends BaseFragment {
         mRV = (RecyclerView) mView.findViewById(R.id.list_view);
         mRV.setLayoutManager(RVUtils.getLayoutManager(getActivity(), LinearLayoutManager.VERTICAL));
 
-        mControlView = (MusicControlView)mView.findViewById(R.id.music_control_view);
+        mControlView = (MusicControlPanel)mView.findViewById(R.id.music_control_view);
     }
 
     @Override
     public void initListener() {
-        mControlView.seMusicControlListener(new MusicControlView.MusicControlViewListener() {
+        mControlView.seMusicControlListener(new MusicControlPanel.MusicControlViewListener() {
             @Override
             public void onPlayClick(boolean isPlay) {
                 if (isPlay) {
@@ -117,12 +124,29 @@ public class MusicPageFragment extends BaseFragment {
     }
 
     private void loadPLayHistory() {
-        mSong = SPUtils.getGson().fromJson(SPUtils.getStringFromMusicConfig(SPUtils.MUSIC_CONFIG_LAST_PLAY_MUSIC, getActivity()),
-                    Song.class);
-        if (mSong != null) {
-            mControlView.setMusic(mSong);
-            mControlView.setPlay(false);
-        }
+        String songId = SPUtils.getStringFromMusicConfig(SPUtils.MUSIC_CONFIG_LAST_PLAY_MUSIC, getActivity());
+        DbBaseOperate<SimpleSong> dbOperator = new DbBaseOperate<>(DbManager.getLiteOrm(), getContext(), SimpleSong.class);
+        dbOperator.query(songId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<SimpleSong>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(SimpleSong song) {
+                if (song != null) {
+                    mSong = song.translateToSong();
+                    mControlView.setMusic(mSong);
+                    mControlView.setPlay(false);
+                }
+            }
+        });
+
     }
 
     private void getCurrentPlayMusic() {

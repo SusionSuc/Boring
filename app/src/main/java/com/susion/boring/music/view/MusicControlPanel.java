@@ -19,7 +19,7 @@ import java.io.File;
 /**
  * Created by susion on 17/2/13.
  */
-public class MusicControlView extends LinearLayout{
+public class MusicControlPanel extends LinearLayout{
 
     private Context mContext;
     private SimpleDraweeView mSdvAlbum;
@@ -32,24 +32,24 @@ public class MusicControlView extends LinearLayout{
 
     private MusicControlViewListener mListener;
 
-    public MusicControlView(Context context) {
+    public MusicControlPanel(Context context) {
         super(context);
         init();
     }
 
-    public MusicControlView(Context context, AttributeSet attrs) {
+    public MusicControlPanel(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public MusicControlView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MusicControlPanel(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
 
     private void init() {
         mContext = getContext();
-        View.inflate(mContext, R.layout.view_music_control, this);
+        View.inflate(mContext, R.layout.view_music_control_panel, this);
         findView();
         initListener();
         initView();

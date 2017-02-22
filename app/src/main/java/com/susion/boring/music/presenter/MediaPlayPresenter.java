@@ -16,7 +16,7 @@ import java.io.IOException;
  */
 public class MediaPlayPresenter implements MediaPlayerContract.Presenter, MediaPlayer.OnPreparedListener, MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnCompletionListener {
 
-    private MediaPlayerContract.View mView;
+    private MediaPlayerContract.BaseView mView;
     private Context mContext;
     private MediaPlayer mPlayer;
     private Uri mSource;
@@ -43,11 +43,11 @@ public class MediaPlayPresenter implements MediaPlayerContract.Presenter, MediaP
         }
     };
 
-    public MediaPlayPresenter(MediaPlayerContract.View mView) {
+    public MediaPlayPresenter(MediaPlayerContract.BaseView mView) {
         this.mView = mView;
     }
 
-    public MediaPlayPresenter(MediaPlayerContract.View mView, Context mContext) {
+    public MediaPlayPresenter(MediaPlayerContract.BaseView mView, Context mContext) {
         this.mView = mView;
         this.mContext = mContext;
     }

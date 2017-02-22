@@ -12,14 +12,14 @@ import rx.Observable;
 public interface DataBaseOperateContract {
 
     interface BaseOperate<T>{
-        Observable<List<T>> add(final List<T> songs);
-        Observable<Boolean> add(T song);
-        Observable<Boolean> delete(T song);
+        Observable<List<T>> add(final List<T> ts);
+        Observable<Boolean> add(T t);
+        Observable<Boolean> delete(T t);
         Observable<Boolean> clearALLData();
-        Observable<Boolean> query(String id);
+        Observable<SimpleSong> query(String id);
         Observable<Long> getTotalCount();
         Observable<List<T>> getAll();
-
+        Observable<Boolean> update(T t);
     }
 
 }

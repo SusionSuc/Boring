@@ -9,20 +9,25 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.susion.boring.db.DbManager;
+import com.susion.boring.db.model.SimpleSong;
+import com.susion.boring.db.operate.DbBaseOperate;
 import com.susion.boring.music.model.Song;
 import com.susion.boring.music.presenter.MediaPlayPresenter;
+import com.susion.boring.music.presenter.PlayMusicPresenter;
 import com.susion.boring.music.presenter.itf.MediaPlayerContract;
 import com.susion.boring.utils.SPUtils;
 
 /**
  * Created by susion on 17/2/13.
  */
-public class MusicPlayerService extends Service implements MediaPlayerContract.View{
+public class MusicPlayerService extends Service implements MediaPlayerContract.BaseView{
 
     private ServiceMusicReceiver mReceiver;
-    private MediaPlayerContract.Presenter mPresenter;
+    private MediaPlayerContract.PlayMusicControlPresenter mPresenter;
+
     public static final String SERVICE_ACTION = "MUSIC_SERVICE";
-    private Song mSong;
+    private Song mSong;  //current play music
     private boolean mAutoPlay;
 
     @Override
@@ -32,7 +37,7 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.V
     }
 
     private void init() {
-        mPresenter = new MediaPlayPresenter(this, this);
+        mPresenter = new PlayMusicPresenter(this, this, new DbBaseOperate<SimpleSong>(DbManager.getLiteOrm(), this, SimpleSong.class));
         mReceiver = new ServiceMusicReceiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, mReceiver.getIntentFilter());
     }
@@ -77,6 +82,11 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.V
         Intent intent = new Intent(MusicInstruction.CLIENT_RECEIVER_SET_DURATION);
         intent.putExtra(MusicInstruction.CLIENT_PARAM_MEDIA_DURATION, mPresenter.getDuration());
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
     }
 
     @Override
@@ -144,7 +154,7 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.V
     }
 
     private void saveLastPlayMusic() {
-        SPUtils.writeStringToMusicConfig(SPUtils.MUSIC_CONFIG_LAST_PLAY_MUSIC, SPUtils.getGson().toJson(mSong),this);
+        mPresenter.saveLastPlayMusic(mSong, this);
     }
 
     @Override

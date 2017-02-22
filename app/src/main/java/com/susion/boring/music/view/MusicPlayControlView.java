@@ -7,7 +7,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.susion.boring.R;
-import com.susion.boring.utils.ToastUtils;
 
 /**
  * Created by susion on 17/1/23.
@@ -117,10 +116,8 @@ public class MusicPlayControlView extends LinearLayout implements View.OnClickLi
     }
 
     public interface MusicPlayerControlViewItemClickListener{
-        void onMoreItemClick();
         void onNextItemClick();
         void onPreItemClick();
-        void onPatternItemClick();
         void onStartOrStartItemClick(boolean isPlay);
     }
 

@@ -1,45 +1,36 @@
 package com.susion.boring.music.activity;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.os.Handler;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.Pair;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.susion.boring.R;
 import com.susion.boring.base.BaseActivity;
+import com.susion.boring.db.DbManager;
+import com.susion.boring.db.model.SimpleSong;
+import com.susion.boring.db.operate.DbBaseOperate;
 import com.susion.boring.http.APIHelper;
-import com.susion.boring.music.model.DownTask;
 import com.susion.boring.music.model.LyricResult;
 import com.susion.boring.music.model.Song;
-import com.susion.boring.music.presenter.FileDownloadPresenter;
-
-import com.susion.boring.music.presenter.itf.IPlayMusicPresenter;
+import com.susion.boring.music.presenter.PlayMusicCommunicatePresenter;
 import com.susion.boring.music.presenter.PlayMusicPresenter;
-
 import com.susion.boring.music.presenter.itf.MediaPlayerContract;
 import com.susion.boring.music.service.MusicInstruction;
-
-import com.susion.boring.music.view.LyricView;
 import com.susion.boring.music.view.MediaSeekBar;
 import com.susion.boring.music.view.MusicPlayControlView;
+import com.susion.boring.music.view.PlayOperatorView;
 import com.susion.boring.utils.AlbumUtils;
 import com.susion.boring.utils.BroadcastUtils;
-import com.susion.boring.utils.ImageUtils;
 import com.susion.boring.utils.MediaUtils;
-import com.susion.boring.utils.ToastUtils;
 import com.susion.boring.utils.TransitionHelper;
 import com.susion.boring.view.SToolBar;
 
@@ -47,26 +38,24 @@ import java.io.File;
 
 import rx.Observer;
 
-public class PlayMusicActivity extends BaseActivity implements MediaPlayerContract.View{
+public class PlayMusicActivity extends BaseActivity implements MediaPlayerContract.CommunicateView {
     private static final String TO_PLAY_MUSIC_INFO = "played_music";
     private static final String FROM_LITTLE_PANEL = "from_little_panel";
 
     private SToolBar mToolBar;
     private MediaSeekBar mSeekBar;
     private MusicPlayControlView mPlayControlView;
-    private LinearLayout mLl;
-    private IPlayMusicPresenter mPresenter;
     private TextView mTvPlayedTime;
     private TextView mTvLeftTime;
-
-
-    private Song mSong;
-    private ClientMusicReceiver mReceiver;
-    private boolean mIsFromLittlePanel;
-
-    private Handler mHandler = new Handler();
     private SimpleDraweeView mSdvAlbym;
     private TextView mTvMusicName;
+    private PlayOperatorView mPovMusicPlayControl;
+
+    private Song mSong;
+    private boolean mIsFromLittlePanel;
+
+    private MediaPlayerContract.PlayMusicControlPresenter mPresenter;
+    private MediaPlayerContract.PlayMusicCommunicatePresenter mCommunicatePresenter;
 
     public static void start(Context context, Song song) {
         Intent intent = new Intent();
@@ -74,6 +63,7 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
         intent.setClass(context, PlayMusicActivity.class);
         context.startActivity(intent);
     }
+
 
     public static void startFromLittlePanel(Activity activity, Song song) {
         final Pair<View, String>[] pairs = TransitionHelper.createSafeTransitionParticipants(activity, true);
@@ -84,7 +74,6 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
         intent.setClass(activity, PlayMusicActivity.class);
         activity.startActivity(intent, transitionActivityOptions.toBundle());
     }
-
 
     @Override
     public void initTransitionAnim() {
@@ -100,21 +89,23 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
     }
 
     @Override
-    public void findView(){
+    public void findView() {
+        mPresenter = new PlayMusicPresenter(this, this, new DbBaseOperate<SimpleSong>(DbManager.getLiteOrm(), this, SimpleSong.class));
+        mCommunicatePresenter = new PlayMusicCommunicatePresenter(this);
+
         mToolBar = (SToolBar) findViewById(R.id.toolbar);
         mSeekBar = (MediaSeekBar) findViewById(R.id.seek_bar);
         mPlayControlView = (MusicPlayControlView) findViewById(R.id.control_view);
-        mLl = (LinearLayout) findViewById(R.id.ll);
         mTvPlayedTime = (TextView) findViewById(R.id.tv_has_play_time);
         mTvLeftTime = (TextView) findViewById(R.id.tv_left_time);
         mSdvAlbym = (SimpleDraweeView) findViewById(R.id.ac_play_music_sdv_album);
         mTvMusicName = (TextView) findViewById(R.id.ac_play_tv_music_name);
+        mPovMusicPlayControl = (PlayOperatorView) findViewById(R.id.ac_play_music_pov);
     }
 
     @Override
     public void initView() {
         getParamAndInitReceiver();
-        mPresenter = new PlayMusicPresenter(this);
         mToolBar.setMainPage(false);
         mToolBar.setTitle("");
         mToolBar.setLeftIcon(R.mipmap.tool_bar_back);
@@ -135,25 +126,19 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
         initListener();
 
         mPlayControlView.setIsPlay(false);
+        mPovMusicPlayControl.setSong(mSong);
+        mPovMusicPlayControl.setPresenter(mPresenter);
     }
 
     private void getParamAndInitReceiver() {
         mSong = (Song) getIntent().getSerializableExtra(TO_PLAY_MUSIC_INFO);
         mIsFromLittlePanel = getIntent().getBooleanExtra(FROM_LITTLE_PANEL, false);
-        mReceiver = new ClientMusicReceiver();
-        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, mReceiver.getIntentFilter());
-
-        BroadcastUtils.sendIntentAction(PlayMusicActivity.this, MusicInstruction.SERVICE_RECEIVER_QUERY_IS_PLAYING);
+        mCommunicatePresenter.queryServiceIsPlaying();
     }
 
     @Override
     public void initListener() {
         mPlayControlView.setOnControlItemClickListener(new MusicPlayControlView.MusicPlayerControlViewItemClickListener() {
-            @Override
-            public void onMoreItemClick() {
-
-            }
-
             @Override
             public void onNextItemClick() {
 
@@ -161,11 +146,6 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
 
             @Override
             public void onPreItemClick() {
-
-            }
-
-            @Override
-            public void onPatternItemClick() {
 
             }
 
@@ -178,7 +158,6 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
                 }
             }
         });
-
 
         mSeekBar.setMediaSeekBarListener(new MediaSeekBar.MediaSeekBarListener() {
             @Override
@@ -207,34 +186,11 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
                 LocalBroadcastManager.getInstance(PlayMusicActivity.this).sendBroadcast(intent);
             }
         });
-
-        mToolBar.setRightIconClickListener(new SToolBar.OnRightIconClickListener() {
-            @Override
-            public void onRightIconClick() {
-                FileDownloadPresenter downManager = FileDownloadPresenter.getInstance();
-                DownTask task = new DownTask(mSong.audio);
-
-                if (downManager.isDowning(task)) {
-                    ToastUtils.showShort("当前任务正在下载!!");
-                    return;
-                }
-
-                task.taskName = mSong.name + mSong.audio.substring(mSong.audio.lastIndexOf("."));
-                downManager.addDownTask(task);
-            }
-        });
     }
 
     @Override
     public void initData() {
         loadLyric();
-    }
-
-    private void loadMusic(boolean autoPlay) {
-        Intent intent = new Intent(MusicInstruction.SERVICE_LOAD_MUSIC_INFO);
-        intent.putExtra(MusicInstruction.SERVICE_PARAM_PLAY_SONG, mSong);
-        intent.putExtra(MusicInstruction.SERVICE_PARAM_PLAY_SONG_AUTO_PLAY, autoPlay);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
     private void loadLyric() {
@@ -256,21 +212,6 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
 
     }
 
-    private void setBlurBackground() {
-        ImageUtils.LoadImage(this, mSong.album.picUrl, new ImageUtils.OnLoadFinishLoadImage() {
-            @Override
-            public void loadImageFinish(String imageUri, View view, Bitmap loadedImage) {
-                mLl.setBackground(mPresenter.getBackgroundBlurImage(loadedImage));
-            }
-        });
-    }
-
-    private void tryToChangeMusic() {
-        Intent intent = new Intent(MusicInstruction.SERVER_RECEIVER_CHANGE_MUSIC);
-        intent.putExtra(MusicInstruction.SERVICE_PARAM_CHANGE_MUSIC, mSong);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-    }
-
     @Override
     public void preparedPlay(int duration) {
         mSeekBar.setCurrentProgress(0);
@@ -284,8 +225,36 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
     }
 
     @Override
+    public void setPlayDuration(int duration) {
+        mSeekBar.setMaxProgress(duration);
+    }
+
+    @Override
+    public void updatePlayProgressForSetMax(int curPos, int left) {
+        mSeekBar.setMaxProgress(left);
+        mSeekBar.setCurrentProgress(curPos);
+        mTvPlayedTime.setText(MediaUtils.getDurationString(curPos, false));
+        mTvLeftTime.setText(MediaUtils.getDurationString(left, true));
+    }
+
+    @Override
+    public void tryToChangeMusicByCurrentCondition(boolean playStatus) {
+        if (!mIsFromLittlePanel) {
+            mCommunicatePresenter.tryToChangePlayingMusic(mSong);
+            mPlayControlView.setIsPlay(true);
+            return;
+        }
+        mPlayControlView.setIsPlay(playStatus);
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
+    }
+
+    @Override
     public void updateBufferedProgress(int percent) {
-        mSeekBar.setHasBufferProgress( (int) (percent * 1.0f / 100 * mSeekBar.getMaxProgress()));
+        mSeekBar.setHasBufferProgress((int) (percent * 1.0f / 100 * mSeekBar.getMaxProgress()));
     }
 
     @Override
@@ -293,72 +262,11 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
         mTvPlayedTime.setText(MediaUtils.getDurationString(curPos, false));
         mTvLeftTime.setText(MediaUtils.getDurationString(left, true));
         mSeekBar.setCurrentProgress(curPos);
-
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
+        mCommunicatePresenter.releaseResource();
     }
-
-    public class ClientMusicReceiver extends BroadcastReceiver{
-
-        public IntentFilter getIntentFilter(){
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(MusicInstruction.CLIENT_RECEIVER_PLAYER_PREPARED);
-            filter.addAction(MusicInstruction.CLIENT_RECEIVER_UPDATE_BUFFERED_PROGRESS);
-            filter.addAction(MusicInstruction.CLIENT_RECEIVER_UPDATE_PLAY_PROGRESS);
-            filter.addAction(MusicInstruction.CLIENT_RECEIVER_SET_DURATION);
-            filter.addAction(MusicInstruction.CLIENT_RECEIVER_CURRENT_IS_PALING);
-            filter.addAction(MusicInstruction.CLIENT_RECEIVER_CURRENT_PLAY_PROGRESS);
-            return filter;
-        }
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            switch (action){
-                case MusicInstruction.CLIENT_RECEIVER_PLAYER_PREPARED:
-                    preparedPlay(intent.getIntExtra(MusicInstruction.CLIENT_PARAM_PREPARED_TOTAL_DURATION, 0));
-                    break;
-                case MusicInstruction.CLIENT_RECEIVER_UPDATE_BUFFERED_PROGRESS:
-                    updateBufferedProgress(intent.getIntExtra(MusicInstruction.CLIENT_PARAM_BUFFERED_PROGRESS, 0));
-                    break;
-                case MusicInstruction.CLIENT_RECEIVER_UPDATE_PLAY_PROGRESS:
-                    updatePlayProgress(intent.getIntExtra(MusicInstruction.CLIENT_PARAM_PLAY_PROGRESS_CUR_POS, 0),
-                            intent.getIntExtra(MusicInstruction.CLIENT_PARAM_PLAY_PROGRESS_DURATION, 0));
-                    break;
-                case MusicInstruction.CLIENT_RECEIVER_SET_DURATION:
-                    mSeekBar.setMaxProgress(intent.getIntExtra(MusicInstruction.CLIENT_PARAM_MEDIA_DURATION, 0));
-                    break;
-                case MusicInstruction.CLIENT_RECEIVER_CURRENT_IS_PALING:
-                    boolean playStatus = intent.getBooleanExtra(MusicInstruction.CLIENT_PARAM_IS_PLAYING, false);
-//                    boolean needLoadMusic = intent.getBooleanExtra(MusicInstruction.CLIENT_PARAM_NEED_LOAD_MUSIC, false);
-                    if (!mIsFromLittlePanel) {
-                        tryToChangeMusic();
-                        mPlayControlView.setIsPlay(true);
-                        return;
-                    }
-
-//                    if (!playStatus && needLoadMusic){
-//                        loadMusic(false);
-//                        return;
-//                    }
-                    mPlayControlView.setIsPlay(playStatus);
-                    BroadcastUtils.sendIntentAction(PlayMusicActivity.this, MusicInstruction.SERVICE_RECEIVER_GET_PLAY_PROGRESS);
-                    break;
-                case MusicInstruction.CLIENT_RECEIVER_CURRENT_PLAY_PROGRESS:
-                    final int curPos = intent.getIntExtra(MusicInstruction.CLIENT_PARAM_CURRENT_PLAY_PROGRESS, 0);
-                    final int left = intent.getIntExtra(MusicInstruction.CLIENT_PARAM_MEDIA_DURATION, 0);
-
-                    mSeekBar.setMaxProgress(left);
-                    mSeekBar.setCurrentProgress(curPos);
-                    mTvPlayedTime.setText(MediaUtils.getDurationString(curPos, false));
-                    mTvLeftTime.setText(MediaUtils.getDurationString(left, true));
-                    break;
-            }
-        }
-    }
-
 }

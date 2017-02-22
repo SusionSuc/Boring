@@ -42,6 +42,6 @@ public class LocalMusicIH extends SimpleItemHandler<SimpleSong> {
 
     @Override
     public void onClick(View view) {
-        PlayMusicActivity.start(mContext, SimpleSong.translateToSong(mData));
+        PlayMusicActivity.start(mContext, mData.translateToSong());
     }
 }

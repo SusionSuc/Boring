@@ -6,26 +6,46 @@ import android.graphics.drawable.Drawable;
 
 import com.susion.boring.base.BasePresenter;
 import com.susion.boring.base.BaseView;
+import com.susion.boring.music.model.Song;
 
 /**
  * Created by susion on 17/2/20.
  */
 public interface MediaPlayerContract {
 
-    interface View extends BaseView<Presenter> {
-        void updateBufferedProgress(int percent);
-        void updatePlayProgress(int curPos, int duration);
-        void preparedPlay(int duration);
-        void completionPlay();
+    interface BaseView{
 
+        Context getContext();
+
+        void updateBufferedProgress(int percent);
+
+        void updatePlayProgress(int curPos, int duration);
+
+        void preparedPlay(int duration);
+
+        void completionPlay();
+    }
+
+    interface CommunicateView extends BaseView{
+
+        void setPlayDuration(int duration);
+
+        void updatePlayProgressForSetMax(int curPos, int duration);
+
+        void tryToChangeMusicByCurrentCondition(boolean playStatus);
     }
 
     interface Presenter extends BasePresenter {
         void initMediaPlayer(String mediaUri) throws Exception;
+
         boolean startPlay();
+
         void pausePlay();
+
         void stopPlay();
+
         void releaseResource();
+
         void seekTo(int pos);
 
         boolean isPrepared();
@@ -35,6 +55,30 @@ public interface MediaPlayerContract {
         boolean isPlaying();
 
         int getCurrentProgress();
-
     }
+
+    //for music play
+    interface PlayMusicControlPresenter extends Presenter{
+        void downMusic(Song song);
+
+        void randomPlayMusic();
+
+        void circlePlayMusic();
+
+        void likeMusic(Song song);
+
+        void saveLastPlayMusic(Song song, Context c);
+    }
+
+    interface PlayMusicCommunicatePresenter{
+
+        void queryServiceIsPlaying();
+
+        void tryToChangePlayingMusic(Song song);
+
+        void releaseResource();
+    }
+
+
+
 }

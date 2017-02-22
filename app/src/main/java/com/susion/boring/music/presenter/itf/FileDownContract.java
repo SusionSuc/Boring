@@ -10,6 +10,7 @@ import java.util.List;
  * Created by susion on 17/2/20.
  */
 public interface FileDownContract {
+
     interface View extends BaseView<Presenter> {
         void errorDownTask(DownTask view);
 
