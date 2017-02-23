@@ -23,15 +23,6 @@ public class Song implements Serializable{
     public boolean favorite;
 
 
-//    Song song = new Song();
-//    song.audio = mSong.getPath();
-//    song.fromLocalMusic = true;
-//    song.name = mSong.getDisplayName();
-//    song.id = mSong.getId();
-//    List<Singer> artist = new ArrayList<>();
-//    artist.add(new Singer(mSong.getArtist()));
-//    song.artists = artist;
-//    song.favorite = mSong.isFavorite();
     public SimpleSong translateToSimpleSong(){
         SimpleSong simpleSong = new SimpleSong();
         simpleSong.setPath(audio);

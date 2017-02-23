@@ -21,6 +21,7 @@ public class PlayMusicPresenter extends MediaPlayPresenter implements MediaPlaye
 
     private DbBaseOperate<SimpleSong> mDbOperator;
 
+
     public PlayMusicPresenter(MediaPlayerContract.BaseView mView) {
         super(mView);
     }
@@ -62,31 +63,6 @@ public class PlayMusicPresenter extends MediaPlayPresenter implements MediaPlaye
     public void circlePlayMusic() {
 
     }
-
-    @Override
-    public void likeMusic(Song song) {
-        song.favorite = !song.favorite;
-        mDbOperator.update(song.translateToSimpleSong())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Boolean>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        ToastUtils.showShort("喜欢失败");
-                    }
-
-                    @Override
-                    public void onNext(Boolean aBoolean) {
-                        ToastUtils.showShort("喜欢成功");
-                    }
-                });
-    }
-
 
     @Override
     public void saveLastPlayMusic(Song song, Context c) {

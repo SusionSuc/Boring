@@ -26,6 +26,7 @@ public interface MediaPlayerContract {
         void completionPlay();
     }
 
+
     interface CommunicateView extends BaseView{
 
         void setPlayDuration(int duration);
@@ -35,6 +36,7 @@ public interface MediaPlayerContract {
         void tryToChangeMusicByCurrentCondition(boolean playStatus);
     }
 
+    //media player
     interface Presenter extends BasePresenter {
         void initMediaPlayer(String mediaUri) throws Exception;
 
@@ -65,11 +67,11 @@ public interface MediaPlayerContract {
 
         void circlePlayMusic();
 
-        void likeMusic(Song song);
-
         void saveLastPlayMusic(Song song, Context c);
     }
 
+
+    //for communicate with music play service
     interface PlayMusicCommunicatePresenter{
 
         void queryServiceIsPlaying();
@@ -77,6 +79,10 @@ public interface MediaPlayerContract {
         void tryToChangePlayingMusic(Song song);
 
         void releaseResource();
+
+        void updatePlayMusic(Song song);
+
+        void likeMusic(Song mSong);
     }
 
 

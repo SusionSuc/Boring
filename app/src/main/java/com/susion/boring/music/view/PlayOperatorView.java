@@ -25,13 +25,13 @@ public class PlayOperatorView  extends LinearLayout implements View.OnClickListe
     private ImageView mIvLike;
 
     private Song mSong;
+    private MediaPlayerContract.PlayMusicCommunicatePresenter mCommunicatePresenter;
     private MediaPlayerContract.PlayMusicControlPresenter mPresenter;
 
     public PlayOperatorView(Context context) {
         super(context);
         init();
     }
-
 
     public PlayOperatorView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -73,7 +73,8 @@ public class PlayOperatorView  extends LinearLayout implements View.OnClickListe
                 break;
 
             case R.id.view_play_operator_iv_like :
-                mPresenter.likeMusic(mSong);
+                mSong.favorite = !mSong.favorite;
+                mCommunicatePresenter.likeMusic(mSong);
                 refreshLikeStatus();
                 break;
         }
@@ -92,7 +93,8 @@ public class PlayOperatorView  extends LinearLayout implements View.OnClickListe
         }
     }
 
-    public void setPresenter(MediaPlayerContract.PlayMusicControlPresenter presenter) {
+    public void setPresenter(MediaPlayerContract.PlayMusicControlPresenter presenter, MediaPlayerContract.PlayMusicCommunicatePresenter communicatePresenter) {
         mPresenter = presenter;
+        mCommunicatePresenter = communicatePresenter;
     }
 }

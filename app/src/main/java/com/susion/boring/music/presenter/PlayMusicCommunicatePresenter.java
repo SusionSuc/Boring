@@ -6,10 +6,18 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.susion.boring.db.DbManager;
+import com.susion.boring.db.model.SimpleSong;
+import com.susion.boring.db.operate.DbBaseOperate;
 import com.susion.boring.music.model.Song;
 import com.susion.boring.music.presenter.itf.MediaPlayerContract;
 import com.susion.boring.music.service.MusicInstruction;
 import com.susion.boring.utils.BroadcastUtils;
+import com.susion.boring.utils.ToastUtils;
+
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by susion on 17/2/22.
@@ -41,6 +49,43 @@ public class PlayMusicCommunicatePresenter implements MediaPlayerContract.PlayMu
     public void releaseResource() {
         LocalBroadcastManager.getInstance(mView.getContext()).unregisterReceiver(mReceiver);
     }
+
+    @Override
+    public void updatePlayMusic(Song song) {
+        Intent intent = new Intent(MusicInstruction.SERVER_RECEIVER_UPDATE_PLAY_MUSIC_INFO);
+        intent.putExtra(MusicInstruction.SERVICE_PARAM_UPDATE_SONG, song);
+        LocalBroadcastManager.getInstance(mView.getContext()).sendBroadcast(intent);
+    }
+
+    @Override
+    public void likeMusic(Song mSong) {
+        updatePlayMusic(mSong);
+        new DbBaseOperate<SimpleSong>(DbManager.getLiteOrm(), mView.getContext(), SimpleSong.class)
+                .update(mSong.translateToSimpleSong())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Boolean>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        ToastUtils.showShort("喜欢失败");
+                    }
+
+                    @Override
+                    public void onNext(Boolean b) {
+                        if (b) {
+                            ToastUtils.showShort("喜欢成功");
+                        } else {
+                            ToastUtils.showShort("喜欢失败");
+                        }
+                    }
+                });
+    }
+
 
     public class ClientMusicReceiver extends BroadcastReceiver {
         public IntentFilter getIntentFilter(){

@@ -69,7 +69,6 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.B
             }
         }
 
-
         mSong = song;
         try {
             mPresenter.initMediaPlayer(mSong.audio);
@@ -161,6 +160,10 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.B
     public void completionPlay() {
 
     }
+    private void updateSong(Song song) {
+        mSong = song;
+    }
+
 
     //用长按home调出最近运行历史，在这里面清除软件,可能会调用
     @Override
@@ -197,6 +200,8 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.B
             filter.addAction(MusicInstruction.SERVICE_RECEIVER_QUERY_CURRENT_STATE);
             filter.addAction(MusicInstruction.SERVICE_RECEIVER_QUERY_IS_PLAYING);
             filter.addAction(MusicInstruction.SERVICE_RECEIVER_GET_PLAY_PROGRESS);
+            filter.addAction(MusicInstruction.SERVICE_RECEIVER_GET_PLAY_PROGRESS);
+            filter.addAction(MusicInstruction.SERVER_RECEIVER_UPDATE_PLAY_MUSIC_INFO);
             return filter;
         }
 
@@ -236,8 +241,10 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.B
                 case MusicInstruction.SERVICE_RECEIVER_GET_PLAY_PROGRESS:
                     informCurrentIfPlayProgress();
                     break;
+                case MusicInstruction.SERVER_RECEIVER_UPDATE_PLAY_MUSIC_INFO:
+                    updateSong((Song) intent.getSerializableExtra(MusicInstruction.SERVICE_PARAM_UPDATE_SONG));
+                    break;
             }
         }
     }
-
 }

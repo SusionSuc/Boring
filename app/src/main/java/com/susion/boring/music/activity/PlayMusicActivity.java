@@ -64,7 +64,6 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
         context.startActivity(intent);
     }
 
-
     public static void startFromLittlePanel(Activity activity, Song song) {
         final Pair<View, String>[] pairs = TransitionHelper.createSafeTransitionParticipants(activity, true);
         ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, pairs);
@@ -127,7 +126,7 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
 
         mPlayControlView.setIsPlay(false);
         mPovMusicPlayControl.setSong(mSong);
-        mPovMusicPlayControl.setPresenter(mPresenter);
+        mPovMusicPlayControl.setPresenter(mPresenter, mCommunicatePresenter);
     }
 
     private void getParamAndInitReceiver() {
