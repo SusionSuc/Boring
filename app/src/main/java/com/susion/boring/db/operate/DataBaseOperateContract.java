@@ -22,4 +22,7 @@ public interface DataBaseOperateContract {
         Observable<Boolean> update(T t);
     }
 
+    interface MusicOperator extends BaseOperate<SimpleSong>{
+        Observable<List<SimpleSong>> getLikeMusic();
+    }
 }

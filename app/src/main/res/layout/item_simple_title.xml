@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_marginTop="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/item_simple_title_iv_icon"
+        android:layout_marginLeft="15dp"
+        android:src="@mipmap/icon_paly_list"
+        android:layout_width="30dp"
+        android:layout_height="30dp" />
+
+
+    <TextView
+        android:id="@+id/item_simple_title_tv_title"
+
+        android:textColor="@color/black"
+        android:layout_marginLeft="10dp"
+        android:text="推荐歌单"
+        android:layout_toRightOf="@id/item_simple_title_iv_icon"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+    <ImageView
+        android:id="@+id/item_simple_title_iv_right_icon"
+        android:layout_centerVertical="true"
+        android:src="@mipmap/icon_more"
+        android:layout_marginRight="15dp"
+        android:layout_alignParentRight="true"
+        android:layout_width="20dp"
+        android:layout_height="20dp" />
+
+
+    <TextView
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/item_simple_title_iv_right_icon"
+        android:id="@+id/item_simple_title_tv_right_desc"
+        android:textColor="@color/black"
+        android:text="更多"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+</RelativeLayout>

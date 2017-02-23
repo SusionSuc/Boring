@@ -3,12 +3,14 @@ package com.susion.boring.base.view;
 import android.content.Context;
 import android.support.annotation.IntDef;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.susion.boring.base.OnLastItemVisibleListener;
 import com.susion.boring.utils.RVUtils;
+import com.susion.boring.utils.UIUtils;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -87,10 +89,12 @@ public class LoadMoreRecycleView extends RecyclerView {
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
             if (viewType == LOAD_MORE_VIEW_TYPE) {
                 mLoadMoreView = new LoadMoreView(mContext);
                 return new LoadMoreVH(mLoadMoreView);
             }
+
             return mAdapter.onCreateViewHolder(parent, viewType);
         }
 
@@ -99,6 +103,13 @@ public class LoadMoreRecycleView extends RecyclerView {
             if (!isLoadMoreView(position)) {
                 mAdapter.onBindViewHolder(holder, position);
             } else {
+                if (getLayoutManager() instanceof StaggeredGridLayoutManager
+                        ) {
+                    StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) (getLayoutManager()).generateDefaultLayoutParams();
+                    layoutParams.setFullSpan(true);
+                    holder.itemView.setLayoutParams(layoutParams);
+                }
+
                 if (holder instanceof VH) {
                     ((VH) holder).onBindViewHolder();
                 }

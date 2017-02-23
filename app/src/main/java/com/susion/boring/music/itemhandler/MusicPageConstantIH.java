@@ -1,7 +1,9 @@
 package com.susion.boring.music.itemhandler;
 
 import android.app.Activity;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.susion.boring.R;
@@ -30,6 +32,15 @@ public class MusicPageConstantIH extends SimpleItemHandler<MusicPageConstantItem
     public static final int DOWNLOAD_LIST = 3;
     private MusicPageConstantItem mData;
     private TextView tvItem;
+
+    @Override
+    public void onCreateItemHandler(ViewHolder vh, ViewGroup parent) {
+        super.onCreateItemHandler(vh, parent);
+        ViewGroup.LayoutParams layoutParams = vh.getConvertView().getLayoutParams();
+        if (layoutParams instanceof StaggeredGridLayoutManager.LayoutParams) {
+            ((StaggeredGridLayoutManager.LayoutParams) layoutParams).setFullSpan(true);
+        }
+    }
 
     @Override
     public void onBindDataView(final ViewHolder vh, MusicPageConstantItem data, int position) {

@@ -8,6 +8,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.View;
 
 import com.susion.boring.R;
@@ -26,6 +27,20 @@ public class RVUtils {
         LinearLayoutManager manager = new LinearLayoutManager(context);
         manager.setOrientation(orientation);
         return manager;
+    }
+
+    public static StaggeredGridLayoutManager getStaggeredGridLayoutManager(int spanCount) {
+        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL) {
+            @Override
+            public void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {
+                try {
+                    super.onLayoutChildren(recycler, state);
+                } catch (IndexOutOfBoundsException e) {
+                    Log.e("probe", "meet a IOOBE in RecyclerView");
+                }
+            }
+        };
+        return staggeredGridLayoutManager;
     }
 
 

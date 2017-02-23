@@ -18,6 +18,10 @@ import com.susion.boring.music.presenter.PlayMusicPresenter;
 import com.susion.boring.music.presenter.itf.MediaPlayerContract;
 import com.susion.boring.utils.SPUtils;
 
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
 /**
  * Created by susion on 17/2/13.
  */
@@ -29,6 +33,7 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.B
     public static final String SERVICE_ACTION = "MUSIC_SERVICE";
     private Song mSong;  //current play music
     private boolean mAutoPlay;
+    private DbBaseOperate<SimpleSong> mDbOperator;
 
     @Override
     public void onCreate() {
@@ -37,6 +42,7 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.B
     }
 
     private void init() {
+        mDbOperator = new DbBaseOperate<>(DbManager.getLiteOrm(), getContext(), SimpleSong.class);
         mPresenter = new PlayMusicPresenter(this, this, new DbBaseOperate<SimpleSong>(DbManager.getLiteOrm(), this, SimpleSong.class));
         mReceiver = new ServiceMusicReceiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, mReceiver.getIntentFilter());
@@ -115,15 +121,36 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.B
     }
 
     private void informCurrentPlayMusic() {
-        Intent intent = new Intent(MusicInstruction.CLIENT_RECEIVER_CURRENT_PLAY_MUSIC);
-        Song song;
-        if (mSong == null) {
-            song = SPUtils.getGson().fromJson(SPUtils.getStringFromMusicConfig(SPUtils.MUSIC_CONFIG_LAST_PLAY_MUSIC, this),
-                    Song.class);
-        } else {
-            song = mSong;
+        if (mSong != null) {
+            notifyCurrentPlayMusic();
+            return;
         }
-        intent.putExtra(MusicInstruction.CLIENT_PARAM_CURRENT_PLAY_MUSIC, song);
+
+        String songId = SPUtils.getStringFromMusicConfig(SPUtils.MUSIC_CONFIG_LAST_PLAY_MUSIC, this);
+        mDbOperator.query(songId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<SimpleSong>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(SimpleSong s) {
+                if (s != null) {
+                    mSong = s.translateToSong();
+                    notifyCurrentPlayMusic();
+                }
+            }
+        });
+    }
+
+    private void notifyCurrentPlayMusic() {
+        Intent intent = new Intent(MusicInstruction.CLIENT_RECEIVER_CURRENT_PLAY_MUSIC);
+        intent.putExtra(MusicInstruction.CLIENT_PARAM_CURRENT_PLAY_MUSIC, mSong);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 

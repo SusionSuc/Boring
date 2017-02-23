@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/white">
 
-    <com.susion.boring.view.SearchBar
-        android:transitionName="@string/transition_name_search_bar"
-        android:id="@+id/search_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </com.susion.boring.view.SearchBar>
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:orientation="vertical">
+         <com.susion.boring.view.SearchBar
+             android:transitionName="@string/transition_name_search_bar"
+             android:id="@+id/search_bar"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content">
+         </com.susion.boring.view.SearchBar>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/list_view"
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="0dp">
-    </android.support.v7.widget.RecyclerView>
+         <com.susion.boring.base.view.LoadMoreRecycleView
+             android:id="@+id/list_view"
+             android:layout_width="match_parent"
+             android:layout_height="0dp"
+             android:layout_weight="1">
+         </com.susion.boring.base.view.LoadMoreRecycleView>
+     </LinearLayout>
 
-    <View
-        android:background="@color/red_divider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"></View>
     <com.susion.boring.music.view.MusicControlPanel
+        android:layout_gravity="bottom"
         android:id="@+id/music_control_view"
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     </com.susion.boring.music.view.MusicControlPanel>
 
-</LinearLayout>
+</FrameLayout>

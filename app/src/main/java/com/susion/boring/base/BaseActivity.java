@@ -33,7 +33,7 @@ public abstract  class BaseActivity extends SwipeBackActivity {
     public abstract void initData();
 
     protected void setStatusBar() {
-        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary));
+//        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary));
     }
 
     @Override

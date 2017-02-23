@@ -34,8 +34,6 @@ public class MainActivity extends BaseActivity{
     private RecyclerView mDrawerList;
     private ViewPager mViewPager;
 
-
-
     public static void start(Context srcContext){
         Intent intent = new Intent();
         intent.setClass(srcContext, MainActivity.class);
@@ -50,8 +48,8 @@ public class MainActivity extends BaseActivity{
 
     @Override
     protected void setStatusBar() {
-        int mStatusBarColor = getResources().getColor(R.color.colorPrimaryDark);
-        StatusBarUtil.setColorForDrawerLayout(this, (DrawerLayout) findViewById(R.id.drawer_layout), mStatusBarColor, 0);
+//        int mStatusBarColor = getResources().getColor(R.color.colorPrimaryDark);
+//        StatusBarUtil.setColorForDrawerLayout(this, (DrawerLayout) findViewById(R.id.drawer_layout), mStatusBarColor, 0);
     }
 
     @Override

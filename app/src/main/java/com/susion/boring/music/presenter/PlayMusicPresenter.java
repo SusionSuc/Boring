@@ -66,7 +66,9 @@ public class PlayMusicPresenter extends MediaPlayPresenter implements MediaPlaye
 
     @Override
     public void saveLastPlayMusic(Song song, Context c) {
-        SPUtils.writeStringToMusicConfig(SPUtils.MUSIC_CONFIG_LAST_PLAY_MUSIC, song.id, c);
+        if (song != null) {
+            SPUtils.writeStringToMusicConfig(SPUtils.MUSIC_CONFIG_LAST_PLAY_MUSIC, song.id, c);
+        }
     }
 
 }

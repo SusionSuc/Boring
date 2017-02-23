@@ -10,6 +10,7 @@ import com.susion.boring.base.ViewHolder;
 import com.susion.boring.db.model.SimpleSong;
 import com.susion.boring.music.activity.PlayMusicActivity;
 import com.susion.boring.utils.AlbumUtils;
+import com.susion.boring.utils.TimeUtils;
 import com.susion.boring.utils.ToastUtils;
 
 
@@ -17,7 +18,6 @@ import com.susion.boring.utils.ToastUtils;
  * Created by susion on 17/2/15.
  */
 public class LocalMusicIH extends SimpleItemHandler<SimpleSong> {
-
 
     private ImageView mIvAlbum;
 
@@ -32,7 +32,7 @@ public class LocalMusicIH extends SimpleItemHandler<SimpleSong> {
         vh.getTextView(R.id.item_local_music_tv_music_name).setText(data.getDisplayName()+"");
         vh.getTextView(R.id.item_local_music_tv_artist_album).setText(data.getArtist()+"-"+data.getAlbum());
         mIvAlbum.setImageBitmap(AlbumUtils.parseAlbum(data));
-
+        vh.getTextView(R.id.item_local_music_tv_duration).setText(TimeUtils.formatDuration(data.getDuration()));
     }
 
     @Override

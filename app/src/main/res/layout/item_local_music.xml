@@ -8,6 +8,7 @@
 
 
     <ImageView
+        android:src="@mipmap/music_placeholder"
         android:id="@+id/item_local_music_iv_album_pic"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
@@ -58,6 +59,7 @@
         android:layout_height="25dp" />
 
     <TextView
+        android:id="@+id/item_local_music_tv_duration"
         android:layout_marginRight="10dp"
         android:text="3:08"
         android:textSize="16sp"

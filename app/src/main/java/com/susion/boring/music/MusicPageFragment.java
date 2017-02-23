@@ -12,12 +12,20 @@ import android.view.View;
 
 import com.susion.boring.R;
 import com.susion.boring.base.BaseFragment;
+import com.susion.boring.base.OnLastItemVisibleListener;
+import com.susion.boring.base.view.LoadMoreRecycleView;
+import com.susion.boring.base.view.LoadMoreView;
 import com.susion.boring.db.DbManager;
 import com.susion.boring.db.model.SimpleSong;
 import com.susion.boring.db.operate.DbBaseOperate;
+import com.susion.boring.http.APIHelper;
+import com.susion.boring.http.MusicServices;
 import com.susion.boring.music.adapter.MusicPageAdapter;
 import com.susion.boring.music.itemhandler.MusicPageConstantIH;
+import com.susion.boring.music.model.GetPlayListResult;
 import com.susion.boring.music.model.MusicPageConstantItem;
+import com.susion.boring.music.model.PlayList;
+import com.susion.boring.music.model.SimpleTitle;
 import com.susion.boring.music.model.Song;
 import com.susion.boring.music.presenter.FileDownloadPresenter;
 import com.susion.boring.music.service.MusicInstruction;
@@ -38,15 +46,18 @@ import rx.schedulers.Schedulers;
 /**
  * Created by susion on 17/1/19.
  */
-public class MusicPageFragment extends BaseFragment {
+public class MusicPageFragment extends BaseFragment implements OnLastItemVisibleListener{
 
     private List<Object> mData = new ArrayList<>();
 
     private SearchBar mSearchBar;
-    private RecyclerView mRV;
+    private LoadMoreRecycleView mRV;
     private MusicControlPanel mControlView;
     private Song mSong;
     private ClientMusicReceiver mReceiver;
+
+    private final int PLAY_LIST_PAGE_SIZE = 6;
+    private int page = 0;
 
 
     @Override
@@ -61,8 +72,9 @@ public class MusicPageFragment extends BaseFragment {
         mSearchBar.setJumpToSearchPage(true);
         mSearchBar.setBackground(R.color.colorLightPrimary);
 
-        mRV = (RecyclerView) mView.findViewById(R.id.list_view);
-        mRV.setLayoutManager(RVUtils.getLayoutManager(getActivity(), LinearLayoutManager.VERTICAL));
+        mRV = (LoadMoreRecycleView) mView.findViewById(R.id.list_view);
+        mRV.setLayoutManager(RVUtils.getStaggeredGridLayoutManager(2));
+        mRV.setOnLastItemVisibleListener(this);
 
         mControlView = (MusicControlPanel)mView.findViewById(R.id.music_control_view);
     }
@@ -98,9 +110,9 @@ public class MusicPageFragment extends BaseFragment {
         initConstantItem();
         MusicPageAdapter mAdapter = new MusicPageAdapter(getActivity(), mData);
         mRV.setAdapter(mAdapter);
-        mRV.addItemDecoration(RVUtils.getItemDecorationDivider(getActivity(), R.color.divider, 1, 2, UIUtils.dp2Px(60)));
-    }
 
+        loadMusicRecommendList();
+    }
 
     @Override
     public void onResume() {
@@ -108,6 +120,35 @@ public class MusicPageFragment extends BaseFragment {
         getCurrentPlayMusic();
         updateDownList();
     }
+
+    private void loadMusicRecommendList() {
+        mRV.setLoadStatus(LoadMoreView.LOADING);
+        APIHelper.subscribeSimpleRequest(APIHelper.getMusicServices().getPlayList(page * PLAY_LIST_PAGE_SIZE, PLAY_LIST_PAGE_SIZE), new Observer<GetPlayListResult>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @Override
+            public void onNext(GetPlayListResult playLists) {
+                mRV.setLoadStatus(LoadMoreView.NO_LOAD);
+
+                if (page == 0) {
+                    mData.add(new SimpleTitle());
+                } else {
+                    mData.addAll(playLists.getPlaylists());
+                }
+                page++;
+                mRV.getAdapter().notifyDataSetChanged();
+            }
+        });
+    }
+
+
 
     private void updateDownList() {
         for(int i=0; i<mData.size(); i++){
@@ -122,6 +163,7 @@ public class MusicPageFragment extends BaseFragment {
             }
         }
     }
+
 
     private void loadPLayHistory() {
         String songId = SPUtils.getStringFromMusicConfig(SPUtils.MUSIC_CONFIG_LAST_PLAY_MUSIC, getActivity());
@@ -146,8 +188,8 @@ public class MusicPageFragment extends BaseFragment {
                 }
             }
         });
-
     }
+
 
     private void getCurrentPlayMusic() {
         Intent intent = new Intent(MusicInstruction.SERVICE_CURRENT_PLAY_MUSIC);
@@ -157,7 +199,7 @@ public class MusicPageFragment extends BaseFragment {
 
     private void initConstantItem() {
         mData.add(new MusicPageConstantItem(R.mipmap.icon_local_music, "本地音乐", MusicPageConstantIH.LOCAL_MUSIC));
-        mData.add(new MusicPageConstantItem(R.mipmap.icon_my_collect, "我的收藏", MusicPageConstantIH.MY_COLLECT));
+        mData.add(new MusicPageConstantItem(R.mipmap.icon_my_collect, "我的喜欢", MusicPageConstantIH.MY_COLLECT));
         mData.add(new MusicPageConstantItem(R.mipmap.icon_my_collect, "下载列表", MusicPageConstantIH.DOWNLOAD_LIST));
     }
 
@@ -167,6 +209,12 @@ public class MusicPageFragment extends BaseFragment {
         intent.putExtra(MusicInstruction.SERVICE_PARAM_PLAY_SONG_AUTO_PLAY, autoPlay);
         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
     }
+
+    @Override
+    public void onLastItemVisible() {
+        loadMusicRecommendList();
+    }
+
 
     public class ClientMusicReceiver extends BroadcastReceiver {
 

@@ -33,10 +33,7 @@
                 android:id="@+id/view_music_player_start_or_stop"
                 android:src="@mipmap/music_player_stop"
                 android:layout_centerInParent="true"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp"
-                android:paddingRight="15dp"
-                android:paddingLeft="20dp"
+                android:scaleType="center"
                 android:layout_width="60dp"
                 android:layout_height="60dp" />
 

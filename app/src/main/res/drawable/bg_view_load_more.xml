@@ -7,7 +7,12 @@
         android:height="25dp"
          android:width="50dp"></size>
 
+
+    <corners
+        android:radius="10dp"></corners>
+
     <solid
-        android:color="@color/colorAccent"></solid>
+        android:color="@color/colorPrimary"></solid>
+
 
 </shape>
