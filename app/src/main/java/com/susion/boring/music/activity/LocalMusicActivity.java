@@ -19,6 +19,7 @@ import com.susion.boring.base.view.LoadMoreRecycleView;
 import com.susion.boring.db.DbManager;
 import com.susion.boring.db.model.SimpleSong;
 import com.susion.boring.db.operate.DbBaseOperate;
+import com.susion.boring.db.operate.MusicDbOperator;
 import com.susion.boring.music.itemhandler.LocalMusicIH;
 import com.susion.boring.music.model.Song;
 import com.susion.boring.music.presenter.itf.LocalMusicContract;
@@ -43,7 +44,7 @@ public class LocalMusicActivity extends BaseActivity implements LocalMusicContra
     private ImageView mRefreshView;
     private Button mBtScanStart;
     private LocalMusicContract.Presenter mPresenter;
-    private DbBaseOperate<SimpleSong> mMusicDbOperator;
+    private MusicDbOperator mMusicDbOperator;
 
     public static void start(Activity context) {
         Intent intent = new Intent(context, LocalMusicActivity.class);
@@ -65,7 +66,7 @@ public class LocalMusicActivity extends BaseActivity implements LocalMusicContra
 
     @Override
     public void initView() {
-        mMusicDbOperator = new DbBaseOperate<>(DbManager.getLiteOrm(), this, SimpleSong.class);
+        mMusicDbOperator = new MusicDbOperator(DbManager.getLiteOrm(), this, SimpleSong.class);
         mPresenter = new LocalMusicPresenter(this, mMusicDbOperator);
 
         mToolBar.setTitle("本地音乐");
@@ -111,7 +112,7 @@ public class LocalMusicActivity extends BaseActivity implements LocalMusicContra
 
     @Override
     public void initData() {
-        mMusicDbOperator.getAll().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<List<SimpleSong>>() {
+        mMusicDbOperator.getLocalMusic().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<List<SimpleSong>>() {
             @Override
             public void onCompleted() {
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 
 import com.susion.boring.R;
 import com.susion.boring.base.BaseActivity;
@@ -15,6 +16,7 @@ import com.susion.boring.db.DbManager;
 import com.susion.boring.db.model.SimpleSong;
 import com.susion.boring.db.operate.MusicDbOperator;
 import com.susion.boring.music.itemhandler.LocalMusicIH;
+import com.susion.boring.utils.RVUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +52,7 @@ public class MyMusicCollectActivity extends BaseActivity {
         mToolBar.setTitle("我的喜欢");
         mToolBar.setLeftIcon(R.mipmap.tool_bar_back);
 
+        mRv.setLayoutManager(RVUtils.getLayoutManager(this, LinearLayoutManager.VERTICAL));
         mRv.setAdapter(new BaseRVAdapter(this, mData) {
             @Override
             protected void initHandlers() {
@@ -97,6 +100,7 @@ public class MyMusicCollectActivity extends BaseActivity {
                     public void onNext(List<SimpleSong> simpleSongs) {
                         if (simpleSongs != null) {
                             mData.addAll(simpleSongs);
+                            mRv.getAdapter().notifyDataSetChanged();
                         }
                     }
                 });

@@ -7,6 +7,7 @@ import com.litesuits.orm.db.annotation.PrimaryKey;
 import com.litesuits.orm.db.annotation.Table;
 import com.litesuits.orm.db.annotation.Unique;
 import com.litesuits.orm.db.enums.AssignType;
+import com.susion.boring.music.model.Album;
 import com.susion.boring.music.model.Singer;
 import com.susion.boring.music.model.Song;
 
@@ -40,6 +41,11 @@ public class SimpleSong implements Parcelable {
 
     private boolean favorite;
 
+
+    private boolean hasDown;
+
+    private String picPath;  //url for :  no store in play, play online
+
     public SimpleSong() {
         // Empty
     }
@@ -47,13 +53,16 @@ public class SimpleSong implements Parcelable {
     public  Song translateToSong() {
         Song song = new Song();
         song.audio = path;
-        song.fromLocalMusic = true;
         song.name = displayName;
         song.id = id;
         List<Singer> artist = new ArrayList<>();
         artist.add(new Singer(getArtist()));
         song.artists = artist;
         song.favorite = favorite;
+        song.hasDown = hasDown;
+
+        song.album = new Album(album, picPath);
+
         return song;
     }
 
@@ -131,6 +140,22 @@ public class SimpleSong implements Parcelable {
 
     public void setFavorite(boolean favorite) {
         this.favorite = favorite;
+    }
+
+    public boolean isHasDown() {
+        return hasDown;
+    }
+
+    public void setHasDown(boolean hasDown) {
+        this.hasDown = hasDown;
+    }
+
+    public String getPicPath() {
+        return picPath;
+    }
+
+    public void setPicPath(String picPath) {
+        this.picPath = picPath;
     }
 
     @Override

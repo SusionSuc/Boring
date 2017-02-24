@@ -111,7 +111,7 @@ public class MusicControlPanel extends LinearLayout{
 
     public void setMusic(Song song){
         mSong = song;
-        if (song.fromLocalMusic) {
+        if (song.hasDown) {
             mSdvAlbum.setImageBitmap(AlbumUtils.parseAlbum(new File(mSong.audio)));
         } else {
             setAlbum(song.album.picUrl);

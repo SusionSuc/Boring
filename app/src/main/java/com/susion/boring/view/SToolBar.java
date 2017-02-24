@@ -204,6 +204,8 @@ public class SToolBar extends RelativeLayout implements View.OnClickListener, Ma
     public void setTitle(String title) {
         this.title = title;
         mTvTitle.setText(title);
+        findViewById(R.id.toolbar_main_menu).setVisibility(GONE);
+        mTvTitle.setVisibility(VISIBLE);
     }
 
     public interface OnItemClickListener{

@@ -12,6 +12,7 @@ import com.susion.boring.base.ViewHolder;
 import com.susion.boring.db.DbManager;
 import com.susion.boring.db.model.SimpleSong;
 import com.susion.boring.db.operate.DbBaseOperate;
+import com.susion.boring.db.operate.MusicDbOperator;
 import com.susion.boring.music.activity.LocalMusicActivity;
 import com.susion.boring.music.activity.MusicDownLoadListActivity;
 import com.susion.boring.music.activity.MyMusicCollectActivity;
@@ -29,7 +30,6 @@ public class MusicPageConstantIH extends SimpleItemHandler<MusicPageConstantItem
 
     public static final int LOCAL_MUSIC = 1;
     public static final int MY_COLLECT = 2;
-    public static final int DOWNLOAD_LIST = 3;
     private MusicPageConstantItem mData;
     private TextView tvItem;
 
@@ -50,8 +50,8 @@ public class MusicPageConstantIH extends SimpleItemHandler<MusicPageConstantItem
         tvItem.setText(data.item);
         if (data.type == LOCAL_MUSIC) {
             vh.getTextView(R.id.item_music_page_constant_tv_append_dec).setText("-_-?");
-            new DbBaseOperate<SimpleSong>(DbManager.getLiteOrm(), mContext, SimpleSong.class)
-                    .getTotalCount()
+            new MusicDbOperator(DbManager.getLiteOrm(), mContext, SimpleSong.class)
+                    .getLocalMusicCount()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<Long>() {
@@ -74,14 +74,28 @@ public class MusicPageConstantIH extends SimpleItemHandler<MusicPageConstantItem
 
 
         if (data.type == MY_COLLECT) {
-            vh.getTextView(R.id.item_music_page_constant_tv_append_dec).setText("15");
-        }
+            vh.getTextView(R.id.item_music_page_constant_tv_append_dec).setText("-_-?");
+            new MusicDbOperator(DbManager.getLiteOrm(), mContext, SimpleSong.class)
+                    .getLikeMusicCount()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<Long>() {
+                        @Override
+                        public void onCompleted() {
 
-        if (data.type == DOWNLOAD_LIST) {
-            vh.getTextView(R.id.item_music_page_constant_tv_append_dec)
-                    .setText(FileDownloadPresenter.getInstance().getTaskList().size()+"");
-        }
+                        }
 
+                        @Override
+                        public void onError(Throwable e) {
+                            vh.getTextView(R.id.item_music_page_constant_tv_append_dec).setText("统计出错");
+                        }
+
+                        @Override
+                        public void onNext(Long count) {
+                            vh.getTextView(R.id.item_music_page_constant_tv_append_dec).setText(""+count);
+                        }
+                    });
+        }
 
     }
 
@@ -98,9 +112,6 @@ public class MusicPageConstantIH extends SimpleItemHandler<MusicPageConstantItem
                 break;
             case MY_COLLECT:
                 MyMusicCollectActivity.start(mContext);
-                break;
-            case DOWNLOAD_LIST:
-                MusicDownLoadListActivity.start(mContext);
                 break;
         }
     }

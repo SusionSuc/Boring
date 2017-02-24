@@ -24,5 +24,9 @@ public interface DataBaseOperateContract {
 
     interface MusicOperator extends BaseOperate<SimpleSong>{
         Observable<List<SimpleSong>> getLikeMusic();
+        Observable<Long> getLikeMusicCount();
+        Observable<List<SimpleSong>> getLocalMusic();
+        Observable<Long> getLocalMusicCount();
+
     }
 }

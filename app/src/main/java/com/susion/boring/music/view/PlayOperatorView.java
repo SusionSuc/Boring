@@ -21,8 +21,8 @@ public class PlayOperatorView  extends LinearLayout implements View.OnClickListe
     private Context mContext;
     private ImageView mIvCircle;
     private ImageView mIvRandom;
-    private ImageView mIvDown;
     private ImageView mIvLike;
+    private ImageView mIvNextPlay;
 
     private Song mSong;
     private MediaPlayerContract.PlayMusicCommunicatePresenter mCommunicatePresenter;
@@ -49,12 +49,12 @@ public class PlayOperatorView  extends LinearLayout implements View.OnClickListe
     private void findView() {
         mIvCircle = (ImageView) findViewById(R.id.view_play_operator_iv_circle);
         mIvRandom = (ImageView) findViewById(R.id.view_play_operator_iv_random);
-        mIvDown = (ImageView) findViewById(R.id.view_play_operator_iv_down);
+        mIvNextPlay = (ImageView) findViewById(R.id.view_play_operator_iv_next_play);
         mIvLike = (ImageView) findViewById(R.id.view_play_operator_iv_like);
     }
     private void initView() {
         mIvCircle.setOnClickListener(this);
-        mIvDown.setOnClickListener(this);
+        mIvNextPlay.setOnClickListener(this);
         mIvRandom.setOnClickListener(this);
         mIvLike.setOnClickListener(this);
     }
@@ -68,8 +68,8 @@ public class PlayOperatorView  extends LinearLayout implements View.OnClickListe
             case R.id.view_play_operator_iv_random :
                 break;
 
-            case R.id.view_play_operator_iv_down :
-                mPresenter.downMusic(mSong);
+            case R.id.view_play_operator_iv_next_play :
+                mPresenter.nextPlay(mSong);
                 break;
 
             case R.id.view_play_operator_iv_like :

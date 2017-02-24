@@ -96,6 +96,7 @@ public class LocalMusicPresenter implements LocalMusicContract.Presenter, Loader
                             do {
                                 SimpleSong song = cursorToMusic(cursor);
                                 song.setId(Md5Utils.md5(song.getPath()));  // make sure primary unique
+                                song.setHasDown(true);
                                 songs.add(song);
                             } while (cursor.moveToNext());
                         }

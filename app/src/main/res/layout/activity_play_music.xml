@@ -101,6 +101,7 @@
 
 
         <com.susion.boring.music.view.PlayOperatorView
+            android:layout_marginBottom="5dp"
             android:id="@+id/ac_play_music_pov"
             android:layout_width="match_parent"
             android:layout_height="0dp"

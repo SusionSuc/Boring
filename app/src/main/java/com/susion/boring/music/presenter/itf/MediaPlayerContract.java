@@ -61,13 +61,14 @@ public interface MediaPlayerContract {
 
     //for music play
     interface PlayMusicControlPresenter extends Presenter{
-        void downMusic(Song song);
 
         void randomPlayMusic();
 
         void circlePlayMusic();
 
         void saveLastPlayMusic(Song song, Context c);
+
+        void nextPlay(Song song);
     }
 
 

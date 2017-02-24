@@ -7,7 +7,7 @@
     android:layout_marginLeft="15dp">
 
 
-    <ImageView
+    <com.facebook.drawee.view.SimpleDraweeView
         android:src="@mipmap/music_placeholder"
         android:id="@+id/item_local_music_iv_album_pic"
         android:layout_centerVertical="true"

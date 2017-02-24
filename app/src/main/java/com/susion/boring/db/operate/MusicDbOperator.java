@@ -26,10 +26,47 @@ public class MusicDbOperator extends DbBaseOperate<SimpleSong> implements DataBa
         return Observable.create(new Observable.OnSubscribe<List<SimpleSong>>() {
             @Override
             public void call(Subscriber<? super List<SimpleSong>> subscriber) {
-                List<SimpleSong> likes = mLiteOrm.query(new QueryBuilder<SimpleSong>(SimpleSong.class)
-                        .where("favorite", "=true"));
+                List<SimpleSong> likes = mLiteOrm.query(new QueryBuilder<>(SimpleSong.class).whereEquals("favorite",true));
                 subscriber.onNext(likes);
             }
         });
     }
+
+    @Override
+    public Observable<Long> getLikeMusicCount(){
+        return Observable.create(new Observable.OnSubscribe<Long>() {
+            @Override
+            public void call(Subscriber<? super Long> subscriber) {
+                long count = mLiteOrm.queryCount(new QueryBuilder(SimpleSong.class).whereEquals("favorite",true));
+                subscriber.onNext(count);
+            }
+        });
+    }
+
+
+    @Override
+    public Observable<List<SimpleSong>> getLocalMusic(){
+        return Observable.create(new Observable.OnSubscribe<List<SimpleSong>>() {
+            @Override
+            public void call(Subscriber<? super List<SimpleSong>> subscriber) {
+                List<SimpleSong> locals = mLiteOrm.query(new QueryBuilder<>(SimpleSong.class).whereEquals("hasDown",true));
+                subscriber.onNext(locals);
+            }
+        });
+    }
+
+    @Override
+    public Observable<Long> getLocalMusicCount(){
+        return Observable.create(new Observable.OnSubscribe<Long>() {
+            @Override
+            public void call(Subscriber<? super Long> subscriber) {
+                long count = mLiteOrm.queryCount(new QueryBuilder(SimpleSong.class).whereEquals("hasDown",true));
+                subscriber.onNext(count);
+            }
+        });
+    }
+
+
+
+
 }

@@ -118,7 +118,6 @@ public class MusicPageFragment extends BaseFragment implements OnLastItemVisible
     public void onResume() {
         super.onResume();
         getCurrentPlayMusic();
-        updateDownList();
     }
 
     private void loadMusicRecommendList() {
@@ -136,32 +135,11 @@ public class MusicPageFragment extends BaseFragment implements OnLastItemVisible
             @Override
             public void onNext(GetPlayListResult playLists) {
                 mRV.setLoadStatus(LoadMoreView.NO_LOAD);
-
-                if (page == 0) {
-                    mData.add(new SimpleTitle());
-                } else {
-                    mData.addAll(playLists.getPlaylists());
-                }
+                mData.addAll(playLists.getPlaylists());
                 page++;
                 mRV.getAdapter().notifyDataSetChanged();
             }
         });
-    }
-
-
-
-    private void updateDownList() {
-        for(int i=0; i<mData.size(); i++){
-            Object o = mData.get(i);
-            if (o instanceof MusicPageConstantItem) {
-                MusicPageConstantItem item = (MusicPageConstantItem) o;
-
-                if (item.type == MusicPageConstantIH.DOWNLOAD_LIST) {
-                    item.appendDesc = FileDownloadPresenter.getInstance().getTaskList().size()+"";
-                    mRV.getAdapter().notifyItemChanged(i);
-                }
-            }
-        }
     }
 
 
@@ -200,7 +178,7 @@ public class MusicPageFragment extends BaseFragment implements OnLastItemVisible
     private void initConstantItem() {
         mData.add(new MusicPageConstantItem(R.mipmap.icon_local_music, "本地音乐", MusicPageConstantIH.LOCAL_MUSIC));
         mData.add(new MusicPageConstantItem(R.mipmap.icon_my_collect, "我的喜欢", MusicPageConstantIH.MY_COLLECT));
-        mData.add(new MusicPageConstantItem(R.mipmap.icon_my_collect, "下载列表", MusicPageConstantIH.DOWNLOAD_LIST));
+        mData.add(new SimpleTitle());
     }
 
     private void loadMusic(boolean autoPlay) {

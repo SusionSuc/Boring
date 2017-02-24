@@ -19,7 +19,8 @@ public class Song implements Serializable{
     public String djProgramId;
     public String page;
 
-    public boolean fromLocalMusic;
+
+    public boolean hasDown;
     public boolean favorite;
 
 
@@ -30,6 +31,8 @@ public class Song implements Serializable{
         simpleSong.setId(id);
         simpleSong.setArtist(artists.get(0).name);
         simpleSong.setFavorite(favorite);
+        simpleSong.setHasDown(hasDown);
+        simpleSong.setPicPath(album.picUrl);
         return simpleSong;
     }
 }

@@ -35,26 +35,6 @@ public class PlayMusicPresenter extends MediaPlayPresenter implements MediaPlaye
     }
 
     @Override
-    public void downMusic(Song song) {
-        if (song.fromLocalMusic) {
-            ToastUtils.showShort("歌曲已经下载!");
-            return;
-        }
-
-        FileDownloadPresenter downManager = FileDownloadPresenter.getInstance();
-        DownTask task = new DownTask(song.audio);
-
-        if (downManager.isDowning(task)) {
-            ToastUtils.showShort("当前任务正在下载!!");
-            return;
-        }
-
-        task.taskName = song.name + song.audio.substring(song.audio.lastIndexOf("."));
-        downManager.addDownTask(task);
-    }
-
-
-    @Override
     public void randomPlayMusic() {
 
     }
@@ -69,6 +49,11 @@ public class PlayMusicPresenter extends MediaPlayPresenter implements MediaPlaye
         if (song != null) {
             SPUtils.writeStringToMusicConfig(SPUtils.MUSIC_CONFIG_LAST_PLAY_MUSIC, song.id, c);
         }
+    }
+
+    @Override
+    public void nextPlay(Song song) {
+
     }
 
 }

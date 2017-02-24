@@ -61,7 +61,7 @@ public class PlayMusicCommunicatePresenter implements MediaPlayerContract.PlayMu
     public void likeMusic(Song mSong) {
         updatePlayMusic(mSong);
         new DbBaseOperate<SimpleSong>(DbManager.getLiteOrm(), mView.getContext(), SimpleSong.class)
-                .update(mSong.translateToSimpleSong())
+                .add(mSong.translateToSimpleSong())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Boolean>() {

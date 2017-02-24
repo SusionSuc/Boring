@@ -14,4 +14,9 @@ public class Album implements Serializable{
     public Album(String name) {
         this.name = name;
     }
+
+    public Album(String name, String picUrl) {
+        this.name = name;
+        this.picUrl = picUrl;
+    }
 }

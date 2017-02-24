@@ -110,10 +110,12 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
         mToolBar.setLeftIcon(R.mipmap.tool_bar_back);
         mToolBar.setBackgroundColor(getResources().getColor(R.color.transparent));
 
-        if (mSong.fromLocalMusic) {
+        if (mSong.hasDown) {
             mSdvAlbym.setImageBitmap(AlbumUtils.parseAlbum(new File(mSong.audio)));
         } else {
-            mSdvAlbym.setImageURI(mSong.album.picUrl);
+            if (mSong.album.picUrl != null) {
+                mSdvAlbym.setImageURI(mSong.album.picUrl);
+            }
         }
 
         mTvMusicName.setText(mSong.name);
