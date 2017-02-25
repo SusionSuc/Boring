@@ -35,6 +35,7 @@ import com.susion.boring.utils.TransitionHelper;
 import com.susion.boring.view.SToolBar;
 
 import java.io.File;
+import java.io.Serializable;
 
 import rx.Observer;
 
@@ -54,7 +55,6 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
     private Song mSong;
     private boolean mIsFromLittlePanel;
 
-    private MediaPlayerContract.PlayMusicControlPresenter mPresenter;
     private MediaPlayerContract.PlayMusicCommunicatePresenter mCommunicatePresenter;
 
     public static void start(Context context, Song song) {
@@ -89,7 +89,6 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
 
     @Override
     public void findView() {
-        mPresenter = new PlayMusicPresenter(this, this, new DbBaseOperate<SimpleSong>(DbManager.getLiteOrm(), this, SimpleSong.class));
         mCommunicatePresenter = new PlayMusicCommunicatePresenter(this);
 
         mToolBar = (SToolBar) findViewById(R.id.toolbar);
@@ -110,25 +109,18 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
         mToolBar.setLeftIcon(R.mipmap.tool_bar_back);
         mToolBar.setBackgroundColor(getResources().getColor(R.color.transparent));
 
-        if (mSong.hasDown) {
-            mSdvAlbym.setImageBitmap(AlbumUtils.parseAlbum(new File(mSong.audio)));
-        } else {
-            if (mSong.album.picUrl != null) {
-                mSdvAlbym.setImageURI(mSong.album.picUrl);
-            }
-        }
-
-        mTvMusicName.setText(mSong.name);
+        refreshSong(mSong);
 
         getWindow().setStatusBarColor(Color.TRANSPARENT);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
+
         initListener();
 
         mPlayControlView.setIsPlay(false);
         mPovMusicPlayControl.setSong(mSong);
-        mPovMusicPlayControl.setPresenter(mPresenter, mCommunicatePresenter);
+        mPovMusicPlayControl.setPresenter(mCommunicatePresenter);
     }
 
     private void getParamAndInitReceiver() {
@@ -142,12 +134,12 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
         mPlayControlView.setOnControlItemClickListener(new MusicPlayControlView.MusicPlayerControlViewItemClickListener() {
             @Override
             public void onNextItemClick() {
-
+                mCommunicatePresenter.changeToNextMusic();
             }
 
             @Override
             public void onPreItemClick() {
-
+                mCommunicatePresenter.changeToPreMusic();
             }
 
             @Override
@@ -246,6 +238,24 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
             return;
         }
         mPlayControlView.setIsPlay(playStatus);
+    }
+
+    @Override
+    public void refreshSong(Song song) {
+        mSong = song;
+        if (mSong.hasDown) {
+            mSdvAlbym.setImageBitmap(AlbumUtils.parseAlbum(new File(mSong.audio)));
+        } else {
+            if (mSong.album.picUrl != null) {
+                mSdvAlbym.setImageURI(mSong.album.picUrl);
+            }
+        }
+        mTvMusicName.setText(mSong.name);
+    }
+
+    @Override
+    public void refreshPlayMode(int mode) {
+        mPovMusicPlayControl.refreshPlayMode(mode);
     }
 
     @Override

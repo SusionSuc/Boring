@@ -8,7 +8,7 @@
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/item_play_list_iv_cover"
         android:scaleType="centerCrop"
-        android:src="@mipmap/swag"
+        android:src="@mipmap/icon"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="30dp"/>

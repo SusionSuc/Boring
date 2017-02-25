@@ -8,6 +8,8 @@ import com.susion.boring.base.BasePresenter;
 import com.susion.boring.base.BaseView;
 import com.susion.boring.music.model.Song;
 
+import java.io.Serializable;
+
 /**
  * Created by susion on 17/2/20.
  */
@@ -34,6 +36,10 @@ public interface MediaPlayerContract {
         void updatePlayProgressForSetMax(int curPos, int duration);
 
         void tryToChangeMusicByCurrentCondition(boolean playStatus);
+
+        void refreshSong(Song song);
+
+        void refreshPlayMode(int serializableExtra);
     }
 
     //media player
@@ -84,6 +90,16 @@ public interface MediaPlayerContract {
         void updatePlayMusic(Song song);
 
         void likeMusic(Song mSong);
+
+        void changeToNextMusic();
+
+        void changeToPreMusic();
+
+        void startCirclePlayMode();
+
+        void startRandomPlayMode();
+
+        void musicToNextPlay(Song mSong);
     }
 
 

@@ -86,6 +86,37 @@ public class PlayMusicCommunicatePresenter implements MediaPlayerContract.PlayMu
                 });
     }
 
+    @Override
+    public void changeToNextMusic() {
+        Intent intent = new Intent(MusicInstruction.SERVER_RECEIVER_PLAY_NEXT);
+        LocalBroadcastManager.getInstance(mView.getContext()).sendBroadcast(intent);
+    }
+
+    @Override
+    public void changeToPreMusic() {
+        Intent intent = new Intent(MusicInstruction.SERVER_RECEIVER_PLAY_PRE);
+        LocalBroadcastManager.getInstance(mView.getContext()).sendBroadcast(intent);
+    }
+
+    @Override
+    public void startCirclePlayMode() {
+        Intent intent = new Intent(MusicInstruction.SERVER_RECEIVER_PLAY_MODE_CIRCLE);
+        LocalBroadcastManager.getInstance(mView.getContext()).sendBroadcast(intent);
+    }
+
+    @Override
+    public void startRandomPlayMode() {
+        Intent intent = new Intent(MusicInstruction.SERVER_RECEIVER_PLAY_MODE_RANDOM);
+        LocalBroadcastManager.getInstance(mView.getContext()).sendBroadcast(intent);
+    }
+
+    @Override
+    public void musicToNextPlay(Song mSong) {
+        Intent intent = new Intent(MusicInstruction.SERVER_RECEIVER_SONG_TO_NEXT_PLAY);
+        intent.putExtra(MusicInstruction.SERVICE_PARAM_SONG_TO_NEXT_PLAY, mSong);
+        LocalBroadcastManager.getInstance(mView.getContext()).sendBroadcast(intent);
+    }
+
 
     public class ClientMusicReceiver extends BroadcastReceiver {
         public IntentFilter getIntentFilter(){
@@ -96,6 +127,8 @@ public class PlayMusicCommunicatePresenter implements MediaPlayerContract.PlayMu
             filter.addAction(MusicInstruction.CLIENT_RECEIVER_SET_DURATION);
             filter.addAction(MusicInstruction.CLIENT_RECEIVER_CURRENT_IS_PALING);
             filter.addAction(MusicInstruction.CLIENT_RECEIVER_CURRENT_PLAY_PROGRESS);
+            filter.addAction(MusicInstruction.CLIENT_RECEIVER_REFRESH_MUSIC);
+            filter.addAction(MusicInstruction.CLIENT_RECEIVER_REFRESH_MODE);
             return filter;
         }
 
@@ -125,6 +158,12 @@ public class PlayMusicCommunicatePresenter implements MediaPlayerContract.PlayMu
                     final int curPos = intent.getIntExtra(MusicInstruction.CLIENT_PARAM_CURRENT_PLAY_PROGRESS, 0);
                     final int left = intent.getIntExtra(MusicInstruction.CLIENT_PARAM_MEDIA_DURATION, 0);
                     mView.updatePlayProgressForSetMax(curPos, left);
+                    break;
+                case MusicInstruction.CLIENT_RECEIVER_REFRESH_MUSIC:
+                    mView.refreshSong((Song) intent.getSerializableExtra(MusicInstruction.CLIENT_PARAM_REFRESH_SONG));
+                    break;
+                case MusicInstruction.CLIENT_RECEIVER_REFRESH_MODE:
+                    mView.refreshPlayMode((int) intent.getSerializableExtra(MusicInstruction.CLIENT_PARAM_PLAY_MODE));
                     break;
             }
         }

@@ -29,6 +29,12 @@ public class MusicInstruction {
     public static final String SERVICE_PARAM_PLAY_SONG_AUTO_PLAY = "SERVICE_PARAM_PLAY_SONG_AUTO_PLAY";
     public static final String SERVER_RECEIVER_UPDATE_PLAY_MUSIC_INFO = "SERVER_RECEIVER_UPDATE_PLAY_MUSIC_INFO";
     public static final String SERVICE_PARAM_UPDATE_SONG = "SERVICE_PARAM_UPDATE_SONG";
+    public static final String SERVER_RECEIVER_PLAY_NEXT = "SERVER_RECEIVER_PLAY_NEXT";
+    public static final String SERVER_RECEIVER_PLAY_PRE = "SERVER_RECEIVER_PLAY_PRE";
+    public static final String SERVER_RECEIVER_SONG_TO_NEXT_PLAY = "SERVER_RECEIVER_SONG_TO_NEXT_PLAY";
+    public static final String SERVER_RECEIVER_PLAY_MODE_RANDOM = "SERVER_RECEIVER_PLAY_MODE_RANDOM";
+    public static final String SERVER_RECEIVER_PLAY_MODE_CIRCLE = "SERVER_RECEIVER_PLAY_MODE_CIRCLE";
+    public static final String SERVICE_PARAM_SONG_TO_NEXT_PLAY = "SERVICE_PARAM_SONG_TO_NEXT_PLAY";
 
 
     //client
@@ -51,6 +57,11 @@ public class MusicInstruction {
     public static final String CLIENT_RECEIVER_CURRENT_PLAY_PROGRESS = "CLIENT_RECEIVER_CURRENT_PLAY_PROGRESS";
     public static final String CLIENT_PARAM_CURRENT_PLAY_PROGRESS = "CLIENT_PARAM_CURRENT_PLAY_PROGRESS";
     public static final String CLIENT_PARAM_NEED_LOAD_MUSIC = "CLIENT_PARAM_NEED_LOAD_MUSIC";
+    public static final String CLIENT_RECEIVER_REFRESH_MUSIC = "CLIENT_RECEIVER_REFRESH_MUSIC";
+    public static final String CLIENT_PARAM_REFRESH_SONG = "CLIENT_PARAM_REFRESH_SONG";
+    public static final String CLIENT_RECEIVER_REFRESH_MODE = "CLIENT_RECEIVER_REFRESH_MODE";
+    public static final String CLIENT_PARAM_PLAY_MODE = "CLIENT_PARAM_PLAY_MODE";
+
 
     public static void startMusicPlayService(Context ctx) {
         Intent intent = new Intent(ctx, MusicPlayerService.class);

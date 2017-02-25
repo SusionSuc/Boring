@@ -11,11 +11,13 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.susion.boring.R;
+import com.susion.boring.mainui.MainActivity;
 import com.susion.boring.utils.FileUtils;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionListener;
@@ -23,12 +25,7 @@ import com.yanzhenjie.permission.PermissionListener;
 import java.util.List;
 
 
-public class SplashActivity extends Activity implements SplashContract.View {
-
-    private ImageView mIvCenterImage;
-    private TextView mTvDescText;
-    private SplashContract.Presenter mPresenter;
-    private TextView mTvAuthor;
+public class SplashActivity extends Activity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,34 +33,30 @@ public class SplashActivity extends Activity implements SplashContract.View {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);     //no status bar
         setContentView(R.layout.activity_splash);
 
-        findView();
-
-        mPresenter = new SplashPresenter(this);
-        mPresenter.setImageAndDescText(R.mipmap.logo, R.string.splash_desc);
-        mPresenter.skipToMainActivity(this, getWindow().getDecorView());
-        mPresenter.setAuthorInfo(this, -1, R.string.author_info);
-        mPresenter.requestPermission(this);
-
+        skipToMainActivity(this, getWindow().getDecorView());
+        requestPermission(this);
     }
 
-    private void findView() {
-        mIvCenterImage = (ImageView) findViewById(R.id.ac_splash_iv_image);
-        mTvDescText = (TextView) findViewById(R.id.ac_splash_tv_desc);
-        mTvAuthor = (TextView) findViewById(R.id.ac_splash_tv_author);
+
+
+    public void skipToMainActivity(final Activity context, View view) {
+        view.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                MainActivity.start(context);
+                context.finish();
+            }
+        }, 3000);
     }
 
-    @Override
-    public void setCenterImageAndDescText(int imageId, int textId) {
-        mIvCenterImage.setImageResource(imageId);
-        mTvDescText.setText(textId);
-    }
 
-    @Override
-    public void setAuthorInfo(Drawable leftImage, int textId) {
-        if (leftImage != null) {
-            mTvAuthor.setCompoundDrawablesRelative(leftImage, null, null, null);
-        }
-        mTvAuthor.setText(textId);
+    public void requestPermission(Activity activity) {
+        AndPermission.with(activity)
+                .requestCode(100)
+                .permission(Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.INTERNET, Manifest.permission.MEDIA_CONTENT_CONTROL, Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS)
+                .send();
     }
 
 }

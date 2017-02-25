@@ -1,22 +1,27 @@
 package com.susion.boring.music.service;
 
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 import com.susion.boring.db.DbManager;
 import com.susion.boring.db.model.SimpleSong;
 import com.susion.boring.db.operate.DbBaseOperate;
+import com.susion.boring.db.operate.MusicDbOperator;
 import com.susion.boring.music.model.Song;
-import com.susion.boring.music.presenter.MediaPlayPresenter;
+import com.susion.boring.music.presenter.MusicPlayQueueControlPresenter;
+import com.susion.boring.music.presenter.MusicPlayerReceiverPresenter;
 import com.susion.boring.music.presenter.PlayMusicPresenter;
 import com.susion.boring.music.presenter.itf.MediaPlayerContract;
+import com.susion.boring.music.presenter.itf.MusicServiceContract;
 import com.susion.boring.utils.SPUtils;
+import com.susion.boring.utils.ToastUtils;
+
+import java.util.List;
 
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
@@ -25,15 +30,19 @@ import rx.schedulers.Schedulers;
 /**
  * Created by susion on 17/2/13.
  */
-public class MusicPlayerService extends Service implements MediaPlayerContract.BaseView{
+public class MusicPlayerService extends Service implements MediaPlayerContract.BaseView, MusicServiceContract.Service{
 
-    private ServiceMusicReceiver mReceiver;
     private MediaPlayerContract.PlayMusicControlPresenter mPresenter;
+    private MusicDbOperator mDbOperator;
+    private MusicServiceContract.ReceiverPresenter mReceiverPresenter;
+    private MusicServiceContract.PlayQueueControlPresenter mPlayQueuePresenter;
+    private boolean mQueueIsPrepare;
 
+
+    private static final String TAG = MusicPlayerService.class.getSimpleName();
     public static final String SERVICE_ACTION = "MUSIC_SERVICE";
-    private Song mSong;  //current play music
+    private Song mSong;          //current play music
     private boolean mAutoPlay;
-    private DbBaseOperate<SimpleSong> mDbOperator;
 
     @Override
     public void onCreate() {
@@ -42,10 +51,32 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.B
     }
 
     private void init() {
-        mDbOperator = new DbBaseOperate<>(DbManager.getLiteOrm(), getContext(), SimpleSong.class);
+        mQueueIsPrepare = false;
+        mDbOperator = new MusicDbOperator(DbManager.getLiteOrm(), getContext(), SimpleSong.class);
         mPresenter = new PlayMusicPresenter(this, this, new DbBaseOperate<SimpleSong>(DbManager.getLiteOrm(), this, SimpleSong.class));
-        mReceiver = new ServiceMusicReceiver();
-        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, mReceiver.getIntentFilter());
+        mReceiverPresenter = new MusicPlayerReceiverPresenter(this);
+
+        mDbOperator.getInitPlayQueue()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<Song>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<Song> songs) {
+                        mQueueIsPrepare = true;
+                        mPlayQueuePresenter = new MusicPlayQueueControlPresenter(songs);
+                    }
+                });
+
     }
 
     @Nullable
@@ -54,7 +85,8 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.B
         return null;
     }
 
-    private void loadMusicInfo(Song song, boolean autoPlay) {
+    @Override
+    public void loadMusicInfo(Song song, boolean autoPlay) {
         mAutoPlay = autoPlay;
         if (song != null) {
             mSong = song;
@@ -66,7 +98,10 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.B
         }
     }
 
-    private void tryToChangeMusic(Song song) {
+    @Override
+    public void tryToChangeMusic(Song song) {
+        Log.e(TAG, "tryToChangeMusic"+song.name);
+        Log.e(TAG, "tryToChangeMusic"+mSong.name);
         mAutoPlay = true;
         if (mSong != null) {
             if (song.id.equals(mSong.id) && mPresenter.isPrepared()) {
@@ -83,7 +118,51 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.B
         }
     }
 
-    private void notifyMediaDuration() {
+    @Override
+    public void changeMusic() {
+        mAutoPlay = true;
+        try {
+            mPresenter.initMediaPlayer(mSong.audio);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        notifyRefreshSong();
+    }
+
+    @Override
+    public void notifyRefreshSong() {
+        Intent intent = new Intent(MusicInstruction.CLIENT_RECEIVER_REFRESH_MUSIC);
+        intent.putExtra(MusicInstruction.CLIENT_PARAM_REFRESH_SONG, mSong);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
+    @Override
+    public void startCircleMode() {
+        mPlayQueuePresenter.setPlayMode(MusicServiceContract.PlayQueueControlPresenter.CIRCLE_MODE);
+        notifyCurrentMode();
+    }
+
+    @Override
+    public void startRandomMode() {
+        mPlayQueuePresenter.setPlayMode(MusicServiceContract.PlayQueueControlPresenter.RANDOM_MODE);
+        notifyCurrentMode();
+    }
+
+    @Override
+    public void songToNextPlay(Song song) {
+        mPlayQueuePresenter.addToNextPlay(song);
+    }
+
+    @Override
+    public void notifyCurrentMode() {
+        int mode = mPlayQueuePresenter.getPlayMode();
+        Intent intent = new Intent(MusicInstruction.CLIENT_RECEIVER_REFRESH_MODE);
+        intent.putExtra(MusicInstruction.CLIENT_PARAM_PLAY_MODE, mode);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
+    @Override
+    public void notifyMediaDuration() {
         Intent intent = new Intent(MusicInstruction.CLIENT_RECEIVER_SET_DURATION);
         intent.putExtra(MusicInstruction.CLIENT_PARAM_MEDIA_DURATION, mPresenter.getDuration());
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
@@ -120,7 +199,9 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.B
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
-    private void informCurrentPlayMusic() {
+
+    @Override
+    public void informCurrentPlayMusic() {
         if (mSong != null) {
             notifyCurrentPlayMusic();
             return;
@@ -148,13 +229,15 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.B
         });
     }
 
-    private void notifyCurrentPlayMusic() {
+    @Override
+    public void notifyCurrentPlayMusic() {
         Intent intent = new Intent(MusicInstruction.CLIENT_RECEIVER_CURRENT_PLAY_MUSIC);
         intent.putExtra(MusicInstruction.CLIENT_PARAM_CURRENT_PLAY_MUSIC, mSong);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
-    private void informCurrentIfPlaying() {
+    @Override
+    public void informCurrentIfPlaying() {
         Intent intent = new Intent(MusicInstruction.CLIENT_RECEIVER_CURRENT_IS_PALING);
         if (mPresenter.isPrepared()) {
             if (mPresenter.isPlaying()) {
@@ -170,7 +253,8 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.B
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
-    private void informCurrentIfPlayProgress() {
+    @Override
+    public void informCurrentIfPlayProgress() {
         if (mPresenter.isPrepared()) {
             Intent intent = new Intent(MusicInstruction.CLIENT_RECEIVER_CURRENT_PLAY_PROGRESS);
             intent.putExtra(MusicInstruction.CLIENT_PARAM_CURRENT_PLAY_PROGRESS, mPresenter.getCurrentProgress());
@@ -179,18 +263,73 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.B
         }
     }
 
-    private void saveLastPlayMusic() {
+    @Override
+    public void saveLastPlayMusic() {
         mPresenter.saveLastPlayMusic(mSong, this);
     }
 
     @Override
     public void completionPlay() {
+        if (!playQueueIsPrepare()) return;
 
+        mSong = mPlayQueuePresenter.getNextPlayMusic();
+        changeMusic();
     }
-    private void updateSong(Song song) {
+
+    @Override
+    public void pausePlay() {
+        mPresenter.pausePlay();
+    }
+
+    @Override
+    public void updateSong(Song song) {
         mSong = song;
     }
 
+    @Override
+    public void seekTo(Intent intent) {
+        mPresenter.seekTo(intent.getIntExtra(MusicInstruction.SERVICE_PARAM_SEEK_TO_POS, 0));
+    }
+
+    @Override
+    public void playMusic() {
+        if (!mPresenter.isPrepared()) {
+            mAutoPlay = true;
+            return;
+        }
+        mPresenter.startPlay();
+    }
+
+    @Override
+    public void clear() {
+        saveLastPlayMusic();
+        mPresenter.releaseResource();
+        mReceiverPresenter.releaseResource();
+    }
+
+    @Override
+    public void playNextMusic() {
+        if (!playQueueIsPrepare()) return;
+
+        mSong = mPlayQueuePresenter.getNextPlayMusic();
+        changeMusic();
+    }
+
+    @Override
+    public void PlayPreMusic() {
+        if (!playQueueIsPrepare()) return;
+
+        mSong = mPlayQueuePresenter.getPrePlayMusic();
+        changeMusic();
+    }
+
+    private boolean playQueueIsPrepare() {
+        if (!mQueueIsPrepare) {
+            ToastUtils.showShort("播放队列正在准备");
+            return false;
+        }
+        return true;
+    }
 
     //用长按home调出最近运行历史，在这里面清除软件,可能会调用
     @Override
@@ -206,72 +345,5 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.B
         clear();
     }
 
-    private void clear() {
-        saveLastPlayMusic();
-        mPresenter.releaseResource();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
-    }
 
-
-    class ServiceMusicReceiver extends BroadcastReceiver{
-
-        IntentFilter getIntentFilter(){
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(MusicInstruction.SERVICE_RECEIVER_PLAY_MUSIC);
-            filter.addAction(MusicInstruction.SERVICE_RECEIVER_PAUSE_MUSIC);
-            filter.addAction(MusicInstruction.SERVICE_RECEIVER_SEEK_TO);
-            filter.addAction(MusicInstruction.SERVICE_SAVE_LAST_PLAY_MUSIC);
-            filter.addAction(MusicInstruction.SERVICE_CURRENT_PLAY_MUSIC);
-            filter.addAction(MusicInstruction.SERVICE_LOAD_MUSIC_INFO);
-            filter.addAction(MusicInstruction.SERVER_RECEIVER_CHANGE_MUSIC);
-            filter.addAction(MusicInstruction.SERVICE_RECEIVER_QUERY_CURRENT_STATE);
-            filter.addAction(MusicInstruction.SERVICE_RECEIVER_QUERY_IS_PLAYING);
-            filter.addAction(MusicInstruction.SERVICE_RECEIVER_GET_PLAY_PROGRESS);
-            filter.addAction(MusicInstruction.SERVICE_RECEIVER_GET_PLAY_PROGRESS);
-            filter.addAction(MusicInstruction.SERVER_RECEIVER_UPDATE_PLAY_MUSIC_INFO);
-            return filter;
-        }
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            switch (action){
-                case MusicInstruction.SERVICE_LOAD_MUSIC_INFO:
-                    loadMusicInfo((Song) intent.getSerializableExtra(MusicInstruction.SERVICE_PARAM_PLAY_SONG),
-                            intent.getBooleanExtra(MusicInstruction.SERVICE_PARAM_PLAY_SONG_AUTO_PLAY, false));
-                    break;
-                case MusicInstruction.SERVICE_RECEIVER_PLAY_MUSIC:
-                    if (!mPresenter.isPrepared()) {
-                        mAutoPlay = true;
-                        return;
-                    }
-                    mPresenter.startPlay();
-                    break;
-                case MusicInstruction.SERVICE_RECEIVER_PAUSE_MUSIC:
-                    mPresenter.pausePlay();
-                    break;
-                case MusicInstruction.SERVICE_RECEIVER_SEEK_TO:
-                    mPresenter.seekTo(intent.getIntExtra(MusicInstruction.SERVICE_PARAM_SEEK_TO_POS, 0));
-                    break;
-                case MusicInstruction.SERVICE_SAVE_LAST_PLAY_MUSIC:
-                    saveLastPlayMusic();
-                    break;
-                case MusicInstruction.SERVICE_CURRENT_PLAY_MUSIC:
-                    informCurrentPlayMusic();
-                    break;
-                case MusicInstruction.SERVER_RECEIVER_CHANGE_MUSIC:
-                    tryToChangeMusic((Song) intent.getSerializableExtra(MusicInstruction.SERVICE_PARAM_CHANGE_MUSIC));
-                    break;
-                case MusicInstruction.SERVICE_RECEIVER_QUERY_IS_PLAYING:
-                    informCurrentIfPlaying();
-                    break;
-                case MusicInstruction.SERVICE_RECEIVER_GET_PLAY_PROGRESS:
-                    informCurrentIfPlayProgress();
-                    break;
-                case MusicInstruction.SERVER_RECEIVER_UPDATE_PLAY_MUSIC_INFO:
-                    updateSong((Song) intent.getSerializableExtra(MusicInstruction.SERVICE_PARAM_UPDATE_SONG));
-                    break;
-            }
-        }
-    }
 }

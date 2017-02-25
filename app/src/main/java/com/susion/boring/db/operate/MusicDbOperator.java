@@ -5,11 +5,16 @@ import android.content.Context;
 import com.litesuits.orm.LiteOrm;
 import com.litesuits.orm.db.assit.QueryBuilder;
 import com.susion.boring.db.model.SimpleSong;
+import com.susion.boring.music.model.Song;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
+import rx.Observer;
 import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by susion on 17/2/23.
@@ -19,7 +24,6 @@ public class MusicDbOperator extends DbBaseOperate<SimpleSong> implements DataBa
     public MusicDbOperator(LiteOrm mLiteOrm, Context mContext, Class c) {
         super(mLiteOrm, mContext, c);
     }
-
 
     @Override
     public Observable<List<SimpleSong>> getLikeMusic() {
@@ -67,6 +71,42 @@ public class MusicDbOperator extends DbBaseOperate<SimpleSong> implements DataBa
     }
 
 
+    public Observable<List<Song>> getInitPlayQueue(){
+        return Observable.create(new Observable.OnSubscribe<List<Song>>() {
+            @Override
+            public void call(final Subscriber<? super List<Song>> subscriber) {
+                getLocalMusic()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<List<SimpleSong>>() {
+                            @Override
+                            public void onCompleted() {
+
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+
+                            }
+
+                            @Override
+                            public void onNext(List<SimpleSong> songs) {
+                                subscriber.onNext(translateSimpleSong2Song(songs));
+                            }
+                        });
+            }
+        });
+    }
+
+    private List<Song> translateSimpleSong2Song(List<SimpleSong> songs) {
+        List<Song> news = new ArrayList<>();
+
+        for (SimpleSong s : songs){
+            news.add(s.translateToSong());
+        }
+
+        return news;
+    }
 
 
 }

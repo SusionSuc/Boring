@@ -11,6 +11,7 @@ import com.susion.boring.music.model.DownTask;
 import com.susion.boring.music.model.Song;
 import com.susion.boring.music.presenter.FileDownloadPresenter;
 import com.susion.boring.music.presenter.itf.MediaPlayerContract;
+import com.susion.boring.music.presenter.itf.MusicServiceContract;
 import com.susion.boring.utils.ToastUtils;
 
 /**
@@ -26,7 +27,9 @@ public class PlayOperatorView  extends LinearLayout implements View.OnClickListe
 
     private Song mSong;
     private MediaPlayerContract.PlayMusicCommunicatePresenter mCommunicatePresenter;
-    private MediaPlayerContract.PlayMusicControlPresenter mPresenter;
+
+    private boolean isCircle;
+    private boolean isRandom;
 
     public PlayOperatorView(Context context) {
         super(context);
@@ -44,6 +47,9 @@ public class PlayOperatorView  extends LinearLayout implements View.OnClickListe
         View.inflate(mContext, R.layout.view_play_operator, this);
         findView();
         initView();
+
+        isRandom = false;
+        isCircle = false;
     }
 
     private void findView() {
@@ -63,21 +69,35 @@ public class PlayOperatorView  extends LinearLayout implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.view_play_operator_iv_circle :
+                mCommunicatePresenter.startCirclePlayMode();
                 break;
-
             case R.id.view_play_operator_iv_random :
+                mCommunicatePresenter.startRandomPlayMode();
                 break;
-
             case R.id.view_play_operator_iv_next_play :
-                mPresenter.nextPlay(mSong);
+                mCommunicatePresenter.musicToNextPlay(mSong);
                 break;
-
             case R.id.view_play_operator_iv_like :
                 mSong.favorite = !mSong.favorite;
                 mCommunicatePresenter.likeMusic(mSong);
                 refreshLikeStatus();
                 break;
         }
+    }
+
+    public void refreshPlayMode(int mode) {
+
+        mIvCircle.setImageResource(R.mipmap.play_operator_circle);
+        mIvRandom.setImageResource(R.mipmap.play_operator_random);
+
+        if (mode == MusicServiceContract.PlayQueueControlPresenter.CIRCLE_MODE) {
+            mIvCircle.setImageResource(R.mipmap.play_operator_circle_enable);
+        }
+
+        if (mode == MusicServiceContract.PlayQueueControlPresenter.RANDOM_MODE) {
+            mIvRandom.setImageResource(R.mipmap.play_operator_random_enable);
+        }
+
     }
 
     public void setSong(Song song) {
@@ -93,8 +113,7 @@ public class PlayOperatorView  extends LinearLayout implements View.OnClickListe
         }
     }
 
-    public void setPresenter(MediaPlayerContract.PlayMusicControlPresenter presenter, MediaPlayerContract.PlayMusicCommunicatePresenter communicatePresenter) {
-        mPresenter = presenter;
+    public void setPresenter(MediaPlayerContract.PlayMusicCommunicatePresenter communicatePresenter) {
         mCommunicatePresenter = communicatePresenter;
     }
 }

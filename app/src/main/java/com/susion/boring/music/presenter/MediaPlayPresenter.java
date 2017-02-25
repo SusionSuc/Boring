@@ -6,6 +6,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
+import android.util.Log;
 
 import com.susion.boring.music.presenter.itf.MediaPlayerContract;
 
@@ -14,7 +15,10 @@ import java.io.IOException;
 /**
  * Created by susion on 17/1/25.
  */
-public class MediaPlayPresenter implements MediaPlayerContract.Presenter, MediaPlayer.OnPreparedListener, MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnCompletionListener {
+public class MediaPlayPresenter implements MediaPlayerContract.Presenter, MediaPlayer.OnPreparedListener,
+        MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener {
+
+    private static final String TAG = MediaPlayPresenter.class.getSimpleName();
 
     private MediaPlayerContract.BaseView mView;
     private Context mContext;
@@ -30,7 +34,7 @@ public class MediaPlayPresenter implements MediaPlayerContract.Presenter, MediaP
     private final Runnable mProgressUpdateRun = new Runnable() {
         @Override
         public void run() {
-            if (mUpdateProgressHandler == null || mPlayer == null)
+            if (mUpdateProgressHandler == null || mPlayer == null || !mIsPrepared)
                 return;
 
             int pos = mPlayer.getCurrentPosition();
@@ -53,13 +57,15 @@ public class MediaPlayPresenter implements MediaPlayerContract.Presenter, MediaP
     }
 
     @Override
-    public void initMediaPlayer(String mediaUri) throws Exception{
+    public void initMediaPlayer(String mediaUri) throws Exception {
+        Log.e(TAG, "initMediaPlayer() uri=" + mediaUri);
         if (mPlayer == null) {
             mPlayer = new MediaPlayer();
             mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mPlayer.setOnPreparedListener(this);
             mPlayer.setOnBufferingUpdateListener(this);
             mPlayer.setOnCompletionListener(this);
+            mPlayer.setOnErrorListener(this);
             mPlayer.setLooping(false);  // after play finish not remain at start state, and will call OnCompletionListener
         }
 
@@ -67,25 +73,30 @@ public class MediaPlayPresenter implements MediaPlayerContract.Presenter, MediaP
 
         mSource = Uri.parse(mediaUri);
         setSourceForMultiType();
+        mIsPrepared = false;
         mPlayer.prepareAsync();
     }
 
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
+        Log.e(TAG, "onPrepared()");
         mIsPrepared = true;
         mView.preparedPlay(mPlayer.getDuration());
     }
 
     @Override
-    public boolean startPlay(){
+    public boolean startPlay() {
         if (!mIsPrepared) {
             return false;
         }
 
-        mPlayer.start();
         if (mUpdateProgressHandler == null) {
             mUpdateProgressHandler = new Handler();
         }
+
+
+        mPlayer.start();
+
         mUpdateProgressHandler.post(mProgressUpdateRun);
         return true;
     }
@@ -130,9 +141,17 @@ public class MediaPlayPresenter implements MediaPlayerContract.Presenter, MediaP
 
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
+        Log.e(TAG, "onCompletion()");
         if (mUpdateProgressHandler != null)
             mUpdateProgressHandler.removeCallbacks(mProgressUpdateRun);
+
         mView.completionPlay();
+    }
+
+    @Override
+    public boolean onError(MediaPlayer mp, int what, int extra) {
+        Log.e(TAG, "onError() what=" + what + ", extra=" + extra);
+        return false;
     }
 
     @Override
