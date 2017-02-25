@@ -6,8 +6,10 @@ package com.susion.boring.http;
 public class BaseURL {
     public static final String MUSIC = "http://s.music.163.com";
     public static final String MUSIC_SEARCH_LYRIC = "http://music.163.com";
+    public static final String CLOUD_MUSIC_API_MUSICINGO = "http://musicapi.duapp.com/api.php";
 
     public static final String MUSIC_PLAY_LIST = "http://musicapi.duapp.com/api.php";
+    public static final String MUSIC_PLAY_LIST_DETAIL = "https://api.imjad.cn/cloudmusic";
 
 
 }

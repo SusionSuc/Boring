@@ -15,6 +15,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.susion.boring.R;
@@ -33,6 +34,7 @@ public class MainActivity extends BaseActivity{
     private LinearLayout mDrawerMenu;
     private RecyclerView mDrawerList;
     private ViewPager mViewPager;
+    private ViewGroup mContentLayout;
 
     public static void start(Context srcContext){
         Intent intent = new Intent();
@@ -63,6 +65,7 @@ public class MainActivity extends BaseActivity{
         mDrawerMenu = (LinearLayout) findViewById(R.id.drawer);
         mDrawerList = (RecyclerView) findViewById(R.id.list_view);
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
+        mContentLayout = (ViewGroup) findViewById(R.id.main);
     }
 
     @Override

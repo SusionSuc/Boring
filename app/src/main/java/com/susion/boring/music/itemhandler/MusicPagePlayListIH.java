@@ -7,7 +7,9 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.susion.boring.R;
 import com.susion.boring.base.SimpleItemHandler;
 import com.susion.boring.base.ViewHolder;
+import com.susion.boring.music.activity.PlayListActivity;
 import com.susion.boring.music.model.PlayList;
+import com.susion.boring.utils.UIUtils;
 
 /**
  * Created by susion on 17/2/23.
@@ -27,7 +29,7 @@ public class MusicPagePlayListIH extends SimpleItemHandler<PlayList> {
     public void onBindDataView(ViewHolder vh, PlayList data, int position) {
         mSDVCover.setImageURI(data.getCoverImgUrl());
         vh.getTextView(R.id.item_play_list_tv_name).setText(data.getName());
-        vh.getTextView(R.id.item_play_list_tv_play_count).setText(data.getPlayCount()+"");
+        vh.getTextView(R.id.item_play_list_tv_play_count).setText(UIUtils.translatePlayCount(data.getPlayCount()));
     }
 
     @Override
@@ -37,7 +39,7 @@ public class MusicPagePlayListIH extends SimpleItemHandler<PlayList> {
 
     @Override
     public void onClick(View v) {
-
+        PlayListActivity.start(mContext, mData);
     }
 
 }

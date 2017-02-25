@@ -2,6 +2,9 @@ package com.susion.boring.utils;
 
 import android.annotation.SuppressLint;
 
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+
 /**
  * Created with Android Studio.
  * User: ryan.hoo.j@gmail.com
@@ -28,4 +31,17 @@ public class TimeUtils {
         else
             return String.format("%02d:%02d", minute, second);
     }
+
+    public static String getDurationString(long durationMs, boolean negativePrefix) {
+        return String.format(Locale.getDefault(), "%s%02d:%02d",
+                negativePrefix ? "- " : "",
+                TimeUnit.MILLISECONDS.toMinutes(durationMs),
+                TimeUnit.MILLISECONDS.toSeconds(durationMs) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(durationMs))
+        );
+    }
+
+
+
+
 }

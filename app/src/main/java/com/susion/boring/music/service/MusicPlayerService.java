@@ -100,8 +100,6 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.B
 
     @Override
     public void tryToChangeMusic(Song song) {
-        Log.e(TAG, "tryToChangeMusic"+song.name);
-        Log.e(TAG, "tryToChangeMusic"+mSong.name);
         mAutoPlay = true;
         if (mSong != null) {
             if (song.id.equals(mSong.id) && mPresenter.isPrepared()) {

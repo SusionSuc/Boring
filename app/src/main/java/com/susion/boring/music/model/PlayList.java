@@ -1,11 +1,12 @@
 package com.susion.boring.music.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by susion on 17/2/23.
  */
-public class PlayList {
+public class PlayList implements Serializable {
 
     /**
      * subscribers : []
@@ -322,7 +323,7 @@ public class PlayList {
         this.tags = tags;
     }
 
-    public static class CreatorBean {
+    public static class CreatorBean implements  Serializable{
         /**
          * authStatus : 0
          * expertTags : ["华语","流行","民谣"]

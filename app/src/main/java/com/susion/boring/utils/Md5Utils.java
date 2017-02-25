@@ -39,4 +39,10 @@ public class Md5Utils {
         return md5StrBuff.toString().toUpperCase();
 
     }
+
+    public static String encodeIdToIds(String ids) {
+
+        String re = "%5B"+ids+"%5D";
+        return re;
+    }
 }

@@ -1,0 +1,74 @@
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/ac_play_list_app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:fitsSystemWindows="false"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/ac_play_list_iv_bg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <com.susion.boring.view.SToolBar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_marginTop="@dimen/status_bar_height"
+                app:layout_collapseMode="pin">
+            </com.susion.boring.view.SToolBar>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="20dp"
+        android:background="@color/white"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+        <com.susion.boring.view.SToolBar
+            android:id="@+id/ac_play_list_tool_bar2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </com.susion.boring.view.SToolBar>
+
+        <com.susion.boring.music.view.PlayOperatorView
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+        </com.susion.boring.music.view.PlayOperatorView>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/red_divider"></View>
+
+        <com.susion.boring.base.view.LoadMoreRecycleView
+            android:id="@+id/list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"></com.susion.boring.base.view.LoadMoreRecycleView>
+    </LinearLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>

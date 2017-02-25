@@ -4,15 +4,11 @@ package com.susion.boring.http;
 import com.susion.boring.music.model.GetPlayListResult;
 import com.susion.boring.music.model.LyricResult;
 import com.susion.boring.music.model.MusicSearchResult;
-import com.susion.boring.music.model.PlayList;
+import com.susion.boring.music.model.PlayListDetail;
+import com.susion.boring.music.model.PlayListSong;
 
-import java.util.List;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import retrofit2.http.Url;
 import rx.Observable;
 
 /**
@@ -29,4 +25,11 @@ public interface MusicServices {
 
     @GET(BaseURL.MUSIC_PLAY_LIST+"?type=topPlayList&cat=全部")
     Observable<GetPlayListResult> getPlayList(@Query("offset") int offset, @Query("limit") int limit);
+
+    @GET(BaseURL.MUSIC_PLAY_LIST_DETAIL+"?type=playlist")
+    Observable<PlayListDetail> getPlayListDetail(@Query("id") int id);
+
+    @GET(BaseURL.CLOUD_MUSIC_API_MUSICINGO+"?type=url")
+    Observable<PlayListSong> getSongDetail(@Query("id") int id);
+
 }

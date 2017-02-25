@@ -47,7 +47,7 @@ public class SearchMusicResultIH extends SimpleItemHandler<Song>{
             ToastUtils.showShort("抱歉啦! 暂时没有播放资源");
         }
 
-        PlayMusicActivity.start(mContext, mData);
+        PlayMusicActivity.start(mContext, mData, false);
 
     }
 }

@@ -25,6 +25,8 @@ public class SToolBar extends RelativeLayout implements View.OnClickListener, Ma
     private ImageView mPlayer;
     private ImageView mMusic;
 
+    public static final int HIDDEN_LEFT_ICON_RES = -1;
+
     private int mCurrentSelectItem = 0;
 
     private boolean isMainPage = true;
@@ -173,6 +175,10 @@ public class SToolBar extends RelativeLayout implements View.OnClickListener, Ma
     }
 
     public void setLeftIcon(int resId){
+        if (resId == HIDDEN_LEFT_ICON_RES) {
+            mLeftIcon.setVisibility(INVISIBLE);
+            return;
+        }
         mLeftIcon.setVisibility(VISIBLE);
         mLeftIcon.setImageResource(resId);
     }
@@ -206,6 +212,10 @@ public class SToolBar extends RelativeLayout implements View.OnClickListener, Ma
         mTvTitle.setText(title);
         findViewById(R.id.toolbar_main_menu).setVisibility(GONE);
         mTvTitle.setVisibility(VISIBLE);
+    }
+
+    public void setTitleColorRes(int res) {
+        mTvTitle.setTextColor(getResources().getColor(res));
     }
 
     public interface OnItemClickListener{

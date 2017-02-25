@@ -8,6 +8,8 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 
+import java.util.List;
+
 /**
  * Created by susion on 17/1/17.
  */
@@ -47,5 +49,25 @@ public class UIUtils {
         animation.setDuration(1000);
         animation.setRepeatCount(1000);
         view.startAnimation(animation);
+    }
+
+    public static String translatePlayCount(int playCount) {
+        if (playCount < 9999) {
+            return playCount+"";
+        }
+        return playCount / 10000 +"万";
+    }
+
+    public static String getPlayListTags(List<String> tags) {
+        String result = "";
+
+        if (tags != null && !tags.isEmpty()) {
+            result += "Tags: ";
+            for (String tag : tags) {
+                result += tag + " ";
+            }
+        }
+
+        return result;
     }
 }

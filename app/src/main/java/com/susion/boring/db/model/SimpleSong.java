@@ -46,6 +46,9 @@ public class SimpleSong implements Parcelable {
 
     private String picPath;  //url for :  no store in play, play online
 
+
+    private boolean fromPlayList;
+
     public SimpleSong() {
         // Empty
     }
@@ -64,6 +67,15 @@ public class SimpleSong implements Parcelable {
         song.album = new Album(album, picPath);
 
         return song;
+    }
+
+
+    public boolean isFromPlayList() {
+        return fromPlayList;
+    }
+
+    public void setFromPlayList(boolean fromPlayList) {
+        this.fromPlayList = fromPlayList;
     }
 
     public SimpleSong(Parcel in) {

@@ -37,7 +37,8 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".music.activity.MusicDownLoadListActivity"></activity>
+        <activity android:name=".music.activity.MusicDownLoadListActivity" />
+        <activity android:name=".music.activity.PlayListActivity"></activity>
     </application>
 
 </manifest>

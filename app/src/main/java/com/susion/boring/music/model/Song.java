@@ -1,5 +1,7 @@
 package com.susion.boring.music.model;
 
+import android.text.TextUtils;
+
 import com.susion.boring.db.model.SimpleSong;
 
 import java.io.Serializable;
@@ -19,6 +21,7 @@ public class Song implements Serializable{
     public String djProgramId;
     public String page;
 
+    public String mp3Url;
 
     public boolean hasDown;
     public boolean favorite;
@@ -26,7 +29,13 @@ public class Song implements Serializable{
 
     public SimpleSong translateToSimpleSong(){
         SimpleSong simpleSong = new SimpleSong();
-        simpleSong.setPath(audio);
+
+        if (!TextUtils.isEmpty(audio)) {
+            simpleSong.setPath(audio);
+        } else {
+            simpleSong.setPath(mp3Url);
+        }
+
         simpleSong.setDisplayName(name);
         simpleSong.setId(id);
         simpleSong.setArtist(artists.get(0).name);

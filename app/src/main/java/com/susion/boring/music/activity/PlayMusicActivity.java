@@ -15,14 +15,13 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.susion.boring.R;
 import com.susion.boring.base.BaseActivity;
-import com.susion.boring.db.DbManager;
-import com.susion.boring.db.model.SimpleSong;
-import com.susion.boring.db.operate.DbBaseOperate;
 import com.susion.boring.http.APIHelper;
 import com.susion.boring.music.model.LyricResult;
+
+import com.susion.boring.music.model.PlayList;
+import com.susion.boring.music.model.PlayListSong;
 import com.susion.boring.music.model.Song;
 import com.susion.boring.music.presenter.PlayMusicCommunicatePresenter;
-import com.susion.boring.music.presenter.PlayMusicPresenter;
 import com.susion.boring.music.presenter.itf.MediaPlayerContract;
 import com.susion.boring.music.service.MusicInstruction;
 import com.susion.boring.music.view.MediaSeekBar;
@@ -30,18 +29,20 @@ import com.susion.boring.music.view.MusicPlayControlView;
 import com.susion.boring.music.view.PlayOperatorView;
 import com.susion.boring.utils.AlbumUtils;
 import com.susion.boring.utils.BroadcastUtils;
-import com.susion.boring.utils.MediaUtils;
+import com.susion.boring.utils.Md5Utils;
+import com.susion.boring.utils.TimeUtils;
 import com.susion.boring.utils.TransitionHelper;
 import com.susion.boring.view.SToolBar;
 
 import java.io.File;
-import java.io.Serializable;
 
 import rx.Observer;
 
 public class PlayMusicActivity extends BaseActivity implements MediaPlayerContract.CommunicateView {
     private static final String TO_PLAY_MUSIC_INFO = "played_music";
     private static final String FROM_LITTLE_PANEL = "from_little_panel";
+    private static final String FROM_PLAY_LIST = "from_play_list";
+    private static final String PLAY_LIST_ID = "play_list_song_id";
 
     private SToolBar mToolBar;
     private MediaSeekBar mSeekBar;
@@ -56,10 +57,12 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
     private boolean mIsFromLittlePanel;
 
     private MediaPlayerContract.PlayMusicCommunicatePresenter mCommunicatePresenter;
+    private boolean mIsFromPlayList;
 
-    public static void start(Context context, Song song) {
+    public static void start(Context context, Song song, boolean isFromPlayList) {
         Intent intent = new Intent();
         intent.putExtra(TO_PLAY_MUSIC_INFO, song);
+        intent.putExtra(FROM_PLAY_LIST, isFromPlayList);
         intent.setClass(context, PlayMusicActivity.class);
         context.startActivity(intent);
     }
@@ -80,6 +83,14 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
             Transition transition = TransitionInflater.from(this).inflateTransition(R.transition.slide_from_bottom);
             getWindow().setEnterTransition(transition);
         }
+    }
+
+    @Override
+    protected void setStatusBar() {
+        getWindow().setStatusBarColor(Color.TRANSPARENT);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
     }
 
     @Override
@@ -110,23 +121,42 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
         mToolBar.setBackgroundColor(getResources().getColor(R.color.transparent));
 
         refreshSong(mSong);
-
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-
-
         initListener();
 
         mPlayControlView.setIsPlay(false);
-        mPovMusicPlayControl.setSong(mSong);
+        mPovMusicPlayControl
+                .setSong(mSong);
         mPovMusicPlayControl.setPresenter(mCommunicatePresenter);
     }
 
     private void getParamAndInitReceiver() {
-        mSong = (Song) getIntent().getSerializableExtra(TO_PLAY_MUSIC_INFO);
         mIsFromLittlePanel = getIntent().getBooleanExtra(FROM_LITTLE_PANEL, false);
-        mCommunicatePresenter.queryServiceIsPlaying();
+        mIsFromPlayList = getIntent().getBooleanExtra(FROM_PLAY_LIST, false);
+        mSong = (Song) getIntent().getSerializableExtra(TO_PLAY_MUSIC_INFO);
+
+        if (mIsFromPlayList) {
+            APIHelper.subscribeSimpleRequest(APIHelper.getMusicServices().getSongDetail(Integer.valueOf(mSong.id)), new Observer<PlayListSong>() {
+                @Override
+                public void onCompleted() {
+
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    int b = 0;
+                }
+
+                @Override
+                public void onNext(PlayListSong songs) {
+                    if (songs != null && !songs.getData().isEmpty()) {
+                        mSong.audio = songs.getData().get(0).getUrl();
+                        mCommunicatePresenter.queryServiceIsPlaying();
+                    }
+                }
+            });
+        } else {
+            mCommunicatePresenter.queryServiceIsPlaying();
+        }
     }
 
     @Override
@@ -226,8 +256,8 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
     public void updatePlayProgressForSetMax(int curPos, int left) {
         mSeekBar.setMaxProgress(left);
         mSeekBar.setCurrentProgress(curPos);
-        mTvPlayedTime.setText(MediaUtils.getDurationString(curPos, false));
-        mTvLeftTime.setText(MediaUtils.getDurationString(left, true));
+        mTvPlayedTime.setText(TimeUtils.getDurationString(curPos, false));
+        mTvLeftTime.setText(TimeUtils.getDurationString(left, true));
     }
 
     @Override
@@ -270,8 +300,8 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
 
     @Override
     public void updatePlayProgress(int curPos, int left) {
-        mTvPlayedTime.setText(MediaUtils.getDurationString(curPos, false));
-        mTvLeftTime.setText(MediaUtils.getDurationString(left, true));
+        mTvPlayedTime.setText(TimeUtils.getDurationString(curPos, false));
+        mTvLeftTime.setText(TimeUtils.getDurationString(left, true));
         mSeekBar.setCurrentProgress(curPos);
     }
 

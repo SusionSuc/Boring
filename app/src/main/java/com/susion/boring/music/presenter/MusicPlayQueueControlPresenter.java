@@ -105,11 +105,13 @@ public class MusicPlayQueueControlPresenter implements MusicServiceContract.Play
     public void setPlayMode(int mode) {
         if (mode == CIRCLE_MODE && mPlayMode == CIRCLE_MODE) {
             mPlayMode = QUEUE_MODE;
+            return;
         }
 
 
         if (mode == RANDOM_MODE && mPlayMode == RANDOM_MODE) {
             mPlayMode = QUEUE_MODE;
+            return;
         }
 
         this.mPlayMode = mode;
