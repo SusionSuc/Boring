@@ -14,6 +14,8 @@ import java.io.IOException;
 
 /**
  * Created by susion on 17/1/25.
+ *
+ * control MediaPlayer
  */
 public class MediaPlayPresenter implements MediaPlayerContract.Presenter, MediaPlayer.OnPreparedListener,
         MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener {
@@ -28,8 +30,8 @@ public class MediaPlayPresenter implements MediaPlayerContract.Presenter, MediaP
     private Handler mUpdateProgressHandler;
     private static final int UPDATE_INTERVAL = 500;
 
-    private boolean mAutoPlay;
     private boolean mIsPrepared;
+
 
     private final Runnable mProgressUpdateRun = new Runnable() {
         @Override

@@ -13,14 +13,16 @@ import com.susion.boring.music.service.MusicInstruction;
 
 /**
  * Created by susion on 17/2/24.
+ *
+ * Service Receiver
  */
-public class MusicPlayerReceiverPresenter implements MusicServiceContract.ReceiverPresenter{
+public class ServiceReceiverPresenter implements MusicServiceContract.ReceiverPresenter{
 
     private final String TAG = getClass().getSimpleName();
     private ServiceMusicReceiver mReceiver;
     private MusicServiceContract.Service mService;
 
-    public MusicPlayerReceiverPresenter(MusicServiceContract.Service view) {
+    public ServiceReceiverPresenter(MusicServiceContract.Service view) {
         mService = view;
         mReceiver = new ServiceMusicReceiver();
         LocalBroadcastManager.getInstance(mService.getContext()).registerReceiver(mReceiver, mReceiver.getIntentFilter());

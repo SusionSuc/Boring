@@ -26,7 +26,7 @@ public class PlayOperatorView  extends LinearLayout implements View.OnClickListe
     private ImageView mIvNextPlay;
 
     private Song mSong;
-    private MediaPlayerContract.PlayMusicCommunicatePresenter mCommunicatePresenter;
+    private MediaPlayerContract.ClientReceiverPresenter mCommunicatePresenter;
 
     private boolean isCircle;
     private boolean isRandom;
@@ -113,7 +113,7 @@ public class PlayOperatorView  extends LinearLayout implements View.OnClickListe
         }
     }
 
-    public void setPresenter(MediaPlayerContract.PlayMusicCommunicatePresenter communicatePresenter) {
+    public void setPresenter(MediaPlayerContract.ClientReceiverPresenter communicatePresenter) {
         mCommunicatePresenter = communicatePresenter;
     }
 }

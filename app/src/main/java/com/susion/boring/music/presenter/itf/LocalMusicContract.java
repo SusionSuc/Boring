@@ -1,13 +1,10 @@
 package com.susion.boring.music.presenter.itf;
 
 import android.app.LoaderManager;
-import android.content.Context;
-
 
 import com.susion.boring.base.BasePresenter;
-import com.susion.boring.base.BaseView;
+import com.susion.boring.base.IView;
 import com.susion.boring.db.model.SimpleSong;
-import com.susion.boring.music.model.Song;
 
 import java.util.List;
 
@@ -20,9 +17,7 @@ import java.util.List;
  */
 /* package */ public interface LocalMusicContract {
 
-    interface View extends BaseView<Presenter> {
-        Context getContext();
-
+    interface View extends IView {
         LoaderManager getMyLoaderManager();
 
         void showScanResult(List<SimpleSong> songs);

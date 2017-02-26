@@ -4,10 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
-import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.susion.boring.R;
@@ -23,7 +21,6 @@ import com.susion.boring.music.model.PlayList;
 import com.susion.boring.music.model.PlayListDetail;
 import com.susion.boring.utils.BeanTranslateUtils;
 import com.susion.boring.utils.RVUtils;
-import com.susion.boring.utils.UIUtils;
 import com.susion.boring.view.SToolBar;
 
 import java.util.ArrayList;

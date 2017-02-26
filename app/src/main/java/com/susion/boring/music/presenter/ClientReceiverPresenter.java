@@ -22,12 +22,12 @@ import rx.schedulers.Schedulers;
 /**
  * Created by susion on 17/2/22.
  */
-public class PlayMusicCommunicatePresenter implements MediaPlayerContract.PlayMusicCommunicatePresenter {
+public class ClientReceiverPresenter implements MediaPlayerContract.ClientReceiverPresenter {
 
     private ClientMusicReceiver mReceiver;
-    private MediaPlayerContract.CommunicateView mView;
+    private MediaPlayerContract.PlayControlView mView;
 
-    public PlayMusicCommunicatePresenter(MediaPlayerContract.CommunicateView view) {
+    public ClientReceiverPresenter(MediaPlayerContract.PlayControlView view) {
         mReceiver = new ClientMusicReceiver();
         mView = view;
     }
@@ -117,6 +117,25 @@ public class PlayMusicCommunicatePresenter implements MediaPlayerContract.PlayMu
         LocalBroadcastManager.getInstance(mView.getContext()).sendBroadcast(intent);
     }
 
+    @Override
+    public void loadMusicInfoToService(Song song, boolean autoPlay) {
+        Intent intent = new Intent(MusicInstruction.SERVICE_LOAD_MUSIC_INFO);
+        intent.putExtra(MusicInstruction.SERVICE_PARAM_PLAY_SONG, song);
+        intent.putExtra(MusicInstruction.SERVICE_PARAM_PLAY_SONG_AUTO_PLAY, autoPlay);
+        LocalBroadcastManager.getInstance(mView.getContext()).sendBroadcast(intent);
+    }
+
+    @Override
+    public void getCurrentPlayMusic() {
+        Intent intent = new Intent(MusicInstruction.SERVICE_CURRENT_PLAY_MUSIC);
+        LocalBroadcastManager.getInstance(mView.getContext()).sendBroadcast(intent);
+    }
+
+    @Override
+    public void pausePlay() {
+        Intent intent = new Intent(MusicInstruction.SERVICE_RECEIVER_PAUSE_MUSIC);
+        LocalBroadcastManager.getInstance(mView.getContext()).sendBroadcast(intent);
+    }
 
     public class ClientMusicReceiver extends BroadcastReceiver {
         public IntentFilter getIntentFilter(){
@@ -125,10 +144,11 @@ public class PlayMusicCommunicatePresenter implements MediaPlayerContract.PlayMu
             filter.addAction(MusicInstruction.CLIENT_RECEIVER_UPDATE_BUFFERED_PROGRESS);
             filter.addAction(MusicInstruction.CLIENT_RECEIVER_UPDATE_PLAY_PROGRESS);
             filter.addAction(MusicInstruction.CLIENT_RECEIVER_SET_DURATION);
-            filter.addAction(MusicInstruction.CLIENT_RECEIVER_CURRENT_IS_PALING);
             filter.addAction(MusicInstruction.CLIENT_RECEIVER_CURRENT_PLAY_PROGRESS);
             filter.addAction(MusicInstruction.CLIENT_RECEIVER_REFRESH_MUSIC);
             filter.addAction(MusicInstruction.CLIENT_RECEIVER_REFRESH_MODE);
+            filter.addAction(MusicInstruction.CLIENT_RECEIVER_CURRENT_IS_PALING);
+            filter.addAction(MusicInstruction.CLIENT_RECEIVER_CURRENT_PLAY_MUSIC);
             return filter;
         }
 
@@ -151,7 +171,8 @@ public class PlayMusicCommunicatePresenter implements MediaPlayerContract.PlayMu
                     break;
                 case MusicInstruction.CLIENT_RECEIVER_CURRENT_IS_PALING:
                     boolean playStatus = intent.getBooleanExtra(MusicInstruction.CLIENT_PARAM_IS_PLAYING, false);
-                    mView.tryToChangeMusicByCurrentCondition(playStatus);
+                    boolean needLoadMusic = intent.getBooleanExtra(MusicInstruction.CLIENT_PARAM_NEED_LOAD_MUSIC, false);
+                    mView.tryToChangeMusicByCurrentCondition(playStatus, needLoadMusic);
                     BroadcastUtils.sendIntentAction(mView.getContext(), MusicInstruction.SERVICE_RECEIVER_GET_PLAY_PROGRESS);
                     break;
                 case MusicInstruction.CLIENT_RECEIVER_CURRENT_PLAY_PROGRESS:
@@ -164,6 +185,12 @@ public class PlayMusicCommunicatePresenter implements MediaPlayerContract.PlayMu
                     break;
                 case MusicInstruction.CLIENT_RECEIVER_REFRESH_MODE:
                     mView.refreshPlayMode((int) intent.getSerializableExtra(MusicInstruction.CLIENT_PARAM_PLAY_MODE));
+                    break;
+                case MusicInstruction.CLIENT_RECEIVER_CURRENT_PLAY_MUSIC:
+                    Song song = (Song) intent.getSerializableExtra(MusicInstruction.CLIENT_PARAM_CURRENT_PLAY_MUSIC);
+                    if (song != null) {
+                        mView.refreshSong(song);
+                    }
                     break;
             }
         }

@@ -81,7 +81,7 @@
 
         </RelativeLayout>
 
-        <TextView
+        <com.susion.boring.music.view.LyricView
             android:gravity="center"
             android:text="绅士"
             android:textColor="@color/black"

@@ -1,17 +1,20 @@
 package com.susion.boring.music.presenter.itf;
 
 import com.susion.boring.base.BasePresenter;
-import com.susion.boring.base.BaseView;
+import com.susion.boring.base.IView;
 import com.susion.boring.music.model.DownTask;
 
 import java.util.List;
 
 /**
  * Created by susion on 17/2/20.
+ *
+ *
+ * because copyright , no use
  */
 public interface FileDownContract {
 
-    interface View extends BaseView<Presenter> {
+    interface View extends IView {
         void errorDownTask(DownTask view);
 
         void updateDownTaskProgress(DownTask view);

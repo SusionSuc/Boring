@@ -28,14 +28,30 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp" />
 
-            <ImageView
+
+            <FrameLayout
                 android:background="@drawable/gradient_circle"
-                android:id="@+id/view_music_player_start_or_stop"
-                android:src="@mipmap/music_player_stop"
                 android:layout_centerInParent="true"
-                android:scaleType="center"
-                android:layout_width="60dp"
-                android:layout_height="60dp" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:visibility="visible"
+                    android:id="@+id/view_music_player_start_or_stop"
+                    android:src="@mipmap/music_player_stop"
+                    android:scaleType="center"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp" />
+
+                <ImageView
+                    android:visibility="invisible"
+                    android:id="@+id/view_music_player_iv_loading"
+                    android:src="@mipmap/music_loading"
+                    android:scaleType="center"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp" />
+            </FrameLayout>
+
 
 
             <ImageView

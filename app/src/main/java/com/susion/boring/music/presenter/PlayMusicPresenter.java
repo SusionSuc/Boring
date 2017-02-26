@@ -19,41 +19,17 @@ import rx.schedulers.Schedulers;
  */
 public class PlayMusicPresenter extends MediaPlayPresenter implements MediaPlayerContract.PlayMusicControlPresenter {
 
-    private DbBaseOperate<SimpleSong> mDbOperator;
-
-
-    public PlayMusicPresenter(MediaPlayerContract.BaseView mView) {
-        super(mView);
+    public PlayMusicPresenter(MediaPlayerContract.BaseView mView, Context mContext) {
+        super(mView, mContext);
     }
 
-    public PlayMusicPresenter(MediaPlayerContract.BaseView mView, Context context) {
-        super(mView, context);
-    }
-    public PlayMusicPresenter(MediaPlayerContract.BaseView mView, Context context, DbBaseOperate<SimpleSong> operator){
-        super(mView, context);
-        mDbOperator = operator;
-    }
-
-    @Override
-    public void randomPlayMusic() {
-
-    }
-
-    @Override
-    public void circlePlayMusic() {
-
-    }
 
     @Override
     public void saveLastPlayMusic(Song song, Context c) {
-        if (song != null) {
+        if (song != null && song.hasDown) {
             SPUtils.writeStringToMusicConfig(SPUtils.MUSIC_CONFIG_LAST_PLAY_MUSIC, song.id, c);
         }
     }
 
-    @Override
-    public void nextPlay(Song song) {
-
-    }
 
 }

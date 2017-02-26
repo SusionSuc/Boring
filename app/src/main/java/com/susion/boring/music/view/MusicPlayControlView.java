@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.susion.boring.R;
+import com.susion.boring.utils.UIUtils;
 
 /**
  * Created by susion on 17/1/23.
@@ -23,6 +24,8 @@ public class MusicPlayControlView extends LinearLayout implements View.OnClickLi
     private boolean mIsPlay = false;
 
     private MusicPlayerControlViewItemClickListener listener;
+    private ImageView mIvLoading;
+
     public MusicPlayControlView(Context context) {
         super(context);
         init(context);
@@ -50,6 +53,7 @@ public class MusicPlayControlView extends LinearLayout implements View.OnClickLi
 
         mIvNext = (ImageView) findViewById(R.id.view_music_player_next);
         mIvPre = (ImageView) findViewById(R.id.view_music_player_pre);
+        mIvLoading = (ImageView) findViewById(R.id.view_music_player_iv_loading);
 
 
 
@@ -113,6 +117,19 @@ public class MusicPlayControlView extends LinearLayout implements View.OnClickLi
                 listener.onStartOrStartItemClick(mIsPlay);
                 break;
         }
+    }
+
+
+    public void startLoadingAnimation() {
+        mIvLoading.setVisibility(VISIBLE);
+        mIvStartStop.setVisibility(INVISIBLE);
+        UIUtils.startSimpleRotateAnimation(mIvLoading);
+    }
+
+    public void endLoadingAnimationAndPlay() {
+        mIvLoading.setVisibility(INVISIBLE);
+        mIvStartStop.setVisibility(VISIBLE);
+        mIvLoading.clearAnimation();
     }
 
     public interface MusicPlayerControlViewItemClickListener{

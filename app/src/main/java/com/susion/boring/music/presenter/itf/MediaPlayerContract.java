@@ -1,24 +1,24 @@
 package com.susion.boring.music.presenter.itf;
 
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 
 import com.susion.boring.base.BasePresenter;
-import com.susion.boring.base.BaseView;
+import com.susion.boring.base.IView;
 import com.susion.boring.music.model.Song;
-
-import java.io.Serializable;
 
 /**
  * Created by susion on 17/2/20.
  */
 public interface MediaPlayerContract {
 
+       //for panel view
+    interface CommunicateBaseView extends IView{
+        void tryToChangeMusicByCurrentCondition(boolean playStatus, boolean needLoadMusic);
+        void refreshSong(Song song);
+    }
+
+    //media player notify view
     interface BaseView{
-
-        Context getContext();
-
         void updateBufferedProgress(int percent);
 
         void updatePlayProgress(int curPos, int duration);
@@ -28,18 +28,13 @@ public interface MediaPlayerContract {
         void completionPlay();
     }
 
-
-    interface CommunicateView extends BaseView{
-
+    //play music activity
+    interface PlayControlView extends CommunicateBaseView, BaseView{
         void setPlayDuration(int duration);
 
         void updatePlayProgressForSetMax(int curPos, int duration);
 
-        void tryToChangeMusicByCurrentCondition(boolean playStatus);
-
-        void refreshSong(Song song);
-
-        void refreshPlayMode(int serializableExtra);
+        void refreshPlayMode(int playmode);
     }
 
     //media player
@@ -67,20 +62,12 @@ public interface MediaPlayerContract {
 
     //for music play
     interface PlayMusicControlPresenter extends Presenter{
-
-        void randomPlayMusic();
-
-        void circlePlayMusic();
-
         void saveLastPlayMusic(Song song, Context c);
-
-        void nextPlay(Song song);
     }
 
 
     //for communicate with music play service
-    interface PlayMusicCommunicatePresenter{
-
+    interface ClientReceiverPresenter{
         void queryServiceIsPlaying();
 
         void tryToChangePlayingMusic(Song song);
@@ -100,8 +87,15 @@ public interface MediaPlayerContract {
         void startRandomPlayMode();
 
         void musicToNextPlay(Song mSong);
-    }
 
+        void loadMusicInfoToService(Song song, boolean autoPlay);
+
+        void getCurrentPlayMusic();
+
+        void pausePlay();
+
+
+    }
 
 
 }

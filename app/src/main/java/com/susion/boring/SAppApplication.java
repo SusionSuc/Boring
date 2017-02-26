@@ -6,6 +6,7 @@ import android.content.Intent;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.lzy.okgo.OkGo;
+import com.susion.boring.music.service.MusicInstruction;
 import com.susion.boring.music.service.MusicPlayerService;
 import com.susion.boring.utils.FileUtils;
 
@@ -22,6 +23,7 @@ public class SAppApplication extends Application {
         Fresco.initialize(this);
         OkGo.init(this);
         FileUtils.initAppDir();
+        MusicInstruction.startMusicPlayService(this);  //start music service
     }
 
     @Override

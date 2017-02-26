@@ -6,15 +6,13 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
 import com.susion.boring.db.DbManager;
 import com.susion.boring.db.model.SimpleSong;
-import com.susion.boring.db.operate.DbBaseOperate;
 import com.susion.boring.db.operate.MusicDbOperator;
 import com.susion.boring.music.model.Song;
 import com.susion.boring.music.presenter.MusicPlayQueueControlPresenter;
-import com.susion.boring.music.presenter.MusicPlayerReceiverPresenter;
+import com.susion.boring.music.presenter.ServiceReceiverPresenter;
 import com.susion.boring.music.presenter.PlayMusicPresenter;
 import com.susion.boring.music.presenter.itf.MediaPlayerContract;
 import com.susion.boring.music.presenter.itf.MusicServiceContract;
@@ -53,8 +51,8 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.B
     private void init() {
         mQueueIsPrepare = false;
         mDbOperator = new MusicDbOperator(DbManager.getLiteOrm(), getContext(), SimpleSong.class);
-        mPresenter = new PlayMusicPresenter(this, this, new DbBaseOperate<SimpleSong>(DbManager.getLiteOrm(), this, SimpleSong.class));
-        mReceiverPresenter = new MusicPlayerReceiverPresenter(this);
+        mPresenter = new PlayMusicPresenter(this, this);
+        mReceiverPresenter = new ServiceReceiverPresenter(this);
 
         mDbOperator.getInitPlayQueue()
                 .subscribeOn(Schedulers.io())

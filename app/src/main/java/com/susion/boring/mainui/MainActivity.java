@@ -28,15 +28,14 @@ import com.susion.boring.utils.StatusBarUtil;
 import com.susion.boring.utils.UIUtils;
 import com.susion.boring.view.SToolBar;
 
-public class MainActivity extends BaseActivity{
+public class MainActivity extends BaseActivity {
 
     private DrawerLayout mDrawerLayout;
     private LinearLayout mDrawerMenu;
     private RecyclerView mDrawerList;
     private ViewPager mViewPager;
-    private ViewGroup mContentLayout;
 
-    public static void start(Context srcContext){
+    public static void start(Context srcContext) {
         Intent intent = new Intent();
         intent.setClass(srcContext, MainActivity.class);
         srcContext.startActivity(intent);
@@ -65,7 +64,6 @@ public class MainActivity extends BaseActivity{
         mDrawerMenu = (LinearLayout) findViewById(R.id.drawer);
         mDrawerList = (RecyclerView) findViewById(R.id.list_view);
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
-        mContentLayout = (ViewGroup) findViewById(R.id.main);
     }
 
     @Override
@@ -79,6 +77,7 @@ public class MainActivity extends BaseActivity{
             public Fragment getItem(int position) {
                 return FragmentFactory.getMainUIFragments().get(position);
             }
+
             @Override
             public int getCount() {
                 return FragmentFactory.getMainUIFragments().size();
@@ -110,6 +109,7 @@ public class MainActivity extends BaseActivity{
             public void onMenuItemClick(View v) {
                 mDrawerLayout.openDrawer(mDrawerMenu);
             }
+
             @Override
             public void onMusicItemClick(View v) {
                 showCurrentSelectedFragment();
