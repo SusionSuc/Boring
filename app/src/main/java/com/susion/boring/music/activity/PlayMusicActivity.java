@@ -16,7 +16,6 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.susion.boring.R;
 import com.susion.boring.base.BaseActivity;
 import com.susion.boring.http.APIHelper;
-import com.susion.boring.music.model.LyricResult;
 import com.susion.boring.music.model.PlayListSong;
 import com.susion.boring.music.model.Song;
 import com.susion.boring.music.presenter.ClientReceiverPresenter;
@@ -54,7 +53,7 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
     private boolean mIsFromLittlePanel;
     private boolean isLoading;
 
-    private MediaPlayerContract.ClientReceiverPresenter mCommunicatePresenter;
+    private MediaPlayerContract.ClientReceiverPresenter mPresenter;
     private boolean mIsFromPlayList;
 
     public static void start(Context context, Song song, boolean isFromPlayList) {
@@ -99,7 +98,7 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
 
     @Override
     public void findView() {
-        mCommunicatePresenter = new ClientReceiverPresenter(this);
+        mPresenter = new ClientReceiverPresenter(this);
 
         mToolBar = (SToolBar) findViewById(R.id.toolbar);
         mSeekBar = (MediaSeekBar) findViewById(R.id.seek_bar);
@@ -125,9 +124,9 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
         mPlayControlView.setIsPlay(false);
         mPovMusicPlayControl
                 .setSong(mSong);
-        mPovMusicPlayControl.setPresenter(mCommunicatePresenter);
+        mPovMusicPlayControl.setPresenter(mPresenter);
 
-        mCommunicatePresenter.pausePlay();
+        mPresenter.pausePlay();
         isLoading = true;
         mPlayControlView.startLoadingAnimation();
     }
@@ -153,12 +152,12 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
                 public void onNext(PlayListSong songs) {
                     if (songs != null && !songs.getData().isEmpty()) {
                         mSong.audio = songs.getData().get(0).getUrl();
-                        mCommunicatePresenter.queryServiceIsPlaying();
+                        mPresenter.queryServiceIsPlaying();
                     }
                 }
             });
         } else {
-            mCommunicatePresenter.queryServiceIsPlaying();
+            mPresenter.queryServiceIsPlaying();
         }
     }
 
@@ -167,12 +166,12 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
         mPlayControlView.setOnControlItemClickListener(new MusicPlayControlView.MusicPlayerControlViewItemClickListener() {
             @Override
             public void onNextItemClick() {
-                mCommunicatePresenter.changeToNextMusic();
+                mPresenter.changeToNextMusic();
             }
 
             @Override
             public void onPreItemClick() {
-                mCommunicatePresenter.changeToPreMusic();
+                mPresenter.changeToPreMusic();
             }
 
             @Override
@@ -220,21 +219,6 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
     }
 
     private void loadLyric() {
-        APIHelper.subscribeSimpleRequest(APIHelper.getMusicServices().getMusicLyric(mSong.id), new Observer<LyricResult>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-            }
-
-            @Override
-            public void onNext(LyricResult s) {
-                // lyric API not unify ,  now don't develop this function
-            }
-        });
 
     }
 
@@ -266,14 +250,12 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
         mSeekBar.setCurrentProgress(curPos);
         mTvPlayedTime.setText(TimeUtils.getDurationString(curPos, false));
         mTvLeftTime.setText(TimeUtils.getDurationString(left, true));
-
-        mTvLyric.setCurrentLyricByTime(TimeUtils.getDurationString(curPos, false));
     }
 
     @Override
     public void tryToChangeMusicByCurrentCondition(boolean playStatus, boolean needLoadMusic) {
         if (!mIsFromLittlePanel) {
-            mCommunicatePresenter.tryToChangePlayingMusic(mSong);   //ignore needLoadMusic --> must load
+            mPresenter.tryToChangePlayingMusic(mSong);   //ignore needLoadMusic --> must load
             return;
         }
         mPlayControlView.setIsPlay(playStatus);
@@ -317,6 +299,6 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mCommunicatePresenter.releaseResource();
+        mPresenter.releaseResource();
     }
 }

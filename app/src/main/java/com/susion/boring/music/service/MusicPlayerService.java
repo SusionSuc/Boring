@@ -42,6 +42,7 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.B
     private Song mSong;          //current play music
     private boolean mAutoPlay;
 
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -330,16 +331,16 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.B
     //用长按home调出最近运行历史，在这里面清除软件,可能会调用
     @Override
     public void onTaskRemoved(Intent rootIntent) {
-        super.onTaskRemoved(rootIntent);
         clear();
+        super.onTaskRemoved(rootIntent);
     }
+
 
     //手动停止, 会被调用
     @Override
     public void onDestroy() {
-        super.onDestroy();
         clear();
+        super.onDestroy();
     }
-
 
 }

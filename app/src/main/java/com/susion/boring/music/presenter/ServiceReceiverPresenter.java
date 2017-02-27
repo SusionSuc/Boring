@@ -24,13 +24,15 @@ public class ServiceReceiverPresenter implements MusicServiceContract.ReceiverPr
 
     public ServiceReceiverPresenter(MusicServiceContract.Service view) {
         mService = view;
+        Log.e(TAG, "mService.register Broadcast :"+mService);
         mReceiver = new ServiceMusicReceiver();
         LocalBroadcastManager.getInstance(mService.getContext()).registerReceiver(mReceiver, mReceiver.getIntentFilter());
     }
 
     @Override
     public void releaseResource() {
-        mService.getContext().unregisterReceiver(mReceiver);
+        Log.e(TAG, "mService.clean Broadcast :"+mService);
+        LocalBroadcastManager.getInstance(mService.getContext()).unregisterReceiver(mReceiver);
     }
 
     class ServiceMusicReceiver extends BroadcastReceiver {

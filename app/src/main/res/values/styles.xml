@@ -7,7 +7,11 @@
         <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:colorAccent">@color/colorAccent</item>
 
+
         <item name="android:windowContentTransitions">true</item>
+
+        <item name="android:windowDisablePreview">true</item>
+
     </style>
 
 
