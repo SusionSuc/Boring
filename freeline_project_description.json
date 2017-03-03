@@ -1,0 +1,119 @@
+{
+    "android_gradle_plugin_version": "2.1.3",
+    "apk_path": "/Users/susion/Documents/Code/myproject/Boring/app/build/outputs/apk/app-debug.apk",
+    "apt": {
+        
+    },
+    "apt_libraries": {
+        "dagger": false,
+        "butterknife": false
+    },
+    "auto_dependency": true,
+    "build_cache_dir": "/Users/susion/Documents/Code/myproject/Boring/app/build/freeline",
+    "build_directory": "/Users/susion/Documents/Code/myproject/Boring/app/build",
+    "build_script": "./gradlew :app:assembleDebug",
+    "build_script_work_directory": "",
+    "build_tools_directory": "/Users/susion/Documents/xiaohongshu_sdk_mac/build-tools/24.0.3",
+    "build_tools_version": "24.0.3",
+    "check_sources_md5": [
+        
+    ],
+    "compile_sdk_directory": "/Users/susion/Documents/xiaohongshu_sdk_mac/platforms/android-24",
+    "compile_sdk_version": "android-24",
+    "databinding": [
+        
+    ],
+    "databinding_compiler_jar": "",
+    "databinding_modules": [
+        
+    ],
+    "debug_package": "com.susion.boring",
+    "exclude_dep_res_paths": [
+        
+    ],
+    "extra_dep_res_paths": [
+        
+    ],
+    "freeline_cache_dir": "/Users/susion/Documents/Code/myproject/Boring",
+    "freeline_gradle_plugin_version": "0.8.6",
+    "ignore_resource_ids": [
+        "avd_hide_password_1",
+        "avd_hide_password_2",
+        "avd_hide_password_3",
+        "avd_show_password_1",
+        "avd_show_password_2",
+        "avd_show_password_3"
+    ],
+    "java_home": "/Library/Java/JavaVirtualMachines/jdk1.8.0_101.jdk/Contents/Home",
+    "launcher": "com.susion.boring.splash.SplashActivity",
+    "main_assets_directory": [
+        "/Users/susion/Documents/Code/myproject/Boring/app/src/debug/assets",
+        "/Users/susion/Documents/Code/myproject/Boring/app/src/main/assets"
+    ],
+    "main_jniLibs_directory": [
+        "/Users/susion/Documents/Code/myproject/Boring/app/src/debug/jniLibs",
+        "/Users/susion/Documents/Code/myproject/Boring/app/src/main/jniLibs"
+    ],
+    "main_jni_directory": [
+        "/Users/susion/Documents/Code/myproject/Boring/app/src/debug/jni",
+        "/Users/susion/Documents/Code/myproject/Boring/app/src/main/jni"
+    ],
+    "main_manifest_path": "/Users/susion/Documents/Code/myproject/Boring/app/src/main/AndroidManifest.xml",
+    "main_project_dir": "app",
+    "main_project_name": "app",
+    "main_r_path": "/Users/susion/Documents/Code/myproject/Boring/app/build/generated/source/r/debug/R.java",
+    "main_res_directory": [
+        "/Users/susion/Documents/Code/myproject/Boring/app/src/debug/res",
+        "/Users/susion/Documents/Code/myproject/Boring/app/src/main/res"
+    ],
+    "main_src_directory": [
+        "/Users/susion/Documents/Code/myproject/Boring/app/src/debug/java",
+        "/Users/susion/Documents/Code/myproject/Boring/app/src/main/java"
+    ],
+    "module_dependencies": {
+        "app": [
+            
+        ]
+    },
+    "modules": [
+        {
+            "name": "app",
+            "path": "/Users/susion/Documents/Code/myproject/Boring/app"
+        }
+    ],
+    "package": "com.susion.boring",
+    "product_flavor": "",
+    "project_source_sets": {
+        "app": {
+            "main_assets_directory": [
+                "/Users/susion/Documents/Code/myproject/Boring/app/src/debug/assets",
+                "/Users/susion/Documents/Code/myproject/Boring/app/src/main/assets"
+            ],
+            "main_jniLibs_directory": [
+                "/Users/susion/Documents/Code/myproject/Boring/app/src/debug/jniLibs",
+                "/Users/susion/Documents/Code/myproject/Boring/app/src/main/jniLibs"
+            ],
+            "main_jni_directory": [
+                "/Users/susion/Documents/Code/myproject/Boring/app/src/debug/jni",
+                "/Users/susion/Documents/Code/myproject/Boring/app/src/main/jni"
+            ],
+            "main_manifest_path": "/Users/susion/Documents/Code/myproject/Boring/app/src/main/AndroidManifest.xml",
+            "main_res_directory": [
+                "/Users/susion/Documents/Code/myproject/Boring/app/src/debug/res",
+                "/Users/susion/Documents/Code/myproject/Boring/app/src/main/res"
+            ],
+            "main_src_directory": [
+                "/Users/susion/Documents/Code/myproject/Boring/app/src/debug/java",
+                "/Users/susion/Documents/Code/myproject/Boring/app/src/main/java"
+            ]
+        }
+    },
+    "project_type": "gradle",
+    "retrolambda": {
+        
+    },
+    "root_dir": "/Users/susion/Documents/Code/myproject/Boring",
+    "sdk_directory": "/Users/susion/Documents/xiaohongshu_sdk_mac",
+    "use_jdk8": false,
+    "use_system_gradle": false
+}

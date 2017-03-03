@@ -3,7 +3,15 @@ package com.susion.boring.music.presenter.itf;
 import android.content.Context;
 import android.content.Intent;
 
+import com.susion.boring.db.model.SimpleSong;
+import com.susion.boring.music.model.PlayList;
+import com.susion.boring.music.model.PlayQueueSong;
 import com.susion.boring.music.model.Song;
+
+import java.io.Serializable;
+import java.util.List;
+
+import rx.Observable;
 
 /**
  * Created by susion on 17/2/24.
@@ -54,6 +62,8 @@ public interface MusicServiceContract {
         void songToNextPlay(Song serializableExtra);
 
         void notifyCurrentMode();
+
+        void circlePlayPlayList(PlayList playList);
     }
 
     interface ReceiverPresenter {
@@ -64,6 +74,8 @@ public interface MusicServiceContract {
           int QUEUE_MODE = 0;
           int RANDOM_MODE = 1;
           int CIRCLE_MODE = 2;
+          int PLAY_LIST_CIRCLE_MODE = 3;
+
 
         boolean addToPlayQueue(Song song);
 
@@ -80,6 +92,8 @@ public interface MusicServiceContract {
         void setPlayMode(int mode);
 
         int getPlayMode();
+
+        Observable<Boolean> reLoadPlayQueue(PlayList playList);
     }
 
 }

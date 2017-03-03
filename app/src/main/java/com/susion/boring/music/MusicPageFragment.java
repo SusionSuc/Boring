@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.susion.boring.R;
+import com.susion.boring.base.BaseFragment;
 import com.susion.boring.base.OnLastItemVisibleListener;
 import com.susion.boring.base.view.LoadMoreRecycleView;
 import com.susion.boring.base.view.LoadMoreView;
@@ -19,6 +20,7 @@ import com.susion.boring.music.model.MusicPageConstantItem;
 import com.susion.boring.music.model.SimpleTitle;
 import com.susion.boring.music.model.Song;
 import com.susion.boring.music.presenter.ClientReceiverPresenter;
+import com.susion.boring.music.presenter.command.ClientPlayControlCommand;
 import com.susion.boring.music.presenter.itf.MediaPlayerContract;
 import com.susion.boring.music.service.MusicInstruction;
 import com.susion.boring.music.view.MusicControlPanel;
@@ -37,7 +39,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by susion on 17/1/19.
  */
-public class MusicPageFragment extends MusicPageBaseFragment implements OnLastItemVisibleListener{
+public class MusicPageFragment extends BaseFragment implements OnLastItemVisibleListener, MediaPlayerContract.BaseView{
 
     private SearchBar mSearchBar;
     private LoadMoreRecycleView mRV;
@@ -47,8 +49,9 @@ public class MusicPageFragment extends MusicPageBaseFragment implements OnLastIt
     private List<Object> mData = new ArrayList<>();
     private int page = 0;
     private Song mSong;
+    private MediaPlayerContract.ClientPlayControlCommand mControlCommand;
+    private MediaPlayerContract.ClientReceiverPresenter mClientReceiver;
 
-    private MediaPlayerContract.ClientReceiverPresenter mPresenter;
 
     @Override
     public View initContentView(LayoutInflater inflater) {
@@ -58,7 +61,9 @@ public class MusicPageFragment extends MusicPageBaseFragment implements OnLastIt
     }
 
     private void initView() {
-        mPresenter = new ClientReceiverPresenter(this);
+        mControlCommand = new ClientPlayControlCommand(getActivity());
+        mClientReceiver = new ClientReceiverPresenter(getActivity());
+        mClientReceiver.setBaseView(this);
 
         mSearchBar = (SearchBar) mView.findViewById(R.id.search_bar);
         mSearchBar.setJumpToSearchPage(true);
@@ -73,6 +78,7 @@ public class MusicPageFragment extends MusicPageBaseFragment implements OnLastIt
         mRV.setAdapter(mAdapter);
 
         mControlView = (MusicControlPanel) mView.findViewById(R.id.music_control_view);
+
     }
 
     @Override
@@ -105,10 +111,9 @@ public class MusicPageFragment extends MusicPageBaseFragment implements OnLastIt
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.queryServiceIsPlaying();
-        mPresenter.getCurrentPlayMusic();
+        mControlCommand.queryServiceIsPlaying();
+        mControlCommand.getCurrentPlayMusic();
     }
-
 
     private void loadMusicRecommendList() {
         mRV.setLoadStatus(LoadMoreView.LOADING);
@@ -170,12 +175,14 @@ public class MusicPageFragment extends MusicPageBaseFragment implements OnLastIt
         loadMusicRecommendList();
     }
 
+
+
     //implements CommunicateBaseView
     @Override
     public void tryToChangeMusicByCurrentCondition(boolean playStatus, boolean needLoadMusic) {
         mControlView.setPlay(playStatus);
         if (!playStatus && needLoadMusic) {
-            mPresenter.loadMusicInfoToService(mSong, false);
+            mControlCommand.loadMusicInfoToService(mSong, false);
         }
     }
 

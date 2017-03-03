@@ -362,7 +362,7 @@ public class PlayList implements Serializable {
         private String detailDescription;
         private int djStatus;
         private String backgroundUrl;
-        private Object remarkName;
+//        private Object remarkName;
         private boolean mutual;
         private int gender;
         private long birthday;
@@ -452,13 +452,6 @@ public class PlayList implements Serializable {
             this.backgroundUrl = backgroundUrl;
         }
 
-        public Object getRemarkName() {
-            return remarkName;
-        }
-
-        public void setRemarkName(Object remarkName) {
-            this.remarkName = remarkName;
-        }
 
         public boolean isMutual() {
             return mutual;

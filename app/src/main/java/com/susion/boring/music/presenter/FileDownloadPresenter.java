@@ -1,21 +1,12 @@
 package com.susion.boring.music.presenter;
 
-import android.support.annotation.Nullable;
-
-import com.lzy.okgo.OkGo;
-import com.lzy.okgo.callback.FileCallback;
 import com.susion.boring.music.model.DownTask;
 import com.susion.boring.music.presenter.itf.FileDownContract;
-import com.susion.boring.utils.FileUtils;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import okhttp3.Call;
-import okhttp3.Response;
 
 /**
  * Created by susion on 17/2/17.
@@ -65,7 +56,7 @@ public class FileDownloadPresenter implements FileDownContract.Presenter {
         }
 
         if (task.uri.equals(mCurrentTask.uri)) {
-            OkGo.getInstance().cancelTag(task.uri);
+//            OkGo.getInstance().cancelTag(task.uri);
             mTasks.remove(mCurrentTask);
             return true;
         }
@@ -97,7 +88,7 @@ public class FileDownloadPresenter implements FileDownContract.Presenter {
             return false;
         }
 
-        OkGo.getInstance().cancelTag(task.uri);
+//        OkGo.getInstance().cancelTag(task.uri);
         return true;
     }
 
@@ -118,48 +109,48 @@ public class FileDownloadPresenter implements FileDownContract.Presenter {
         while (!mIsDowning && !mTasks.isEmpty()) {
             mCurrentTask = mTasks.get(0);
             mIsDowning = true;
-            OkGo.get(mCurrentTask.uri)
-                    .tag(mCurrentTask.uri)
-                    .execute(new FileCallback(mCurrentTask.taskName) {
-                        @Override
-                        public void onSuccess(File file, Call call, Response response) {
-                            mCurrentTask.downStatus = DownTask.DOWN_SUCCESS;
-                            mTasks.remove(mCurrentTask);
-                            mUris.remove(mCurrentTask.uri);
-                            mIsDowning = false;
-
-                            if (FileUtils.saveFile(file, FileUtils.SD_MUSIC_DIR)) {
-
-                            }
-
-                            if (!mViews.isEmpty()) {
-                                for (FileDownContract.View  view : mViews) {
-                                    view.successDownTask(mCurrentTask);
-                                }
-                            }
-
-                            startDownTask();
-                        }
-                        @Override
-                        public void downloadProgress(long currentSize, long totalSize, float progress, long networkSpeed) {
-                            mCurrentTask.setDownInfo(currentSize, totalSize, progress, networkSpeed);
-                            if (!mViews.isEmpty()) {
-                                for (FileDownContract.View  view : mViews) {
-                                    view.updateDownTaskProgress(mCurrentTask);
-                                }
-                            }
-                        }
-                        @Override
-                        public void onError(Call call, @Nullable Response response, @Nullable Exception e) {
-                            mCurrentTask.downStatus = DownTask.DOWN_ERROR;
-                            mIsDowning = false;
-                            if (!mViews.isEmpty()) {
-                                for (FileDownContract.View  view : mViews) {
-                                    view.errorDownTask(mCurrentTask);
-                                }
-                            }
-                        }
-                    });
+//            OkGo.get(mCurrentTask.uri)
+//                    .tag(mCurrentTask.uri)
+//                    .execute(new FileCallback(mCurrentTask.taskName) {
+//                        @Override
+//                        public void onSuccess(File file, Call call, Response response) {
+//                            mCurrentTask.downStatus = DownTask.DOWN_SUCCESS;
+//                            mTasks.remove(mCurrentTask);
+//                            mUris.remove(mCurrentTask.uri);
+//                            mIsDowning = false;
+//
+//                            if (FileUtils.saveFile(file, FileUtils.SD_MUSIC_DIR)) {
+//
+//                            }
+//
+//                            if (!mViews.isEmpty()) {
+//                                for (FileDownContract.View  view : mViews) {
+//                                    view.successDownTask(mCurrentTask);
+//                                }
+//                            }
+//
+//                            startDownTask();
+//                        }
+//                        @Override
+//                        public void downloadProgress(long currentSize, long totalSize, float progress, long networkSpeed) {
+//                            mCurrentTask.setDownInfo(currentSize, totalSize, progress, networkSpeed);
+//                            if (!mViews.isEmpty()) {
+//                                for (FileDownContract.View  view : mViews) {
+//                                    view.updateDownTaskProgress(mCurrentTask);
+//                                }
+//                            }
+//                        }
+//                        @Override
+//                        public void onError(Call call, @Nullable Response response, @Nullable Exception e) {
+//                            mCurrentTask.downStatus = DownTask.DOWN_ERROR;
+//                            mIsDowning = false;
+//                            if (!mViews.isEmpty()) {
+//                                for (FileDownContract.View  view : mViews) {
+//                                    view.errorDownTask(mCurrentTask);
+//                                }
+//                            }
+//                        }
+//                    });
         }
     }
 

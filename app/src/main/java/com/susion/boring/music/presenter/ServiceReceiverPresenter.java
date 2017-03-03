@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.susion.boring.music.model.PlayList;
 import com.susion.boring.music.model.Song;
 import com.susion.boring.music.presenter.itf.MusicServiceContract;
 import com.susion.boring.music.service.MusicInstruction;
@@ -55,6 +56,8 @@ public class ServiceReceiverPresenter implements MusicServiceContract.ReceiverPr
             filter.addAction(MusicInstruction.SERVER_RECEIVER_PLAY_MODE_CIRCLE);
             filter.addAction(MusicInstruction.SERVER_RECEIVER_PLAY_MODE_RANDOM);
             filter.addAction(MusicInstruction.SERVER_RECEIVER_SONG_TO_NEXT_PLAY);
+            filter.addAction(MusicInstruction.SERVER_RECEIVER_SONG_QUERY_CUR_MODE);
+            filter.addAction(MusicInstruction.SERVER_RECEIVER_CIRCLE_PLAY_PLAY_LIST);
             return filter;
         }
 
@@ -108,6 +111,12 @@ public class ServiceReceiverPresenter implements MusicServiceContract.ReceiverPr
                     break;
                 case MusicInstruction.SERVER_RECEIVER_SONG_TO_NEXT_PLAY:
                     mService.songToNextPlay((Song)intent.getSerializableExtra(MusicInstruction.SERVICE_PARAM_SONG_TO_NEXT_PLAY));
+                    break;
+                case MusicInstruction.SERVER_RECEIVER_SONG_QUERY_CUR_MODE:
+                    mService.notifyCurrentMode();
+                    break;
+                case MusicInstruction.SERVER_RECEIVER_CIRCLE_PLAY_PLAY_LIST:
+                    mService.circlePlayPlayList((PlayList) intent.getSerializableExtra(MusicInstruction.SERVICE_PARAM_PLAY_LIST));
                     break;
             }
         }

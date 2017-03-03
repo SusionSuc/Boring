@@ -54,6 +54,12 @@ public class APIHelper {
     }
 
 
+    public static OkHttpClient.Builder createBaseClient() {
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        return builder;
+    }
+
+
     public static <T> void subscribeSimpleRequest(Observable<T> observable, Observer<T> observer){
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(observer);
     }

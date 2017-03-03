@@ -5,6 +5,7 @@ import android.content.Context;
 import com.litesuits.orm.LiteOrm;
 import com.litesuits.orm.db.assit.QueryBuilder;
 import com.susion.boring.db.model.SimpleSong;
+import com.susion.boring.music.model.PlayQueueSong;
 import com.susion.boring.music.model.Song;
 
 import java.util.ArrayList;

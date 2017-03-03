@@ -53,6 +53,7 @@
         </com.susion.boring.view.SToolBar>
 
         <com.susion.boring.music.view.PlayOperatorView
+            android:id="@+id/play_operator"
             android:layout_width="match_parent"
             android:layout_height="40dp">
         </com.susion.boring.music.view.PlayOperatorView>

@@ -26,10 +26,8 @@ public class PlayOperatorView  extends LinearLayout implements View.OnClickListe
     private ImageView mIvNextPlay;
 
     private Song mSong;
-    private MediaPlayerContract.ClientReceiverPresenter mCommunicatePresenter;
-
-    private boolean isCircle;
-    private boolean isRandom;
+    private MediaPlayerContract.ClientPlayModeCommand mModeCommand;
+    private OnItemClickListener itemClickListener;
 
     public PlayOperatorView(Context context) {
         super(context);
@@ -47,9 +45,6 @@ public class PlayOperatorView  extends LinearLayout implements View.OnClickListe
         View.inflate(mContext, R.layout.view_play_operator, this);
         findView();
         initView();
-
-        isRandom = false;
-        isCircle = false;
     }
 
     private void findView() {
@@ -67,19 +62,24 @@ public class PlayOperatorView  extends LinearLayout implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+
+        if (itemClickListener == null) {
+            return;
+        }
+
         switch (v.getId()){
             case R.id.view_play_operator_iv_circle :
-                mCommunicatePresenter.startCirclePlayMode();
+                itemClickListener.onCirclePlayItemClick();
                 break;
             case R.id.view_play_operator_iv_random :
-                mCommunicatePresenter.startRandomPlayMode();
+                itemClickListener.onRandomPlayItemClick();
                 break;
             case R.id.view_play_operator_iv_next_play :
-                mCommunicatePresenter.musicToNextPlay(mSong);
+                itemClickListener.onNextPlayItemClick();
                 break;
             case R.id.view_play_operator_iv_like :
+                itemClickListener.onLikeItemClick();
                 mSong.favorite = !mSong.favorite;
-                mCommunicatePresenter.likeMusic(mSong);
                 refreshLikeStatus();
                 break;
         }
@@ -113,7 +113,20 @@ public class PlayOperatorView  extends LinearLayout implements View.OnClickListe
         }
     }
 
-    public void setPresenter(MediaPlayerContract.ClientReceiverPresenter communicatePresenter) {
-        mCommunicatePresenter = communicatePresenter;
+    public void setModeCommand(MediaPlayerContract.ClientPlayModeCommand modeCommand) {
+        mModeCommand = modeCommand;
     }
+
+
+    public void setItemClickListener(OnItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
+    }
+
+    public interface OnItemClickListener{
+        void onCirclePlayItemClick();
+        void onRandomPlayItemClick();
+        void onLikeItemClick();
+        void onNextPlayItemClick();
+    }
+
 }

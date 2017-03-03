@@ -69,7 +69,6 @@ public class MusicControlPanel extends LinearLayout{
     }
 
     private void initListener() {
-
         mIvPlay.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,7 +111,7 @@ public class MusicControlPanel extends LinearLayout{
     public void setMusic(Song song){
         mSong = song;
         if (song.hasDown) {
-            mSdvAlbum.setImageBitmap(AlbumUtils.parseAlbum(new File(mSong.audio)));
+            AlbumUtils.setAlbum(mSdvAlbum, mSong.audio);
         } else {
             setAlbum(song.album.picUrl);
         }

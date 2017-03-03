@@ -1,16 +1,33 @@
 package com.susion.boring.music.presenter;
 
+import android.support.v4.app.ShareCompat;
+
+import com.susion.boring.base.ModelTranslateContract;
+import com.susion.boring.base.MusicModelTranslatePresenter;
+import com.susion.boring.db.model.SimpleSong;
+import com.susion.boring.http.APIHelper;
+import com.susion.boring.music.model.PlayList;
+import com.susion.boring.music.model.PlayListSong;
+import com.susion.boring.music.model.PlayQueueSong;
 import com.susion.boring.music.model.Song;
 import com.susion.boring.music.presenter.itf.MusicServiceContract;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import rx.Observable;
+import rx.Observer;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by susion on 17/2/24.
  */
-public class MusicPlayQueueControlPresenter implements MusicServiceContract.PlayQueueControlPresenter {
+public class MusicPlayQueueControlPresenter implements MusicServiceContract.PlayQueueControlPresenter{
 
+    private ModelTranslateContract.MusicModeTranslate musicModeTranslate;
     private List<Song> mQueue;
     private int mPlayMode;
     private int mCurrentIndex = 0;
@@ -18,10 +35,18 @@ public class MusicPlayQueueControlPresenter implements MusicServiceContract.Play
     private final Random mRandom;
 
     public MusicPlayQueueControlPresenter(List<Song> initQueue) {
-        mQueue = initQueue;
+
+        if (mQueue == null) {
+            mQueue = new ArrayList<>();
+        }
+
+        for (Song song : initQueue) {
+            mQueue.add(song);
+        }
         mRandom = new Random();
         mCurrentIndex = 0;
         mPlayMode = QUEUE_MODE;
+        musicModeTranslate = new MusicModelTranslatePresenter();
     }
 
     @Override
@@ -50,16 +75,15 @@ public class MusicPlayQueueControlPresenter implements MusicServiceContract.Play
 
     @Override
     public Song getNextPlayMusic() {
-
         if (mQueue.isEmpty()) {
-            return null;
+          return null;
         }
 
         if (mPlayMode == CIRCLE_MODE) {
 
         }
 
-        if (mPlayMode == QUEUE_MODE) {
+        if (mPlayMode == QUEUE_MODE || mPlayMode == PLAY_LIST_CIRCLE_MODE) {
             if (mCurrentIndex < mQueue.size() - 1) {
                 ++mCurrentIndex;
             } else {
@@ -70,18 +94,16 @@ public class MusicPlayQueueControlPresenter implements MusicServiceContract.Play
         if (mPlayMode == RANDOM_MODE) {
             mCurrentIndex = mRandom.nextInt(mQueue.size());
         }
-
         return mQueue.get(mCurrentIndex);
     }
 
     @Override
     public Song getPrePlayMusic() {
-
         if (mQueue.isEmpty()) {
             return null;
         }
 
-        if (mPlayMode == QUEUE_MODE) {
+        if (mPlayMode == QUEUE_MODE && mPlayMode ==CIRCLE_MODE) {
             if (mCurrentIndex > 0){
                 mCurrentIndex--;
             } else {
@@ -92,7 +114,6 @@ public class MusicPlayQueueControlPresenter implements MusicServiceContract.Play
         if (mPlayMode == RANDOM_MODE) {
             mCurrentIndex = mRandom.nextInt(mQueue.size());
         }
-
         return mQueue.get(mCurrentIndex);
     }
 
@@ -108,7 +129,6 @@ public class MusicPlayQueueControlPresenter implements MusicServiceContract.Play
             return;
         }
 
-
         if (mode == RANDOM_MODE && mPlayMode == RANDOM_MODE) {
             mPlayMode = QUEUE_MODE;
             return;
@@ -120,5 +140,37 @@ public class MusicPlayQueueControlPresenter implements MusicServiceContract.Play
 
     public int getPlayMode() {
         return mPlayMode;
+    }
+
+
+    @Override
+    public Observable<Boolean> reLoadPlayQueue(final PlayList playList) {
+        mQueue.clear();
+        return Observable.create(new Observable.OnSubscribe<Boolean>() {
+            @Override
+            public void call(final  Subscriber<? super Boolean> subscriber) {
+                musicModeTranslate.getSongFromPlayList(playList)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<List<Song>>() {
+                            @Override
+                            public void onCompleted() {
+
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                subscriber.onNext(false);
+                            }
+
+                            @Override
+                            public void onNext(List<Song> songs) {
+                                mQueue.addAll(songs);
+                                subscriber.onNext(true);
+                            }
+                        });
+            }
+        });
+
     }
 }

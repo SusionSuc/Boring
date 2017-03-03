@@ -13,14 +13,18 @@ import com.susion.boring.base.BaseActivity;
 import com.susion.boring.base.BaseRVAdapter;
 import com.susion.boring.base.ItemHandler;
 import com.susion.boring.base.ItemHandlerFactory;
+import com.susion.boring.base.MusicModelTranslatePresenter;
 import com.susion.boring.base.view.LoadMoreRecycleView;
 import com.susion.boring.db.model.SimpleSong;
 import com.susion.boring.http.APIHelper;
 import com.susion.boring.music.itemhandler.LocalMusicIH;
 import com.susion.boring.music.model.PlayList;
 import com.susion.boring.music.model.PlayListDetail;
-import com.susion.boring.utils.BeanTranslateUtils;
+import com.susion.boring.music.presenter.command.ClientPlayModeCommand;
+import com.susion.boring.music.presenter.itf.MediaPlayerContract;
+import com.susion.boring.music.view.PlayOperatorView;
 import com.susion.boring.utils.RVUtils;
+import com.susion.boring.utils.ToastUtils;
 import com.susion.boring.view.SToolBar;
 
 import java.util.ArrayList;
@@ -29,7 +33,6 @@ import java.util.List;
 import rx.Observer;
 
 public class PlayListActivity extends BaseActivity {
-
 
     private static final String PLAY_LIST = "PLAY_LIST";
     private SimpleDraweeView mSdvBg;
@@ -40,6 +43,10 @@ public class PlayListActivity extends BaseActivity {
     private AppBarLayout mAppBarLayout;
     private int mMaxScrollSize;
     private static final int PERCENTAGE_TO_SHOW_IMAGE = 90;
+
+
+    private PlayOperatorView mPlayOperatorView;
+    private MediaPlayerContract.ClientPlayModeCommand mPlayModeCommand;
 
 
     public static void start(Context mContext, PlayList mData) {
@@ -64,11 +71,13 @@ public class PlayListActivity extends BaseActivity {
 
     @Override
     public void findView() {
+        mPlayModeCommand = new ClientPlayModeCommand(this);
+
         mSdvBg = (SimpleDraweeView) findViewById(R.id.ac_play_list_iv_bg);
         mRv = (LoadMoreRecycleView) findViewById(R.id.list_view);
         mToolBar2 = (SToolBar) findViewById(R.id.ac_play_list_tool_bar2);
         mAppBarLayout = (AppBarLayout) findViewById(R.id.ac_play_list_app_bar_layout);
-
+        mPlayOperatorView = (PlayOperatorView) findViewById(R.id.play_operator);
     }
 
     @Override
@@ -81,6 +90,27 @@ public class PlayListActivity extends BaseActivity {
         mToolBar2.setBackgroundResource(R.color.white);
         mToolBar2.setTitleColorRes(R.color.black);
 
+        mRv.setLayoutManager(RVUtils.getLayoutManager(this, LinearLayoutManager.VERTICAL));
+        mRv.setAdapter(new BaseRVAdapter(this, mData) {
+            @Override
+            protected void initHandlers() {
+                registerItemHandler(0, new ItemHandlerFactory() {
+                    @Override
+                    public ItemHandler newInstant(int viewType) {
+                        return new LocalMusicIH();
+                    }
+                });
+            }
+
+            @Override
+            protected int getViewType(int position) {
+                return 0;
+            }
+        });
+    }
+
+    @Override
+    public void initListener() {
         mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
 
             @Override
@@ -104,28 +134,28 @@ public class PlayListActivity extends BaseActivity {
             }
         });
 
-
-        mRv.setLayoutManager(RVUtils.getLayoutManager(this, LinearLayoutManager.VERTICAL));
-        mRv.setAdapter(new BaseRVAdapter(this, mData) {
+        mPlayOperatorView.setItemClickListener(new PlayOperatorView.OnItemClickListener() {
             @Override
-            protected void initHandlers() {
-                registerItemHandler(0, new ItemHandlerFactory() {
-                    @Override
-                    public ItemHandler newInstant(int viewType) {
-                        return new LocalMusicIH();
-                    }
-                });
+            public void onCirclePlayItemClick() {
+                ToastUtils.showShort("即将开始循环播放此歌单的音乐, 请稍等......");
+                mPlayModeCommand.circlePlayPlayList(mPlayList);
             }
 
             @Override
-            protected int getViewType(int position) {
-                return 0;
+            public void onRandomPlayItemClick() {
+
+            }
+
+            @Override
+            public void onLikeItemClick() {
+
+            }
+
+            @Override
+            public void onNextPlayItemClick() {
+
             }
         });
-    }
-
-    @Override
-    public void initListener() {
     }
 
     @Override
@@ -147,7 +177,7 @@ public class PlayListActivity extends BaseActivity {
 
             @Override
             public void onNext(PlayListDetail playListDetail) {
-                mData.addAll(BeanTranslateUtils.translateTracksToSimpleSong(playListDetail.getPlaylist().getTracks()));
+                mData.addAll(new MusicModelTranslatePresenter().translateTracksToSimpleSong(playListDetail.getPlaylist().getTracks()));
                 mRv.getAdapter().notifyDataSetChanged();
             }
         });

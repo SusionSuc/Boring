@@ -19,6 +19,8 @@ import com.susion.boring.http.APIHelper;
 import com.susion.boring.music.model.PlayListSong;
 import com.susion.boring.music.model.Song;
 import com.susion.boring.music.presenter.ClientReceiverPresenter;
+import com.susion.boring.music.presenter.command.ClientPlayControlCommand;
+import com.susion.boring.music.presenter.command.ClientPlayModeCommand;
 import com.susion.boring.music.presenter.itf.MediaPlayerContract;
 import com.susion.boring.music.service.MusicInstruction;
 import com.susion.boring.music.view.LyricView;
@@ -31,11 +33,9 @@ import com.susion.boring.utils.TimeUtils;
 import com.susion.boring.utils.TransitionHelper;
 import com.susion.boring.view.SToolBar;
 
-import java.io.File;
-
 import rx.Observer;
 
-public class PlayMusicActivity extends BaseActivity implements MediaPlayerContract.PlayControlView {
+public class PlayMusicActivity extends BaseActivity implements MediaPlayerContract.PlayView {
     private static final String TO_PLAY_MUSIC_INFO = "played_music";
     private static final String FROM_LITTLE_PANEL = "from_little_panel";
     private static final String FROM_PLAY_LIST = "from_play_list";
@@ -52,9 +52,12 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
     private Song mSong;
     private boolean mIsFromLittlePanel;
     private boolean isLoading;
-
-    private MediaPlayerContract.ClientReceiverPresenter mPresenter;
+    
     private boolean mIsFromPlayList;
+
+    private MediaPlayerContract.ClientPlayControlCommand mPlayControlCommand;
+    private MediaPlayerContract.ClientPlayModeCommand mPlayModeCommand;
+    private MediaPlayerContract.ClientReceiverPresenter mClientReceiver;
 
     public static void start(Context context, Song song, boolean isFromPlayList) {
         Intent intent = new Intent();
@@ -98,7 +101,10 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
 
     @Override
     public void findView() {
-        mPresenter = new ClientReceiverPresenter(this);
+        mPlayControlCommand = new ClientPlayControlCommand(this);
+        mPlayModeCommand = new ClientPlayModeCommand(this);
+        mClientReceiver = new ClientReceiverPresenter(this);
+        mClientReceiver.setPlayView(this);
 
         mToolBar = (SToolBar) findViewById(R.id.toolbar);
         mSeekBar = (MediaSeekBar) findViewById(R.id.seek_bar);
@@ -117,18 +123,9 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
         mToolBar.setTitle("");
         mToolBar.setLeftIcon(R.mipmap.tool_bar_back);
         mToolBar.setBackgroundColor(getResources().getColor(R.color.transparent));
-
-        refreshSong(mSong);
         initListener();
 
-        mPlayControlView.setIsPlay(false);
-        mPovMusicPlayControl
-                .setSong(mSong);
-        mPovMusicPlayControl.setPresenter(mPresenter);
-
-        mPresenter.pausePlay();
-        isLoading = true;
-        mPlayControlView.startLoadingAnimation();
+        refreshSong(mSong);
     }
 
     private void getParamAndInitReceiver() {
@@ -152,12 +149,12 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
                 public void onNext(PlayListSong songs) {
                     if (songs != null && !songs.getData().isEmpty()) {
                         mSong.audio = songs.getData().get(0).getUrl();
-                        mPresenter.queryServiceIsPlaying();
+                        mPlayControlCommand.queryServiceIsPlaying();
                     }
                 }
             });
         } else {
-            mPresenter.queryServiceIsPlaying();
+            mPlayControlCommand.queryServiceIsPlaying();
         }
     }
 
@@ -166,12 +163,14 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
         mPlayControlView.setOnControlItemClickListener(new MusicPlayControlView.MusicPlayerControlViewItemClickListener() {
             @Override
             public void onNextItemClick() {
-                mPresenter.changeToNextMusic();
+                loadNewMusic();
+                mPlayControlCommand.changeToNextMusic();
             }
 
             @Override
             public void onPreItemClick() {
-                mPresenter.changeToPreMusic();
+                loadNewMusic();
+                mPlayControlCommand.changeToPreMusic();
             }
 
             @Override
@@ -211,21 +210,41 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
                 LocalBroadcastManager.getInstance(PlayMusicActivity.this).sendBroadcast(intent);
             }
         });
+
+        mPovMusicPlayControl.setItemClickListener(new PlayOperatorView.OnItemClickListener() {
+            @Override
+            public void onCirclePlayItemClick() {
+                mPlayModeCommand.startCirclePlayMode();
+            }
+
+            @Override
+            public void onRandomPlayItemClick() {
+                mPlayModeCommand.startRandomPlayMode();
+            }
+
+            @Override
+            public void onLikeItemClick() {
+                mPlayModeCommand.musicToNextPlay(mSong);
+            }
+
+            @Override
+            public void onNextPlayItemClick() {
+                mSong.favorite = !mSong.favorite;
+                mPlayModeCommand.likeMusic(mSong);
+            }
+        });
     }
 
     @Override
     public void initData() {
-        loadLyric();
-    }
-
-    private void loadLyric() {
-
+//        loadLyric();
     }
 
     @Override
     public void preparedPlay(int duration) {
         if (isLoading) {
             mPlayControlView.endLoadingAnimationAndPlay();
+            mPlayControlView.setIsPlay(true);
             isLoading = false;
         }
 
@@ -246,16 +265,18 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
 
     @Override
     public void updatePlayProgressForSetMax(int curPos, int left) {
-        mSeekBar.setMaxProgress(left);
-        mSeekBar.setCurrentProgress(curPos);
-        mTvPlayedTime.setText(TimeUtils.getDurationString(curPos, false));
-        mTvLeftTime.setText(TimeUtils.getDurationString(left, true));
+        if (!isLoading) {
+            mSeekBar.setMaxProgress(left);
+            mSeekBar.setCurrentProgress(curPos);
+            mTvPlayedTime.setText(TimeUtils.getDurationString(curPos, false));
+            mTvLeftTime.setText(TimeUtils.getDurationString(left, true));
+        }
     }
 
     @Override
     public void tryToChangeMusicByCurrentCondition(boolean playStatus, boolean needLoadMusic) {
         if (!mIsFromLittlePanel) {
-            mPresenter.tryToChangePlayingMusic(mSong);   //ignore needLoadMusic --> must load
+            mPlayControlCommand.tryToChangePlayingMusic(mSong);     //ignore needLoadMusic --> must load
             return;
         }
         mPlayControlView.setIsPlay(playStatus);
@@ -264,14 +285,32 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
     @Override
     public void refreshSong(Song song) {
         mSong = song;
+
+        mPovMusicPlayControl.setSong(mSong);
+        mPovMusicPlayControl.setModeCommand(mPlayModeCommand);
+
+        if (!mIsFromLittlePanel) {  //may be change music
+            loadNewMusic();
+        }
+
         if (mSong.hasDown) {
-            mSdvAlbym.setImageBitmap(AlbumUtils.parseAlbum(new File(mSong.audio)));
+            mSdvAlbym.setImageBitmap(AlbumUtils.parseAlbum(song.audio));
         } else {
             if (mSong.album.picUrl != null) {
                 mSdvAlbym.setImageURI(mSong.album.picUrl);
             }
         }
         mTvLyric.setText(mSong.name);
+
+        mPlayModeCommand.queryCurrentPlayMode();
+    }
+
+    @Override
+    public void loadNewMusic() {
+        mPlayControlCommand.pausePlay();
+        mSeekBar.setCurrentProgress(0);
+        isLoading = true;
+        mPlayControlView.startLoadingAnimation();
     }
 
     @Override
@@ -299,6 +338,6 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mPresenter.releaseResource();
+        mClientReceiver.releaseResource();
     }
 }

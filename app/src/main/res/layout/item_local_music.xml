@@ -41,12 +41,11 @@
             android:textSize="14sp"
             android:paddingBottom="5dp"
             android:text="薛之谦-意外"
+            android:maxLength="16"
             android:id="@+id/item_local_music_tv_artist_album"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
-
-
 
 
     <ImageView

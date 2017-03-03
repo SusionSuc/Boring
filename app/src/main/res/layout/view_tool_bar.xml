@@ -55,6 +55,7 @@
             android:id="@+id/toolbar_title"
             android:textSize="17sp"
             android:textColor="@color/white"
+            android:maxLength="15"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

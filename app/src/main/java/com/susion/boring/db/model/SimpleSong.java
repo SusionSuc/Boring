@@ -8,6 +8,7 @@ import com.litesuits.orm.db.annotation.Table;
 import com.litesuits.orm.db.annotation.Unique;
 import com.litesuits.orm.db.enums.AssignType;
 import com.susion.boring.music.model.Album;
+import com.susion.boring.music.model.PlayQueueSong;
 import com.susion.boring.music.model.Singer;
 import com.susion.boring.music.model.Song;
 
@@ -18,7 +19,7 @@ import java.util.List;
     store in local database
  */
 @Table("simple_song")
-public class SimpleSong implements Parcelable {
+public class SimpleSong implements Parcelable , PlayQueueSong{
 
     @PrimaryKey(AssignType.BY_MYSELF)
     private String id;
@@ -30,7 +31,6 @@ public class SimpleSong implements Parcelable {
     private String artist;
 
     private String album;
-
 
     @Unique
     private String path;

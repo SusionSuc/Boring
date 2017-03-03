@@ -16,13 +16,14 @@ import rx.schedulers.Schedulers;
 
 /**
  * Created by susion on 17/2/8.
+ *
+ *  extension
  */
 public class PlayMusicPresenter extends MediaPlayPresenter implements MediaPlayerContract.PlayMusicControlPresenter {
 
-    public PlayMusicPresenter(MediaPlayerContract.BaseView mView, Context mContext) {
+    public PlayMusicPresenter(MediaPlayerContract.LittlePlayView mView, Context mContext) {
         super(mView, mContext);
     }
-
 
     @Override
     public void saveLastPlayMusic(Song song, Context c) {
@@ -30,6 +31,4 @@ public class PlayMusicPresenter extends MediaPlayPresenter implements MediaPlaye
             SPUtils.writeStringToMusicConfig(SPUtils.MUSIC_CONFIG_LAST_PLAY_MUSIC, song.id, c);
         }
     }
-
-
 }

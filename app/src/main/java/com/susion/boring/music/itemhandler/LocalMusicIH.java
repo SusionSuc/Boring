@@ -1,5 +1,6 @@
 package com.susion.boring.music.itemhandler;
 
+import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,14 @@ import com.susion.boring.music.activity.PlayMusicActivity;
 import com.susion.boring.utils.AlbumUtils;
 import com.susion.boring.utils.TimeUtils;
 import com.susion.boring.utils.ToastUtils;
+
+import java.io.File;
+
+import rx.Observable;
+import rx.Observer;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 
 /**
@@ -30,19 +39,19 @@ public class LocalMusicIH extends SimpleItemHandler<SimpleSong> {
     }
 
     @Override
-    public void onBindDataView(ViewHolder vh, SimpleSong data, int position) {
+    public void onBindDataView(ViewHolder vh, final  SimpleSong data, int position) {
         vh.getTextView(R.id.item_local_music_tv_music_name).setText(data.getDisplayName()+"");
 
         String desc = data.getArtist();
 
         if (!TextUtils.isEmpty(data.getAlbum())) {
-            desc = "-"+data.getAlbum();
+            desc += "-"+data.getAlbum();
         }
 
         vh.getTextView(R.id.item_local_music_tv_artist_album).setText(desc);
 
         if (data.isHasDown()) {
-            mSdvAlbum.setImageBitmap(AlbumUtils.parseAlbum(data));
+            AlbumUtils.setAlbum(mSdvAlbum, data.getPath());
             vh.getTextView(R.id.item_local_music_tv_duration).setText(TimeUtils.formatDuration(data.getDuration()));
         } else {
             mSdvAlbum.setImageURI(data.getPicPath());
@@ -58,7 +67,6 @@ public class LocalMusicIH extends SimpleItemHandler<SimpleSong> {
 
     @Override
     public void onClick(View view) {
-
         if (!mData.isFromPlayList()) {
             PlayMusicActivity.start(mContext, mData.translateToSong(), false);
         } else {

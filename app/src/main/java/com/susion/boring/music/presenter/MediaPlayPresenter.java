@@ -22,7 +22,7 @@ public class MediaPlayPresenter implements MediaPlayerContract.Presenter, MediaP
 
     private static final String TAG = MediaPlayPresenter.class.getSimpleName();
 
-    private MediaPlayerContract.BaseView mView;
+    private MediaPlayerContract.LittlePlayView mView;
     private Context mContext;
     private MediaPlayer mPlayer;
     private Uri mSource;
@@ -49,11 +49,8 @@ public class MediaPlayPresenter implements MediaPlayerContract.Presenter, MediaP
         }
     };
 
-    public MediaPlayPresenter(MediaPlayerContract.BaseView mView) {
-        this.mView = mView;
-    }
 
-    public MediaPlayPresenter(MediaPlayerContract.BaseView mView, Context mContext) {
+    public MediaPlayPresenter(MediaPlayerContract.LittlePlayView mView, Context mContext) {
         this.mView = mView;
         this.mContext = mContext;
     }

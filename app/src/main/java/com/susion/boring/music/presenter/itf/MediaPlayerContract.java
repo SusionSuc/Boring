@@ -4,21 +4,26 @@ import android.content.Context;
 
 import com.susion.boring.base.BasePresenter;
 import com.susion.boring.base.IView;
+import com.susion.boring.db.model.SimpleSong;
+import com.susion.boring.music.model.PlayList;
 import com.susion.boring.music.model.Song;
+
+import java.util.List;
 
 /**
  * Created by susion on 17/2/20.
  */
 public interface MediaPlayerContract {
 
-       //for panel view
-    interface CommunicateBaseView extends IView{
+    //for panel view
+    interface BaseView extends IView {
         void tryToChangeMusicByCurrentCondition(boolean playStatus, boolean needLoadMusic);
+
         void refreshSong(Song song);
     }
 
     //media player notify view
-    interface BaseView{
+    interface LittlePlayView {
         void updateBufferedProgress(int percent);
 
         void updatePlayProgress(int curPos, int duration);
@@ -29,13 +34,16 @@ public interface MediaPlayerContract {
     }
 
     //play music activity
-    interface PlayControlView extends CommunicateBaseView, BaseView{
+    interface PlayView extends BaseView, LittlePlayView {
         void setPlayDuration(int duration);
+
+        void refreshPlayMode(int playMode);
 
         void updatePlayProgressForSetMax(int curPos, int duration);
 
-        void refreshPlayMode(int playmode);
+        void loadNewMusic();
     }
+
 
     //media player
     interface Presenter extends BasePresenter {
@@ -61,40 +69,59 @@ public interface MediaPlayerContract {
     }
 
     //for music play
-    interface PlayMusicControlPresenter extends Presenter{
+    interface PlayMusicControlPresenter extends Presenter {
         void saveLastPlayMusic(Song song, Context c);
     }
 
 
-    //for communicate with music play service
-    interface ClientReceiverPresenter{
+    //client broadcast receiver
+    interface ClientReceiverPresenter {
+        void registerReceiver();
+
+        void releaseResource();
+
+        void setBaseView(BaseView view);
+
+        void setLittlePlayView(LittlePlayView view);
+
+        void setPlayView(PlayView view);
+    }
+
+
+    //Client send command interact with play service
+    interface ClientCommand {
+        void likeMusic(Song mSong);
+
+        void updatePlayMusic(Song song);
+
+        void musicToNextPlay(Song mSong);
+    }
+
+    interface ClientPlayControlCommand extends ClientCommand {
         void queryServiceIsPlaying();
 
         void tryToChangePlayingMusic(Song song);
 
-        void releaseResource();
-
-        void updatePlayMusic(Song song);
-
-        void likeMusic(Song mSong);
-
         void changeToNextMusic();
 
         void changeToPreMusic();
-
-        void startCirclePlayMode();
-
-        void startRandomPlayMode();
-
-        void musicToNextPlay(Song mSong);
 
         void loadMusicInfoToService(Song song, boolean autoPlay);
 
         void getCurrentPlayMusic();
 
         void pausePlay();
+    }
 
 
+    interface ClientPlayModeCommand extends ClientCommand {
+        void queryCurrentPlayMode();
+
+        void startCirclePlayMode();
+
+        void startRandomPlayMode();
+
+        void circlePlayPlayList(PlayList mData);
     }
 
 

@@ -7,13 +7,15 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.susion.boring.base.MusicModelTranslatePresenter;
 import com.susion.boring.db.DbManager;
 import com.susion.boring.db.model.SimpleSong;
 import com.susion.boring.db.operate.MusicDbOperator;
+import com.susion.boring.music.model.PlayList;
 import com.susion.boring.music.model.Song;
 import com.susion.boring.music.presenter.MusicPlayQueueControlPresenter;
-import com.susion.boring.music.presenter.ServiceReceiverPresenter;
 import com.susion.boring.music.presenter.PlayMusicPresenter;
+import com.susion.boring.music.presenter.ServiceReceiverPresenter;
 import com.susion.boring.music.presenter.itf.MediaPlayerContract;
 import com.susion.boring.music.presenter.itf.MusicServiceContract;
 import com.susion.boring.utils.SPUtils;
@@ -28,14 +30,13 @@ import rx.schedulers.Schedulers;
 /**
  * Created by susion on 17/2/13.
  */
-public class MusicPlayerService extends Service implements MediaPlayerContract.BaseView, MusicServiceContract.Service{
+public class MusicPlayerService extends Service implements MediaPlayerContract.LittlePlayView, MusicServiceContract.Service{
 
     private MediaPlayerContract.PlayMusicControlPresenter mPresenter;
     private MusicDbOperator mDbOperator;
     private MusicServiceContract.ReceiverPresenter mReceiverPresenter;
     private MusicServiceContract.PlayQueueControlPresenter mPlayQueuePresenter;
     private boolean mQueueIsPrepare;
-
 
     private static final String TAG = MusicPlayerService.class.getSimpleName();
     public static final String SERVICE_ACTION = "MUSIC_SERVICE";
@@ -117,6 +118,35 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.B
 
     @Override
     public void changeMusic() {
+        if (mSong.fromPlayList) {
+            new MusicModelTranslatePresenter().checkIfHasPlayUrl(mSong)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<Boolean>() {
+                        @Override
+                        public void onCompleted() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+
+                        }
+
+                        @Override
+                        public void onNext(Boolean flag) {
+                            if (flag) {
+                                preparePlay();
+                            }
+                        }
+                    });
+        } else {
+            preparePlay();
+        }
+
+    }
+
+    private void preparePlay() {
         mAutoPlay = true;
         try {
             mPresenter.initMediaPlayer(mSong.audio);
@@ -156,6 +186,37 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.B
         Intent intent = new Intent(MusicInstruction.CLIENT_RECEIVER_REFRESH_MODE);
         intent.putExtra(MusicInstruction.CLIENT_PARAM_PLAY_MODE, mode);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
+    @Override
+    public void circlePlayPlayList(PlayList playList) {
+        if (mPlayQueuePresenter != null) {
+            mPresenter.stopPlay();
+            mQueueIsPrepare = false;
+            mPlayQueuePresenter.reLoadPlayQueue(playList)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<Boolean>() {
+                        @Override
+                        public void onCompleted() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            ToastUtils.showShort("装载音乐列表失败");
+                        }
+
+                        @Override
+                        public void onNext(Boolean flag) {
+                            if (flag) {
+                                mQueueIsPrepare = true;
+                                mPlayQueuePresenter.setPlayMode(MusicServiceContract.PlayQueueControlPresenter.PLAY_LIST_CIRCLE_MODE);
+                                playNextMusic();
+                            }
+                        }
+                    });
+        }
     }
 
     @Override
@@ -262,13 +323,13 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.B
 
     @Override
     public void saveLastPlayMusic() {
+        mPresenter.stopPlay();
         mPresenter.saveLastPlayMusic(mSong, this);
     }
 
     @Override
     public void completionPlay() {
         if (!playQueueIsPrepare()) return;
-
         mSong = mPlayQueuePresenter.getNextPlayMusic();
         changeMusic();
     }
@@ -307,7 +368,6 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.B
     @Override
     public void playNextMusic() {
         if (!playQueueIsPrepare()) return;
-
         mSong = mPlayQueuePresenter.getNextPlayMusic();
         changeMusic();
     }
@@ -315,7 +375,6 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.B
     @Override
     public void PlayPreMusic() {
         if (!playQueueIsPrepare()) return;
-
         mSong = mPlayQueuePresenter.getPrePlayMusic();
         changeMusic();
     }
@@ -342,5 +401,4 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.B
         clear();
         super.onDestroy();
     }
-
 }

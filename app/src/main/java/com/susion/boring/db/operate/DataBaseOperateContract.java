@@ -1,6 +1,7 @@
 package com.susion.boring.db.operate;
 
 import com.susion.boring.db.model.SimpleSong;
+import com.susion.boring.music.model.PlayQueueSong;
 
 import java.util.List;
 

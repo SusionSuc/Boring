@@ -38,30 +38,29 @@ public class FileUtils {
         }
     }
 
-
-    public static boolean saveFile(File file, String destDir) {
-        try {
-            FileInputStream in = new FileInputStream(file);
-            FileOutputStream out = new FileOutputStream(destDir+file.getName());
-
-            byte[] buff = new byte[1024];
-            int len = 0;
-
-            while ( (len = in.read(buff))!= -1) {
-                out.write(buff, 0, len);
-            }
-
-            in.close();
-            out.close();
-            return true;
-
-        } catch (IOException e) {
-            e.printStackTrace();
-
-        }
-
-        return false;
-    }
+//    public static boolean saveFile(File file, String destDir) {
+//        try {
+//            FileInputStream in = new FileInputStream(file);
+//            FileOutputStream out = new FileOutputStream(destDir+file.getName());
+//
+//            byte[] buff = new byte[1024];
+//            int len = 0;
+//
+//            while ( (len = in.read(buff))!= -1) {
+//                out.write(buff, 0, len);
+//            }
+//
+//            in.close();
+//            out.close();
+//            return true;
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//
+//        }
+//
+//        return false;
+//    }
 
 
     public static List<Song> scanLocalMusic() {

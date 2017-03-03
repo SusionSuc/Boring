@@ -22,120 +22,45 @@ import rx.schedulers.Schedulers;
 /**
  * Created by susion on 17/2/22.
  */
-public class ClientReceiverPresenter implements MediaPlayerContract.ClientReceiverPresenter {
+public class ClientReceiverPresenter implements MediaPlayerContract.ClientReceiverPresenter{
 
-    private ClientMusicReceiver mReceiver;
-    private MediaPlayerContract.PlayControlView mView;
+    protected ClientMusicReceiver mReceiver;
+    protected MediaPlayerContract.BaseView mBaseView;
+    protected MediaPlayerContract.LittlePlayView mLittlePlayView;
+    protected MediaPlayerContract.PlayView mPlayView;
 
-    public ClientReceiverPresenter(MediaPlayerContract.PlayControlView view) {
+    private Context mContext;
+
+    public ClientReceiverPresenter(Context mContext) {
+        this.mContext = mContext;
         mReceiver = new ClientMusicReceiver();
-        mView = view;
+        registerReceiver();
+    }
+
+    public void setBaseView(MediaPlayerContract.BaseView mBaseView) {
+        this.mBaseView = mBaseView;
     }
 
     @Override
-    public void queryServiceIsPlaying() {
-        LocalBroadcastManager.getInstance(mView.getContext()).registerReceiver(mReceiver, mReceiver.getIntentFilter());
-        BroadcastUtils.sendIntentAction(mView.getContext(), MusicInstruction.SERVICE_RECEIVER_QUERY_IS_PLAYING);
+    public void setLittlePlayView(MediaPlayerContract.LittlePlayView view) {
+        this.mLittlePlayView = view;
     }
 
     @Override
-    public void tryToChangePlayingMusic(Song song) {
-        Intent intent = new Intent(MusicInstruction.SERVER_RECEIVER_CHANGE_MUSIC);
-        intent.putExtra(MusicInstruction.SERVICE_PARAM_CHANGE_MUSIC, song);
-        LocalBroadcastManager.getInstance(mView.getContext()).sendBroadcast(intent);
+    public void setPlayView(MediaPlayerContract.PlayView view) {
+        this.mPlayView = view;
+    }
+
+    @Override
+    public void registerReceiver() {
+        LocalBroadcastManager.getInstance(mContext).registerReceiver(mReceiver, mReceiver.getIntentFilter());
     }
 
     @Override
     public void releaseResource() {
-        LocalBroadcastManager.getInstance(mView.getContext()).unregisterReceiver(mReceiver);
+        LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mReceiver);
     }
 
-    @Override
-    public void updatePlayMusic(Song song) {
-        Intent intent = new Intent(MusicInstruction.SERVER_RECEIVER_UPDATE_PLAY_MUSIC_INFO);
-        intent.putExtra(MusicInstruction.SERVICE_PARAM_UPDATE_SONG, song);
-        LocalBroadcastManager.getInstance(mView.getContext()).sendBroadcast(intent);
-    }
-
-    @Override
-    public void likeMusic(Song mSong) {
-        updatePlayMusic(mSong);
-        new DbBaseOperate<SimpleSong>(DbManager.getLiteOrm(), mView.getContext(), SimpleSong.class)
-                .add(mSong.translateToSimpleSong())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Boolean>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        ToastUtils.showShort("喜欢失败");
-                    }
-
-                    @Override
-                    public void onNext(Boolean b) {
-                        if (b) {
-                            ToastUtils.showShort("喜欢成功");
-                        } else {
-                            ToastUtils.showShort("喜欢失败");
-                        }
-                    }
-                });
-    }
-
-    @Override
-    public void changeToNextMusic() {
-        Intent intent = new Intent(MusicInstruction.SERVER_RECEIVER_PLAY_NEXT);
-        LocalBroadcastManager.getInstance(mView.getContext()).sendBroadcast(intent);
-    }
-
-    @Override
-    public void changeToPreMusic() {
-        Intent intent = new Intent(MusicInstruction.SERVER_RECEIVER_PLAY_PRE);
-        LocalBroadcastManager.getInstance(mView.getContext()).sendBroadcast(intent);
-    }
-
-    @Override
-    public void startCirclePlayMode() {
-        Intent intent = new Intent(MusicInstruction.SERVER_RECEIVER_PLAY_MODE_CIRCLE);
-        LocalBroadcastManager.getInstance(mView.getContext()).sendBroadcast(intent);
-    }
-
-    @Override
-    public void startRandomPlayMode() {
-        Intent intent = new Intent(MusicInstruction.SERVER_RECEIVER_PLAY_MODE_RANDOM);
-        LocalBroadcastManager.getInstance(mView.getContext()).sendBroadcast(intent);
-    }
-
-    @Override
-    public void musicToNextPlay(Song mSong) {
-        Intent intent = new Intent(MusicInstruction.SERVER_RECEIVER_SONG_TO_NEXT_PLAY);
-        intent.putExtra(MusicInstruction.SERVICE_PARAM_SONG_TO_NEXT_PLAY, mSong);
-        LocalBroadcastManager.getInstance(mView.getContext()).sendBroadcast(intent);
-    }
-
-    @Override
-    public void loadMusicInfoToService(Song song, boolean autoPlay) {
-        Intent intent = new Intent(MusicInstruction.SERVICE_LOAD_MUSIC_INFO);
-        intent.putExtra(MusicInstruction.SERVICE_PARAM_PLAY_SONG, song);
-        intent.putExtra(MusicInstruction.SERVICE_PARAM_PLAY_SONG_AUTO_PLAY, autoPlay);
-        LocalBroadcastManager.getInstance(mView.getContext()).sendBroadcast(intent);
-    }
-
-    @Override
-    public void getCurrentPlayMusic() {
-        Intent intent = new Intent(MusicInstruction.SERVICE_CURRENT_PLAY_MUSIC);
-        LocalBroadcastManager.getInstance(mView.getContext()).sendBroadcast(intent);
-    }
-
-    @Override
-    public void pausePlay() {
-        Intent intent = new Intent(MusicInstruction.SERVICE_RECEIVER_PAUSE_MUSIC);
-        LocalBroadcastManager.getInstance(mView.getContext()).sendBroadcast(intent);
-    }
 
     public class ClientMusicReceiver extends BroadcastReceiver {
         public IntentFilter getIntentFilter(){
@@ -157,39 +82,83 @@ public class ClientReceiverPresenter implements MediaPlayerContract.ClientReceiv
             String action = intent.getAction();
             switch (action){
                 case MusicInstruction.CLIENT_RECEIVER_PLAYER_PREPARED:
-                    mView.preparedPlay(intent.getIntExtra(MusicInstruction.CLIENT_PARAM_PREPARED_TOTAL_DURATION, 0));
+                    if (mLittlePlayView != null) {
+                        mLittlePlayView.preparedPlay(intent.getIntExtra(MusicInstruction.CLIENT_PARAM_PREPARED_TOTAL_DURATION, 0));
+                    }
+
+                    if (mPlayView != null) {
+                        mPlayView.preparedPlay(intent.getIntExtra(MusicInstruction.CLIENT_PARAM_PREPARED_TOTAL_DURATION, 0));
+                    }
                     break;
                 case MusicInstruction.CLIENT_RECEIVER_UPDATE_BUFFERED_PROGRESS:
-                    mView.updateBufferedProgress(intent.getIntExtra(MusicInstruction.CLIENT_PARAM_BUFFERED_PROGRESS, 0));
+                    if (mLittlePlayView != null) {
+                        mLittlePlayView.updateBufferedProgress(intent.getIntExtra(MusicInstruction.CLIENT_PARAM_BUFFERED_PROGRESS, 0));
+                    }
+
+                    if (mPlayView != null) {
+                        mPlayView.updateBufferedProgress(intent.getIntExtra(MusicInstruction.CLIENT_PARAM_BUFFERED_PROGRESS, 0));
+                    }
                     break;
                 case MusicInstruction.CLIENT_RECEIVER_UPDATE_PLAY_PROGRESS:
-                    mView.updatePlayProgress(intent.getIntExtra(MusicInstruction.CLIENT_PARAM_PLAY_PROGRESS_CUR_POS, 0),
-                            intent.getIntExtra(MusicInstruction.CLIENT_PARAM_PLAY_PROGRESS_DURATION, 0));
+                    if (mLittlePlayView != null) {
+                        mLittlePlayView.updatePlayProgress(intent.getIntExtra(MusicInstruction.CLIENT_PARAM_PLAY_PROGRESS_CUR_POS, 0),
+                                intent.getIntExtra(MusicInstruction.CLIENT_PARAM_PLAY_PROGRESS_DURATION, 0));
+                    }
+
+                    if (mPlayView != null) {
+                        mPlayView.updatePlayProgress(intent.getIntExtra(MusicInstruction.CLIENT_PARAM_PLAY_PROGRESS_CUR_POS, 0),
+                                intent.getIntExtra(MusicInstruction.CLIENT_PARAM_PLAY_PROGRESS_DURATION, 0));
+                    }
                     break;
                 case MusicInstruction.CLIENT_RECEIVER_SET_DURATION:
-                    mView.setPlayDuration(intent.getIntExtra(MusicInstruction.CLIENT_PARAM_MEDIA_DURATION, 0));
+                    if (mPlayView != null) {
+                        mPlayView.setPlayDuration(intent.getIntExtra(MusicInstruction.CLIENT_PARAM_MEDIA_DURATION, 0));
+                    }
                     break;
                 case MusicInstruction.CLIENT_RECEIVER_CURRENT_IS_PALING:
                     boolean playStatus = intent.getBooleanExtra(MusicInstruction.CLIENT_PARAM_IS_PLAYING, false);
                     boolean needLoadMusic = intent.getBooleanExtra(MusicInstruction.CLIENT_PARAM_NEED_LOAD_MUSIC, false);
-                    mView.tryToChangeMusicByCurrentCondition(playStatus, needLoadMusic);
-                    BroadcastUtils.sendIntentAction(mView.getContext(), MusicInstruction.SERVICE_RECEIVER_GET_PLAY_PROGRESS);
+                    BroadcastUtils.sendIntentAction(mContext, MusicInstruction.SERVICE_RECEIVER_GET_PLAY_PROGRESS);
+
+                    if (mBaseView != null) {
+                        mBaseView.tryToChangeMusicByCurrentCondition(playStatus, needLoadMusic);
+                    }
+
+                    if (mPlayView != null) {
+                        mPlayView.tryToChangeMusicByCurrentCondition(playStatus, needLoadMusic);
+                    }
+
                     break;
                 case MusicInstruction.CLIENT_RECEIVER_CURRENT_PLAY_PROGRESS:
                     final int curPos = intent.getIntExtra(MusicInstruction.CLIENT_PARAM_CURRENT_PLAY_PROGRESS, 0);
                     final int left = intent.getIntExtra(MusicInstruction.CLIENT_PARAM_MEDIA_DURATION, 0);
-                    mView.updatePlayProgressForSetMax(curPos, left);
+                    if (mPlayView != null) {
+                        mPlayView.updatePlayProgressForSetMax(curPos, left);
+                    }
                     break;
                 case MusicInstruction.CLIENT_RECEIVER_REFRESH_MUSIC:
-                    mView.refreshSong((Song) intent.getSerializableExtra(MusicInstruction.CLIENT_PARAM_REFRESH_SONG));
+                    if (mBaseView != null) {
+                        mBaseView.refreshSong((Song) intent.getSerializableExtra(MusicInstruction.CLIENT_PARAM_REFRESH_SONG));
+                    }
+                    if (mPlayView != null) {
+                        mPlayView.refreshSong((Song) intent.getSerializableExtra(MusicInstruction.CLIENT_PARAM_REFRESH_SONG));
+                    }
                     break;
                 case MusicInstruction.CLIENT_RECEIVER_REFRESH_MODE:
-                    mView.refreshPlayMode((int) intent.getSerializableExtra(MusicInstruction.CLIENT_PARAM_PLAY_MODE));
+                    if (mPlayView != null) {
+                        mPlayView.refreshPlayMode((int) intent.getSerializableExtra(MusicInstruction.CLIENT_PARAM_PLAY_MODE));
+                    }
                     break;
                 case MusicInstruction.CLIENT_RECEIVER_CURRENT_PLAY_MUSIC:
                     Song song = (Song) intent.getSerializableExtra(MusicInstruction.CLIENT_PARAM_CURRENT_PLAY_MUSIC);
                     if (song != null) {
-                        mView.refreshSong(song);
+                        if (mBaseView != null) {
+                            mBaseView.refreshSong(song);
+                        }
+
+                        if (mPlayView != null) {
+                            mPlayView.refreshSong(song);
+                        }
                     }
                     break;
             }

@@ -12,7 +12,7 @@ import java.util.List;
  * Created by susion on 17/1/20.
  * model for request accept wang yi music API
  */
-public class Song implements Serializable{
+public class Song implements Serializable, PlayQueueSong{
     public String id;
     public String name;
     public List<Singer> artists;
@@ -25,7 +25,7 @@ public class Song implements Serializable{
 
     public boolean hasDown;
     public boolean favorite;
-
+    public boolean fromPlayList;
 
     public SimpleSong translateToSimpleSong(){
         SimpleSong simpleSong = new SimpleSong();
