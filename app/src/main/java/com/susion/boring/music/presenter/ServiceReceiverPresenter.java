@@ -58,6 +58,7 @@ public class ServiceReceiverPresenter implements MusicServiceContract.ReceiverPr
             filter.addAction(MusicInstruction.SERVER_RECEIVER_SONG_TO_NEXT_PLAY);
             filter.addAction(MusicInstruction.SERVER_RECEIVER_SONG_QUERY_CUR_MODE);
             filter.addAction(MusicInstruction.SERVER_RECEIVER_CIRCLE_PLAY_PLAY_LIST);
+            filter.addAction(MusicInstruction.SERVER_RECEIVER_GET_PLAY_QUEUE);
             return filter;
         }
 
@@ -117,6 +118,9 @@ public class ServiceReceiverPresenter implements MusicServiceContract.ReceiverPr
                     break;
                 case MusicInstruction.SERVER_RECEIVER_CIRCLE_PLAY_PLAY_LIST:
                     mService.circlePlayPlayList((PlayList) intent.getSerializableExtra(MusicInstruction.SERVICE_PARAM_PLAY_LIST));
+                    break;
+                case MusicInstruction.SERVER_RECEIVER_GET_PLAY_QUEUE:
+                    mService.getPlayQueue();
                     break;
             }
         }

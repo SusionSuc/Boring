@@ -7,7 +7,6 @@
     android:orientation="vertical">
 
     <View
-        android:layout_alignParentTop="true"
         android:background="@color/red_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp">
@@ -17,6 +16,7 @@
         android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/view_music_control_sdv_album"
             android:layout_alignParentLeft="true"

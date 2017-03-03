@@ -15,6 +15,8 @@ import com.susion.boring.music.service.MusicInstruction;
 import com.susion.boring.utils.BroadcastUtils;
 import com.susion.boring.utils.ToastUtils;
 
+import java.util.List;
+
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -74,6 +76,7 @@ public class ClientReceiverPresenter implements MediaPlayerContract.ClientReceiv
             filter.addAction(MusicInstruction.CLIENT_RECEIVER_REFRESH_MODE);
             filter.addAction(MusicInstruction.CLIENT_RECEIVER_CURRENT_IS_PALING);
             filter.addAction(MusicInstruction.CLIENT_RECEIVER_CURRENT_PLAY_MUSIC);
+            filter.addAction(MusicInstruction.CLIENT_RECEIVER_PLAY_QUEUE);
             return filter;
         }
 
@@ -159,6 +162,13 @@ public class ClientReceiverPresenter implements MediaPlayerContract.ClientReceiv
                         if (mPlayView != null) {
                             mPlayView.refreshSong(song);
                         }
+                    }
+                    break;
+                case MusicInstruction.CLIENT_RECEIVER_PLAY_QUEUE:
+                    List<Song> songs = (List<Song>) intent.getSerializableExtra(MusicInstruction.CLIENT_PARAM_PLAY_QUEUE);
+                    if (mPlayView != null && songs != null) {
+                        mPlayView.setPlayQueue(songs);
+
                     }
                     break;
             }

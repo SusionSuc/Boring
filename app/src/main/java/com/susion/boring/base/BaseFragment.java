@@ -29,7 +29,7 @@ public abstract  class BaseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         if (mView == null) {
-            mView = initContentView(inflater);
+            mView = initContentView(inflater, container);
             initListener();
             initData();
         } else {
@@ -40,7 +40,7 @@ public abstract  class BaseFragment extends Fragment {
         return mView;
     }
 
-    public abstract View initContentView(LayoutInflater inflater);
+    public abstract View initContentView(LayoutInflater inflater, ViewGroup container);
     public abstract void initListener();
     public abstract void initData();
 

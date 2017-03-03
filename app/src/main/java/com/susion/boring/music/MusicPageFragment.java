@@ -3,6 +3,7 @@ package com.susion.boring.music;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.susion.boring.R;
 import com.susion.boring.base.BaseFragment;
@@ -54,8 +55,8 @@ public class MusicPageFragment extends BaseFragment implements OnLastItemVisible
 
 
     @Override
-    public View initContentView(LayoutInflater inflater) {
-        mView = inflater.inflate(R.layout.fragment_music_page_layout, null);
+    public View initContentView(LayoutInflater inflater, ViewGroup container) {
+        mView = inflater.inflate(R.layout.fragment_music_page_layout, container, false);
         initView();
         return mView;
     }

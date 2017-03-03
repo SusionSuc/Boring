@@ -105,7 +105,6 @@ public class RVUtils {
                     float bottom = view.getBottom() + mDividerHeight;
                     c.drawRect(left, top, right, bottom, mDividerPaint);
                 }
-
                 return;
             }
 

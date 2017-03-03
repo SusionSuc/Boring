@@ -42,6 +42,8 @@ public interface MediaPlayerContract {
         void updatePlayProgressForSetMax(int curPos, int duration);
 
         void loadNewMusic();
+
+        void setPlayQueue(List<Song> playQueue);
     }
 
 
@@ -124,5 +126,8 @@ public interface MediaPlayerContract {
         void circlePlayPlayList(PlayList mData);
     }
 
+    interface ClientPlayQueueControlCommand{
+        void getPlayQueue();
+    }
 
 }

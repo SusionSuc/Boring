@@ -26,6 +26,7 @@ public class Song implements Serializable, PlayQueueSong{
     public boolean hasDown;
     public boolean favorite;
     public boolean fromPlayList;
+    public boolean isPlaying;
 
     public SimpleSong translateToSimpleSong(){
         SimpleSong simpleSong = new SimpleSong();
@@ -43,5 +44,21 @@ public class Song implements Serializable, PlayQueueSong{
         simpleSong.setHasDown(hasDown);
         simpleSong.setPicPath(album.picUrl);
         return simpleSong;
+    }
+
+
+    public String getArtist(){
+        String artist = "";
+        if (artists != null && !artists.isEmpty()) {
+            for (int i=0; i<artists.size(); i++) {
+                if (i == 0) {
+                    artist = artists.get(i).name;
+                } else {
+                    artist += "、"+artists.get(i).name;
+                }
+            }
+        }
+
+        return artist;
     }
 }

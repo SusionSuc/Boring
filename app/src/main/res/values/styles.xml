@@ -51,4 +51,12 @@
         <item name="shadow_bottom">@drawable/shadow_bottom</item>
     </style>
 
+
+    <!--   -->
+    <style name="dialog_animation_frombottom" parent="android:Animation">
+        <item name="@android:windowEnterAnimation">@anim/anim_dialog_enter_formbottom</item>
+        <item name="@android:windowExitAnimation">@anim/anim_dialog_exit_formbottom</item>
+    </style>
+
+
 </resources>

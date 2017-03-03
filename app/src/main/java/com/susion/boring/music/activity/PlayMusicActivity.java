@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.Pair;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.litesuits.orm.db.annotation.NotNull;
 import com.susion.boring.R;
 import com.susion.boring.base.BaseActivity;
 import com.susion.boring.http.APIHelper;
@@ -21,17 +23,21 @@ import com.susion.boring.music.model.Song;
 import com.susion.boring.music.presenter.ClientReceiverPresenter;
 import com.susion.boring.music.presenter.command.ClientPlayControlCommand;
 import com.susion.boring.music.presenter.command.ClientPlayModeCommand;
+import com.susion.boring.music.presenter.command.ClientPlayQueueControlCommand;
 import com.susion.boring.music.presenter.itf.MediaPlayerContract;
 import com.susion.boring.music.service.MusicInstruction;
 import com.susion.boring.music.view.LyricView;
 import com.susion.boring.music.view.MediaSeekBar;
 import com.susion.boring.music.view.MusicPlayControlView;
+import com.susion.boring.music.view.PlayControlDialog;
 import com.susion.boring.music.view.PlayOperatorView;
 import com.susion.boring.utils.AlbumUtils;
 import com.susion.boring.utils.BroadcastUtils;
 import com.susion.boring.utils.TimeUtils;
 import com.susion.boring.utils.TransitionHelper;
 import com.susion.boring.view.SToolBar;
+
+import java.util.List;
 
 import rx.Observer;
 
@@ -58,6 +64,8 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
     private MediaPlayerContract.ClientPlayControlCommand mPlayControlCommand;
     private MediaPlayerContract.ClientPlayModeCommand mPlayModeCommand;
     private MediaPlayerContract.ClientReceiverPresenter mClientReceiver;
+    private PlayControlDialog mDialog;
+    private ClientPlayQueueControlCommand mPlayQueueCommand;
 
     public static void start(Context context, Song song, boolean isFromPlayList) {
         Intent intent = new Intent();
@@ -103,6 +111,7 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
     public void findView() {
         mPlayControlCommand = new ClientPlayControlCommand(this);
         mPlayModeCommand = new ClientPlayModeCommand(this);
+        mPlayQueueCommand = new ClientPlayQueueControlCommand(this);
         mClientReceiver = new ClientReceiverPresenter(this);
         mClientReceiver.setPlayView(this);
 
@@ -123,6 +132,16 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
         mToolBar.setTitle("");
         mToolBar.setLeftIcon(R.mipmap.tool_bar_back);
         mToolBar.setBackgroundColor(getResources().getColor(R.color.transparent));
+        mToolBar.setRightIcon(R.mipmap.top_menu);
+        mToolBar.setRightIconClickListener(new SToolBar.OnRightIconClickListener() {
+            @Override
+            public void onRightIconClick() {
+                mDialog = new PlayControlDialog(PlayMusicActivity.this);
+                mDialog.show();
+                mPlayQueueCommand.getPlayQueue();
+                mDialog.startLoadingAnimation();
+            }
+        });
         initListener();
 
         refreshSong(mSong);
@@ -311,6 +330,15 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
         mSeekBar.setCurrentProgress(0);
         isLoading = true;
         mPlayControlView.startLoadingAnimation();
+    }
+
+    @NonNull
+    @Override
+    public void setPlayQueue(List<Song> playQueue) {
+        if (mDialog != null) {
+            mDialog.addMusicQueue(playQueue);
+            mDialog.stopLoadingAnimation();
+        }
     }
 
     @Override

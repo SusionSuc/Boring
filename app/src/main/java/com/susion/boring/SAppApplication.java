@@ -19,9 +19,9 @@ public class SAppApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fresco.initialize(this);
         FileUtils.initAppDir();
         MusicInstruction.startMusicPlayService(this);  //start music service
-        Fresco.initialize(this);
     }
 
     @Override

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:paddingLeft="15dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <ImageView
+        android:visibility="gone"
+        android:id="@+id/item_dialog_music_iv_volum"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:src="@mipmap/volume"
+        android:layout_width="15dp"
+        android:layout_height="15dp" />
+
+    <TextView
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/item_dialog_music_iv_volum"
+        android:id="@+id/item_dialog_music_tv_music_name"
+        android:text="瑰宝"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="16sp"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+    <TextView
+        android:id="@+id/item_dialog_music_tv_artist"
+        android:layout_marginLeft="5dp"
+        android:text="薛之谦"
+        android:textSize="13sp"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/item_dialog_music_tv_music_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+    <ImageView
+        android:layout_marginRight="15dp"
+        android:layout_alignParentRight="true"
+        android:src="@mipmap/dialog_music_item_delete"
+        android:layout_centerVertical="true"
+        android:layout_width="16dp"
+        android:layout_height="16dp" />
+
+
+</RelativeLayout>

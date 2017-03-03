@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="30dp">
+
+
+    <TextView
+        android:id="@+id/item_dialog_header_title"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="16sp"
+        android:layout_centerInParent="true"
+        android:text="播放列表"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:layout_alignParentBottom="true"
+        android:background="@color/red_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1px"></View>
+</RelativeLayout>

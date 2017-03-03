@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 
@@ -21,6 +22,7 @@ import com.susion.boring.music.presenter.itf.MusicServiceContract;
 import com.susion.boring.utils.SPUtils;
 import com.susion.boring.utils.ToastUtils;
 
+import java.io.Serializable;
 import java.util.List;
 
 import rx.Observer;
@@ -217,6 +219,13 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.L
                         }
                     });
         }
+    }
+
+    @Override
+    public void getPlayQueue() {
+        Intent intent = new Intent(MusicInstruction.CLIENT_RECEIVER_PLAY_QUEUE);
+        intent.putExtra(MusicInstruction.CLIENT_PARAM_PLAY_QUEUE, (Serializable) mPlayQueuePresenter.getPlayQueue());
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
     @Override

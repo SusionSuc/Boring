@@ -64,6 +64,9 @@ public interface MusicServiceContract {
         void notifyCurrentMode();
 
         void circlePlayPlayList(PlayList playList);
+
+        void getPlayQueue();
+
     }
 
     interface ReceiverPresenter {
@@ -94,6 +97,8 @@ public interface MusicServiceContract {
         int getPlayMode();
 
         Observable<Boolean> reLoadPlayQueue(PlayList playList);
+
+        List<Song> getPlayQueue();
     }
 
 }

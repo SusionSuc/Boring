@@ -79,6 +79,8 @@ public class MusicPlayQueueControlPresenter implements MusicServiceContract.Play
           return null;
         }
 
+        mQueue.get(mCurrentIndex).isPlaying = false;
+
         if (mPlayMode == CIRCLE_MODE) {
 
         }
@@ -94,6 +96,8 @@ public class MusicPlayQueueControlPresenter implements MusicServiceContract.Play
         if (mPlayMode == RANDOM_MODE) {
             mCurrentIndex = mRandom.nextInt(mQueue.size());
         }
+
+        mQueue.get(mCurrentIndex).isPlaying = true;
         return mQueue.get(mCurrentIndex);
     }
 
@@ -103,7 +107,9 @@ public class MusicPlayQueueControlPresenter implements MusicServiceContract.Play
             return null;
         }
 
-        if (mPlayMode == QUEUE_MODE && mPlayMode ==CIRCLE_MODE) {
+        mQueue.get(mCurrentIndex).isPlaying = false;
+
+        if (mPlayMode == QUEUE_MODE || mPlayMode == CIRCLE_MODE) {
             if (mCurrentIndex > 0){
                 mCurrentIndex--;
             } else {
@@ -114,6 +120,8 @@ public class MusicPlayQueueControlPresenter implements MusicServiceContract.Play
         if (mPlayMode == RANDOM_MODE) {
             mCurrentIndex = mRandom.nextInt(mQueue.size());
         }
+
+        mQueue.get(mCurrentIndex).isPlaying = true;
         return mQueue.get(mCurrentIndex);
     }
 
@@ -172,5 +180,10 @@ public class MusicPlayQueueControlPresenter implements MusicServiceContract.Play
             }
         });
 
+    }
+
+    @Override
+    public List<Song> getPlayQueue() {
+        return mQueue;
     }
 }

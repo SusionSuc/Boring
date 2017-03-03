@@ -2,6 +2,7 @@ package com.susion.boring.interesting;
 
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.susion.boring.R;
 import com.susion.boring.base.BaseFragment;
@@ -11,8 +12,8 @@ import com.susion.boring.base.BaseFragment;
  */
 public class InterestingPageFragment extends BaseFragment {
     @Override
-    public View initContentView(LayoutInflater inflater) {
-        mView = inflater.inflate(R.layout.fragment_interseting_page_layout, null);
+    public View initContentView(LayoutInflater inflater, ViewGroup container) {
+        mView = inflater.inflate(R.layout.fragment_interseting_page_layout, container, false);
         return mView;
     }
 

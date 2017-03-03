@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.SearchEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -59,4 +60,8 @@ public class SplashActivity extends Activity  {
                 .send();
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
 }

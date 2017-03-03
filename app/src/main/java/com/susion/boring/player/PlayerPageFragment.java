@@ -3,6 +3,7 @@ package com.susion.boring.player;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.susion.boring.R;
 import com.susion.boring.base.BaseFragment;
@@ -12,8 +13,8 @@ import com.susion.boring.base.BaseFragment;
  */
 public class PlayerPageFragment extends BaseFragment {
     @Override
-    public View initContentView(LayoutInflater inflater) {
-        mView = inflater.inflate(R.layout.fragment_player_page_layout, null);
+    public View initContentView(LayoutInflater inflater, ViewGroup container) {
+        mView = inflater.inflate(R.layout.fragment_player_page_layout, container, false);
         return mView;
     }
 
