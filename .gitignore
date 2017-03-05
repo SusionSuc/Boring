@@ -6,3 +6,7 @@
 .DS_Store
 /build
 /captures
+/infer-out
+/freeline
+freeline.py
+freeline_project_description.json
