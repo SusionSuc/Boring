@@ -11,13 +11,10 @@ import com.susion.boring.base.SimpleItemHandler;
 import com.susion.boring.base.ViewHolder;
 import com.susion.boring.db.DbManager;
 import com.susion.boring.db.model.SimpleSong;
-import com.susion.boring.db.operate.DbBaseOperate;
 import com.susion.boring.db.operate.MusicDbOperator;
 import com.susion.boring.music.activity.LocalMusicActivity;
-import com.susion.boring.music.activity.MusicDownLoadListActivity;
-import com.susion.boring.music.activity.MyMusicCollectActivity;
+import com.susion.boring.music.activity.MyLikeActivity;
 import com.susion.boring.music.model.MusicPageConstantItem;
-import com.susion.boring.music.presenter.FileDownloadPresenter;
 
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
@@ -111,7 +108,7 @@ public class MusicPageConstantIH extends SimpleItemHandler<MusicPageConstantItem
                 LocalMusicActivity.start((Activity) mContext);
                 break;
             case MY_COLLECT:
-                MyMusicCollectActivity.start(mContext);
+                MyLikeActivity.start(mContext);
                 break;
         }
     }

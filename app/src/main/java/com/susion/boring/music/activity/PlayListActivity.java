@@ -15,13 +15,18 @@ import com.susion.boring.base.ItemHandler;
 import com.susion.boring.base.ItemHandlerFactory;
 import com.susion.boring.base.MusicModelTranslatePresenter;
 import com.susion.boring.base.view.LoadMoreRecycleView;
+import com.susion.boring.db.DbManager;
 import com.susion.boring.db.model.SimpleSong;
+import com.susion.boring.db.operate.DbBaseOperate;
 import com.susion.boring.http.APIHelper;
 import com.susion.boring.music.itemhandler.LocalMusicIH;
+import com.susion.boring.music.itemhandler.SimpleMusicIH;
 import com.susion.boring.music.model.PlayList;
 import com.susion.boring.music.model.PlayListDetail;
+import com.susion.boring.music.presenter.PlayListPresenter;
 import com.susion.boring.music.presenter.command.ClientPlayModeCommand;
 import com.susion.boring.music.presenter.itf.MediaPlayerContract;
+import com.susion.boring.music.presenter.itf.PlayListContract;
 import com.susion.boring.music.view.PlayOperatorView;
 import com.susion.boring.utils.RVUtils;
 import com.susion.boring.utils.ToastUtils;
@@ -31,9 +36,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
-public class PlayListActivity extends BaseActivity {
-
+public class PlayListActivity extends BaseActivity implements PlayListContract.View{
     private static final String PLAY_LIST = "PLAY_LIST";
     private SimpleDraweeView mSdvBg;
     private PlayList mPlayList;
@@ -44,10 +50,12 @@ public class PlayListActivity extends BaseActivity {
     private int mMaxScrollSize;
     private static final int PERCENTAGE_TO_SHOW_IMAGE = 90;
 
-
     private PlayOperatorView mPlayOperatorView;
     private MediaPlayerContract.ClientPlayModeCommand mPlayModeCommand;
+    private DbBaseOperate<PlayList> mPlayDb;
 
+    private boolean mIsLike = false;
+    private PlayListContract.Presenter mPresenter;
 
     public static void start(Context mContext, PlayList mData) {
         Intent intent = new Intent();
@@ -56,13 +64,13 @@ public class PlayListActivity extends BaseActivity {
         mContext.startActivity(intent);
     }
 
-
     @Override
     protected void setStatusBar() {
         getWindow().setStatusBarColor(Color.TRANSPARENT);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
     }
+
     @Override
     public int getLayoutId() {
         mPlayList = (PlayList) getIntent().getSerializableExtra(PLAY_LIST);
@@ -71,7 +79,9 @@ public class PlayListActivity extends BaseActivity {
 
     @Override
     public void findView() {
+        mPresenter = new PlayListPresenter(this);
         mPlayModeCommand = new ClientPlayModeCommand(this);
+
 
         mSdvBg = (SimpleDraweeView) findViewById(R.id.ac_play_list_iv_bg);
         mRv = (LoadMoreRecycleView) findViewById(R.id.list_view);
@@ -86,7 +96,7 @@ public class PlayListActivity extends BaseActivity {
         mToolBar.setBackgroundResource(R.color.transparent);
         mToolBar.setLeftIcon(R.mipmap.tool_bar_back);
         mSdvBg.setImageURI(mPlayList.getCoverImgUrl());
-        mToolBar2.setTitle("共 "+mPlayList.getTrackCount()+" 首");
+        mToolBar2.setTitle("共 " + mPlayList.getTrackCount() + " 首");
         mToolBar2.setBackgroundResource(R.color.white);
         mToolBar2.setTitleColorRes(R.color.black);
 
@@ -101,12 +111,16 @@ public class PlayListActivity extends BaseActivity {
                     }
                 });
             }
-
             @Override
             protected int getViewType(int position) {
                 return 0;
             }
         });
+
+        mPlayOperatorView.hideNextPlay();
+
+
+        mPresenter.queryPlayListLikeStatus(mPlayList);
     }
 
     @Override
@@ -128,7 +142,7 @@ public class PlayListActivity extends BaseActivity {
                 } else {
                     mToolBar2.setLeftIcon(SToolBar.HIDDEN_LEFT_ICON_RES);
                     mToolBar2.setBackgroundResource(R.color.white);
-                    mToolBar2.setTitle("共 "+mPlayList.getTrackCount()+" 首");
+                    mToolBar2.setTitle("共 " + mPlayList.getTrackCount() + " 首");
                 }
 
             }
@@ -137,50 +151,52 @@ public class PlayListActivity extends BaseActivity {
         mPlayOperatorView.setItemClickListener(new PlayOperatorView.OnItemClickListener() {
             @Override
             public void onCirclePlayItemClick() {
-                ToastUtils.showShort("即将开始循环播放此歌单的音乐, 请稍等......");
                 mPlayModeCommand.circlePlayPlayList(mPlayList);
             }
 
             @Override
             public void onRandomPlayItemClick() {
-
+                mPlayModeCommand.randomPlayPlayList(mPlayList);
             }
 
             @Override
             public void onLikeItemClick() {
-
+                mIsLike = !mIsLike;
+                if (mIsLike) {
+                    mPresenter.likePlayList(mPlayList);
+                } else {
+                    mPresenter.disLikePlayList(mPlayList);
+                }
             }
-
             @Override
             public void onNextPlayItemClick() {
-
+                //no operator
             }
         });
     }
 
     @Override
     public void initData() {
-        loadData();
+        mPresenter.loadData(mPlayList);
     }
 
-    private void loadData() {
-        APIHelper.subscribeSimpleRequest(APIHelper.getMusicServices().getPlayListDetail(mPlayList.getId()), new Observer<PlayListDetail>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                int b = 0;
-            }
-
-            @Override
-            public void onNext(PlayListDetail playListDetail) {
-                mData.addAll(new MusicModelTranslatePresenter().translateTracksToSimpleSong(playListDetail.getPlaylist().getTracks()));
-                mRv.getAdapter().notifyDataSetChanged();
-            }
-        });
+    @Override
+    public void addData(PlayListDetail playListDetail) {
+        mData.addAll(new MusicModelTranslatePresenter().translateTracksToSimpleSong(playListDetail.getPlaylist().getTracks()));
+        mRv.getAdapter().notifyDataSetChanged();
     }
 
+    @Override
+    public void refreshPlayListLikeStatus(Boolean flag) {
+        if (flag) {
+            mPlayOperatorView.refreshLikeStatus(true);
+            return;
+        }
+        mPlayOperatorView.refreshLikeStatus(false);
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
+    }
 }

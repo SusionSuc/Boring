@@ -3,8 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/bg_ripple"
     android:paddingTop="10dp"
-    android:layout_marginLeft="15dp">
+    android:paddingLeft="15dp">
 
 
     <com.facebook.drawee.view.SimpleDraweeView
@@ -29,7 +30,8 @@
             android:textColor="@color/black"
             android:paddingTop="5dp"
             android:text="绅士"
-            android:textSize="16sp"
+            android:textSize="14sp"
+            android:maxLength="16"
             android:id="@+id/item_local_music_tv_music_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -38,7 +40,7 @@
             android:layout_below="@id/item_local_music_tv_music_name"
             android:textColor="@color/red_font_divider"
             android:layout_marginTop="5dp"
-            android:textSize="14sp"
+            android:textSize="12sp"
             android:paddingBottom="5dp"
             android:text="薛之谦-意外"
             android:maxLength="16"
@@ -55,7 +57,7 @@
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_width="25dp"
-        android:layout_height="25dp" />
+        android:layout_height="30dp" />
 
     <TextView
         android:id="@+id/item_local_music_tv_duration"

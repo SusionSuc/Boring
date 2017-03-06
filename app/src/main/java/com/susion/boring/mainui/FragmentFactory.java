@@ -17,6 +17,8 @@ import java.util.List;
 public class FragmentFactory implements MainUIFragmentIndex{
 
     private static List<Fragment> mMainUIFragments;
+
+
     private FragmentFactory(){
 
     }
@@ -29,4 +31,5 @@ public class FragmentFactory implements MainUIFragmentIndex{
         }
         return mMainUIFragments;
     }
+
 }

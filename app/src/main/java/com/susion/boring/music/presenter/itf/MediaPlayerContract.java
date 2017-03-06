@@ -124,10 +124,16 @@ public interface MediaPlayerContract {
         void startRandomPlayMode();
 
         void circlePlayPlayList(PlayList mData);
+
+        void randomPlayPlayList(PlayList mPlayList);
     }
 
-    interface ClientPlayQueueControlCommand{
+    interface ClientPlayQueueControlCommand {
         void getPlayQueue();
+
+        void removeSongFromQueue(Song song);
+
+        void changeMusic(Song song);
     }
 
 }

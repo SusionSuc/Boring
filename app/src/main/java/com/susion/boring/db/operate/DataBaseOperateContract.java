@@ -1,6 +1,7 @@
 package com.susion.boring.db.operate;
 
 import com.susion.boring.db.model.SimpleSong;
+import com.susion.boring.music.model.PlayList;
 import com.susion.boring.music.model.PlayQueueSong;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public interface DataBaseOperateContract {
         Observable<Boolean> add(T t);
         Observable<Boolean> delete(T t);
         Observable<Boolean> clearALLData();
-        Observable<SimpleSong> query(String id);
+        Observable<T> query(String id);
         Observable<Long> getTotalCount();
         Observable<List<T>> getAll();
         Observable<Boolean> update(T t);
@@ -28,6 +29,8 @@ public interface DataBaseOperateContract {
         Observable<Long> getLikeMusicCount();
         Observable<List<SimpleSong>> getLocalMusic();
         Observable<Long> getLocalMusicCount();
-
     }
+
+
+
 }

@@ -54,7 +54,6 @@ public class ViewHolder {
     }
 
     public TextSwitcher getTextSwitcher(int id) {
-
         return get(id);
     }
 

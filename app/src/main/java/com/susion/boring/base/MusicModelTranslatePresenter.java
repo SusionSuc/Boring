@@ -24,7 +24,7 @@ public class MusicModelTranslatePresenter implements ModelTranslateContract.Musi
         return Observable.create(new Observable.OnSubscribe<List<Song>>() {
             @Override
             public void call(final Subscriber<? super List<Song>> subscriber) {
-                APIHelper.subscribeSimpleRequest(APIHelper.getMusicServices().getPlayListDetail(playList.getId()), new Observer<PlayListDetail>() {
+                APIHelper.subscribeSimpleRequest(APIHelper.getMusicServices().getPlayListDetail(Integer.valueOf(playList.getId())), new Observer<PlayListDetail>() {
                     @Override
                     public void onCompleted() {
 

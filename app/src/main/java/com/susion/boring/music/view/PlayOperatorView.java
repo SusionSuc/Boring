@@ -17,7 +17,7 @@ import com.susion.boring.utils.ToastUtils;
 /**
  * Created by susion on 17/2/21.
  */
-public class PlayOperatorView  extends LinearLayout implements View.OnClickListener{
+public class PlayOperatorView extends LinearLayout implements View.OnClickListener {
 
     private Context mContext;
     private ImageView mIvCircle;
@@ -25,9 +25,9 @@ public class PlayOperatorView  extends LinearLayout implements View.OnClickListe
     private ImageView mIvLike;
     private ImageView mIvNextPlay;
 
-    private Song mSong;
-    private MediaPlayerContract.ClientPlayModeCommand mModeCommand;
     private OnItemClickListener itemClickListener;
+
+    private boolean pseudoLike;
 
     public PlayOperatorView(Context context) {
         super(context);
@@ -38,7 +38,6 @@ public class PlayOperatorView  extends LinearLayout implements View.OnClickListe
         super(context, attrs);
         init();
     }
-
 
     private void init() {
         mContext = getContext();
@@ -53,40 +52,40 @@ public class PlayOperatorView  extends LinearLayout implements View.OnClickListe
         mIvNextPlay = (ImageView) findViewById(R.id.view_play_operator_iv_next_play);
         mIvLike = (ImageView) findViewById(R.id.view_play_operator_iv_like);
     }
+
     private void initView() {
         mIvCircle.setOnClickListener(this);
         mIvNextPlay.setOnClickListener(this);
         mIvRandom.setOnClickListener(this);
         mIvLike.setOnClickListener(this);
+
+        pseudoLike = false;
     }
 
     @Override
     public void onClick(View v) {
-
         if (itemClickListener == null) {
             return;
         }
-
-        switch (v.getId()){
-            case R.id.view_play_operator_iv_circle :
+        switch (v.getId()) {
+            case R.id.view_play_operator_iv_circle:
                 itemClickListener.onCirclePlayItemClick();
                 break;
-            case R.id.view_play_operator_iv_random :
+            case R.id.view_play_operator_iv_random:
                 itemClickListener.onRandomPlayItemClick();
                 break;
-            case R.id.view_play_operator_iv_next_play :
+            case R.id.view_play_operator_iv_next_play:
                 itemClickListener.onNextPlayItemClick();
                 break;
-            case R.id.view_play_operator_iv_like :
+            case R.id.view_play_operator_iv_like:
                 itemClickListener.onLikeItemClick();
-                mSong.favorite = !mSong.favorite;
-                refreshLikeStatus();
+                pseudoLike = !pseudoLike;
+                refreshLikeStatus(pseudoLike);
                 break;
         }
     }
 
     public void refreshPlayMode(int mode) {
-
         mIvCircle.setImageResource(R.mipmap.play_operator_circle);
         mIvRandom.setImageResource(R.mipmap.play_operator_random);
 
@@ -97,24 +96,19 @@ public class PlayOperatorView  extends LinearLayout implements View.OnClickListe
         if (mode == MusicServiceContract.PlayQueueControlPresenter.RANDOM_MODE) {
             mIvRandom.setImageResource(R.mipmap.play_operator_random_enable);
         }
-
     }
 
-    public void setSong(Song song) {
-        this.mSong = song;
-        refreshLikeStatus();
-    }
-
-    private void refreshLikeStatus() {
-        if (mSong.favorite) {
+    public void refreshLikeStatus(boolean likes) {
+        if (likes) {
             mIvLike.setImageResource(R.mipmap.play_operator_un_love);
         } else {
             mIvLike.setImageResource(R.mipmap.play_operator_love);
         }
     }
 
-    public void setModeCommand(MediaPlayerContract.ClientPlayModeCommand modeCommand) {
-        mModeCommand = modeCommand;
+
+    public void hideNextPlay(){
+        mIvNextPlay.setVisibility(GONE);
     }
 
 
@@ -122,10 +116,13 @@ public class PlayOperatorView  extends LinearLayout implements View.OnClickListe
         this.itemClickListener = itemClickListener;
     }
 
-    public interface OnItemClickListener{
+    public interface OnItemClickListener {
         void onCirclePlayItemClick();
+
         void onRandomPlayItemClick();
+
         void onLikeItemClick();
+
         void onNextPlayItemClick();
     }
 

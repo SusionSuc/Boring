@@ -18,6 +18,8 @@ import com.litesuits.orm.db.annotation.NotNull;
 import com.susion.boring.R;
 import com.susion.boring.base.BaseActivity;
 import com.susion.boring.http.APIHelper;
+import com.susion.boring.music.event.ChangeSongEvent;
+import com.susion.boring.music.event.SongDeleteFromPlayQueueEvent;
 import com.susion.boring.music.model.PlayListSong;
 import com.susion.boring.music.model.Song;
 import com.susion.boring.music.presenter.ClientReceiverPresenter;
@@ -36,6 +38,10 @@ import com.susion.boring.utils.BroadcastUtils;
 import com.susion.boring.utils.TimeUtils;
 import com.susion.boring.utils.TransitionHelper;
 import com.susion.boring.view.SToolBar;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -58,7 +64,6 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
     private Song mSong;
     private boolean mIsFromLittlePanel;
     private boolean isLoading;
-    
     private boolean mIsFromPlayList;
 
     private MediaPlayerContract.ClientPlayControlCommand mPlayControlCommand;
@@ -109,6 +114,7 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
 
     @Override
     public void findView() {
+        EventBus.getDefault().register(this);
         mPlayControlCommand = new ClientPlayControlCommand(this);
         mPlayModeCommand = new ClientPlayModeCommand(this);
         mPlayQueueCommand = new ClientPlayQueueControlCommand(this);
@@ -156,7 +162,6 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
             APIHelper.subscribeSimpleRequest(APIHelper.getMusicServices().getSongDetail(Integer.valueOf(mSong.id)), new Observer<PlayListSong>() {
                 @Override
                 public void onCompleted() {
-
                 }
 
                 @Override
@@ -243,13 +248,13 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
 
             @Override
             public void onLikeItemClick() {
-                mPlayModeCommand.musicToNextPlay(mSong);
+                mSong.favorite = !mSong.favorite;
+                mPlayModeCommand.likeMusic(mSong);
             }
 
             @Override
             public void onNextPlayItemClick() {
-                mSong.favorite = !mSong.favorite;
-                mPlayModeCommand.likeMusic(mSong);
+                mPlayModeCommand.musicToNextPlay(mSong);
             }
         });
     }
@@ -268,6 +273,7 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
         }
 
         mSeekBar.setCurrentProgress(0);
+        mSeekBar.setHasBufferProgress(0);
         mSeekBar.setMaxProgress(duration);
     }
 
@@ -295,7 +301,7 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
     @Override
     public void tryToChangeMusicByCurrentCondition(boolean playStatus, boolean needLoadMusic) {
         if (!mIsFromLittlePanel) {
-            mPlayControlCommand.tryToChangePlayingMusic(mSong);     //ignore needLoadMusic --> must load
+            mPlayControlCommand.tryToChangePlayingMusic(mSong);             //ignore needLoadMusic --> must load
             return;
         }
         mPlayControlView.setIsPlay(playStatus);
@@ -304,11 +310,9 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
     @Override
     public void refreshSong(Song song) {
         mSong = song;
+        mPovMusicPlayControl.refreshLikeStatus(song.favorite);
 
-        mPovMusicPlayControl.setSong(mSong);
-        mPovMusicPlayControl.setModeCommand(mPlayModeCommand);
-
-        if (!mIsFromLittlePanel) {  //may be change music
+        if (!mIsFromLittlePanel) {   //may be change music
             loadNewMusic();
         }
 
@@ -363,9 +367,29 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
         mSeekBar.setCurrentProgress(curPos);
     }
 
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mClientReceiver.releaseResource();
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(SongDeleteFromPlayQueueEvent event) {
+        Song song = event.song;
+        mPlayQueueCommand.removeSongFromQueue(song);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(ChangeSongEvent event){
+        Song song = event.song;
+        mPlayQueueCommand.changeMusic(song);
     }
 }

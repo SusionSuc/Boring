@@ -39,6 +39,11 @@ public class MusicInstruction {
     public static final String SERVER_RECEIVER_CIRCLE_PLAY_PLAY_LIST = "SERVER_RECEIVER_CIRCLE_PLAY_PLAY_LIST";
     public static final String SERVICE_PARAM_PLAY_LIST = "SERVICE_PARAM_PLAY_LIST";
     public static final String SERVER_RECEIVER_GET_PLAY_QUEUE = "SERVER_RECEIVER_GET_PLAY_QUEUE";
+    public static final String SERVER_RECEIVER_RANDOM_PLAY_PLAY_LIST = "SERVER_RECEIVER_RANDOM_PLAY_PLAY_LIST";
+    public static final String SERVER_RECEIVER_REMOVE_SONG_FROM_QUEUE = "SERVER_RECEIVER_REMOVE_SONG_FROM_QUEUE";
+    public static final String SERVICE_PARAM_REMOVE_SONG = "SERVICE_PARAM_REMOVE_SONG";
+    public static final String SERVER_RECEIVER_CHANGE_MUSIC_FROM_QUEUE = "SERVER_RECEIVER_CHANGE_MUSIC_FROM_QUEUE";
+
 
 
     //client
@@ -67,6 +72,7 @@ public class MusicInstruction {
     public static final String CLIENT_PARAM_PLAY_MODE = "CLIENT_PARAM_PLAY_MODE";
     public static final String CLIENT_RECEIVER_PLAY_QUEUE = "CLIENT_RECEIVER_PLAY_QUEUE";
     public static final String CLIENT_PARAM_PLAY_QUEUE = "CLIENT_PARAM_PLAY_QUEUE";
+
 
 
     public static void startMusicPlayService(Context ctx) {

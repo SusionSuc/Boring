@@ -22,11 +22,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".mainui.MainActivity" />
-        <activity android:name=".music.activity.SearchMusicActivity" />
-        <activity android:name=".music.activity.PlayMusicActivity" />
-        <activity android:name=".music.activity.LocalMusicActivity" />
-        <activity android:name=".music.activity.MyMusicCollectActivity" />
+        <activity
+            android:name=".mainui.MainActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".music.activity.SearchMusicActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".music.activity.PlayMusicActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".music.activity.LocalMusicActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".music.activity.MyLikeActivity"
+            android:theme="@style/AppTheme" />
 
         <service
             android:name=".music.service.MusicPlayerService"
@@ -37,8 +47,12 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".music.activity.MusicDownLoadListActivity" />
-        <activity android:name=".music.activity.PlayListActivity"></activity>
+        <activity
+            android:name=".music.activity.MusicDownLoadListActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".music.activity.PlayListActivity"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

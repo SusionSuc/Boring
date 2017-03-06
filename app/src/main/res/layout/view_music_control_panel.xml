@@ -2,21 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:paddingBottom="5dp"
     android:orientation="vertical">
 
     <View
-        android:background="@color/red_divider"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="1dp">
     </View>
 
     <RelativeLayout
-        android:layout_marginTop="5dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:background="@color/transparent_white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/view_music_control_sdv_album"
             android:layout_alignParentLeft="true"
@@ -24,27 +25,6 @@
             android:scaleType="centerCrop"
             android:layout_width="40dp"
             android:layout_height="40dp" />
-
-        <LinearLayout
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/view_music_control_sdv_album"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/view_music_control_tv_song_name"
-                android:text="绅士"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:id="@+id/view_music_control_tv_song_artist"
-                android:text="薛之谦"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
 
 
         <ImageView
@@ -64,6 +44,31 @@
             android:id="@+id/view_music_control_iv_play"
             android:layout_width="25dp"
             android:layout_height="25dp" />
+
+        <LinearLayout
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toLeftOf="@id/view_music_control_iv_play"
+            android:layout_toRightOf="@id/view_music_control_sdv_album"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/view_music_control_tv_song_name"
+                android:text="绅士"
+                android:maxLength="18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/view_music_control_tv_song_artist"
+                android:text="薛之谦"
+                android:maxLength="15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
 
     </RelativeLayout>
 

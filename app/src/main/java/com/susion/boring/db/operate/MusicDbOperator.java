@@ -1,10 +1,12 @@
 package com.susion.boring.db.operate;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.litesuits.orm.LiteOrm;
 import com.litesuits.orm.db.assit.QueryBuilder;
 import com.susion.boring.db.model.SimpleSong;
+import com.susion.boring.music.model.PlayList;
 import com.susion.boring.music.model.PlayQueueSong;
 import com.susion.boring.music.model.Song;
 
@@ -31,6 +33,7 @@ public class MusicDbOperator extends DbBaseOperate<SimpleSong> implements DataBa
         return Observable.create(new Observable.OnSubscribe<List<SimpleSong>>() {
             @Override
             public void call(Subscriber<? super List<SimpleSong>> subscriber) {
+                Log.e("MusicDbOperator","getLikeMusic -> call method");
                 List<SimpleSong> likes = mLiteOrm.query(new QueryBuilder<>(SimpleSong.class).whereEquals("favorite",true));
                 subscriber.onNext(likes);
             }
@@ -71,7 +74,6 @@ public class MusicDbOperator extends DbBaseOperate<SimpleSong> implements DataBa
         });
     }
 
-
     public Observable<List<Song>> getInitPlayQueue(){
         return Observable.create(new Observable.OnSubscribe<List<Song>>() {
             @Override
@@ -99,13 +101,14 @@ public class MusicDbOperator extends DbBaseOperate<SimpleSong> implements DataBa
         });
     }
 
+
+
+
     private List<Song> translateSimpleSong2Song(List<SimpleSong> songs) {
         List<Song> news = new ArrayList<>();
-
         for (SimpleSong s : songs){
             news.add(s.translateToSong());
         }
-
         return news;
     }
 

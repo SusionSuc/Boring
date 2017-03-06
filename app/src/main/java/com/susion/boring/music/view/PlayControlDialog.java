@@ -17,10 +17,16 @@ import com.susion.boring.R;
 import com.susion.boring.base.BaseRVAdapter;
 import com.susion.boring.base.ItemHandler;
 import com.susion.boring.base.ItemHandlerFactory;
+import com.susion.boring.music.event.ChangeSongEvent;
+import com.susion.boring.music.event.SongDeleteFromPlayQueueEvent;
 import com.susion.boring.music.itemhandler.DialogMusicIH;
 import com.susion.boring.music.model.Song;
 import com.susion.boring.utils.RVUtils;
 import com.susion.boring.utils.UIUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,11 +47,17 @@ public class PlayControlDialog extends Dialog {
         initView();
     }
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
     private void initView() {
         setContentView(R.layout.dialog_play_control);
         mRV = (RecyclerView) findViewById(R.id.list_view);
         mIvLoading = (ImageView) findViewById(R.id.loading);
-
 
         Window dialogWindow = getWindow();
         dialogWindow.setBackgroundDrawableResource(android.R.color.white);
@@ -68,7 +80,6 @@ public class PlayControlDialog extends Dialog {
         mRV.addItemDecoration(RVUtils.getItemDecorationDivider(mContext, R.color.red_divider, 1, -1, UIUtils.dp2Px(15)));
         mRV.setAdapter(new BaseRVAdapter((Activity) mContext, mDialogData) {
             final int TYPE_MUSIC = 1;
-
             @Override
             protected void initHandlers() {
                 registerItemHandler(TYPE_MUSIC, new ItemHandlerFactory() {
@@ -115,5 +126,22 @@ public class PlayControlDialog extends Dialog {
         mIvLoading.clearAnimation();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(SongDeleteFromPlayQueueEvent event) {
+        mDialogData.remove(event.song);
+        mRV.getAdapter().notifyDataSetChanged();
+    }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(ChangeSongEvent event){
+        Song song = event.song;
+        song.isPlaying = true;
+        mRV.getAdapter().notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
 }

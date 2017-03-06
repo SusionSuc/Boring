@@ -2,6 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
@@ -62,7 +63,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/red_divider"></View>
+            android:background="@color/colorPrimary"></View>
 
         <com.susion.boring.base.view.LoadMoreRecycleView
             android:id="@+id/list_view"

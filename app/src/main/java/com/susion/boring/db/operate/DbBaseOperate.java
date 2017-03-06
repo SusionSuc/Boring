@@ -105,11 +105,11 @@ public class DbBaseOperate<T>  implements DataBaseOperateContract.BaseOperate<T>
     }
 
     @Override
-    public Observable<SimpleSong> query(final  String id) {
-        return Observable.create(new Observable.OnSubscribe<SimpleSong>() {
+    public Observable<T> query(final  String id) {
+        return Observable.create(new Observable.OnSubscribe<T>() {
             @Override
-            public void call(Subscriber<? super SimpleSong > subscriber) {
-                SimpleSong song = (SimpleSong) mLiteOrm.queryById(id, mClass);
+            public void call(Subscriber<? super T > subscriber) {
+                T song = (T) mLiteOrm.queryById(id, mClass);
                 if ( song != null) {
                     subscriber.onNext(song);
                 } else {

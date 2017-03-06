@@ -120,6 +120,10 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.L
 
     @Override
     public void changeMusic() {
+        if (mSong == null) {
+            return;
+        }
+
         if (mSong.fromPlayList) {
             new MusicModelTranslatePresenter().checkIfHasPlayUrl(mSong)
                     .subscribeOn(Schedulers.io())
@@ -219,6 +223,42 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.L
                         }
                     });
         }
+    }
+
+    @Override
+    public void randomPlayPlayList(PlayList playList) {
+        if (mPlayQueuePresenter != null) {
+            mPresenter.stopPlay();
+            mQueueIsPrepare = false;
+            mPlayQueuePresenter.reLoadPlayQueue(playList)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<Boolean>() {
+                        @Override
+                        public void onCompleted() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            ToastUtils.showShort("装载音乐列表失败");
+                        }
+
+                        @Override
+                        public void onNext(Boolean flag) {
+                            if (flag) {
+                                mQueueIsPrepare = true;
+                                mPlayQueuePresenter.setPlayMode(MusicServiceContract.PlayQueueControlPresenter.RANDOM_MODE);
+                                playNextMusic();
+                            }
+                        }
+                    });
+        }
+    }
+
+    @Override
+    public void removeSongFromQueue(Song song) {
+        mPlayQueuePresenter.removeSong(song);
     }
 
     @Override

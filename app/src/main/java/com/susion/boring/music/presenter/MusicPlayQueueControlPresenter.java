@@ -1,14 +1,8 @@
 package com.susion.boring.music.presenter;
 
-import android.support.v4.app.ShareCompat;
-
 import com.susion.boring.base.ModelTranslateContract;
 import com.susion.boring.base.MusicModelTranslatePresenter;
-import com.susion.boring.db.model.SimpleSong;
-import com.susion.boring.http.APIHelper;
 import com.susion.boring.music.model.PlayList;
-import com.susion.boring.music.model.PlayListSong;
-import com.susion.boring.music.model.PlayQueueSong;
 import com.susion.boring.music.model.Song;
 import com.susion.boring.music.presenter.itf.MusicServiceContract;
 
@@ -109,7 +103,7 @@ public class MusicPlayQueueControlPresenter implements MusicServiceContract.Play
 
         mQueue.get(mCurrentIndex).isPlaying = false;
 
-        if (mPlayMode == QUEUE_MODE || mPlayMode == CIRCLE_MODE) {
+        if (mPlayMode == QUEUE_MODE || mPlayMode == PLAY_LIST_CIRCLE_MODE) {
             if (mCurrentIndex > 0){
                 mCurrentIndex--;
             } else {
@@ -185,5 +179,24 @@ public class MusicPlayQueueControlPresenter implements MusicServiceContract.Play
     @Override
     public List<Song> getPlayQueue() {
         return mQueue;
+    }
+
+    @Override
+    public boolean removeSong(Song song) {
+
+        int songIndex = -1;
+
+        for (int i=0; i<mQueue.size(); i++) {
+            if (song.id.equals(mQueue.get(i).id)) {
+                songIndex = i;
+            }
+        }
+
+        if (songIndex > 0) {
+            mQueue.remove(songIndex);
+            return true;
+        }
+
+        return false;
     }
 }

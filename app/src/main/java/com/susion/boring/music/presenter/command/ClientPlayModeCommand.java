@@ -41,6 +41,13 @@ public class ClientPlayModeCommand extends ClientPlayCommand implements MediaPla
     }
 
     @Override
+    public void randomPlayPlayList(PlayList mPlayList) {
+        Intent intent = new Intent(MusicInstruction.SERVER_RECEIVER_RANDOM_PLAY_PLAY_LIST);
+        intent.putExtra(MusicInstruction.SERVICE_PARAM_PLAY_LIST, mPlayList);
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+    }
+
+    @Override
     public void queryCurrentPlayMode() {
         Intent intent = new Intent(MusicInstruction.SERVER_RECEIVER_SONG_QUERY_CUR_MODE);
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);

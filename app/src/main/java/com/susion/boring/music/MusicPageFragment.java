@@ -155,9 +155,12 @@ public class MusicPageFragment extends BaseFragment implements OnLastItemVisible
             @Override
             public void onNext(SimpleSong song) {
                 if (song != null) {
+                    mControlView.setVisibility(View.VISIBLE);
                     mSong = song.translateToSong();
                     mControlView.setMusic(mSong);
                     mControlView.setPlay(false);
+                } else {
+                    mControlView.setVisibility(View.GONE);
                 }
             }
         });
@@ -189,6 +192,7 @@ public class MusicPageFragment extends BaseFragment implements OnLastItemVisible
 
     @Override
     public void refreshSong(Song song) {
+        mControlView.setVisibility(View.VISIBLE);
         mSong = song;
         mControlView.setMusic(song);
     }

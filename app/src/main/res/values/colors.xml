@@ -19,7 +19,7 @@
     <color name="divider">#BDBDBD</color>
     
 
-    <color name="transparent_white">#A9FFFAFA</color>
+    <color name="transparent_white">#EEFFFFFF</color>
 
 
     <color name="has_play_color">#FF5468</color>
@@ -41,6 +41,7 @@
     <color name="red_font_divider">#c7c7c7</color>
 
     <color name="transparent_gray">#88c7c7c7</color>
+
     <color name="search_bar_text_color">#f49f9f</color>
 
 
