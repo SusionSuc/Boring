@@ -18,6 +18,7 @@ import com.susion.boring.music.adapter.MusicPageAdapter;
 import com.susion.boring.music.itemhandler.MusicPageConstantIH;
 import com.susion.boring.music.model.GetPlayListResult;
 import com.susion.boring.music.model.MusicPageConstantItem;
+import com.susion.boring.music.model.PlayList;
 import com.susion.boring.music.model.SimpleTitle;
 import com.susion.boring.music.model.Song;
 import com.susion.boring.music.presenter.ClientReceiverPresenter;
@@ -31,7 +32,9 @@ import com.susion.boring.utils.SPUtils;
 import com.susion.boring.view.SearchBar;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
@@ -48,6 +51,7 @@ public class MusicPageFragment extends BaseFragment implements OnLastItemVisible
 
     private final int PLAY_LIST_PAGE_SIZE = 6;
     private List<Object> mData = new ArrayList<>();
+    private Set<String> uniqueData = new HashSet<>();
     private int page = 0;
     private Song mSong;
     private MediaPlayerContract.ClientPlayControlCommand mControlCommand;
@@ -131,7 +135,15 @@ public class MusicPageFragment extends BaseFragment implements OnLastItemVisible
             @Override
             public void onNext(GetPlayListResult playLists) {
                 mRV.setLoadStatus(LoadMoreView.NO_LOAD);
-                mData.addAll(playLists.getPlaylists());
+
+                List<PlayList> playlists = playLists.getPlaylists();
+
+                for (PlayList playList : playlists) {  //discard repeat data
+                    if (uniqueData.add(playList.getId())) {
+                        mData.add(playList);
+                    }
+                }
+
                 page++;
                 mRV.getAdapter().notifyDataSetChanged();
             }

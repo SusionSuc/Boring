@@ -23,7 +23,7 @@ public class PlayOperatorView extends LinearLayout implements View.OnClickListen
     private ImageView mIvCircle;
     private ImageView mIvRandom;
     private ImageView mIvLike;
-    private ImageView mIvNextPlay;
+    private ImageView mIvList;
 
     private OnItemClickListener itemClickListener;
 
@@ -49,13 +49,13 @@ public class PlayOperatorView extends LinearLayout implements View.OnClickListen
     private void findView() {
         mIvCircle = (ImageView) findViewById(R.id.view_play_operator_iv_circle);
         mIvRandom = (ImageView) findViewById(R.id.view_play_operator_iv_random);
-        mIvNextPlay = (ImageView) findViewById(R.id.view_play_operator_iv_next_play);
+        mIvList = (ImageView) findViewById(R.id.view_play_operator_iv_list);
         mIvLike = (ImageView) findViewById(R.id.view_play_operator_iv_like);
     }
 
     private void initView() {
         mIvCircle.setOnClickListener(this);
-        mIvNextPlay.setOnClickListener(this);
+        mIvList.setOnClickListener(this);
         mIvRandom.setOnClickListener(this);
         mIvLike.setOnClickListener(this);
 
@@ -74,13 +74,13 @@ public class PlayOperatorView extends LinearLayout implements View.OnClickListen
             case R.id.view_play_operator_iv_random:
                 itemClickListener.onRandomPlayItemClick();
                 break;
-            case R.id.view_play_operator_iv_next_play:
-                itemClickListener.onNextPlayItemClick();
+            case R.id.view_play_operator_iv_list:
+                itemClickListener.onMusicListClick();
                 break;
             case R.id.view_play_operator_iv_like:
-                itemClickListener.onLikeItemClick();
                 pseudoLike = !pseudoLike;
-                refreshLikeStatus(pseudoLike);
+                refreshLikeStatus(pseudoLike);  //pseudo refresh
+                itemClickListener.onLikeItemClick(pseudoLike);
                 break;
         }
     }
@@ -98,32 +98,32 @@ public class PlayOperatorView extends LinearLayout implements View.OnClickListen
         }
     }
 
-    public void refreshLikeStatus(boolean likes) {
-        if (likes) {
+    public void refreshLikeStatus(boolean like) {
+        this.pseudoLike = like;
+        if (pseudoLike) {
             mIvLike.setImageResource(R.mipmap.play_operator_un_love);
         } else {
             mIvLike.setImageResource(R.mipmap.play_operator_love);
         }
     }
 
-
-    public void hideNextPlay(){
-        mIvNextPlay.setVisibility(GONE);
+    public void hideNextPlay() {
+        mIvList.setVisibility(GONE);
     }
-
 
     public void setItemClickListener(OnItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
+
 
     public interface OnItemClickListener {
         void onCirclePlayItemClick();
 
         void onRandomPlayItemClick();
 
-        void onLikeItemClick();
+        void onLikeItemClick(boolean like);
 
-        void onNextPlayItemClick();
+        void onMusicListClick();
     }
 
 }

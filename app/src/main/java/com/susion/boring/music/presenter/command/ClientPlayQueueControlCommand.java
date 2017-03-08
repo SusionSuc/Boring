@@ -33,8 +33,8 @@ public class ClientPlayQueueControlCommand implements MediaPlayerContract.Client
 
     @Override
     public void changeMusic(Song song) {
-        Intent intent = new Intent(MusicInstruction.SERVER_RECEIVER_CHANGE_MUSIC_FROM_QUEUE);
-        intent.putExtra(MusicInstruction.SERVER_RECEIVER_CHANGE_MUSIC, song);
+        Intent intent = new Intent(MusicInstruction.SERVER_RECEIVER_CHANGE_MUSIC);
+        intent.putExtra(MusicInstruction.SERVICE_PARAM_CHANGE_MUSIC, song);
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
 
     }

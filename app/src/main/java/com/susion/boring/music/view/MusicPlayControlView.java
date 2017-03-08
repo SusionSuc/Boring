@@ -16,15 +16,12 @@ public class MusicPlayControlView extends LinearLayout implements View.OnClickLi
 
     private Context mContext;
     private ImageView mIvStartStop;
-
     private ImageView mIvNext;
     private ImageView mIvPre;
-
+    private ImageView mIvLoading;
 
     private boolean mIsPlay = false;
-
     private MusicPlayerControlViewItemClickListener listener;
-    private ImageView mIvLoading;
 
     public MusicPlayControlView(Context context) {
         super(context);
@@ -50,17 +47,13 @@ public class MusicPlayControlView extends LinearLayout implements View.OnClickLi
 
     private void findView() {
         mIvStartStop = (ImageView) findViewById(R.id.view_music_player_start_or_stop);
-
         mIvNext = (ImageView) findViewById(R.id.view_music_player_next);
         mIvPre = (ImageView) findViewById(R.id.view_music_player_pre);
         mIvLoading = (ImageView) findViewById(R.id.view_music_player_iv_loading);
 
-
-
         mIvStartStop.setOnClickListener(this);
         mIvNext.setOnClickListener(this);
         mIvPre.setOnClickListener(this);
-
     }
 
 

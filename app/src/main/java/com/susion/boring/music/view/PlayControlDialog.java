@@ -60,13 +60,13 @@ public class PlayControlDialog extends Dialog {
         mIvLoading = (ImageView) findViewById(R.id.loading);
 
         Window dialogWindow = getWindow();
-        dialogWindow.setBackgroundDrawableResource(android.R.color.white);
+        dialogWindow.setBackgroundDrawableResource(R.drawable.bg_dialog);
         dialogWindow.setGravity(Gravity.BOTTOM);
         this.setCancelable(true);
         setCanceledOnTouchOutside(true);
         WindowManager.LayoutParams p = getWindow().getAttributes();
 
-        p.height = UIUtils.getScreenHeight() * 3 / 7;
+        p.height = UIUtils.getScreenHeight() * 4 / 7;
         p.width = WindowManager.LayoutParams.MATCH_PARENT;
         dialogWindow.setAttributes(p);
         dialogWindow.setWindowAnimations(R.style.dialog_animation_frombottom);
@@ -94,11 +94,9 @@ public class PlayControlDialog extends Dialog {
             @Override
             protected int getViewType(int position) {
                 Object o = mData.get(position);
-
                 if (o instanceof Song) {
                     return TYPE_MUSIC;
                 }
-
                 return 0;
             }
         });
@@ -134,6 +132,7 @@ public class PlayControlDialog extends Dialog {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(ChangeSongEvent event){
+        dismiss();
         Song song = event.song;
         song.isPlaying = true;
         mRV.getAdapter().notifyDataSetChanged();

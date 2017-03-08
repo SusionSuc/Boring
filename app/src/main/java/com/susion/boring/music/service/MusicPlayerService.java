@@ -102,20 +102,15 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.L
 
     @Override
     public void tryToChangeMusic(Song song) {
-        mAutoPlay = true;
-        if (mSong != null) {
-            if (song.id.equals(mSong.id) && mPresenter.isPrepared()) {
-                notifyMediaDuration();
-                return;
-            }
-        }
+//        if (mSong != null) {
+//            if (song.id.equals(mSong.id) && mPresenter.isPrepared()) {
+//                notifyMediaDuration();
+//                return;
+//            }
+//        }
 
         mSong = song;
-        try {
-            mPresenter.initMediaPlayer(mSong.audio);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        preparePlay();
     }
 
     @Override
@@ -297,15 +292,14 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.L
 
     @Override
     public void preparedPlay(int duration) {
+        mPlayQueuePresenter.markCurrentPlayMusic(mSong);
         if (mAutoPlay) {
             mPresenter.startPlay();
         }
-
         Intent intent = new Intent(MusicInstruction.CLIENT_RECEIVER_PLAYER_PREPARED);
         intent.putExtra(MusicInstruction.CLIENT_PARAM_PREPARED_TOTAL_DURATION, duration);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
-
 
     @Override
     public void informCurrentPlayMusic() {

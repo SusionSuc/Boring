@@ -61,7 +61,6 @@ public class ServiceReceiverPresenter implements MusicServiceContract.ReceiverPr
             filter.addAction(MusicInstruction.SERVER_RECEIVER_GET_PLAY_QUEUE);
             filter.addAction(MusicInstruction.SERVER_RECEIVER_RANDOM_PLAY_PLAY_LIST);
             filter.addAction(MusicInstruction.SERVER_RECEIVER_REMOVE_SONG_FROM_QUEUE);
-            filter.addAction(MusicInstruction.SERVER_RECEIVER_CHANGE_MUSIC_FROM_QUEUE);
             return filter;
         }
 
@@ -127,9 +126,6 @@ public class ServiceReceiverPresenter implements MusicServiceContract.ReceiverPr
                     break;
                 case MusicInstruction.SERVER_RECEIVER_RANDOM_PLAY_PLAY_LIST:
                     mService.randomPlayPlayList((PlayList) intent.getSerializableExtra(MusicInstruction.SERVICE_PARAM_PLAY_LIST));
-                    break;
-                case MusicInstruction.SERVER_RECEIVER_CHANGE_MUSIC_FROM_QUEUE:
-                    mService.tryToChangeMusic((Song) intent.getSerializableExtra(MusicInstruction.SERVICE_PARAM_CHANGE_MUSIC));
                     break;
             }
         }

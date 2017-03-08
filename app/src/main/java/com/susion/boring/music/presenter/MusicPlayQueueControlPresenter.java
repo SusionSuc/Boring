@@ -73,8 +73,6 @@ public class MusicPlayQueueControlPresenter implements MusicServiceContract.Play
           return null;
         }
 
-        mQueue.get(mCurrentIndex).isPlaying = false;
-
         if (mPlayMode == CIRCLE_MODE) {
 
         }
@@ -91,7 +89,6 @@ public class MusicPlayQueueControlPresenter implements MusicServiceContract.Play
             mCurrentIndex = mRandom.nextInt(mQueue.size());
         }
 
-        mQueue.get(mCurrentIndex).isPlaying = true;
         return mQueue.get(mCurrentIndex);
     }
 
@@ -100,8 +97,6 @@ public class MusicPlayQueueControlPresenter implements MusicServiceContract.Play
         if (mQueue.isEmpty()) {
             return null;
         }
-
-        mQueue.get(mCurrentIndex).isPlaying = false;
 
         if (mPlayMode == QUEUE_MODE || mPlayMode == PLAY_LIST_CIRCLE_MODE) {
             if (mCurrentIndex > 0){
@@ -115,7 +110,6 @@ public class MusicPlayQueueControlPresenter implements MusicServiceContract.Play
             mCurrentIndex = mRandom.nextInt(mQueue.size());
         }
 
-        mQueue.get(mCurrentIndex).isPlaying = true;
         return mQueue.get(mCurrentIndex);
     }
 
@@ -143,7 +137,6 @@ public class MusicPlayQueueControlPresenter implements MusicServiceContract.Play
     public int getPlayMode() {
         return mPlayMode;
     }
-
 
     @Override
     public Observable<Boolean> reLoadPlayQueue(final PlayList playList) {
@@ -198,5 +191,26 @@ public class MusicPlayQueueControlPresenter implements MusicServiceContract.Play
         }
 
         return false;
+    }
+
+    @Override
+    public void markCurrentPlayMusic(Song markSong) {
+        if (mQueue == null || mQueue.isEmpty()) {
+            return;
+        }
+        boolean haveSong = false;
+        for (Song song : mQueue) {
+            song.isPlaying = false;
+            if (song.id.equals(markSong.id)) {
+                song.isPlaying = true;
+                haveSong = true;
+            }
+        }
+
+        if (!haveSong) {
+            markSong.isPlaying = true;
+            mQueue.add(0, markSong);
+        }
+
     }
 }

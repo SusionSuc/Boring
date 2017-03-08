@@ -15,10 +15,12 @@ import java.util.List;
 /**
  * Created by susion on 17/3/2.
  */
-public class ClientPlayModeCommand extends ClientPlayCommand implements MediaPlayerContract.ClientPlayModeCommand{
+public class ClientPlayModeCommand implements MediaPlayerContract.ClientPlayModeCommand{
+
+    private Context mContext;
 
     public ClientPlayModeCommand(Context mContext) {
-        super(mContext);
+        this.mContext = mContext;
     }
 
     @Override

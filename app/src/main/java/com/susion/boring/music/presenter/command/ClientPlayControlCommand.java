@@ -12,11 +12,12 @@ import com.susion.boring.utils.BroadcastUtils;
 /**
  * Created by susion on 17/3/2.
  */
-public class ClientPlayControlCommand  extends ClientPlayCommand implements MediaPlayerContract.ClientPlayControlCommand {
+public class ClientPlayControlCommand implements MediaPlayerContract.ClientPlayControlCommand {
 
+    private Context mContext;
 
     public ClientPlayControlCommand(Context mContext) {
-        super(mContext);
+        this.mContext = mContext;
     }
 
     @Override
@@ -60,6 +61,12 @@ public class ClientPlayControlCommand  extends ClientPlayCommand implements Medi
     @Override
     public void pausePlay() {
         Intent intent = new Intent(MusicInstruction.SERVICE_RECEIVER_PAUSE_MUSIC);
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+    }
+
+    @Override
+    public void updatePlayMusic(Song song) {
+        Intent intent = new Intent(MusicInstruction.SERVICE_PARAM_UPDATE_SONG);
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
 

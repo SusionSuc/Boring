@@ -17,7 +17,7 @@ public class LocalMusicIH extends SimpleMusicIH<SimpleSong> {
 
     @Override
     protected void onClickEvent() {
-        if (!mData.isFromPlayList()) {
+        if (!mData.isFromPlayList() && mData.isHasDown()) {
             PlayMusicActivity.start(mContext, mData.translateToSong(), false);
         } else {
             PlayMusicActivity.start(mContext, mData.translateToSong(), true);

@@ -11,16 +11,17 @@
         android:text="播放列表"
         android:textColor="@color/colorPrimary"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
+        android:layout_height="40dp" />
     <View
         android:background="@color/red_divider"
         android:layout_width="match_parent"
         android:layout_height="1px" />
 
+
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_weight="1"
+        android:layout_height="0dp">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/list_view"

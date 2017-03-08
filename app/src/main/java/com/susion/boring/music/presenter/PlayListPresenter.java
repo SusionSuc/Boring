@@ -64,7 +64,6 @@ public class PlayListPresenter implements PlayListContract.Presenter {
                         mView.refreshPlayListLikeStatus(flag);
                     }
                 });
-
     }
 
     @Override
@@ -85,11 +84,9 @@ public class PlayListPresenter implements PlayListContract.Presenter {
 
                     @Override
                     public void onNext(Boolean flag) {
-                        mView.refreshPlayListLikeStatus(flag);
+                        mView.refreshPlayListLikeStatus(!flag);
                     }
                 });
-
-
     }
 
     @Override

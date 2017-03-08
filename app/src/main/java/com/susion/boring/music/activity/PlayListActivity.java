@@ -52,9 +52,6 @@ public class PlayListActivity extends BaseActivity implements PlayListContract.V
 
     private PlayOperatorView mPlayOperatorView;
     private MediaPlayerContract.ClientPlayModeCommand mPlayModeCommand;
-    private DbBaseOperate<PlayList> mPlayDb;
-
-    private boolean mIsLike = false;
     private PlayListContract.Presenter mPresenter;
 
     public static void start(Context mContext, PlayList mData) {
@@ -81,7 +78,6 @@ public class PlayListActivity extends BaseActivity implements PlayListContract.V
     public void findView() {
         mPresenter = new PlayListPresenter(this);
         mPlayModeCommand = new ClientPlayModeCommand(this);
-
 
         mSdvBg = (SimpleDraweeView) findViewById(R.id.ac_play_list_iv_bg);
         mRv = (LoadMoreRecycleView) findViewById(R.id.list_view);
@@ -118,8 +114,6 @@ public class PlayListActivity extends BaseActivity implements PlayListContract.V
         });
 
         mPlayOperatorView.hideNextPlay();
-
-
         mPresenter.queryPlayListLikeStatus(mPlayList);
     }
 
@@ -160,17 +154,16 @@ public class PlayListActivity extends BaseActivity implements PlayListContract.V
             }
 
             @Override
-            public void onLikeItemClick() {
-                mIsLike = !mIsLike;
-                if (mIsLike) {
+            public void onLikeItemClick(boolean like) {
+                if (like) {
                     mPresenter.likePlayList(mPlayList);
                 } else {
                     mPresenter.disLikePlayList(mPlayList);
                 }
             }
+
             @Override
-            public void onNextPlayItemClick() {
-                //no operator
+            public void onMusicListClick() {
             }
         });
     }
@@ -188,11 +181,7 @@ public class PlayListActivity extends BaseActivity implements PlayListContract.V
 
     @Override
     public void refreshPlayListLikeStatus(Boolean flag) {
-        if (flag) {
-            mPlayOperatorView.refreshLikeStatus(true);
-            return;
-        }
-        mPlayOperatorView.refreshLikeStatus(false);
+        mPlayOperatorView.refreshLikeStatus(flag);
     }
 
     @Override

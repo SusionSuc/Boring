@@ -18,7 +18,6 @@ public interface MediaPlayerContract {
     //for panel view
     interface BaseView extends IView {
         void tryToChangeMusicByCurrentCondition(boolean playStatus, boolean needLoadMusic);
-
         void refreshSong(Song song);
     }
 
@@ -91,15 +90,7 @@ public interface MediaPlayerContract {
 
 
     //Client send command interact with play service
-    interface ClientCommand {
-        void likeMusic(Song mSong);
-
-        void updatePlayMusic(Song song);
-
-        void musicToNextPlay(Song mSong);
-    }
-
-    interface ClientPlayControlCommand extends ClientCommand {
+    interface ClientPlayControlCommand {
         void queryServiceIsPlaying();
 
         void tryToChangePlayingMusic(Song song);
@@ -113,10 +104,12 @@ public interface MediaPlayerContract {
         void getCurrentPlayMusic();
 
         void pausePlay();
+
+        void updatePlayMusic(Song song);
     }
 
 
-    interface ClientPlayModeCommand extends ClientCommand {
+    interface ClientPlayModeCommand{
         void queryCurrentPlayMode();
 
         void startCirclePlayMode();

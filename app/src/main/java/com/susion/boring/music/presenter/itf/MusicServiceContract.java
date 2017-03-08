@@ -105,6 +105,8 @@ public interface MusicServiceContract {
         List<Song> getPlayQueue();
 
         boolean removeSong(Song song);
+
+        void markCurrentPlayMusic(Song song);
     }
 
 }
