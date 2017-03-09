@@ -26,6 +26,7 @@ import com.susion.boring.music.model.PlayListDetail;
 import com.susion.boring.music.presenter.PlayListPresenter;
 import com.susion.boring.music.presenter.command.ClientPlayModeCommand;
 import com.susion.boring.music.presenter.itf.MediaPlayerContract;
+import com.susion.boring.music.presenter.itf.MusicServiceContract;
 import com.susion.boring.music.presenter.itf.PlayListContract;
 import com.susion.boring.music.view.PlayOperatorView;
 import com.susion.boring.utils.RVUtils;
@@ -144,13 +145,21 @@ public class PlayListActivity extends BaseActivity implements PlayListContract.V
 
         mPlayOperatorView.setItemClickListener(new PlayOperatorView.OnItemClickListener() {
             @Override
-            public void onCirclePlayItemClick() {
-                mPlayModeCommand.circlePlayPlayList(mPlayList);
+            public void onCirclePlayItemClick(int mode) {
+                if (mode == MusicServiceContract.PlayQueueControlPresenter.CIRCLE_MODE) {
+                    mPlayModeCommand.circlePlayPlayList(mPlayList);
+                } else {
+                    mPlayModeCommand.startQueuePlayMode();
+                }
             }
 
             @Override
-            public void onRandomPlayItemClick() {
-                mPlayModeCommand.randomPlayPlayList(mPlayList);
+            public void onRandomPlayItemClick(int mode) {
+                if (mode == MusicServiceContract.PlayQueueControlPresenter.RANDOM_MODE) {
+                    mPlayModeCommand.randomPlayPlayList(mPlayList);
+                } else {
+                    mPlayModeCommand.startQueuePlayMode();
+                }
             }
 
             @Override

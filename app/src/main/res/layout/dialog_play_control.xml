@@ -5,6 +5,7 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/dialog_title"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:gravity="center"

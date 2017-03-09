@@ -29,24 +29,28 @@
 
 
         <RelativeLayout
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="200dp"
             android:visibility="gone"
             android:id="@+id/refresh_parent"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
             <ImageView
+                android:layout_centerHorizontal="true"
                 android:id="@+id/refresh"
-                android:layout_centerInParent="true"
-                android:src="@mipmap/refresh"
-                android:layout_width="40dp"
-                android:layout_height="40dp" />
+                android:src="@mipmap/music_loading"
+                android:layout_width="35dp"
+                android:layout_height="35dp" />
 
             <Button
                 android:id="@+id/local_music_bt_start_scan"
-                android:background="@color/colorLightPrimary"
+                android:background="@drawable/bg_shape_corner_rectangle"
                 android:layout_marginTop="10dp"
-                android:text="开始扫描"
-                android:layout_centerHorizontal="true"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="扫描本地音乐"
+                android:textColor="@color/white"
                 android:layout_below="@id/refresh"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />

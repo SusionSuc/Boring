@@ -50,6 +50,12 @@ public class ClientPlayModeCommand implements MediaPlayerContract.ClientPlayMode
     }
 
     @Override
+    public void startQueuePlayMode() {
+        Intent intent = new Intent(MusicInstruction.SERVER_RECEIVER_PLAY_MODE_QUEUE);
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+    }
+
+    @Override
     public void queryCurrentPlayMode() {
         Intent intent = new Intent(MusicInstruction.SERVER_RECEIVER_SONG_QUERY_CUR_MODE);
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);

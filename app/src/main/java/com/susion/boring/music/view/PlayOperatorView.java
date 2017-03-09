@@ -27,7 +27,8 @@ public class PlayOperatorView extends LinearLayout implements View.OnClickListen
 
     private OnItemClickListener itemClickListener;
 
-    private boolean pseudoLike;
+    private boolean mPseudoLike;
+    private int mPseudoMode;
 
     public PlayOperatorView(Context context) {
         super(context);
@@ -59,7 +60,7 @@ public class PlayOperatorView extends LinearLayout implements View.OnClickListen
         mIvRandom.setOnClickListener(this);
         mIvLike.setOnClickListener(this);
 
-        pseudoLike = false;
+        mPseudoLike = false;
     }
 
     @Override
@@ -67,20 +68,35 @@ public class PlayOperatorView extends LinearLayout implements View.OnClickListen
         if (itemClickListener == null) {
             return;
         }
+        boolean isSameMode;
         switch (v.getId()) {
             case R.id.view_play_operator_iv_circle:
-                itemClickListener.onCirclePlayItemClick();
+                isSameMode = mPseudoMode == MusicServiceContract.PlayQueueControlPresenter.CIRCLE_MODE;
+                if (isSameMode) {
+                    mPseudoMode = MusicServiceContract.PlayQueueControlPresenter.QUEUE_MODE;
+                }else {
+                    mPseudoMode = MusicServiceContract.PlayQueueControlPresenter.CIRCLE_MODE;
+                }
+                itemClickListener.onCirclePlayItemClick(mPseudoMode);
+                refreshPlayMode(mPseudoMode);
                 break;
             case R.id.view_play_operator_iv_random:
-                itemClickListener.onRandomPlayItemClick();
+                isSameMode = mPseudoMode == MusicServiceContract.PlayQueueControlPresenter.RANDOM_MODE;
+                if (isSameMode) {
+                    mPseudoMode = MusicServiceContract.PlayQueueControlPresenter.QUEUE_MODE;
+                } else {
+                    mPseudoMode = MusicServiceContract.PlayQueueControlPresenter.RANDOM_MODE;
+                }
+                itemClickListener.onRandomPlayItemClick(mPseudoMode);
+                refreshPlayMode(mPseudoMode);
                 break;
             case R.id.view_play_operator_iv_list:
                 itemClickListener.onMusicListClick();
                 break;
             case R.id.view_play_operator_iv_like:
-                pseudoLike = !pseudoLike;
-                refreshLikeStatus(pseudoLike);  //pseudo refresh
-                itemClickListener.onLikeItemClick(pseudoLike);
+                mPseudoLike = !mPseudoLike;
+                refreshLikeStatus(mPseudoLike);  //pseudo refresh
+                itemClickListener.onLikeItemClick(mPseudoLike);
                 break;
         }
     }
@@ -99,8 +115,8 @@ public class PlayOperatorView extends LinearLayout implements View.OnClickListen
     }
 
     public void refreshLikeStatus(boolean like) {
-        this.pseudoLike = like;
-        if (pseudoLike) {
+        this.mPseudoLike = like;
+        if (mPseudoLike) {
             mIvLike.setImageResource(R.mipmap.play_operator_un_love);
         } else {
             mIvLike.setImageResource(R.mipmap.play_operator_love);
@@ -117,9 +133,9 @@ public class PlayOperatorView extends LinearLayout implements View.OnClickListen
 
 
     public interface OnItemClickListener {
-        void onCirclePlayItemClick();
+        void onCirclePlayItemClick(int mode);
 
-        void onRandomPlayItemClick();
+        void onRandomPlayItemClick(int mode);
 
         void onLikeItemClick(boolean like);
 

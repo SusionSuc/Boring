@@ -28,6 +28,7 @@ import com.susion.boring.music.presenter.command.ClientPlayControlCommand;
 import com.susion.boring.music.presenter.command.ClientPlayModeCommand;
 import com.susion.boring.music.presenter.command.ClientPlayQueueControlCommand;
 import com.susion.boring.music.presenter.itf.MediaPlayerContract;
+import com.susion.boring.music.presenter.itf.MusicServiceContract;
 import com.susion.boring.music.presenter.itf.PlayMusicPageContract;
 import com.susion.boring.music.service.MusicInstruction;
 import com.susion.boring.music.view.LyricView;
@@ -38,6 +39,7 @@ import com.susion.boring.music.view.PlayOperatorView;
 import com.susion.boring.utils.AlbumUtils;
 import com.susion.boring.utils.BroadcastUtils;
 import com.susion.boring.utils.TimeUtils;
+import com.susion.boring.utils.ToastUtils;
 import com.susion.boring.utils.TransitionHelper;
 import com.susion.boring.view.SToolBar;
 
@@ -66,7 +68,6 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
     private Song mSong;
     private boolean mIsFromLittlePanel;
     private boolean isLoading;
-
 
     private PlayMusicPageContract.Presenter mPresenter;
     private MediaPlayerContract.ClientPlayControlCommand mPlayControlCommand;
@@ -231,13 +232,21 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
 
         mPovMusicPlayControl.setItemClickListener(new PlayOperatorView.OnItemClickListener() {
             @Override
-            public void onCirclePlayItemClick() {
-                mPlayModeCommand.startCirclePlayMode();
+            public void onCirclePlayItemClick(int mode) {
+                if (mode == MusicServiceContract.PlayQueueControlPresenter.CIRCLE_MODE) {
+                    mPlayModeCommand.startCirclePlayMode();
+                } else {
+                    mPlayModeCommand.startQueuePlayMode();
+                }
             }
 
             @Override
-            public void onRandomPlayItemClick() {
-                mPlayModeCommand.startRandomPlayMode();
+            public void onRandomPlayItemClick(int mode) {
+                if (mode == MusicServiceContract.PlayQueueControlPresenter.RANDOM_MODE) {
+                    mPlayModeCommand.startRandomPlayMode();
+                } else {
+                    mPlayModeCommand.startQueuePlayMode();
+                }
             }
 
             @Override

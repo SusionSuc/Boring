@@ -119,6 +119,8 @@ public interface MediaPlayerContract {
         void circlePlayPlayList(PlayList mData);
 
         void randomPlayPlayList(PlayList mPlayList);
+
+        void startQueuePlayMode();
     }
 
     interface ClientPlayQueueControlCommand {

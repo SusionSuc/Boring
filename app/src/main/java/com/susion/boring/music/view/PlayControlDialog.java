@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.susion.boring.R;
 import com.susion.boring.base.BaseRVAdapter;
@@ -40,6 +41,7 @@ public class PlayControlDialog extends Dialog {
     private List<Object> mDialogData = new ArrayList<>();
     private ImageView mIvLoading;
     private Context mContext;
+    private TextView mTvTitle;
 
     public PlayControlDialog(Context context) {
         super(context);
@@ -55,6 +57,7 @@ public class PlayControlDialog extends Dialog {
     }
 
     private void initView() {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dialog_play_control);
         mRV = (RecyclerView) findViewById(R.id.list_view);
         mIvLoading = (ImageView) findViewById(R.id.loading);
@@ -65,12 +68,11 @@ public class PlayControlDialog extends Dialog {
         this.setCancelable(true);
         setCanceledOnTouchOutside(true);
         WindowManager.LayoutParams p = getWindow().getAttributes();
-
         p.height = UIUtils.getScreenHeight() * 4 / 7;
         p.width = WindowManager.LayoutParams.MATCH_PARENT;
         dialogWindow.setAttributes(p);
         dialogWindow.setWindowAnimations(R.style.dialog_animation_frombottom);
-
+        
         initData();
         initRv();
     }

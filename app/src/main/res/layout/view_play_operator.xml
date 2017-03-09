@@ -7,33 +7,41 @@
 
     <ImageView
         android:id="@+id/view_play_operator_iv_circle"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:layout_height="20dp"
+        android:layout_height="40dp"
         android:background="@drawable/bg_ripple"
         android:src="@mipmap/play_operator_circle" />
 
     <ImageView
         android:id="@+id/view_play_operator_iv_random"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:layout_height="20dp"
+        android:layout_height="40dp"
         android:background="@drawable/bg_ripple"
         android:src="@mipmap/play_operator_random" />
 
     <ImageView
         android:id="@+id/view_play_operator_iv_like"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:layout_height="20dp"
+        android:layout_height="40dp"
         android:background="@drawable/bg_ripple"
         android:src="@mipmap/play_operator_love" />
 
     <ImageView
         android:id="@+id/view_play_operator_iv_list"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:layout_height="20dp"
+        android:layout_height="40dp"
         android:background="@drawable/bg_ripple"
         android:src="@mipmap/play_operator_music_list" />
 

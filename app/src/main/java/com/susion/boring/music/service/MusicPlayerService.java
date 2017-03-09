@@ -34,17 +34,19 @@ import rx.schedulers.Schedulers;
  */
 public class MusicPlayerService extends Service implements MediaPlayerContract.LittlePlayView, MusicServiceContract.Service{
 
+    private static final String PLAY_NOT_IS_PLAY_LIST = "PLAY_NOT_IS_PLAY_LIST";
+    private static final String TAG = MusicPlayerService.class.getSimpleName();
+    public static final String SERVICE_ACTION = "MUSIC_SERVICE";
+
     private MediaPlayerContract.PlayMusicControlPresenter mPresenter;
     private MusicDbOperator mDbOperator;
     private MusicServiceContract.ReceiverPresenter mReceiverPresenter;
     private MusicServiceContract.PlayQueueControlPresenter mPlayQueuePresenter;
     private boolean mQueueIsPrepare;
 
-    private static final String TAG = MusicPlayerService.class.getSimpleName();
-    public static final String SERVICE_ACTION = "MUSIC_SERVICE";
     private Song mSong;          //current play music
+    private String mHasLoadPlayListId = PLAY_NOT_IS_PLAY_LIST;
     private boolean mAutoPlay;
-
 
     @Override
     public void onCreate() {
@@ -190,8 +192,8 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.L
     }
 
     @Override
-    public void circlePlayPlayList(PlayList playList) {
-        if (mPlayQueuePresenter != null) {
+    public void circlePlayPlayList(final PlayList playList) {
+        if (mPlayQueuePresenter != null && !playList.getId().equals(mHasLoadPlayListId)) {
             mPresenter.stopPlay();
             mQueueIsPrepare = false;
             mPlayQueuePresenter.reLoadPlayQueue(playList)
@@ -211,6 +213,7 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.L
                         @Override
                         public void onNext(Boolean flag) {
                             if (flag) {
+                                mHasLoadPlayListId = playList.getId();
                                 mQueueIsPrepare = true;
                                 mPlayQueuePresenter.setPlayMode(MusicServiceContract.PlayQueueControlPresenter.PLAY_LIST_CIRCLE_MODE);
                                 playNextMusic();
@@ -221,39 +224,44 @@ public class MusicPlayerService extends Service implements MediaPlayerContract.L
     }
 
     @Override
-    public void randomPlayPlayList(PlayList playList) {
-        if (mPlayQueuePresenter != null) {
+    public void randomPlayPlayList(final  PlayList playList) {
+        if (mPlayQueuePresenter != null && !playList.getId().equals(mHasLoadPlayListId)) {
             mPresenter.stopPlay();
             mQueueIsPrepare = false;
             mPlayQueuePresenter.reLoadPlayQueue(playList)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Observer<Boolean>() {
-                        @Override
-                        public void onCompleted() {
-
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            ToastUtils.showShort("装载音乐列表失败");
-                        }
-
-                        @Override
-                        public void onNext(Boolean flag) {
-                            if (flag) {
-                                mQueueIsPrepare = true;
-                                mPlayQueuePresenter.setPlayMode(MusicServiceContract.PlayQueueControlPresenter.RANDOM_MODE);
-                                playNextMusic();
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<Boolean>() {
+                            @Override
+                            public void onCompleted() {
                             }
-                        }
-                    });
+
+                            @Override
+                            public void onError(Throwable e) {
+                                ToastUtils.showShort("装载音乐列表失败");
+                            }
+
+                            @Override
+                            public void onNext(Boolean flag) {
+                                if (flag) {
+                                    mHasLoadPlayListId = playList.getId();
+                                    mQueueIsPrepare = true;
+                                    mPlayQueuePresenter.setPlayMode(MusicServiceContract.PlayQueueControlPresenter.RANDOM_MODE);
+                                    playNextMusic();
+                                }
+                            }
+                        });
         }
     }
 
     @Override
     public void removeSongFromQueue(Song song) {
         mPlayQueuePresenter.removeSong(song);
+    }
+
+    @Override
+    public void startQueueMode() {
+        mPlayQueuePresenter.setPlayMode(MusicServiceContract.PlayQueueControlPresenter.QUEUE_MODE);
     }
 
     @Override

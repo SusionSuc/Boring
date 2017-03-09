@@ -25,7 +25,6 @@ public class MusicPlayQueueControlPresenter implements MusicServiceContract.Play
     private List<Song> mQueue;
     private int mPlayMode;
     private int mCurrentIndex = 0;
-
     private final Random mRandom;
 
     public MusicPlayQueueControlPresenter(List<Song> initQueue) {
@@ -211,6 +210,5 @@ public class MusicPlayQueueControlPresenter implements MusicServiceContract.Play
             markSong.isPlaying = true;
             mQueue.add(0, markSong);
         }
-
     }
 }
