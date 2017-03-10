@@ -2,6 +2,9 @@ package com.susion.boring.utils;
 
 import android.annotation.SuppressLint;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -42,4 +45,40 @@ public class TimeUtils {
     }
 
 
+    public static String formatDate(Date date, String pattern) {
+        SimpleDateFormat format = new SimpleDateFormat(pattern);
+        return  format.format(date);
+    }
+
+    public static String getDateCnDescForZhiHu(Date date) {
+        String dateDesc;
+        Calendar calender = Calendar.getInstance();
+        calender.setTime(date);
+        int month = calender.get(Calendar.MONTH)+1;
+        int day = calender.get(Calendar.DATE);
+        int weekDay = calender.get(Calendar.DAY_OF_WEEK) - 1;
+        dateDesc = month+"月"+day+"日 "+"星期"+ translateToCn(weekDay);
+        return dateDesc;
+    }
+
+    private static String translateToCn(int weekDay) {
+
+        switch (weekDay) {
+            case 1:
+                return "一";
+            case 2:
+                return "二";
+            case 3:
+                return "三";
+            case 4:
+                return "四";
+            case 5:
+                return "五";
+            case 6:
+                return "六";
+            case 7:
+                return "日";
+        }
+        return "八";
+    }
 }

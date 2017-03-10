@@ -6,6 +6,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.susion.boring.R;
 import com.susion.boring.base.SimpleItemHandler;
 import com.susion.boring.base.ViewHolder;
+import com.susion.boring.interesting.activity.ZhiHuEssayActivity;
 import com.susion.boring.interesting.model.DailyNews;
 
 /**
@@ -28,6 +29,6 @@ public class DailyNewsIH extends SimpleItemHandler<DailyNews.StoriesBean>{
 
     @Override
     public void onClick(View v) {
-
+        ZhiHuEssayActivity.start(mContext, mData.getId());
     }
 }

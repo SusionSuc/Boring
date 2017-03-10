@@ -12,4 +12,5 @@ public class BaseURL {
     public static final String MUSIC_PLAY_LIST_DETAIL = "https://api.imjad.cn/cloudmusic";
     public static final String ZHI_HU_DAILY_LATEST_NEWS = "http://news-at.zhihu.com/api/4/news/latest";
 
+    public static final String ZHI_HU_DAILY_FIX_DATE_NEWS = "http://news-at.zhihu.com/api/4/news/before";
 }

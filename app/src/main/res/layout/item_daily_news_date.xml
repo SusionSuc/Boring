@@ -8,6 +8,7 @@
     android:orientation="vertical">
 
     <TextView
+        android:textColor="@color/white"
         android:id="@+id/item_daily_news_date_tv_date"
         android:layout_gravity="center"
         android:text="03月0日 星期四"

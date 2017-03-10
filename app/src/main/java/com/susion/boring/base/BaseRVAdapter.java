@@ -93,7 +93,6 @@ public abstract class BaseRVAdapter extends RecyclerView.Adapter{
                 ((ViewHolder) holder.itemView.getTag(R.id.item_tag_id)).position = position;
             }
         }
-
     }
 
 

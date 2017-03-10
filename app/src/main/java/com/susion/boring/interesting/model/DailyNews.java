@@ -1,5 +1,7 @@
 package com.susion.boring.interesting.model;
 
+import com.susion.boring.interesting.inf.TitleMark;
+
 import java.util.List;
 
 /**
@@ -31,7 +33,7 @@ public class DailyNews {
         this.stories = stories;
     }
 
-    public static class StoriesBean {
+    public static class StoriesBean extends TitleMark {
         /**
          * images : ["http://pic3.zhimg.com/d626aee39080e15f9a24ff2fa56771ba.jpg"]
          * type : 0
@@ -95,5 +97,7 @@ public class DailyNews {
         public void setImages(List<String> images) {
             this.images = images;
         }
+
+
     }
 }

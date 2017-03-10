@@ -72,6 +72,11 @@ public class LoadMoreRecycleView extends RecyclerView {
         hasLastListener = true;
     }
 
+
+    public boolean hasLoadMoreView(){
+        return hasLastListener;
+    }
+
     public class LoadMoreAdapter extends Adapter<ViewHolder> {
 
         LoadMoreView mLoadMoreView;

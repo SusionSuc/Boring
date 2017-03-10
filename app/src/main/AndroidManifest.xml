@@ -50,13 +50,13 @@
         <activity
             android:name=".music.activity.MusicDownLoadListActivity"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".music.activity.PlayListActivity"
             android:theme="@style/AppTheme" />
-
-        <activity android:name=".interesting.activity.ZhiHuDailyNewsActivity"
-            android:theme="@style/AppTheme"></activity>
+        <activity
+            android:name=".interesting.activity.ZhiHuDailyNewsActivity"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".interesting.activity.ZhiHuEssayActivity"></activity>
     </application>
 
 </manifest>

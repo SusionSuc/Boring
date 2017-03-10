@@ -8,6 +8,7 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 /**
@@ -67,7 +68,20 @@ public class UIUtils {
                 result += tag + " ";
             }
         }
-
         return result;
+    }
+
+    public static int getStatusBarHeight(Context context){
+        try {
+            Class<?> c = Class.forName("com.android.internal.R$dimen");
+            Object obj = c.newInstance();
+            Field field = c.getField("status_bar_height");
+            int height = context.getResources().getDimensionPixelSize(Integer.parseInt(field.get(obj).toString()));
+            int b = 0;
+            return height;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 }

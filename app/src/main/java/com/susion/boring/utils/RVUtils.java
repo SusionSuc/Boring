@@ -1,13 +1,18 @@
 package com.susion.boring.utils;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.text.TextPaint;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
@@ -15,6 +20,9 @@ import com.susion.boring.R;
 import com.susion.boring.base.DividerMark;
 import com.susion.boring.base.DrawerData;
 import com.susion.boring.base.OnLastItemVisibleListener;
+import com.susion.boring.base.view.LoadMoreRecycleView;
+import com.susion.boring.interesting.activity.ZhiHuDailyNewsActivity;
+import com.susion.boring.interesting.contract.ZhiHuDailyContract;
 
 import java.util.List;
 
@@ -55,6 +63,11 @@ public class RVUtils {
 
     public static RecyclerView.ItemDecoration getDrawerItemDecorationDivider(Context context, int color, Rect margin, List<DividerMark> data){
         return new DrawerDividerDecoration(context, color, margin, data);
+    }
+
+    public static RecyclerView.ItemDecoration getZhiHuDailyNewsDecoration(Context context, int headerHeight, ZhiHuDailyContract.DailyNewsStickHeader dailyNewsStickHeader) {
+        return new ZhiHuDailyNewsDecoration(context, dailyNewsStickHeader, headerHeight);
+
     }
 
     public  static  class SimpleDividerDecoration extends RecyclerView.ItemDecoration {
@@ -155,6 +168,90 @@ public class RVUtils {
             }
         }
     }
+    private static class ZhiHuDailyNewsDecoration extends RecyclerView.ItemDecoration {
+        private ZhiHuDailyContract.DailyNewsStickHeader stickHeader;
+        private TextPaint textPaint;
+        private Paint paint;
+        private int topGap;
+        private Paint.FontMetrics fontMetrics;
+
+        public ZhiHuDailyNewsDecoration(Context context, ZhiHuDailyContract.DailyNewsStickHeader dailyNewsStickHeader, int headerHeight) {
+            Resources res = context.getResources();
+            stickHeader = dailyNewsStickHeader;
+
+            paint = new Paint();
+            paint.setColor(res.getColor(R.color.colorAccent));
+
+            textPaint = new TextPaint();
+            textPaint.setTypeface(Typeface.DEFAULT_BOLD);
+            textPaint.setAntiAlias(true);
+            textPaint.setTextSize(42);
+            textPaint.setColor(Color.WHITE);
+            textPaint.getFontMetrics(fontMetrics);
+            textPaint.setTextAlign(Paint.Align.CENTER);
+            fontMetrics = new Paint.FontMetrics();
+            topGap = headerHeight;
+        }
+
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            super.getItemOffsets(outRect, view, parent, state);
+            int pos = parent.getChildAdapterPosition(view);
+            if (pos < 0) return;
+            if (pos == 0 || isFirstInGroup(pos)) {//同组的第一个才添加padding
+                outRect.top = topGap;
+            } else {
+                outRect.top = 0;
+            }
+        }
+
+        @Override
+        public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
+            super.onDrawOver(c, parent, state);
+            int itemCount = state.getItemCount();
+            int childCount = parent.getChildCount();
+            int left = parent.getPaddingLeft();
+            int right = parent.getWidth() - parent.getPaddingRight();
+
+            String preTitle, title = null;
+            for (int i = 0; i < childCount; i++) {
+                View view = parent.getChildAt(i);
+                int position = parent.getChildAdapterPosition(view);
+
+                preTitle = title;
+                title = stickHeader.getTitle(position);
+                stickHeader.setNewTitle(preTitle);
+                if (title.equals(preTitle)) continue;
+
+                if (TextUtils.isEmpty(title) || stickHeader.isShowTitle(position)) continue;
+
+                int viewBottom = view.getBottom();
+                float textY = Math.max(topGap, view.getTop());
+                if (position + 1 < itemCount) {                 //下一个和当前不一样移动当前
+                    String nextTitle = stickHeader.getTitle(position + 1);
+                    if (!nextTitle.equals(title) && viewBottom < textY ) {      //组内最后一个view进入了header
+                        textY = viewBottom;
+                    }
+                }
+                paint.setColor(stickHeader.getHeaderColor(position));
+                c.drawRect(left, textY - topGap, right, textY + UIUtils.dp2Px(5), paint);
+                c.drawText(title, left + (view.getRight() - left) / 2, textY, textPaint);
+            }
+        }
+
+
+        private boolean isFirstInGroup(int pos) {
+            if (pos == 0) {
+                return true;
+            } else {
+                String title = stickHeader.getTitle(pos - 1);
+                String title2 = stickHeader.getTitle(pos);
+                return !title.equals(title2);
+            }
+        }
+    }
+
 
     /**
      * 添加到底部的监听.
@@ -203,5 +300,6 @@ public class RVUtils {
             }
         });
     }
+
 
 }

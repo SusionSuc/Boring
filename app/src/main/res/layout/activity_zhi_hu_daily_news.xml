@@ -39,11 +39,14 @@
 
     </com.susion.boring.base.view.LoadMoreRecycleView>
 
-    <com.susion.boring.view.SToolBar
+    <TextView
+        android:textColor="@color/white"
+        android:background="@color/colorPrimary"
         android:paddingTop="@dimen/status_bar_height"
-        android:id="@+id/toolbar"
+        android:id="@+id/textview"
+        android:gravity="center_horizontal"
+        android:textSize="14sp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></com.susion.boring.view.SToolBar>
-
+        android:layout_height="wrap_content"></TextView>
 
 </android.support.design.widget.CoordinatorLayout>

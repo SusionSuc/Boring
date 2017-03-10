@@ -5,4 +5,8 @@ package com.susion.boring.interesting.model;
  */
 public class DailyNewsDate {
     public String date;
+
+    public DailyNewsDate(String date) {
+        this.date = date;
+    }
 }
