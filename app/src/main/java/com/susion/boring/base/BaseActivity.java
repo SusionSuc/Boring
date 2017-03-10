@@ -6,6 +6,7 @@ import android.os.PersistableBundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import com.susion.boring.R;
 import com.susion.boring.base.view.swipebacklayout.SwipeBackActivity;
@@ -43,7 +44,12 @@ public abstract  class BaseActivity extends SwipeBackActivity {
         setContentView(getLayoutId());
         setStatusBar();
         initTransitionAnim();
-        mToolBar = (SToolBar) findViewById(R.id.toolbar);
+
+        View view = findViewById(R.id.toolbar);
+        if (view instanceof SToolBar) {
+            mToolBar = (SToolBar)view;
+        }
+
         findView();
         initView();
         initListener();

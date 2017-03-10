@@ -80,4 +80,8 @@ public class APIHelper {
         return getInstance().getService(ImageService.class);
     }
 
+    public static ZhiHuService getZhiHuService(){
+        return getInstance().getService(ZhiHuService.class);
+    }
+
 }

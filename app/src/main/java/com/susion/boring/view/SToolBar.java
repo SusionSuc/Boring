@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import com.susion.boring.R;
 
@@ -115,7 +116,6 @@ public class SToolBar extends RelativeLayout implements View.OnClickListener, Ma
                         ((Activity) mContext).finish();
                     }
                 }
-
                 break;
             case R.id.toolbar_music:
                 mCurrentSelectItem = ITEM_MUSIC;

@@ -25,7 +25,6 @@ public abstract class BaseRVAdapter extends RecyclerView.Adapter{
     public SparseArray<ItemHandlerFactory> mItemHandlerHashMap = new SparseArray<>();
 
 
-
     public Object getItem(int position) {
         return mData != null && mData.size() > position && position >= 0 ? mData.get(position) : null;
     }

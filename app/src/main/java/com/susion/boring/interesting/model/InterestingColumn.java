@@ -8,13 +8,24 @@ public class InterestingColumn {
     private String desc;
     private String contentCount;
     private String bgUrl;
+    private int type;
 
 
-    public InterestingColumn(String title, String bgUrl, String contentCount, String desc) {
+    public InterestingColumn(String title, String bgUrl, String contentCount, String desc, int type) {
         this.title = title;
         this.bgUrl = bgUrl;
         this.contentCount = contentCount;
         this.desc = desc;
+        this.type = type;
+    }
+
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     public String getTitle() {

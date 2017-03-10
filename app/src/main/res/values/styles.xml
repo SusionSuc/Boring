@@ -11,6 +11,8 @@
     </style>
 
 
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
     <declare-styleable name="MediaSeekBar">
         <attr name="hasPlayColor" format="color|reference" />
         <attr name="originBackgroundColor" format="color|reference" />
