@@ -9,18 +9,14 @@ import android.view.View;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.susion.boring.R;
-import com.susion.boring.base.BaseActivity;
-import com.susion.boring.base.BaseRVAdapter;
-import com.susion.boring.base.ItemHandler;
-import com.susion.boring.base.ItemHandlerFactory;
-import com.susion.boring.base.MusicModelTranslatePresenter;
+import com.susion.boring.base.ui.BaseActivity;
+import com.susion.boring.base.adapter.BaseRVAdapter;
+import com.susion.boring.base.ui.ItemHandler;
+import com.susion.boring.base.ui.ItemHandlerFactory;
+import com.susion.boring.base.mvp.MusicModelTranslatePresenter;
 import com.susion.boring.base.view.LoadMoreRecycleView;
-import com.susion.boring.db.DbManager;
 import com.susion.boring.db.model.SimpleSong;
-import com.susion.boring.db.operate.DbBaseOperate;
-import com.susion.boring.http.APIHelper;
 import com.susion.boring.music.itemhandler.LocalMusicIH;
-import com.susion.boring.music.itemhandler.SimpleMusicIH;
 import com.susion.boring.music.model.PlayList;
 import com.susion.boring.music.model.PlayListDetail;
 import com.susion.boring.music.presenter.PlayListPresenter;
@@ -30,15 +26,10 @@ import com.susion.boring.music.presenter.itf.MusicServiceContract;
 import com.susion.boring.music.presenter.itf.PlayListContract;
 import com.susion.boring.music.view.PlayOperatorView;
 import com.susion.boring.utils.RVUtils;
-import com.susion.boring.utils.ToastUtils;
-import com.susion.boring.view.SToolBar;
+import com.susion.boring.base.view.SToolBar;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import rx.Observer;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 public class PlayListActivity extends BaseActivity implements PlayListContract.View{
     private static final String PLAY_LIST = "PLAY_LIST";

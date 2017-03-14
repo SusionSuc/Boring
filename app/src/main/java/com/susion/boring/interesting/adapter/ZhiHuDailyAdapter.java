@@ -2,9 +2,9 @@ package com.susion.boring.interesting.adapter;
 
 import android.app.Activity;
 
-import com.susion.boring.base.BaseRVAdapter;
-import com.susion.boring.base.ItemHandler;
-import com.susion.boring.base.ItemHandlerFactory;
+import com.susion.boring.base.adapter.BaseRVAdapter;
+import com.susion.boring.base.ui.ItemHandler;
+import com.susion.boring.base.ui.ItemHandlerFactory;
 import com.susion.boring.interesting.itemhandler.DailyNewsDateIH;
 import com.susion.boring.interesting.itemhandler.DailyNewsIH;
 import com.susion.boring.interesting.model.DailyNews;

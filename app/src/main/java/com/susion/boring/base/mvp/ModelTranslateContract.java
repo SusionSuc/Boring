@@ -1,0 +1,27 @@
+package com.susion.boring.base.mvp;
+
+import com.susion.boring.db.model.SimpleSong;
+import com.susion.boring.music.model.PlayList;
+import com.susion.boring.music.model.PlayListDetail;
+import com.susion.boring.music.model.Song;
+
+import java.util.List;
+
+import rx.Observable;
+
+/**
+ * Created by susion on 17/3/3.
+ */
+public interface ModelTranslateContract {
+
+
+    interface MusicModeTranslate{
+        Observable<List<Song>> getSongFromPlayList(PlayList playList);
+
+        List<SimpleSong> translateTracksToSimpleSong(List<PlayListDetail.PlaylistBean.TracksBean> tracks);
+
+        List<Song> translateTracksToSong(List<PlayListDetail.PlaylistBean.TracksBean> tracks);
+
+        Observable<Boolean> checkIfHasPlayUrl(Song song);
+    }
+}

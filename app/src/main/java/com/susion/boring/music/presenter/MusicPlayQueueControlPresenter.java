@@ -1,7 +1,7 @@
 package com.susion.boring.music.presenter;
 
-import com.susion.boring.base.ModelTranslateContract;
-import com.susion.boring.base.MusicModelTranslatePresenter;
+import com.susion.boring.base.mvp.ModelTranslateContract;
+import com.susion.boring.base.mvp.MusicModelTranslatePresenter;
 import com.susion.boring.music.model.PlayList;
 import com.susion.boring.music.model.Song;
 import com.susion.boring.music.presenter.itf.MusicServiceContract;

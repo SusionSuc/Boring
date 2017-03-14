@@ -1,7 +1,7 @@
 package com.susion.boring.music.presenter.itf;
 
-import com.susion.boring.base.BasePresenter;
-import com.susion.boring.base.IView;
+import com.susion.boring.base.mvp.BasePresenter;
+import com.susion.boring.base.ui.IView;
 import com.susion.boring.music.model.DownTask;
 
 import java.util.List;

@@ -5,11 +5,11 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.susion.boring.R;
-import com.susion.boring.base.BaseActivity;
-import com.susion.boring.base.BaseRVAdapter;
-import com.susion.boring.base.ItemHandler;
-import com.susion.boring.base.ItemHandlerFactory;
-import com.susion.boring.base.OnLastItemVisibleListener;
+import com.susion.boring.base.ui.BaseActivity;
+import com.susion.boring.base.adapter.BaseRVAdapter;
+import com.susion.boring.base.ui.ItemHandler;
+import com.susion.boring.base.ui.ItemHandlerFactory;
+import com.susion.boring.base.ui.OnLastItemVisibleListener;
 import com.susion.boring.base.view.LoadMoreRecycleView;
 import com.susion.boring.base.view.LoadMoreView;
 import com.susion.boring.http.APIHelper;
@@ -19,7 +19,7 @@ import com.susion.boring.music.model.Song;
 import com.susion.boring.utils.RVUtils;
 import com.susion.boring.utils.SystemOperationUtils;
 import com.susion.boring.utils.UIUtils;
-import com.susion.boring.view.SearchBar;
+import com.susion.boring.base.view.SearchBar;
 
 import java.util.ArrayList;
 import java.util.List;

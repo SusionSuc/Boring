@@ -17,11 +17,8 @@ import android.util.Log;
 import android.view.View;
 
 import com.susion.boring.R;
-import com.susion.boring.base.DividerMark;
-import com.susion.boring.base.DrawerData;
-import com.susion.boring.base.OnLastItemVisibleListener;
-import com.susion.boring.base.view.LoadMoreRecycleView;
-import com.susion.boring.interesting.activity.ZhiHuDailyNewsActivity;
+import com.susion.boring.base.ui.mainui.drawer.DividerMark;
+import com.susion.boring.base.ui.OnLastItemVisibleListener;
 import com.susion.boring.interesting.contract.ZhiHuDailyContract;
 
 import java.util.List;

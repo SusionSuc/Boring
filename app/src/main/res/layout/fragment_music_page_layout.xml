@@ -9,12 +9,12 @@
          android:layout_width="match_parent"
          android:layout_height="match_parent"
          android:orientation="vertical">
-         <com.susion.boring.view.SearchBar
+         <com.susion.boring.base.view.SearchBar
              android:transitionName="@string/transition_name_search_bar"
              android:id="@+id/search_bar"
              android:layout_width="match_parent"
              android:layout_height="wrap_content">
-         </com.susion.boring.view.SearchBar>
+         </com.susion.boring.base.view.SearchBar>
 
          <com.susion.boring.base.view.LoadMoreRecycleView
              android:id="@+id/list_view"

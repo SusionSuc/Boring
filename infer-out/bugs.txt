@@ -1,8 +1,8 @@
 Found 2 issues
 
 app/src/main/java/com/susion/boring/SAppApplication.java:31: error: CONTEXT_LEAK
-  Context class android.content.Context may leak during method com.susion.boring.SAppApplication.attachBaseContext:
-  Static field com.susion.boring.SAppApplication.sContext |->
+  Context class android.content.Context may leak during method com.susion.boring.base.SAppApplication.attachBaseContext:
+  Static field com.susion.boring.base.SAppApplication.sContext |->
   Leaked class android.content.Context
   29.           super.attachBaseContext(base);
   30.           sContext = base;
@@ -11,8 +11,8 @@ app/src/main/java/com/susion/boring/SAppApplication.java:31: error: CONTEXT_LEAK
   33.       public static Context getAppContext() {
 
 app/src/main/java/com/susion/boring/SAppApplication.java:34: error: CONTEXT_LEAK
-  Context class android.content.Context may leak during method com.susion.boring.SAppApplication.getAppContext:
-  Static field com.susion.boring.SAppApplication.sContext |->
+  Context class android.content.Context may leak during method com.susion.boring.base.SAppApplication.getAppContext:
+  Static field com.susion.boring.base.SAppApplication.sContext |->
   Leaked class android.content.Context
   32.   
   33.       public static Context getAppContext() {

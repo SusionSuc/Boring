@@ -2,6 +2,7 @@ package com.susion.boring.utils;
 
 import android.annotation.SuppressLint;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -64,7 +65,7 @@ public class TimeUtils {
     private static String translateToCn(int weekDay) {
 
         switch (weekDay) {
-            case 1:
+            case 0:
                 return "一";
             case 2:
                 return "二";
@@ -80,5 +81,16 @@ public class TimeUtils {
                 return "日";
         }
         return "八";
+    }
+
+    public static Date getDate(String date) {
+        SimpleDateFormat format = new SimpleDateFormat();
+        try {
+            return format.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

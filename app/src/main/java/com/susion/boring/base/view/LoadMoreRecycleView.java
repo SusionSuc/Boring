@@ -8,9 +8,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.susion.boring.base.OnLastItemVisibleListener;
+import com.susion.boring.base.ui.OnLastItemVisibleListener;
 import com.susion.boring.utils.RVUtils;
-import com.susion.boring.utils.UIUtils;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

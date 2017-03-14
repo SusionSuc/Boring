@@ -2,7 +2,7 @@ package com.susion.boring.db;
 
 import com.litesuits.orm.BuildConfig;
 import com.litesuits.orm.LiteOrm;
-import com.susion.boring.SAppApplication;
+import com.susion.boring.base.SAppApplication;
 
 /**
  * Created by susion on 17/2/20.

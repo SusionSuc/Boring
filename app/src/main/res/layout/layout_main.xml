@@ -21,7 +21,7 @@
             app:contentScrim="@color/transparent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <com.susion.boring.view.SToolBar
+            <com.susion.boring.base.view.SToolBar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

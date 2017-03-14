@@ -23,14 +23,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-            <com.susion.boring.view.SToolBar
+            <com.susion.boring.base.view.SToolBar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
                 android:layout_marginTop="@dimen/status_bar_height"
                 app:layout_collapseMode="pin">
-            </com.susion.boring.view.SToolBar>
+            </com.susion.boring.base.view.SToolBar>
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
@@ -46,12 +46,12 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
-        <com.susion.boring.view.SToolBar
+        <com.susion.boring.base.view.SToolBar
             android:id="@+id/ac_play_list_tool_bar2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        </com.susion.boring.view.SToolBar>
+        </com.susion.boring.base.view.SToolBar>
 
         <com.susion.boring.music.view.PlayOperatorView
             android:id="@+id/play_operator"

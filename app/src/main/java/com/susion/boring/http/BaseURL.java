@@ -13,4 +13,5 @@ public class BaseURL {
     public static final String ZHI_HU_DAILY_LATEST_NEWS = "http://news-at.zhihu.com/api/4/news/latest";
 
     public static final String ZHI_HU_DAILY_FIX_DATE_NEWS = "http://news-at.zhihu.com/api/4/news/before";
+    public static final String ZHI_HU_ESSAY_CONTENT = "http://news-at.zhihu.com/api/4/news";
 }

@@ -23,13 +23,13 @@
             android:scaleType="centerCrop"
             />
 
-        <com.susion.boring.view.SToolBar
+        <com.susion.boring.base.view.SToolBar
             android:layout_gravity="top"
             android:layout_marginTop="@dimen/status_bar_height"
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-        </com.susion.boring.view.SToolBar>
+        </com.susion.boring.base.view.SToolBar>
 
     </FrameLayout>
 

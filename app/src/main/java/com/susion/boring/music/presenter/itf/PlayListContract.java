@@ -1,6 +1,6 @@
 package com.susion.boring.music.presenter.itf;
 
-import com.susion.boring.base.IView;
+import com.susion.boring.base.ui.IView;
 import com.susion.boring.music.model.PlayList;
 import com.susion.boring.music.model.PlayListDetail;
 

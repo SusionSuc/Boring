@@ -7,13 +7,12 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.susion.boring.R;
-import com.susion.boring.base.BaseActivity;
-import com.susion.boring.base.OnLastItemVisibleListener;
-import com.susion.boring.base.QuickPageAdapter;
+import com.susion.boring.base.ui.BaseActivity;
+import com.susion.boring.base.ui.OnLastItemVisibleListener;
+import com.susion.boring.base.adapter.QuickPageAdapter;
 import com.susion.boring.base.view.LoadMoreRecycleView;
 import com.susion.boring.interesting.adapter.ZhiHuDailyAdapter;
 import com.susion.boring.interesting.contract.ZhiHuDailyContract;

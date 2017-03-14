@@ -7,14 +7,14 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".SAppApplication"
+        android:name=".base.SAppApplication"
         android:allowBackup="true"
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".splash.SplashActivity"
+            android:name=".base.ui.SplashActivity"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".mainui.MainActivity"
+            android:name=".base.ui.mainui.MainActivity"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".music.activity.SearchMusicActivity"
@@ -39,11 +39,11 @@
             android:theme="@style/AppTheme" />
 
         <service
-            android:name=".music.service.MusicPlayerService"
+            android:name=".base.service.BaseService"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
-                <action android:name="MUSIC_SERVICE" />
+                <action android:name="BASE_SERVICE" />
             </intent-filter>
         </service>
 

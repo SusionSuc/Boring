@@ -8,14 +8,13 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.susion.boring.R;
-import com.susion.boring.base.BaseActivity;
-import com.susion.boring.base.ItemHandler;
-import com.susion.boring.base.ListFragment;
-import com.susion.boring.base.ViewHolder;
+import com.susion.boring.base.ui.BaseActivity;
+import com.susion.boring.base.ui.ItemHandler;
+import com.susion.boring.base.ui.ListFragment;
+import com.susion.boring.base.adapter.ViewHolder;
 import com.susion.boring.db.DbManager;
 import com.susion.boring.db.model.SimpleSong;
 import com.susion.boring.db.operate.DbBaseOperate;

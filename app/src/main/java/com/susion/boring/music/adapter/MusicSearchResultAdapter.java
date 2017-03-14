@@ -1,13 +1,8 @@
 package com.susion.boring.music.adapter;
 
 import android.app.Activity;
-import android.support.v7.widget.RecyclerView;
 
-import com.susion.boring.base.BaseRVAdapter;
-import com.susion.boring.base.DrawerData;
-import com.susion.boring.base.ItemHandler;
-import com.susion.boring.base.ItemHandlerFactory;
-import com.susion.boring.music.itemhandler.SearchMusicResultIH;
+import com.susion.boring.base.adapter.BaseRVAdapter;
 import com.susion.boring.music.model.Song;
 
 import java.util.List;

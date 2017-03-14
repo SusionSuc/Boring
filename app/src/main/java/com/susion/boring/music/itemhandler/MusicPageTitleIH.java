@@ -5,8 +5,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.susion.boring.R;
-import com.susion.boring.base.SimpleItemHandler;
-import com.susion.boring.base.ViewHolder;
+import com.susion.boring.base.ui.SimpleItemHandler;
+import com.susion.boring.base.adapter.ViewHolder;
 import com.susion.boring.music.model.SimpleTitle;
 
 /**

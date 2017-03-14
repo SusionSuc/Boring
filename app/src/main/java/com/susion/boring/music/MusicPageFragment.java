@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.susion.boring.R;
-import com.susion.boring.base.BaseFragment;
-import com.susion.boring.base.OnLastItemVisibleListener;
+import com.susion.boring.base.ui.BaseFragment;
+import com.susion.boring.base.ui.OnLastItemVisibleListener;
 import com.susion.boring.base.view.LoadMoreRecycleView;
 import com.susion.boring.base.view.LoadMoreView;
 import com.susion.boring.db.DbManager;
@@ -29,7 +29,7 @@ import com.susion.boring.music.view.MusicControlPanel;
 import com.susion.boring.utils.BroadcastUtils;
 import com.susion.boring.utils.RVUtils;
 import com.susion.boring.utils.SPUtils;
-import com.susion.boring.view.SearchBar;
+import com.susion.boring.base.view.SearchBar;
 
 import java.util.ArrayList;
 import java.util.HashSet;

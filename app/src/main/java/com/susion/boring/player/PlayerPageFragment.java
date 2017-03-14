@@ -1,12 +1,11 @@
 package com.susion.boring.player;
 
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.susion.boring.R;
-import com.susion.boring.base.BaseFragment;
+import com.susion.boring.base.ui.BaseFragment;
 
 /**
  * Created by susion on 17/1/19.

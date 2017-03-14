@@ -5,15 +5,17 @@ import android.os.Environment;
 import android.text.TextUtils;
 
 import com.susion.boring.db.model.SimpleSong;
-import com.susion.boring.music.model.Album;
 import com.susion.boring.music.model.Song;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.List;
 
 /**
@@ -23,7 +25,11 @@ public class FileUtils {
 
     public static final String SD_ROOT_DIR = Environment.getExternalStorageDirectory() + "/Boring/";
     public static final String SD_MUSIC_DIR = SD_ROOT_DIR + "music/";
+    public static final String SD_INTERESTING_DIR = SD_ROOT_DIR + "interesting/";
+    public static final String SD_INTERESTING_DAILY_NEWS = SD_INTERESTING_DIR+"daily_news/";
     private static final String UNKNOWN = "unknown";
+    public static final String SD_TEMP_CSS = SD_INTERESTING_DAILY_NEWS+"css/";
+    public static final String TEMP_CSS_FILE = SD_TEMP_CSS+"temp_css.css";
 
     public static void initAppDir() {
         // 不存在SD卡
@@ -31,10 +37,12 @@ public class FileUtils {
             return;
         }
 
-        String path = SD_MUSIC_DIR;
-        File dir = new File(path);
-        if (!dir.exists()) {
-            dir.mkdirs();
+        String[] initPath = new String[]{SD_MUSIC_DIR, SD_INTERESTING_DIR, SD_INTERESTING_DAILY_NEWS,SD_TEMP_CSS};
+        for (String path : initPath){
+            File dir = new File(path);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
         }
     }
 
@@ -61,11 +69,6 @@ public class FileUtils {
 //
 //        return false;
 //    }
-
-
-    public static List<Song> scanLocalMusic() {
-        return null;
-    }
 
     public static SimpleSong fileToMusic(File file) {
         if (file.length() == 0) return null;
@@ -101,5 +104,67 @@ public class FileUtils {
             value = defaultValue;
         }
         return value;
+    }
+
+    public static String writeTempCssFile(InputStream in) {
+        try {
+            File css = new File(TEMP_CSS_FILE);
+
+            if (!css.exists()) {
+                css.createNewFile();
+            }
+
+            FileOutputStream out = new FileOutputStream(css);
+            byte[] buff = new byte[1024];
+            int len;
+
+            while ( (len = in.read(buff))!= -1) {
+                out.write(buff, 0, len);
+            }
+
+            in.close();
+            out.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
+        return TEMP_CSS_FILE;
+    }
+
+    public static String getTempCssString() {
+        try {
+            return getStringFromFile(TEMP_CSS_FILE);
+        }catch (Exception e){
+
+        }
+        return  null;
+    }
+
+    private static String getStringFromFile(String tempCssFile) throws FileNotFoundException {
+        FileInputStream in = new FileInputStream(new File(tempCssFile));;
+        return getStringFromInputStream(in);
+    }
+
+    public static String getStringFromInputStream(InputStream in) {
+        ByteArrayOutputStream byteOS = null;
+        try {
+
+            byteOS = new ByteArrayOutputStream();
+            byte[] buff = new byte[1024];
+            int len;
+            while ( (len = in.read(buff))!= -1) {
+                byteOS.write(buff, 0, len);
+            }
+
+        }catch (Exception e){
+
+        }
+
+        if (byteOS == null) {
+            return null;
+        }
+
+        return byteOS.toString();
     }
 }

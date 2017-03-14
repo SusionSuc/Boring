@@ -1,6 +1,6 @@
 package com.susion.boring.interesting.contract;
 
-import com.susion.boring.base.IView;
+import com.susion.boring.base.ui.IView;
 import com.susion.boring.interesting.model.Banner;
 import com.susion.boring.interesting.model.DailyNews;
 import com.susion.boring.interesting.view.BannerView;

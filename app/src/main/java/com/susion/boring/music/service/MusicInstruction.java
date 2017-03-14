@@ -74,9 +74,4 @@ public class MusicInstruction {
     public static final String CLIENT_PARAM_PLAY_QUEUE = "CLIENT_PARAM_PLAY_QUEUE";
 
 
-
-    public static void startMusicPlayService(Context ctx) {
-        Intent intent = new Intent(ctx, MusicPlayerService.class);
-        ctx.startService(intent);
-    }
 }

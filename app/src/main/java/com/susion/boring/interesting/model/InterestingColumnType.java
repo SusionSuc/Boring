@@ -1,8 +1,7 @@
 package com.susion.boring.interesting.model;
 
 import com.susion.boring.R;
-import com.susion.boring.SAppApplication;
-import com.susion.boring.http.BaseURL;
+import com.susion.boring.base.SAppApplication;
 
 import java.util.ArrayList;
 import java.util.List;

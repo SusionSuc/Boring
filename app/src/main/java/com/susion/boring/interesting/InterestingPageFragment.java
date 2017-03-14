@@ -6,10 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.susion.boring.R;
-import com.susion.boring.base.BaseFragment;
-import com.susion.boring.base.BaseRVAdapter;
-import com.susion.boring.base.ItemHandler;
-import com.susion.boring.base.ItemHandlerFactory;
+import com.susion.boring.base.ui.BaseFragment;
+import com.susion.boring.base.adapter.BaseRVAdapter;
+import com.susion.boring.base.ui.ItemHandler;
+import com.susion.boring.base.ui.ItemHandlerFactory;
 import com.susion.boring.base.view.LoadMoreRecycleView;
 import com.susion.boring.interesting.itemhandler.InterestingPageIH;
 import com.susion.boring.interesting.model.InterestingColumnType;

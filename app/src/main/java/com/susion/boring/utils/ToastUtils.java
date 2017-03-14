@@ -1,9 +1,8 @@
 package com.susion.boring.utils;
 
-import android.content.Context;
 import android.widget.Toast;
 
-import com.susion.boring.SAppApplication;
+import com.susion.boring.base.SAppApplication;
 
 
 /**

@@ -2,9 +2,9 @@ package com.susion.boring.music.adapter;
 
 import android.app.Activity;
 
-import com.susion.boring.base.BaseRVAdapter;
-import com.susion.boring.base.ItemHandler;
-import com.susion.boring.base.ItemHandlerFactory;
+import com.susion.boring.base.adapter.BaseRVAdapter;
+import com.susion.boring.base.ui.ItemHandler;
+import com.susion.boring.base.ui.ItemHandlerFactory;
 import com.susion.boring.music.itemhandler.MusicPageConstantIH;
 import com.susion.boring.music.itemhandler.MusicPagePlayListIH;
 import com.susion.boring.music.itemhandler.MusicPageTitleIH;

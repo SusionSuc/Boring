@@ -11,22 +11,21 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.susion.boring.R;
-import com.susion.boring.base.BaseActivity;
-import com.susion.boring.base.BaseRVAdapter;
-import com.susion.boring.base.ItemHandler;
-import com.susion.boring.base.ItemHandlerFactory;
+import com.susion.boring.base.ui.BaseActivity;
+import com.susion.boring.base.adapter.BaseRVAdapter;
+import com.susion.boring.base.ui.ItemHandler;
+import com.susion.boring.base.ui.ItemHandlerFactory;
 import com.susion.boring.base.view.LoadMoreRecycleView;
 import com.susion.boring.db.DbManager;
 import com.susion.boring.db.model.SimpleSong;
 import com.susion.boring.db.operate.MusicDbOperator;
 import com.susion.boring.music.itemhandler.LocalMusicIH;
-import com.susion.boring.music.itemhandler.SimpleMusicIH;
 import com.susion.boring.music.presenter.itf.LocalMusicContract;
 import com.susion.boring.music.presenter.LocalMusicPresenter;
 import com.susion.boring.utils.RVUtils;
 import com.susion.boring.utils.ToastUtils;
 import com.susion.boring.utils.UIUtils;
-import com.susion.boring.view.SToolBar;
+import com.susion.boring.base.view.SToolBar;
 
 import java.util.ArrayList;
 import java.util.List;

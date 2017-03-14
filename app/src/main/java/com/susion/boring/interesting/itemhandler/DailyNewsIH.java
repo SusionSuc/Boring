@@ -4,8 +4,8 @@ import android.view.View;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.susion.boring.R;
-import com.susion.boring.base.SimpleItemHandler;
-import com.susion.boring.base.ViewHolder;
+import com.susion.boring.base.ui.SimpleItemHandler;
+import com.susion.boring.base.adapter.ViewHolder;
 import com.susion.boring.interesting.activity.ZhiHuEssayActivity;
 import com.susion.boring.interesting.model.DailyNews;
 
@@ -13,6 +13,7 @@ import com.susion.boring.interesting.model.DailyNews;
  * Created by susion on 17/3/9.
  */
 public class DailyNewsIH extends SimpleItemHandler<DailyNews.StoriesBean>{
+
     @Override
     public void onBindDataView(ViewHolder vh, DailyNews.StoriesBean data, int position) {
         vh.getTextView(R.id.item_daily_new_tv_title).setText(data.getTitle());

@@ -4,7 +4,7 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.susion.boring.R;
-import com.susion.boring.base.ViewHolder;
+import com.susion.boring.base.adapter.ViewHolder;
 import com.susion.boring.db.model.SimpleSong;
 import com.susion.boring.music.activity.PlayMusicActivity;
 import com.susion.boring.utils.AlbumUtils;

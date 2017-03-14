@@ -9,13 +9,13 @@
     android:background="@color/white"
     tools:context="com.susion.boring.music.activity.LocalMusicActivity">
 
-    <com.susion.boring.view.SToolBar
+    <com.susion.boring.base.view.SToolBar
         android:transitionName="@string/transition_name_tool_bar"
         android:id="@+id/toolbar"
         app:showTitle="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    </com.susion.boring.view.SToolBar>
+    </com.susion.boring.base.view.SToolBar>
 
     <FrameLayout
         android:layout_width="match_parent"

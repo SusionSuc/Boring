@@ -7,11 +7,11 @@
     tools:context=".music.activity.MyLikeActivity"
     android:orientation="vertical">
 
-    <com.susion.boring.view.SToolBar
+    <com.susion.boring.base.view.SToolBar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    </com.susion.boring.view.SToolBar>
+    </com.susion.boring.base.view.SToolBar>
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_layout"

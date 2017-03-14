@@ -6,20 +6,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
 
-import com.susion.boring.db.DbManager;
-import com.susion.boring.db.model.SimpleSong;
-import com.susion.boring.db.operate.DbBaseOperate;
 import com.susion.boring.music.model.Song;
 import com.susion.boring.music.presenter.itf.MediaPlayerContract;
 import com.susion.boring.music.service.MusicInstruction;
 import com.susion.boring.utils.BroadcastUtils;
-import com.susion.boring.utils.ToastUtils;
 
 import java.util.List;
-
-import rx.Observer;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by susion on 17/2/22.

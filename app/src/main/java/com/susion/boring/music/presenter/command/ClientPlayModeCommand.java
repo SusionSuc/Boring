@@ -2,15 +2,11 @@ package com.susion.boring.music.presenter.command;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
 
-import com.susion.boring.db.model.SimpleSong;
 import com.susion.boring.music.model.PlayList;
 import com.susion.boring.music.presenter.itf.MediaPlayerContract;
 import com.susion.boring.music.service.MusicInstruction;
-
-import java.util.List;
 
 /**
  * Created by susion on 17/3/2.

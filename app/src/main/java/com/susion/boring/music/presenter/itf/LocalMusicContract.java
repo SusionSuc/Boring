@@ -2,8 +2,8 @@ package com.susion.boring.music.presenter.itf;
 
 import android.app.LoaderManager;
 
-import com.susion.boring.base.BasePresenter;
-import com.susion.boring.base.IView;
+import com.susion.boring.base.mvp.BasePresenter;
+import com.susion.boring.base.ui.IView;
 import com.susion.boring.db.model.SimpleSong;
 
 import java.util.List;

@@ -5,13 +5,11 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="260dp"
-        android:fitsSystemWindows="false"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:fitsSystemWindows="false">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
@@ -21,7 +19,7 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <com.facebook.drawee.view.SimpleDraweeView
-                android:id="@+id/view_pager"
+                android:id="@+id/ac_zhi_hu_essay_sdv_news_header"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_collapseMode="parallax" />
@@ -33,60 +31,59 @@
 
     <android.support.v4.widget.NestedScrollView
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:paddingBottom="40dp"
+        android:scrollbars="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        
-        <TextView
-            android:id="@+id/ac_zhi_hu_essay_tv_content"
+        <WebView
+            android:id="@+id/ac_zhi_hu_essay_wv_content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
+            android:layout_height="match_parent"></WebView>
 
     </android.support.v4.widget.NestedScrollView>
 
 
-
-    <View
-        android:background="@color/colorPrimary"
-        android:layout_marginBottom="45dp"
+    <RelativeLayout
+        android:background="@color/white"
         android:layout_gravity="bottom"
         android:layout_width="match_parent"
-        android:layout_height="1dp"></View>
+        android:layout_height="40dp">
 
-    <LinearLayout
-        android:layout_gravity="bottom"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:orientation="horizontal">
+        <View
+            android:layout_marginTop="1dp"
+            android:background="@color/colorPrimary"
+            android:layout_alignParentTop="true"
+            android:layout_width="match_parent"
+            android:layout_height="1px"></View>
 
         <ImageView
-            android:paddingRight="50dp"
-            android:paddingLeft="50dp"
+            android:layout_centerVertical="true"
+            android:id="@+id/ac_zhi_hu_essay_iv_pre"
+            android:layout_alignParentLeft="true"
             android:src="@mipmap/pre"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="40dp" />
+            android:layout_marginLeft="60dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
 
 
         <ImageView
+            android:id="@+id/ac_zhi_hu_essay_iv_lile"
+            android:layout_centerInParent="true"
             android:src="@mipmap/play_operator_love"
-            android:paddingRight="50dp"
-            android:paddingLeft="50dp"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="40dp" />
+            android:layout_width="25dp"
+            android:layout_height="25dp" />
 
         <ImageView
+            android:id="@+id/ac_zhi_hu_essay_iv_next"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="60dp"
+            android:layout_alignParentRight="true"
             android:src="@mipmap/next"
-            android:paddingRight="50dp"
-            android:paddingLeft="50dp"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="40dp" />
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
 
-    </LinearLayout>
-
+    </RelativeLayout>
 
 
 </android.support.design.widget.CoordinatorLayout>
