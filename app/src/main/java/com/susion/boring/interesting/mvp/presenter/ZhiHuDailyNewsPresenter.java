@@ -18,9 +18,8 @@ import rx.schedulers.Schedulers;
 /**
  * Created by susion on 17/3/9.
  */
-public class ZhiHuDailyNewsPresenter implements ZhiHuDailyContract.Presenter{
+public class ZhiHuDailyNewsPresenter implements ZhiHuDailyContract.Presenter {
 
-    private final int BANNER_NUMBER = 6;
     private ZhiHuDailyContract.View mView;
     private Date mCurrentDate;
     private boolean mIsLatest;
@@ -74,7 +73,7 @@ public class ZhiHuDailyNewsPresenter implements ZhiHuDailyContract.Presenter{
 
     private List<DailyNews.StoriesBean> addHeaderTitle(List<DailyNews.StoriesBean> stories) {
         for (DailyNews.StoriesBean bean : stories) {
-            bean.setShowTitle(mIsLatest);
+            bean.setShowTitle(true);
             bean.setHeaderTitle(mIsLatest ? "今日新闻" : TimeUtils.getDateCnDescForZhiHu(mCurrentDate));
         }
         return stories;
@@ -107,6 +106,7 @@ public class ZhiHuDailyNewsPresenter implements ZhiHuDailyContract.Presenter{
                     }
                 });
     }
+
     @Override
     public void setCurrentDate(Date date) {
         mCurrentDate = date;

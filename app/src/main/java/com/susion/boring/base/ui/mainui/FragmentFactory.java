@@ -2,10 +2,9 @@ package com.susion.boring.base.ui.mainui;
 
 import android.support.v4.app.Fragment;
 
+import com.susion.boring.base.view.MainUIFragmentIndex;
 import com.susion.boring.interesting.InterestingPageFragment;
 import com.susion.boring.music.MusicPageFragment;
-import com.susion.boring.player.PlayerPageFragment;
-import com.susion.boring.base.view.MainUIFragmentIndex;
 
 import java.util.ArrayList;
 import java.util.List;

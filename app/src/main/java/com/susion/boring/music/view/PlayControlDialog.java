@@ -70,7 +70,7 @@ public class PlayControlDialog extends Dialog {
         p.width = WindowManager.LayoutParams.MATCH_PARENT;
         dialogWindow.setAttributes(p);
         dialogWindow.setWindowAnimations(R.style.dialog_animation_frombottom);
-        
+
         initData();
         initRv();
     }
@@ -80,6 +80,7 @@ public class PlayControlDialog extends Dialog {
         mRV.addItemDecoration(RVUtils.getItemDecorationDivider(mContext, R.color.red_divider, 1, -1, UIUtils.dp2Px(15)));
         mRV.setAdapter(new BaseRVAdapter((Activity) mContext, mDialogData) {
             final int TYPE_MUSIC = 1;
+
             @Override
             protected void initHandlers() {
                 registerItemHandler(TYPE_MUSIC, new ItemHandlerFactory() {
@@ -106,19 +107,19 @@ public class PlayControlDialog extends Dialog {
 
     }
 
-    public void addMusicQueue(List<Song> songs){
+    public void addMusicQueue(List<Song> songs) {
         mDialogData.addAll(songs);
         mRV.getAdapter().notifyDataSetChanged();
     }
 
 
-    public void startLoadingAnimation(){
+    public void startLoadingAnimation() {
         mIvLoading.setVisibility(View.VISIBLE);
         mRV.setVisibility(View.INVISIBLE);
         UIUtils.startSimpleRotateAnimation(mIvLoading);
     }
 
-    public void stopLoadingAnimation(){
+    public void stopLoadingAnimation() {
         mIvLoading.setVisibility(View.INVISIBLE);
         mRV.setVisibility(View.VISIBLE);
         mIvLoading.clearAnimation();
@@ -131,7 +132,7 @@ public class PlayControlDialog extends Dialog {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(ChangeSongEvent event){
+    public void onMessageEvent(ChangeSongEvent event) {
         dismiss();
         Song song = event.song;
         song.isPlaying = true;

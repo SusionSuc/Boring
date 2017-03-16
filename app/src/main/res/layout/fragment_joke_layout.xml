@@ -4,10 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:textColor="@color/black"
-        android:text="段子"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+
+    <com.susion.boring.base.view.LoadMoreRecycleView
+        android:id="@+id/list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></com.susion.boring.base.view.LoadMoreRecycleView>
 
 </LinearLayout>

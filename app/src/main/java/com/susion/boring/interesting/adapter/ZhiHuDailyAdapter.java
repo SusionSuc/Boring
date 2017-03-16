@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created by susion on 17/3/9.
  */
-public class ZhiHuDailyAdapter extends BaseRVAdapter{
+public class ZhiHuDailyAdapter extends BaseRVAdapter {
 
     private static final int TYPE_NEWS = 1;
     private static final int TYPE_DATE = 2;

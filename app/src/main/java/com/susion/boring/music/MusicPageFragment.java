@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.susion.boring.R;
+import com.susion.boring.base.SAppApplication;
 import com.susion.boring.base.ui.BaseFragment;
 import com.susion.boring.base.ui.OnLastItemVisibleListener;
 import com.susion.boring.base.view.LoadMoreRecycleView;
@@ -43,7 +44,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by susion on 17/1/19.
  */
-public class MusicPageFragment extends BaseFragment implements OnLastItemVisibleListener, MediaPlayerContract.BaseView{
+public class MusicPageFragment extends BaseFragment implements OnLastItemVisibleListener, MediaPlayerContract.BaseView {
 
     private SearchBar mSearchBar;
     private LoadMoreRecycleView mRV;
@@ -61,29 +62,31 @@ public class MusicPageFragment extends BaseFragment implements OnLastItemVisible
     @Override
     public View initContentView(LayoutInflater inflater, ViewGroup container) {
         mView = inflater.inflate(R.layout.fragment_music_page_layout, container, false);
-        initView();
         return mView;
     }
 
-    private void initView() {
-        mControlCommand = new ClientPlayControlCommand(getActivity());
-        mClientReceiver = new ClientReceiverPresenter(getActivity());
-        mClientReceiver.setBaseView(this);
-
-        mSearchBar = (SearchBar) mView.findViewById(R.id.search_bar);
+    @Override
+    public void initView() {
         mSearchBar.setJumpToSearchPage(true);
         mSearchBar.setBackground(R.color.colorLightPrimary);
 
-        mRV = (LoadMoreRecycleView) mView.findViewById(R.id.list_view);
         mRV.setLayoutManager(RVUtils.getStaggeredGridLayoutManager(2));
         mRV.setOnLastItemVisibleListener(this);
 
         initConstantItem();
         MusicPageAdapter mAdapter = new MusicPageAdapter(getActivity(), mData);
         mRV.setAdapter(mAdapter);
+    }
 
+    @Override
+    protected void findView() {
+        mControlCommand = new ClientPlayControlCommand(getActivity());
+        mClientReceiver = new ClientReceiverPresenter(getActivity());
+        mClientReceiver.setBaseView(this);
+
+        mSearchBar = (SearchBar) mView.findViewById(R.id.search_bar);
+        mRV = (LoadMoreRecycleView) mView.findViewById(R.id.list_view);
         mControlView = (MusicControlPanel) mView.findViewById(R.id.music_control_view);
-
     }
 
     @Override
@@ -151,7 +154,7 @@ public class MusicPageFragment extends BaseFragment implements OnLastItemVisible
     }
 
     private void loadPLayHistory() {
-        String songId = SPUtils.getStringFromMusicConfig(SPUtils.MUSIC_CONFIG_LAST_PLAY_MUSIC, getActivity());
+        String songId = SPUtils.getStringFromMusicConfig(SPUtils.MUSIC_CONFIG_LAST_PLAY_MUSIC, SAppApplication.getAppContext());
         DbBaseOperate<SimpleSong> dbOperator = new DbBaseOperate<>(DbManager.getLiteOrm(), getContext(), SimpleSong.class);
         dbOperator.query(songId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<SimpleSong>() {
             @Override
@@ -192,7 +195,6 @@ public class MusicPageFragment extends BaseFragment implements OnLastItemVisible
     }
 
 
-
     //implements CommunicateBaseView
     @Override
     public void tryToChangeMusicByCurrentCondition(boolean playStatus, boolean needLoadMusic) {
@@ -210,7 +212,7 @@ public class MusicPageFragment extends BaseFragment implements OnLastItemVisible
     }
 
     @Override
-    public Context getViewContext(){
+    public Context getViewContext() {
         return getActivity();
     }
 

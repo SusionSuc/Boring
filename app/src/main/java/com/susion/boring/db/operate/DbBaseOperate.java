@@ -12,7 +12,7 @@ import rx.Subscriber;
 /**
  * Created by susion on 17/2/20.
  */
-public class DbBaseOperate<T>  implements DataBaseOperateContract.BaseOperate<T>{
+public class DbBaseOperate<T> implements DataBaseOperateContract.BaseOperate<T> {
 
     private Class<T> mClass;
     protected LiteOrm mLiteOrm;
@@ -46,7 +46,7 @@ public class DbBaseOperate<T>  implements DataBaseOperateContract.BaseOperate<T>
     public Observable<Boolean> add(final T t) {
         return Observable.create(new Observable.OnSubscribe<Boolean>() {
             @Override
-            public void call(Subscriber<? super Boolean > subscriber) {
+            public void call(Subscriber<? super Boolean> subscriber) {
                 if (mLiteOrm.save(t) > 0) {
                     subscriber.onNext(true);
                 } else {
@@ -61,7 +61,7 @@ public class DbBaseOperate<T>  implements DataBaseOperateContract.BaseOperate<T>
     public Observable<Boolean> update(final T t) {
         return Observable.create(new Observable.OnSubscribe<Boolean>() {
             @Override
-            public void call(Subscriber<? super Boolean > subscriber) {
+            public void call(Subscriber<? super Boolean> subscriber) {
                 if (mLiteOrm.update(t) > 0) {
                     subscriber.onNext(true);
                 } else {
@@ -76,7 +76,7 @@ public class DbBaseOperate<T>  implements DataBaseOperateContract.BaseOperate<T>
     public Observable<Boolean> delete(final T song) {
         return Observable.create(new Observable.OnSubscribe<Boolean>() {
             @Override
-            public void call(Subscriber<? super Boolean > subscriber) {
+            public void call(Subscriber<? super Boolean> subscriber) {
                 if (mLiteOrm.delete(song) > 0) {
                     subscriber.onNext(true);
                 } else {
@@ -91,7 +91,7 @@ public class DbBaseOperate<T>  implements DataBaseOperateContract.BaseOperate<T>
     public Observable<Boolean> clearALLData() {
         return Observable.create(new Observable.OnSubscribe<Boolean>() {
             @Override
-            public void call(Subscriber<? super Boolean > subscriber) {
+            public void call(Subscriber<? super Boolean> subscriber) {
                 if (mLiteOrm.deleteAll(mClass) > 0) {
                     subscriber.onNext(true);
                 } else {
@@ -103,12 +103,12 @@ public class DbBaseOperate<T>  implements DataBaseOperateContract.BaseOperate<T>
     }
 
     @Override
-    public Observable<T> query(final  String id) {
+    public Observable<T> query(final String id) {
         return Observable.create(new Observable.OnSubscribe<T>() {
             @Override
-            public void call(Subscriber<? super T > subscriber) {
+            public void call(Subscriber<? super T> subscriber) {
                 T song = (T) mLiteOrm.queryById(id, mClass);
-                if ( song != null) {
+                if (song != null) {
                     subscriber.onNext(song);
                 } else {
                     subscriber.onNext(null);
@@ -123,7 +123,7 @@ public class DbBaseOperate<T>  implements DataBaseOperateContract.BaseOperate<T>
     public Observable<Long> getTotalCount() {
         return Observable.create(new Observable.OnSubscribe<Long>() {
             @Override
-            public void call(Subscriber<? super Long > subscriber) {
+            public void call(Subscriber<? super Long> subscriber) {
                 long count = mLiteOrm.queryCount(mClass);
                 subscriber.onNext(count);
                 subscriber.onCompleted();
@@ -135,7 +135,7 @@ public class DbBaseOperate<T>  implements DataBaseOperateContract.BaseOperate<T>
     public Observable<List<T>> getAll() {
         return Observable.create(new Observable.OnSubscribe<List<T>>() {
             @Override
-            public void call(Subscriber<? super List<T> > subscriber) {
+            public void call(Subscriber<? super List<T>> subscriber) {
                 subscriber.onNext(mLiteOrm.query(mClass));
                 subscriber.onCompleted();
             }

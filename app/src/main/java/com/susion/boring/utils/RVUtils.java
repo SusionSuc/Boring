@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.support.annotation.ColorRes;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -49,7 +50,8 @@ public class RVUtils {
     }
 
 
-    public  static  RecyclerView.ItemDecoration getItemDecorationDivider(Context context, int color, int divideHeight){
+
+    public  static  RecyclerView.ItemDecoration getItemDecorationDivider(Context context, @ColorRes int color, int divideHeight){
         return new SimpleDividerDecoration(context, color, divideHeight);
     }
 
@@ -212,20 +214,22 @@ public class RVUtils {
             int right = parent.getWidth() - parent.getPaddingRight();
 
             String preTitle, title = null;
+
             for (int i = 0; i < childCount; i++) {
                 View view = parent.getChildAt(i);
                 int position = parent.getChildAdapterPosition(view);
 
                 preTitle = title;
                 title = stickHeader.getTitle(position);
+
                 if (title.equals(preTitle)) continue;
 
-                if (TextUtils.isEmpty(title) || stickHeader.isShowTitle(position)) continue;
+                if (TextUtils.isEmpty(title) || !stickHeader.isShowTitle(position)) continue;
 
-                int viewBottom = view.getBottom();
                 float textY = Math.max(topGap, view.getTop());
                 if (position + 1 < itemCount) {                 //下一个和当前不一样移动当前
                     String nextTitle = stickHeader.getTitle(position + 1);
+                    int viewBottom = view.getBottom();
                     if (!nextTitle.equals(title) && viewBottom < textY ) {      //组内最后一个view进入了header
                         textY = viewBottom;
                     }
@@ -235,7 +239,6 @@ public class RVUtils {
                 c.drawText(title, left + (view.getRight() - left) / 2, textY, textPaint);
             }
         }
-
 
         private boolean isFirstInGroup(int pos) {
             if (pos == 0) {
@@ -247,7 +250,6 @@ public class RVUtils {
             }
         }
     }
-
 
     /**
      * 添加到底部的监听.

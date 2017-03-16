@@ -1,9 +1,7 @@
 package com.susion.boring.interesting;
 
-import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,7 +26,6 @@ public class InterestingPageFragment extends BaseFragment {
 
     private TabLayout mTabLayout;
     private NestChildViewPager mViewPager;
-
     private List<ViewPageFragment> mFragments;
 
     @Override
@@ -39,7 +36,8 @@ public class InterestingPageFragment extends BaseFragment {
         return mView;
     }
 
-    private void findView() {
+    @Override
+    public void findView() {
         mTabLayout = (TabLayout) mView.findViewById(R.id.tab_layout);
         mViewPager = (NestChildViewPager) mView.findViewById(R.id.view_pager);
     }
@@ -53,13 +51,14 @@ public class InterestingPageFragment extends BaseFragment {
         }
     }
 
-    private void initView() {
+    @Override
+    public void initView() {
         initFragments();
         //shit!!!  getChildFragmentManager()!!!
         mViewPager.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
-                Log.e("getItem position", position+"");
+                Log.e("getItem position", position + "");
                 return mFragments.get(position);
             }
 
@@ -82,5 +81,6 @@ public class InterestingPageFragment extends BaseFragment {
 
     @Override
     public void initData() {
+        Log.e("InterestingPageFragment", "initData");
     }
 }

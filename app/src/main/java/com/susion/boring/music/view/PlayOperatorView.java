@@ -69,7 +69,7 @@ public class PlayOperatorView extends LinearLayout implements View.OnClickListen
                 isSameMode = mPseudoMode == MusicServiceContract.PlayQueueControlPresenter.CIRCLE_MODE;
                 if (isSameMode) {
                     mPseudoMode = MusicServiceContract.PlayQueueControlPresenter.QUEUE_MODE;
-                }else {
+                } else {
                     mPseudoMode = MusicServiceContract.PlayQueueControlPresenter.CIRCLE_MODE;
                 }
                 itemClickListener.onCirclePlayItemClick(mPseudoMode);

@@ -140,6 +140,10 @@ public class MyLikeActivity extends BaseActivity {
             return "音乐";
         }
 
+        @Override
+        protected void findView() {
+
+        }
     }
 
     public  static class PlayListFragment extends ListFragment<PlayList> {
@@ -204,5 +208,9 @@ public class MyLikeActivity extends BaseActivity {
             return "专辑";
         }
 
+        @Override
+        protected void findView() {
+
+        }
     }
 }

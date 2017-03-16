@@ -35,34 +35,28 @@ import java.util.List;
  * Created by susion on 17/3/15.
  */
 public class ZhiHuFragment extends ViewPageFragment implements ZhiHuDailyContract.View, OnLastItemVisibleListener {
-    private ViewPager mViewPager;
+
     private LoadMoreRecycleView mRv;
-    private List<BannerView> mBannerViews;
     private List<Object> mData = new ArrayList<>();
 
     private ZhiHuDailyContract.Presenter mPresenter;
-    private TextView mTvTitle;
     private LinearLayoutManager mManager;
 
     @Override
     public View initContentView(LayoutInflater inflater, ViewGroup container) {
         mView = inflater.inflate(R.layout.fragment_zhi_hu_layout, container, false);
-        findView();
-        initView();
         return mView;
     }
 
+    @Override
     public void findView() {
         mPresenter = new ZhiHuDailyNewsPresenter(this);
         mPresenter.setCurrentDate(new Date(System.currentTimeMillis()));
-        mViewPager = (ViewPager) mView.findViewById(R.id.view_pager);
         mRv = (LoadMoreRecycleView) mView.findViewById(R.id.list_view);
-        mTvTitle = (TextView) mView.findViewById(R.id.textview);
     }
 
+    @Override
     public void initView() {
-        mTvTitle.setText("今日新闻");
-
         mManager = RVUtils.getLayoutManager(getContext(), LinearLayoutManager.VERTICAL);
         mRv.setLayoutManager(mManager);
         mRv.setAdapter(new ZhiHuDailyAdapter((Activity) getContext(), mData));
@@ -71,9 +65,14 @@ public class ZhiHuFragment extends ViewPageFragment implements ZhiHuDailyContrac
 
             @Override
             public String getTitle(int position) {
-                if (position >= mData.size() || position == 0) {
+                if (position == 0) {
+                    return "今日新闻";
+                }
+
+                if (position >= mData.size()) {
                     return "";
                 }
+
                 if (mData.get(position) instanceof TitleMark) {
                     return ((TitleMark) mData.get(position)).getHeaderTitle();
                 }
@@ -82,17 +81,13 @@ public class ZhiHuFragment extends ViewPageFragment implements ZhiHuDailyContrac
 
             @Override
             public int getHeaderColor(int position) {
-                if (position == 0) {
-                    return getResources().getColor(R.color.transparent);
-                }
                 return getResources().getColor(R.color.colorAccent);
             }
 
-
             @Override
             public boolean isShowTitle(int position) {
-                if (position >= mData.size()) {
-                    return false;
+                if (position == 0) {
+                    return true;
                 }
                 if (mData.get(position) instanceof TitleMark) {
                     return ((TitleMark) mData.get(position)).isShowTitle();
@@ -101,29 +96,6 @@ public class ZhiHuFragment extends ViewPageFragment implements ZhiHuDailyContrac
             }
         }));
         mRv.addItemDecoration(RVUtils.getItemDecorationDivider(getContext(), R.color.red_divider, 1, -1, UIUtils.dp2Px(15)));
-
-        mRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                int pos = mManager.findFirstVisibleItemPosition();
-                if (pos >= 1 && pos < mData.size()) {
-                    if (mData.get(pos - 1) instanceof TitleMark) {
-                        TitleMark preTitle = (TitleMark) mData.get(pos - 1);
-                        TitleMark title = (TitleMark) mData.get(pos);
-
-                        if (!preTitle.equals(title)) {
-                            mTvTitle.setText(title.getHeaderTitle());
-                        }
-                    }
-                }
-            }
-        });
     }
 
 

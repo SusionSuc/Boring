@@ -76,12 +76,13 @@ public class APIHelper {
         return getInstance().getService(MusicServices.class);
     }
 
-    public static ImageService getImageServices() {
-        return getInstance().getService(ImageService.class);
-    }
 
     public static ZhiHuService getZhiHuService() {
         return getInstance().getService(ZhiHuService.class);
     }
 
+
+    public static JokeService getJokeService() {
+        return getInstance().getService(JokeService.class);
+    }
 }

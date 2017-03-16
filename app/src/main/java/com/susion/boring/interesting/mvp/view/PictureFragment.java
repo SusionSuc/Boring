@@ -18,6 +18,16 @@ public class PictureFragment extends ViewPageFragment{
     }
 
     @Override
+    protected void initView() {
+
+    }
+
+    @Override
+    protected void findView() {
+
+    }
+
+    @Override
     public void initListener() {
 
     }

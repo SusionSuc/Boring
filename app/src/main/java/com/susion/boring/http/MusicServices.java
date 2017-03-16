@@ -16,20 +16,20 @@ import rx.Observable;
  */
 public interface MusicServices {
 
-    @GET(BaseURL.MUSIC+"/search/get/")
+    @GET(BaseURL.MUSIC + "/search/get/")
     Observable<MusicSearchResult> searchMusic(@Query("s") String musicName, @Query("limit") int limit,
                                               @Query("type") int type, @Query("offset") int page);
 
-    @GET(BaseURL.MUSIC_SEARCH_LYRIC+"/api/song/lyric?os=pc&kv=-1&tv=-1&lv=-1")
+    @GET(BaseURL.MUSIC_SEARCH_LYRIC + "/api/song/lyric?os=pc&kv=-1&tv=-1&lv=-1")
     Observable<LyricResult> getMusicLyric(@Query("id") String songId);
 
-    @GET(BaseURL.MUSIC_PLAY_LIST+"?type=topPlayList&cat=全部")
+    @GET(BaseURL.MUSIC_PLAY_LIST + "?type=topPlayList&cat=全部")
     Observable<GetPlayListResult> getPlayList(@Query("offset") int offset, @Query("limit") int limit);
 
-    @GET(BaseURL.MUSIC_PLAY_LIST_DETAIL+"?type=playlist")
+    @GET(BaseURL.MUSIC_PLAY_LIST_DETAIL + "?type=playlist")
     Observable<PlayListDetail> getPlayListDetail(@Query("id") int id);
 
-    @GET(BaseURL.CLOUD_MUSIC_API_MUSICINGO+"?type=url")
+    @GET(BaseURL.CLOUD_MUSIC_API_MUSICINGO + "?type=url")
     Observable<PlayListSong> getSongDetail(@Query("id") int id);
 
 }

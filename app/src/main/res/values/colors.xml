@@ -36,6 +36,9 @@
 
     <color name="topBarColor">#ee4647</color>
     <color name="topBarColorLow">#F27979</color>
+
+    <color name="shallow_red_divider">#e9e9e9</color>
+
     <color name="red_divider">#e4e4e4</color>
 
     <color name="red_font_divider">#c7c7c7</color>

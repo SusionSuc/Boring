@@ -30,7 +30,8 @@ public abstract class ListFragment<T> extends ViewPageFragment{
         return mView;
     }
 
-    private void initView() {
+    @Override
+    public void initView() {
         mRv = (LoadMoreRecycleView) mView.findViewById(R.id.list_view);
 
 

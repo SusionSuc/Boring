@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Created by susion on 17/3/15.
  */
-public class TopNewsIH  extends SimpleItemHandler<List<DailyNews.TopStoriesBean>>{
+public class TopNewsIH extends SimpleItemHandler<List<DailyNews.TopStoriesBean>> {
 
     private ViewPager mViewPager;
 
@@ -30,7 +30,7 @@ public class TopNewsIH  extends SimpleItemHandler<List<DailyNews.TopStoriesBean>
     @Override
     public void onBindDataView(ViewHolder vh, List<DailyNews.TopStoriesBean> data, int position) {
         List<BannerView> mBannerViews = new ArrayList<>();
-        for (DailyNews.TopStoriesBean bean : data){
+        for (DailyNews.TopStoriesBean bean : data) {
             BannerView view = new BannerView(mContext, bean);
             view.setTitle(bean.getTitle());
             view.setImgUrl(bean.getImage());

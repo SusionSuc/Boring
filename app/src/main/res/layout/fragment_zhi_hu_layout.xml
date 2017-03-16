@@ -10,15 +10,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <TextView
-        android:id="@+id/textview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorAccent"
-        android:gravity="center_horizontal"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp"
-        android:textColor="@color/white"
-        android:textSize="14sp"></TextView>
 
 </FrameLayout>

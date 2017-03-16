@@ -17,7 +17,7 @@ import com.susion.boring.utils.AlbumUtils;
 /**
  * Created by susion on 17/2/13.
  */
-public class MusicControlPanel extends LinearLayout{
+public class MusicControlPanel extends LinearLayout {
 
     private Context mContext;
     private SimpleDraweeView mSdvAlbum;
@@ -97,7 +97,7 @@ public class MusicControlPanel extends LinearLayout{
         });
     }
 
-    public void setPlay(boolean isPlay){
+    public void setPlay(boolean isPlay) {
         mIsPlay = isPlay;
         if (mIsPlay) {
             mIvPlay.setImageResource(R.mipmap.little_stop);
@@ -106,7 +106,7 @@ public class MusicControlPanel extends LinearLayout{
         }
     }
 
-    public void setMusic(Song song){
+    public void setMusic(Song song) {
         mSong = song;
         if (song.hasDown) {
             AlbumUtils.setAlbum(mSdvAlbum, mSong.audio);
@@ -117,21 +117,22 @@ public class MusicControlPanel extends LinearLayout{
         setSongInfo(song.artists.get(0).name, song.name);
     }
 
-    public void setAlbum(String uri){
+    public void setAlbum(String uri) {
         mSdvAlbum.setImageURI(uri);
     }
 
-    public void setSongInfo(String artist, String songName){
-        mTvArtist.setText(artist+"");
-        mTvSongName.setText(songName+"");
+    public void setSongInfo(String artist, String songName) {
+        mTvArtist.setText(artist + "");
+        mTvSongName.setText(songName + "");
     }
 
     public void seMusicControlListener(MusicControlViewListener mListener) {
         this.mListener = mListener;
     }
 
-    public interface MusicControlViewListener{
+    public interface MusicControlViewListener {
         void onPlayClick(boolean isPlay);
+
         void onNextClick();
     }
 

@@ -12,11 +12,11 @@ public class DbManager {
     private static volatile LiteOrm sLiteOrm;
     private static final String DB_NAME = "boring.db";
 
-    private DbManager(){
+    private DbManager() {
 
     }
 
-    public static LiteOrm getLiteOrm(){
+    public static LiteOrm getLiteOrm() {
         if (sLiteOrm == null) {
             synchronized (DbManager.class) {
                 if (sLiteOrm == null) {
@@ -27,6 +27,4 @@ public class DbManager {
         }
         return sLiteOrm;
     }
-
-
 }

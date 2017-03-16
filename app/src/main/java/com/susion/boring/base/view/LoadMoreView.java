@@ -50,7 +50,7 @@ public class LoadMoreView extends TextView{
 
     private void init(Context context) {
         mContext = context;
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(UIUtils.dp2Px(100), UIUtils.dp2Px(30));
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, UIUtils.dp2Px(30));
         setLayoutParams(params);
         setGravity(Gravity.CENTER_HORIZONTAL);
         setTextColor(getResources().getColor(R.color.colorPrimary));

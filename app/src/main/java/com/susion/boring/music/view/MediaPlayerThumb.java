@@ -28,8 +28,8 @@ public class MediaPlayerThumb {
         this.height = height;
         this.width = width;
 
-        int circle1Padding = (int) (width*CIRCLE1_PADDING_PERCENT);
-        int circle2Padding = (int) (width*CIRCLE2_PADDING_PERCENT);
+        int circle1Padding = (int) (width * CIRCLE1_PADDING_PERCENT);
+        int circle2Padding = (int) (width * CIRCLE2_PADDING_PERCENT);
 
         bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
@@ -39,12 +39,12 @@ public class MediaPlayerThumb {
         paint.setColor(mContext.getResources().getColor(R.color.transparent));
         paint.setStyle(Paint.Style.FILL);
 
-        RectF ovalRect2 = new RectF(circle1Padding, circle1Padding, width-circle1Padding, height-circle1Padding);
+        RectF ovalRect2 = new RectF(circle1Padding, circle1Padding, width - circle1Padding, height - circle1Padding);
         paint.setColor(mContext.getResources().getColor(R.color.thumb_out));
         paint.setStyle(Paint.Style.FILL);
         canvas.drawOval(ovalRect2, paint);
 
-        RectF ovalRect3 = new RectF(circle2Padding, circle2Padding, width-circle2Padding, height-circle2Padding);
+        RectF ovalRect3 = new RectF(circle2Padding, circle2Padding, width - circle2Padding, height - circle2Padding);
         paint.setColor(mContext.getResources().getColor(R.color.white));
         paint.setStyle(Paint.Style.FILL);
         canvas.drawOval(ovalRect3, paint);
@@ -52,11 +52,11 @@ public class MediaPlayerThumb {
         drawable = new BitmapDrawable(mContext.getResources(), bitmap);
     }
 
-    public Bitmap getBitmap(){
+    public Bitmap getBitmap() {
         return bitmap;
     }
 
-    public Drawable getDrawable(){
+    public Drawable getDrawable() {
         return drawable;
     }
 

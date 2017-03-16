@@ -12,7 +12,7 @@ import com.susion.boring.utils.UIUtils;
 /**
  * Created by susion on 17/1/23.
  */
-public class MusicPlayControlView extends LinearLayout implements View.OnClickListener{
+public class MusicPlayControlView extends LinearLayout implements View.OnClickListener {
 
     private Context mContext;
     private ImageView mIvStartStop;
@@ -27,6 +27,7 @@ public class MusicPlayControlView extends LinearLayout implements View.OnClickLi
         super(context);
         init(context);
     }
+
     public MusicPlayControlView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
@@ -79,7 +80,7 @@ public class MusicPlayControlView extends LinearLayout implements View.OnClickLi
     public void onClick(View view) {
 
         int id = view.getId();
-        switch (id){
+        switch (id) {
             case R.id.view_music_player_next:
 
                 break;
@@ -99,7 +100,7 @@ public class MusicPlayControlView extends LinearLayout implements View.OnClickLi
         if (listener == null) {
             return;
         }
-        switch (id){
+        switch (id) {
             case R.id.view_music_player_next:
                 listener.onNextItemClick();
                 break;
@@ -125,13 +126,15 @@ public class MusicPlayControlView extends LinearLayout implements View.OnClickLi
         mIvLoading.clearAnimation();
     }
 
-    public interface MusicPlayerControlViewItemClickListener{
+    public interface MusicPlayerControlViewItemClickListener {
         void onNextItemClick();
+
         void onPreItemClick();
+
         void onStartOrStartItemClick(boolean isPlay);
     }
 
-    public void setOnControlItemClickListener(MusicPlayerControlViewItemClickListener listener){
+    public void setOnControlItemClickListener(MusicPlayerControlViewItemClickListener listener) {
         this.listener = listener;
     }
 }
