@@ -35,11 +35,10 @@ import java.util.List;
  * Created by susion on 17/3/15.
  */
 public class ZhiHuFragment extends ViewPageFragment implements ZhiHuDailyContract.View, OnLastItemVisibleListener {
-    private int mMaxScrollSize;
     private ViewPager mViewPager;
     private LoadMoreRecycleView mRv;
     private List<BannerView> mBannerViews;
-    private List<TitleMark> mData = new ArrayList<>();
+    private List<Object> mData = new ArrayList<>();
 
     private ZhiHuDailyContract.Presenter mPresenter;
     private TextView mTvTitle;
@@ -75,7 +74,10 @@ public class ZhiHuFragment extends ViewPageFragment implements ZhiHuDailyContrac
                 if (position >= mData.size() || position == 0) {
                     return "";
                 }
-                return mData.get(position).getHeaderTitle();
+                if (mData.get(position) instanceof TitleMark) {
+                    return ((TitleMark) mData.get(position)).getHeaderTitle();
+                }
+                return "";
             }
 
             @Override
@@ -92,7 +94,10 @@ public class ZhiHuFragment extends ViewPageFragment implements ZhiHuDailyContrac
                 if (position >= mData.size()) {
                     return false;
                 }
-                return mData.get(position).isShowTitle();
+                if (mData.get(position) instanceof TitleMark) {
+                    return ((TitleMark) mData.get(position)).isShowTitle();
+                }
+                return false;
             }
         }));
         mRv.addItemDecoration(RVUtils.getItemDecorationDivider(getContext(), R.color.red_divider, 1, -1, UIUtils.dp2Px(15)));
@@ -108,11 +113,13 @@ public class ZhiHuFragment extends ViewPageFragment implements ZhiHuDailyContrac
                 super.onScrolled(recyclerView, dx, dy);
                 int pos = mManager.findFirstVisibleItemPosition();
                 if (pos >= 1 && pos < mData.size()) {
-                    TitleMark preTitle = mData.get(pos - 1);
-                    TitleMark title = mData.get(pos);
+                    if (mData.get(pos - 1) instanceof TitleMark) {
+                        TitleMark preTitle = (TitleMark) mData.get(pos - 1);
+                        TitleMark title = (TitleMark) mData.get(pos);
 
-                    if (!preTitle.equals(title)) {
-                        mTvTitle.setText(title.getHeaderTitle());
+                        if (!preTitle.equals(title)) {
+                            mTvTitle.setText(title.getHeaderTitle());
+                        }
                     }
                 }
             }
@@ -137,17 +144,16 @@ public class ZhiHuFragment extends ViewPageFragment implements ZhiHuDailyContrac
 
     @Override
     public void setDataForViewPage(List<DailyNews.TopStoriesBean> banners) {
-        mBannerViews = mPresenter.getBannerViews(banners);
-        mViewPager.setAdapter(new QuickPageAdapter<>(mBannerViews));
-        mViewPager.setOffscreenPageLimit(3);
+        mData.add(banners);
+        mRv.getAdapter().notifyDataSetChanged();
     }
 
     @Override
     public void addNewsData(List<DailyNews.StoriesBean> news) {
         for (DailyNews.StoriesBean bean : news) {
             bean.date = new Date(System.currentTimeMillis());
+            mData.add(bean);
         }
-        mData.addAll(news);
         mRv.getAdapter().notifyDataSetChanged();
     }
 
@@ -155,7 +161,6 @@ public class ZhiHuFragment extends ViewPageFragment implements ZhiHuDailyContrac
     public void onLastItemVisible() {
         mPresenter.loadData(ZhiHuDailyContract.AFTER_DAY_NEWS);
     }
-
 
     @Override
     public String getTitle() {

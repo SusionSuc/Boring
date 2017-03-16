@@ -1,6 +1,7 @@
 package com.susion.boring.utils;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -57,27 +58,28 @@ public class TimeUtils {
         calender.setTime(date);
         int month = calender.get(Calendar.MONTH)+1;
         int day = calender.get(Calendar.DATE);
-        int weekDay = calender.get(Calendar.DAY_OF_WEEK);
+        int weekDay = calender.get(Calendar.DAY_OF_WEEK) - 1;
         dateDesc = month+"月"+day+"日 "+"星期"+ translateToCn(weekDay);
+        Log.e("dateDesc", dateDesc);
         return dateDesc;
     }
 
     private static String translateToCn(int weekDay) {
-
+        Log.e("weekDay: ", weekDay+"");
         switch (weekDay) {
-            case 0:
-                return "一";
             case 1:
-                return "二";
+                return "一";
             case 2:
-                return "三";
+                return "二";
             case 3:
-                return "四";
+                return "三";
             case 4:
-                return "五";
+                return "四";
             case 5:
-                return "六";
+                return "五";
             case 6:
+                return "六";
+            case 0:
                 return "日";
         }
         return "八";  // -_-!

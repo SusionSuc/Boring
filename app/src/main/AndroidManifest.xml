@@ -53,9 +53,6 @@
         <activity
             android:name=".music.mvp.view.PlayListActivity"
             android:theme="@style/AppTheme" />
-        <activity
-            android:name=".interesting.mvp.view.ZhiHuDailyNewsActivity"
-            android:theme="@style/AppTheme" />
         <activity android:name=".interesting.mvp.view.ZhiHuEssayActivity"
             android:launchMode="singleTask"></activity>
     </application>

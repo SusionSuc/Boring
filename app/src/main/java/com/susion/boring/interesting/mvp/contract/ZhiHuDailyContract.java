@@ -18,16 +18,13 @@ public interface ZhiHuDailyContract {
     int BEFORE_DAY_NEWS = -1;
 
     interface View extends IView {
-        void setDataForViewPage(List<DailyNews.TopStoriesBean> banners);
-
         void addNewsData(List<DailyNews.StoriesBean> news);
+        void setDataForViewPage(List<DailyNews.TopStoriesBean> banners);
     }
 
 
     interface Presenter {
         void loadData(int page);
-
-        List<BannerView> getBannerViews(List<DailyNews.TopStoriesBean> banners);
 
         void setCurrentDate(Date date);
     }

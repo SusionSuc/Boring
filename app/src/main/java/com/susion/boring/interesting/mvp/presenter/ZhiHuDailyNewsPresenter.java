@@ -99,28 +99,14 @@ public class ZhiHuDailyNewsPresenter implements ZhiHuDailyContract.Presenter{
                     @Override
                     public void onNext(DailyNews dailyNews) {
                         if (dailyNews != null) {
-                            mView.addNewsData(addHeaderTitle(dailyNews.getStories()));
                             if (page == 0) {
                                 mView.setDataForViewPage(dailyNews.getTop_stories());
                             }
+                            mView.addNewsData(addHeaderTitle(dailyNews.getStories()));
                         }
                     }
                 });
     }
-
-    @Override
-    public List<BannerView> getBannerViews(List<DailyNews.TopStoriesBean> topNews) {
-
-        List<BannerView> mBannerView = new ArrayList<>();
-        for (DailyNews.TopStoriesBean bean : topNews){
-            BannerView view = new BannerView(mView.getViewContext(), bean);
-            view.setTitle(bean.getTitle());
-            view.setImgUrl(bean.getImage());
-            mBannerView.add(view);
-        }
-        return mBannerView;
-    }
-
     @Override
     public void setCurrentDate(Date date) {
         mCurrentDate = date;

@@ -54,6 +54,11 @@ public class ZhiHuDailyAdapter extends BaseRVAdapter{
     protected int getViewType(int position) {
 
         Object item = getItem(position);
+
+        if (item instanceof List) {
+            return TYPE_TOP_NEWS;
+        }
+
         if (item instanceof DailyNews.StoriesBean) {
             return TYPE_NEWS;
         }
