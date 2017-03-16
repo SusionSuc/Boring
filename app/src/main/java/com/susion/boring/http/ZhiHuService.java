@@ -1,19 +1,11 @@
 package com.susion.boring.http;
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-
-import com.susion.boring.interesting.model.DailyNews;
-import com.susion.boring.interesting.model.NewsDetail;
-import com.susion.boring.music.model.PlayListSong;
-
-import java.io.InputStream;
+import com.susion.boring.interesting.mvp.model.DailyNews;
+import com.susion.boring.interesting.mvp.model.NewsDetail;
 
 import okhttp3.ResponseBody;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
-import retrofit2.http.Query;
-import retrofit2.http.Streaming;
 import retrofit2.http.Url;
 import rx.Observable;
 

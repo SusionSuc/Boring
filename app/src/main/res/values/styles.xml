@@ -10,9 +10,6 @@
         <item name="android:screenOrientation">portrait</item>
     </style>
 
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
     <declare-styleable name="MediaSeekBar">
         <attr name="hasPlayColor" format="color|reference" />
         <attr name="originBackgroundColor" format="color|reference" />
@@ -48,9 +45,8 @@
         <item name="shadow_right">@drawable/shadow_right</item>
         <item name="shadow_bottom">@drawable/shadow_bottom</item>
     </style>
-
-
-    <!--   -->
+    
+    <!---->
     <style name="dialog_animation_frombottom" parent="android:Animation">
         <item name="@android:windowEnterAnimation">@anim/anim_dialog_enter_formbottom</item>
         <item name="@android:windowExitAnimation">@anim/anim_dialog_exit_formbottom</item>

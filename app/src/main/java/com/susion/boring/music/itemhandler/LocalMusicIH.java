@@ -5,8 +5,8 @@ import android.view.View;
 
 import com.susion.boring.R;
 import com.susion.boring.base.adapter.ViewHolder;
-import com.susion.boring.db.model.SimpleSong;
-import com.susion.boring.music.activity.PlayMusicActivity;
+import com.susion.boring.music.mvp.model.SimpleSong;
+import com.susion.boring.music.mvp.view.PlayMusicActivity;
 import com.susion.boring.utils.AlbumUtils;
 import com.susion.boring.utils.TimeUtils;
 

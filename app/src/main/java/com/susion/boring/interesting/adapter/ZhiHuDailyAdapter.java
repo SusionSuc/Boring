@@ -7,8 +7,9 @@ import com.susion.boring.base.ui.ItemHandler;
 import com.susion.boring.base.ui.ItemHandlerFactory;
 import com.susion.boring.interesting.itemhandler.DailyNewsDateIH;
 import com.susion.boring.interesting.itemhandler.DailyNewsIH;
-import com.susion.boring.interesting.model.DailyNews;
-import com.susion.boring.interesting.model.DailyNewsDate;
+import com.susion.boring.interesting.itemhandler.TopNewsIH;
+import com.susion.boring.interesting.mvp.model.DailyNews;
+import com.susion.boring.interesting.mvp.model.DailyNewsDate;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class ZhiHuDailyAdapter extends BaseRVAdapter{
 
     private static final int TYPE_NEWS = 1;
     private static final int TYPE_DATE = 2;
+    private static final int TYPE_TOP_NEWS = 3;
 
     public ZhiHuDailyAdapter(Activity activity, List<?> data) {
         super(activity, data);
@@ -26,6 +28,13 @@ public class ZhiHuDailyAdapter extends BaseRVAdapter{
 
     @Override
     protected void initHandlers() {
+        registerItemHandler(TYPE_TOP_NEWS, new ItemHandlerFactory() {
+            @Override
+            public ItemHandler newInstant(int viewType) {
+                return new TopNewsIH();
+            }
+        });
+
         registerItemHandler(TYPE_NEWS, new ItemHandlerFactory() {
             @Override
             public ItemHandler newInstant(int viewType) {

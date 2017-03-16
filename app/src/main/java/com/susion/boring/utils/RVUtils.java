@@ -19,7 +19,7 @@ import android.view.View;
 import com.susion.boring.R;
 import com.susion.boring.base.ui.mainui.drawer.DividerMark;
 import com.susion.boring.base.ui.OnLastItemVisibleListener;
-import com.susion.boring.interesting.contract.ZhiHuDailyContract;
+import com.susion.boring.interesting.mvp.contract.ZhiHuDailyContract;
 
 import java.util.List;
 
@@ -182,7 +182,7 @@ public class RVUtils {
             textPaint = new TextPaint();
             textPaint.setTypeface(Typeface.DEFAULT_BOLD);
             textPaint.setAntiAlias(true);
-            textPaint.setTextSize(42);
+            textPaint.setTextSize(47);
             textPaint.setColor(Color.WHITE);
             textPaint.getFontMetrics(fontMetrics);
             textPaint.setTextAlign(Paint.Align.CENTER);
@@ -218,7 +218,6 @@ public class RVUtils {
 
                 preTitle = title;
                 title = stickHeader.getTitle(position);
-                stickHeader.setNewTitle(preTitle);
                 if (title.equals(preTitle)) continue;
 
                 if (TextUtils.isEmpty(title) || stickHeader.isShowTitle(position)) continue;

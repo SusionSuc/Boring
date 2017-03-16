@@ -10,11 +10,9 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.susion.boring.R;
-import com.susion.boring.music.activity.PlayMusicActivity;
-import com.susion.boring.music.model.Song;
+import com.susion.boring.music.mvp.view.PlayMusicActivity;
+import com.susion.boring.music.mvp.model.Song;
 import com.susion.boring.utils.AlbumUtils;
-
-import java.io.File;
 
 /**
  * Created by susion on 17/2/13.

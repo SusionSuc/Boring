@@ -19,7 +19,7 @@ import com.susion.boring.base.ui.ItemHandlerFactory;
 import com.susion.boring.music.event.ChangeSongEvent;
 import com.susion.boring.music.event.SongDeleteFromPlayQueueEvent;
 import com.susion.boring.music.itemhandler.DialogMusicIH;
-import com.susion.boring.music.model.Song;
+import com.susion.boring.music.mvp.model.Song;
 import com.susion.boring.utils.RVUtils;
 import com.susion.boring.utils.UIUtils;
 

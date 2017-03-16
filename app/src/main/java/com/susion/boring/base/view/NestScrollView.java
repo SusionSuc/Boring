@@ -3,11 +3,13 @@ package com.susion.boring.base.view;
 import android.content.Context;
 import android.support.v4.view.NestedScrollingParent;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.OverScroller;
+import android.widget.RelativeLayout;
 
 /**
  * Created by susion on 17/2/10.
@@ -54,9 +56,9 @@ public class NestScrollView extends LinearLayout implements NestedScrollingParen
         super.onSizeChanged(w, h, oldw, oldh);
         mTopViewHeight = mTopView.getHeight();
     }
+
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
-    {
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         //不限制顶部的高度
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         getChildAt(0).measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
@@ -72,7 +74,6 @@ public class NestScrollView extends LinearLayout implements NestedScrollingParen
         setMeasuredDimension(getMeasuredWidth(), mTopView.getMeasuredHeight() + mSecondView.getMeasuredHeight());
     }
 
-
     @Override
     public boolean onStartNestedScroll(View child, View target, int nestedScrollAxes) {
         return (nestedScrollAxes & ViewCompat.SCROLL_AXIS_VERTICAL) != 0;   //只要是竖直滑动, 就拦截
@@ -82,8 +83,7 @@ public class NestScrollView extends LinearLayout implements NestedScrollingParen
     public void onNestedPreScroll(View target, int dx, int dy, int[] consumed) {
         boolean hiddenTop = dy > 0 && getScrollY() < mTopViewHeight;
         boolean showTop = dy < 0 && getScrollY() >= 0 && !ViewCompat.canScrollVertically(target, -1);
-        if (hiddenTop || showTop)
-        {
+        if (hiddenTop || showTop) {
             scrollBy(0, dy);
             consumed[1] = dy;
         }
@@ -92,16 +92,14 @@ public class NestScrollView extends LinearLayout implements NestedScrollingParen
 
 
     @Override
-    public boolean onNestedPreFling(View target, float velocityX, float velocityY)
-    {
+    public boolean onNestedPreFling(View target, float velocityX, float velocityY) {
         //down - //up+
         if (getScrollY() >= mTopViewHeight) return false;
         fling((int) velocityY);
         return true;
     }
 
-    public void fling(int velocityY)
-    {
+    public void fling(int velocityY) {
         mScroller.fling(0, getScrollY(), 0, velocityY, 0, 0, 0, mTopViewHeight);
         invalidate();
     }
@@ -109,23 +107,19 @@ public class NestScrollView extends LinearLayout implements NestedScrollingParen
     @Override
     public void scrollTo(int x, int y)   //call by scrollTo
     {
-        if (y < 0)
-        {
+        if (y < 0) {
             y = 0;
         }
-        if (y > mTopViewHeight)
-        {
+        if (y > mTopViewHeight) {
             y = mTopViewHeight;
         }
-        if (y != getScrollY())
-        {
+        if (y != getScrollY()) {
             super.scrollTo(x, y);
         }
     }
 
     @Override
-    public void computeScroll()
-    {
+    public void computeScroll() {
         if (mScroller.computeScrollOffset())  //for fling
         {
             scrollTo(0, mScroller.getCurrY());

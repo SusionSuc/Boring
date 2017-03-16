@@ -5,7 +5,7 @@ import android.view.View;
 import com.susion.boring.R;
 import com.susion.boring.base.ui.SimpleItemHandler;
 import com.susion.boring.base.adapter.ViewHolder;
-import com.susion.boring.music.model.PlayList;
+import com.susion.boring.music.mvp.model.PlayList;
 
 /**
  * Created by susion on 17/3/6.

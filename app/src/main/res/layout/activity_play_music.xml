@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".music.activity.PlayMusicActivity"
+    tools:context=".music.mvp.view.PlayMusicActivity"
     android:background="@color/white"
     android:orientation="vertical">
 

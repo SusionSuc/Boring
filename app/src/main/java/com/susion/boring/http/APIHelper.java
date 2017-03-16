@@ -23,11 +23,11 @@ public class APIHelper {
     private HashMap<Class, Object> mServicesMap = new HashMap<>();
     private static APIHelper sInstance;
 
-    private APIHelper(){
+    private APIHelper() {
 
     }
 
-    private synchronized static APIHelper getInstance(){
+    private synchronized static APIHelper getInstance() {
         if (sInstance == null) {
             sInstance = new APIHelper();
             initRetrofit();
@@ -60,27 +60,27 @@ public class APIHelper {
     }
 
 
-    public static <T> void subscribeSimpleRequest(Observable<T> observable, Observer<T> observer){
+    public static <T> void subscribeSimpleRequest(Observable<T> observable, Observer<T> observer) {
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(observer);
     }
 
 
-    private synchronized <T> T getService(Class<T> c){
+    private synchronized <T> T getService(Class<T> c) {
         if (!mServicesMap.containsKey(c)) {
             mServicesMap.put(c, mRetrofit.create(c));
         }
         return (T) mServicesMap.get(c);
     }
 
-    public static MusicServices getMusicServices(){
+    public static MusicServices getMusicServices() {
         return getInstance().getService(MusicServices.class);
     }
 
-    public static ImageService getImageServices(){
+    public static ImageService getImageServices() {
         return getInstance().getService(ImageService.class);
     }
 
-    public static ZhiHuService getZhiHuService(){
+    public static ZhiHuService getZhiHuService() {
         return getInstance().getService(ZhiHuService.class);
     }
 

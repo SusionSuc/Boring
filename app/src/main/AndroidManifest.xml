@@ -26,16 +26,16 @@
             android:name=".base.ui.mainui.MainActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".music.activity.SearchMusicActivity"
+            android:name=".music.mvp.view.SearchMusicActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".music.activity.PlayMusicActivity"
+            android:name=".music.mvp.view.PlayMusicActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".music.activity.LocalMusicActivity"
+            android:name=".music.mvp.view.LocalMusicActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".music.activity.MyLikeActivity"
+            android:name=".music.mvp.view.MyLikeActivity"
             android:theme="@style/AppTheme" />
 
         <service
@@ -48,15 +48,16 @@
         </service>
 
         <activity
-            android:name=".music.activity.MusicDownLoadListActivity"
+            android:name=".music.mvp.view.MusicDownLoadListActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".music.activity.PlayListActivity"
+            android:name=".music.mvp.view.PlayListActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".interesting.activity.ZhiHuDailyNewsActivity"
+            android:name=".interesting.mvp.view.ZhiHuDailyNewsActivity"
             android:theme="@style/AppTheme" />
-        <activity android:name=".interesting.activity.ZhiHuEssayActivity"></activity>
+        <activity android:name=".interesting.mvp.view.ZhiHuEssayActivity"
+            android:launchMode="singleTask"></activity>
     </application>
 
 </manifest>

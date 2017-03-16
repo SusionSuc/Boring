@@ -8,9 +8,9 @@ import com.susion.boring.base.ui.ItemHandlerFactory;
 import com.susion.boring.music.itemhandler.MusicPageConstantIH;
 import com.susion.boring.music.itemhandler.MusicPagePlayListIH;
 import com.susion.boring.music.itemhandler.MusicPageTitleIH;
-import com.susion.boring.music.model.MusicPageConstantItem;
-import com.susion.boring.music.model.PlayList;
-import com.susion.boring.music.model.SimpleTitle;
+import com.susion.boring.music.mvp.model.MusicPageConstantItem;
+import com.susion.boring.music.mvp.model.PlayList;
+import com.susion.boring.music.mvp.model.SimpleTitle;
 
 import java.util.List;
 

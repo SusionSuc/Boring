@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/white"
-    tools:context="com.susion.boring.music.activity.LocalMusicActivity">
+    tools:context=".music.mvp.view.LocalMusicActivity">
 
     <com.susion.boring.base.view.SToolBar
         android:transitionName="@string/transition_name_tool_bar"

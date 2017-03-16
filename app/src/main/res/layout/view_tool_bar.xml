@@ -24,28 +24,41 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/toolbar_music"
+            <TextView
+                android:background="@drawable/bg_ripple_toolbar"
+                android:id="@+id/toolbar_tv_music"
                 android:layout_gravity="center_vertical"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@drawable/select_toolbar_music" />
+                android:layout_width="wrap_content"
+                android:gravity="center"
+                android:layout_height="match_parent"
+                android:textColor="@color/black"
+                android:paddingRight="14dp"
+                android:paddingLeft="14dp"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:text="听歌"/>
 
-            <ImageView
-                android:id="@+id/toolbar_player"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="30dp"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@drawable/select_toolbar_player" />
 
-            <ImageView
-                android:id="@+id/toolbar_interesting"
+            <View
+                android:background="@color/colorAccent"
+                android:layout_marginTop="7dp"
+                android:layout_marginBottom="7dp"
+                android:layout_width="2dp"
+                android:layout_height="match_parent"></View>
+
+            <TextView
+                android:background="@drawable/bg_ripple_toolbar"
+                android:paddingRight="14dp"
+                android:paddingLeft="14dp"
+                android:id="@+id/toolbar_tv_interesting"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="30dp"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@drawable/select_toolbar_interseting" />
+                android:gravity="center"
+                android:text="阅读"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp" />
 
         </LinearLayout>
 

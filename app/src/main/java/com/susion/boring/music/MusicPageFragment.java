@@ -11,20 +11,20 @@ import com.susion.boring.base.ui.OnLastItemVisibleListener;
 import com.susion.boring.base.view.LoadMoreRecycleView;
 import com.susion.boring.base.view.LoadMoreView;
 import com.susion.boring.db.DbManager;
-import com.susion.boring.db.model.SimpleSong;
+import com.susion.boring.music.mvp.model.SimpleSong;
 import com.susion.boring.db.operate.DbBaseOperate;
 import com.susion.boring.http.APIHelper;
 import com.susion.boring.music.adapter.MusicPageAdapter;
 import com.susion.boring.music.itemhandler.MusicPageConstantIH;
-import com.susion.boring.music.model.GetPlayListResult;
-import com.susion.boring.music.model.MusicPageConstantItem;
-import com.susion.boring.music.model.PlayList;
-import com.susion.boring.music.model.SimpleTitle;
-import com.susion.boring.music.model.Song;
-import com.susion.boring.music.presenter.ClientReceiverPresenter;
-import com.susion.boring.music.presenter.command.ClientPlayControlCommand;
-import com.susion.boring.music.presenter.itf.MediaPlayerContract;
-import com.susion.boring.music.service.MusicInstruction;
+import com.susion.boring.music.mvp.model.GetPlayListResult;
+import com.susion.boring.music.mvp.model.MusicPageConstantItem;
+import com.susion.boring.music.mvp.model.PlayList;
+import com.susion.boring.music.mvp.model.SimpleTitle;
+import com.susion.boring.music.mvp.model.Song;
+import com.susion.boring.music.mvp.presenter.ClientReceiverPresenter;
+import com.susion.boring.music.service.action.ClientPlayControlCommand;
+import com.susion.boring.music.mvp.contract.MediaPlayerContract;
+import com.susion.boring.music.service.MusicServiceInstruction;
 import com.susion.boring.music.view.MusicControlPanel;
 import com.susion.boring.utils.BroadcastUtils;
 import com.susion.boring.utils.RVUtils;
@@ -92,9 +92,9 @@ public class MusicPageFragment extends BaseFragment implements OnLastItemVisible
             @Override
             public void onPlayClick(boolean isPlay) {
                 if (isPlay) {
-                    BroadcastUtils.sendIntentAction(getActivity(), MusicInstruction.SERVICE_RECEIVER_PLAY_MUSIC);
+                    BroadcastUtils.sendIntentAction(getActivity(), MusicServiceInstruction.SERVICE_RECEIVER_PLAY_MUSIC);
                 } else {
-                    BroadcastUtils.sendIntentAction(getActivity(), MusicInstruction.SERVICE_RECEIVER_PAUSE_MUSIC);
+                    BroadcastUtils.sendIntentAction(getActivity(), MusicServiceInstruction.SERVICE_RECEIVER_PAUSE_MUSIC);
                 }
             }
 
@@ -210,7 +210,7 @@ public class MusicPageFragment extends BaseFragment implements OnLastItemVisible
     }
 
     @Override
-    public Context getContext(){
+    public Context getViewContext(){
         return getActivity();
     }
 

@@ -4,8 +4,7 @@ import android.media.MediaMetadataRetriever;
 import android.os.Environment;
 import android.text.TextUtils;
 
-import com.susion.boring.db.model.SimpleSong;
-import com.susion.boring.music.model.Song;
+import com.susion.boring.music.mvp.model.SimpleSong;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -14,9 +13,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.util.List;
 
 /**
  * Created by susion on 17/2/18.

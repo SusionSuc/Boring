@@ -14,21 +14,18 @@ import com.susion.boring.R;
 /**
  * Created by susion on 17/1/17.
  */
-public class SToolBar extends RelativeLayout implements View.OnClickListener, MainUIFragmentIndex{
+public class SToolBar extends RelativeLayout implements View.OnClickListener, MainUIFragmentIndex {
+
+    public static final int HIDDEN_LEFT_ICON_RES = -1;
 
     private Context mContext;
     private ImageView mLeftIcon;
     private ImageView mRightIcon;
-    private ImageView mInteresting;
-    private ImageView mPlayer;
-    private ImageView mMusic;
-
-    public static final int HIDDEN_LEFT_ICON_RES = -1;
+    private TextView mTvInteresting;
+    private TextView mTvMusic;
 
     private int mCurrentSelectItem = 0;
-
     private boolean isMainPage = true;
-    private String title;
 
     private OnItemClickListener listener;
     private OnRightIconClickListener rightIconClickListener;
@@ -62,7 +59,7 @@ public class SToolBar extends RelativeLayout implements View.OnClickListener, Ma
     }
 
     private void setAttrs(AttributeSet attrs) {
-        if(attrs != null){
+        if (attrs != null) {
             TypedArray ta = getContext().obtainStyledAttributes(attrs, R.styleable.SToolBar);
             isMainPage = !ta.getBoolean(R.styleable.SToolBar_showTitle, false);
             isShowTitle();
@@ -85,15 +82,13 @@ public class SToolBar extends RelativeLayout implements View.OnClickListener, Ma
         mLeftIcon = (ImageView) findViewById(R.id.toolbar_left_icon);
         mRightIcon = (ImageView) findViewById(R.id.toolbar_right_icon);
         mTvTitle = (TextView) findViewById(R.id.toolbar_title);
-        mMusic = (ImageView) findViewById(R.id.toolbar_music);
-        mPlayer = (ImageView) findViewById(R.id.toolbar_player);
-        mInteresting = (ImageView) findViewById(R.id.toolbar_interesting);
+        mTvMusic = (TextView) findViewById(R.id.toolbar_tv_music);
+        mTvInteresting = (TextView) findViewById(R.id.toolbar_tv_interesting);
 
         mRightIcon.setOnClickListener(this);
         mLeftIcon.setOnClickListener(this);
-        mMusic.setOnClickListener(this);
-        mPlayer.setOnClickListener(this);
-        mInteresting.setOnClickListener(this);
+        mTvMusic.setOnClickListener(this);
+        mTvInteresting.setOnClickListener(this);
     }
 
 
@@ -102,7 +97,7 @@ public class SToolBar extends RelativeLayout implements View.OnClickListener, Ma
 
         int clickId = view.getId();
 
-        switch (clickId){
+        switch (clickId) {
             case R.id.toolbar_left_icon:
                 if (isMainPage) {
                     if (listener != null) {
@@ -114,13 +109,11 @@ public class SToolBar extends RelativeLayout implements View.OnClickListener, Ma
                     }
                 }
                 break;
-            case R.id.toolbar_music:
+            case R.id.toolbar_tv_music:
                 mCurrentSelectItem = ITEM_MUSIC;
                 break;
-            case R.id.toolbar_player:
-                mCurrentSelectItem = ITEM_PLAYER;
-                break;
-            case R.id.toolbar_interesting:
+
+            case R.id.toolbar_tv_interesting:
                 mCurrentSelectItem = ITEM_INTERESTING;
                 break;
             case R.id.toolbar_right_icon:
@@ -135,14 +128,12 @@ public class SToolBar extends RelativeLayout implements View.OnClickListener, Ma
 
     private void notifyListener(int clickId, View view) {
         if (listener != null) {
-            switch (clickId){
-                case R.id.toolbar_music:
+            switch (clickId) {
+                case R.id.toolbar_tv_music:
                     listener.onMusicItemClick(view);
                     break;
-                case R.id.toolbar_player:
-                    listener.onPlayerItemClick(view);
-                    break;
-                case R.id.toolbar_interesting:
+
+                case R.id.toolbar_tv_interesting:
                     listener.onInterestingItemClick(view);
                     break;
             }
@@ -151,27 +142,23 @@ public class SToolBar extends RelativeLayout implements View.OnClickListener, Ma
 
     public void setSelectedItem(int selectedItem) {
         clearSelectItem();
-        switch (selectedItem){
+        switch (selectedItem) {
             case ITEM_MUSIC:
-                mMusic.setSelected(true);
-                break;
-            case ITEM_PLAYER:
-                mPlayer.setSelected(true);
+                mTvMusic.setTextColor(getResources().getColor(R.color.white));
                 break;
             case ITEM_INTERESTING:
-                mInteresting.setSelected(true);
+                mTvInteresting.setTextColor(getResources().getColor(R.color.white));
                 break;
         }
     }
 
 
     private void clearSelectItem() {
-        mMusic.setSelected(false);
-        mInteresting.setSelected(false);
-        mPlayer.setSelected(false);
+        mTvInteresting.setTextColor(getResources().getColor(R.color.black));
+        mTvMusic.setTextColor(getResources().getColor(R.color.black));
     }
 
-    public void setLeftIcon(int resId){
+    public void setLeftIcon(int resId) {
         if (resId == HIDDEN_LEFT_ICON_RES) {
             mLeftIcon.setVisibility(INVISIBLE);
             return;
@@ -180,7 +167,7 @@ public class SToolBar extends RelativeLayout implements View.OnClickListener, Ma
         mLeftIcon.setImageResource(resId);
     }
 
-    public void setRightIcon(int resId){
+    public void setRightIcon(int resId) {
         mRightIcon.setVisibility(VISIBLE);
         mRightIcon.setImageResource(resId);
     }
@@ -205,7 +192,6 @@ public class SToolBar extends RelativeLayout implements View.OnClickListener, Ma
     }
 
     public void setTitle(String title) {
-        this.title = title;
         mTvTitle.setText(title);
         findViewById(R.id.toolbar_main_menu).setVisibility(GONE);
         mTvTitle.setVisibility(VISIBLE);
@@ -215,14 +201,15 @@ public class SToolBar extends RelativeLayout implements View.OnClickListener, Ma
         mTvTitle.setTextColor(getResources().getColor(res));
     }
 
-    public interface OnItemClickListener{
+    public interface OnItemClickListener {
         void onMenuItemClick(View v);
+
         void onMusicItemClick(View v);
-        void onPlayerItemClick(View v);
+
         void onInterestingItemClick(View v);
     }
 
-    public interface OnRightIconClickListener{
+    public interface OnRightIconClickListener {
         void onRightIconClick();
     }
 }

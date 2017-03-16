@@ -5,7 +5,7 @@ import android.view.View;
 import com.susion.boring.R;
 import com.susion.boring.base.ui.SimpleItemHandler;
 import com.susion.boring.base.adapter.ViewHolder;
-import com.susion.boring.interesting.model.DailyNewsDate;
+import com.susion.boring.interesting.mvp.model.DailyNewsDate;
 
 /**
  * Created by susion on 17/3/9.

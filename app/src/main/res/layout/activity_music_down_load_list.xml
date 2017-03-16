@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.susion.boring.music.activity.MusicDownLoadListActivity">
+    tools:context=".music.mvp.view.MusicDownLoadListActivity">
 
 
     <com.susion.boring.base.view.LoadMoreRecycleView

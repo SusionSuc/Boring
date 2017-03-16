@@ -1,11 +1,11 @@
 package com.susion.boring.http;
 
 
-import com.susion.boring.music.model.GetPlayListResult;
-import com.susion.boring.music.model.LyricResult;
-import com.susion.boring.music.model.MusicSearchResult;
-import com.susion.boring.music.model.PlayListDetail;
-import com.susion.boring.music.model.PlayListSong;
+import com.susion.boring.music.mvp.model.GetPlayListResult;
+import com.susion.boring.music.mvp.model.LyricResult;
+import com.susion.boring.music.mvp.model.MusicSearchResult;
+import com.susion.boring.music.mvp.model.PlayListDetail;
+import com.susion.boring.music.mvp.model.PlayListSong;
 
 import retrofit2.http.GET;
 import retrofit2.http.Query;

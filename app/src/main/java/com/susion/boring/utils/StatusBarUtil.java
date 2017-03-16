@@ -14,7 +14,6 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 
 import com.susion.boring.R;
-import com.susion.boring.music.activity.PlayMusicActivity;
 
 /**
  * Created by Jaeger on 16/2/14.

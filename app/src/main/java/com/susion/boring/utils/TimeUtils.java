@@ -57,7 +57,7 @@ public class TimeUtils {
         calender.setTime(date);
         int month = calender.get(Calendar.MONTH)+1;
         int day = calender.get(Calendar.DATE);
-        int weekDay = calender.get(Calendar.DAY_OF_WEEK) - 1;
+        int weekDay = calender.get(Calendar.DAY_OF_WEEK);
         dateDesc = month+"月"+day+"日 "+"星期"+ translateToCn(weekDay);
         return dateDesc;
     }
@@ -67,20 +67,20 @@ public class TimeUtils {
         switch (weekDay) {
             case 0:
                 return "一";
-            case 2:
+            case 1:
                 return "二";
-            case 3:
+            case 2:
                 return "三";
-            case 4:
+            case 3:
                 return "四";
-            case 5:
+            case 4:
                 return "五";
-            case 6:
+            case 5:
                 return "六";
-            case 7:
+            case 6:
                 return "日";
         }
-        return "八";
+        return "八";  // -_-!
     }
 
     public static Date getDate(String date) {

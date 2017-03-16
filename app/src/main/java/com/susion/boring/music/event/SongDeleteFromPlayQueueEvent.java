@@ -1,6 +1,6 @@
 package com.susion.boring.music.event;
 
-import com.susion.boring.music.model.Song;
+import com.susion.boring.music.mvp.model.Song;
 
 /**
  * Created by susion on 17/3/6.

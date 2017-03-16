@@ -3,7 +3,7 @@ package com.susion.boring.music.adapter;
 import android.app.Activity;
 
 import com.susion.boring.base.adapter.BaseRVAdapter;
-import com.susion.boring.music.model.Song;
+import com.susion.boring.music.mvp.model.Song;
 
 import java.util.List;
 

@@ -1,26 +1,35 @@
 package com.susion.boring.interesting;
 
-import android.support.v7.widget.LinearLayoutManager;
+import android.content.Context;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.susion.boring.R;
 import com.susion.boring.base.ui.BaseFragment;
-import com.susion.boring.base.adapter.BaseRVAdapter;
-import com.susion.boring.base.ui.ItemHandler;
-import com.susion.boring.base.ui.ItemHandlerFactory;
-import com.susion.boring.base.view.LoadMoreRecycleView;
-import com.susion.boring.interesting.itemhandler.InterestingPageIH;
-import com.susion.boring.interesting.model.InterestingColumnType;
-import com.susion.boring.utils.RVUtils;
+import com.susion.boring.base.view.ViewPageFragment;
+import com.susion.boring.interesting.mvp.view.JokeFragment;
+import com.susion.boring.interesting.mvp.view.NestChildViewPager;
+import com.susion.boring.interesting.mvp.view.PictureFragment;
+import com.susion.boring.interesting.mvp.view.ZhiHuFragment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by susion on 17/1/19.
  */
 public class InterestingPageFragment extends BaseFragment {
 
-    private LoadMoreRecycleView mRv;
+    private TabLayout mTabLayout;
+    private NestChildViewPager mViewPager;
+
+    private List<ViewPageFragment> mFragments;
 
     @Override
     public View initContentView(LayoutInflater inflater, ViewGroup container) {
@@ -31,26 +40,40 @@ public class InterestingPageFragment extends BaseFragment {
     }
 
     private void findView() {
-        mRv = (LoadMoreRecycleView)mView.findViewById(R.id.list_view);
+        mTabLayout = (TabLayout) mView.findViewById(R.id.tab_layout);
+        mViewPager = (NestChildViewPager) mView.findViewById(R.id.view_pager);
+    }
+
+    private void initFragments() {
+        if (mFragments == null) {
+            mFragments = new ArrayList<>();
+            mFragments.add(new ZhiHuFragment());
+            mFragments.add(new JokeFragment());
+            mFragments.add(new PictureFragment());
+        }
     }
 
     private void initView() {
-        mRv.setLayoutManager(RVUtils.getLayoutManager(getContext(), LinearLayoutManager.VERTICAL));
-        mRv.setAdapter(new BaseRVAdapter(this, InterestingColumnType.getColumnS()) {
+        initFragments();
+        //shit!!!  getChildFragmentManager()!!!
+        mViewPager.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
             @Override
-            protected void initHandlers() {
-                registerItemHandler(0, new ItemHandlerFactory() {
-                    @Override
-                    public ItemHandler newInstant(int viewType) {
-                        return new InterestingPageIH();
-                    }
-                });
+            public Fragment getItem(int position) {
+                Log.e("getItem position", position+"");
+                return mFragments.get(position);
             }
+
             @Override
-            protected int getViewType(int position) {
-                return 0;
+            public int getCount() {
+                return mFragments.size();
+            }
+
+            @Override
+            public CharSequence getPageTitle(int position) {
+                return mFragments.get(position).getTitle();
             }
         });
+        mTabLayout.setupWithViewPager(mViewPager);
     }
 
     @Override

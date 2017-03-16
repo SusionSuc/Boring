@@ -1,9 +1,9 @@
 package com.susion.boring.base.mvp;
 
-import com.susion.boring.db.model.SimpleSong;
-import com.susion.boring.music.model.PlayList;
-import com.susion.boring.music.model.PlayListDetail;
-import com.susion.boring.music.model.Song;
+import com.susion.boring.music.mvp.model.SimpleSong;
+import com.susion.boring.music.mvp.model.PlayList;
+import com.susion.boring.music.mvp.model.PlayListDetail;
+import com.susion.boring.music.mvp.model.Song;
 
 import java.util.List;
 

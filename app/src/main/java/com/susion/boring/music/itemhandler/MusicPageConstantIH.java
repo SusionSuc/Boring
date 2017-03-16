@@ -10,11 +10,11 @@ import com.susion.boring.R;
 import com.susion.boring.base.ui.SimpleItemHandler;
 import com.susion.boring.base.adapter.ViewHolder;
 import com.susion.boring.db.DbManager;
-import com.susion.boring.db.model.SimpleSong;
+import com.susion.boring.music.mvp.model.SimpleSong;
 import com.susion.boring.db.operate.MusicDbOperator;
-import com.susion.boring.music.activity.LocalMusicActivity;
-import com.susion.boring.music.activity.MyLikeActivity;
-import com.susion.boring.music.model.MusicPageConstantItem;
+import com.susion.boring.music.mvp.view.LocalMusicActivity;
+import com.susion.boring.music.mvp.view.MyLikeActivity;
+import com.susion.boring.music.mvp.model.MusicPageConstantItem;
 
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;

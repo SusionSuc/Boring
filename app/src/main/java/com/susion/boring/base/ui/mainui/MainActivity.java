@@ -20,7 +20,7 @@ import com.susion.boring.R;
 import com.susion.boring.base.ui.BaseActivity;
 import com.susion.boring.base.ui.mainui.drawer.DrawerData;
 import com.susion.boring.base.ui.mainui.drawer.MainDrawerAdapter;
-import com.susion.boring.music.service.MusicInstruction;
+import com.susion.boring.music.service.MusicServiceInstruction;
 import com.susion.boring.utils.RVUtils;
 import com.susion.boring.utils.UIUtils;
 import com.susion.boring.base.view.SToolBar;
@@ -113,11 +113,6 @@ public class MainActivity extends BaseActivity {
             }
 
             @Override
-            public void onPlayerItemClick(View v) {
-                showCurrentSelectedFragment();
-            }
-
-            @Override
             public void onInterestingItemClick(View v) {
                 showCurrentSelectedFragment();
             }
@@ -139,7 +134,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Intent intent = new Intent(MusicInstruction.SERVICE_SAVE_LAST_PLAY_MUSIC);
+        Intent intent = new Intent(MusicServiceInstruction.SERVICE_SAVE_LAST_PLAY_MUSIC);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 }

@@ -3,9 +3,7 @@ package com.susion.boring.db.operate;
 import android.content.Context;
 
 import com.litesuits.orm.LiteOrm;
-import com.susion.boring.db.model.SimpleSong;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
@@ -49,7 +47,7 @@ public class DbBaseOperate<T>  implements DataBaseOperateContract.BaseOperate<T>
         return Observable.create(new Observable.OnSubscribe<Boolean>() {
             @Override
             public void call(Subscriber<? super Boolean > subscriber) {
-                if (mLiteOrm.save(t) != -1) {
+                if (mLiteOrm.save(t) > 0) {
                     subscriber.onNext(true);
                 } else {
                     subscriber.onNext(false);
@@ -64,7 +62,7 @@ public class DbBaseOperate<T>  implements DataBaseOperateContract.BaseOperate<T>
         return Observable.create(new Observable.OnSubscribe<Boolean>() {
             @Override
             public void call(Subscriber<? super Boolean > subscriber) {
-                if (mLiteOrm.update(t) != -1) {
+                if (mLiteOrm.update(t) > 0) {
                     subscriber.onNext(true);
                 } else {
                     subscriber.onNext(false);
@@ -79,7 +77,7 @@ public class DbBaseOperate<T>  implements DataBaseOperateContract.BaseOperate<T>
         return Observable.create(new Observable.OnSubscribe<Boolean>() {
             @Override
             public void call(Subscriber<? super Boolean > subscriber) {
-                if (mLiteOrm.delete(song) != -1) {
+                if (mLiteOrm.delete(song) > 0) {
                     subscriber.onNext(true);
                 } else {
                     subscriber.onNext(false);
@@ -94,7 +92,7 @@ public class DbBaseOperate<T>  implements DataBaseOperateContract.BaseOperate<T>
         return Observable.create(new Observable.OnSubscribe<Boolean>() {
             @Override
             public void call(Subscriber<? super Boolean > subscriber) {
-                if (mLiteOrm.deleteAll(mClass) != -1) {
+                if (mLiteOrm.deleteAll(mClass) > 0) {
                     subscriber.onNext(true);
                 } else {
                     subscriber.onNext(false);

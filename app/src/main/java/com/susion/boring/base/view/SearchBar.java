@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 
 import com.susion.boring.R;
 import com.susion.boring.base.ui.mainui.MainActivity;
-import com.susion.boring.music.activity.SearchMusicActivity;
+import com.susion.boring.music.mvp.view.SearchMusicActivity;
 import com.susion.boring.utils.UIUtils;
 
 /**

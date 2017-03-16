@@ -1,7 +1,9 @@
 package com.susion.boring.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.animation.Animation;
@@ -24,12 +26,12 @@ public class UIUtils {
         return sMetrics;
     }
 
-    public static int px2Dp(float px){
+    public static int px2Dp(float px) {
         final float scale = getDisplayMetrics() != null ? getDisplayMetrics().density : 1;
         return (int) (px / scale + 0.5f);
     }
 
-    public static int dp2Px(float dp){
+    public static int dp2Px(float dp) {
         final float scale = getDisplayMetrics() != null ? getDisplayMetrics().density : 1;
         return (int) (dp * scale + 0.5f);
     }
@@ -53,9 +55,9 @@ public class UIUtils {
 
     public static String translatePlayCount(int playCount) {
         if (playCount < 9999) {
-            return playCount+"";
+            return playCount + "";
         }
-        return playCount / 10000 +"万";
+        return playCount / 10000 + "万";
     }
 
     public static String getPlayListTags(List<String> tags) {
@@ -70,7 +72,7 @@ public class UIUtils {
         return result;
     }
 
-    public static int getStatusBarHeight(Context context){
+    public static int getStatusBarHeight(Context context) {
         try {
             Class<?> c = Class.forName("com.android.internal.R$dimen");
             Object obj = c.newInstance();
@@ -82,5 +84,11 @@ public class UIUtils {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public static void expandContentLayoutFullScreen(Activity activity) {
+        activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
+        activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
     }
 }

@@ -7,8 +7,8 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.susion.boring.R;
 import com.susion.boring.base.ui.SimpleItemHandler;
 import com.susion.boring.base.adapter.ViewHolder;
-import com.susion.boring.music.activity.PlayListActivity;
-import com.susion.boring.music.model.PlayList;
+import com.susion.boring.music.mvp.view.PlayListActivity;
+import com.susion.boring.music.mvp.model.PlayList;
 import com.susion.boring.utils.UIUtils;
 
 /**

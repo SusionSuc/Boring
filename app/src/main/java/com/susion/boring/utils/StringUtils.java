@@ -19,6 +19,7 @@ public class StringUtils {
         for (String link : links) {
             builder.append(link);
         }
+        builder.append("<meta name=\\\"viewport\\\" content=\\\"width=device-width, user-scalable=yes\\\" />");
         builder.append("</head>");
         return  builder.toString();
     }

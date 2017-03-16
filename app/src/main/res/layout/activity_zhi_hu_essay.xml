@@ -30,59 +30,64 @@
 
 
     <android.support.v4.widget.NestedScrollView
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:paddingTop="@dimen/status_bar_height"
+        android:id="@+id/ac_zhi_hu_essay_wv_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:paddingBottom="40dp"
         android:scrollbars="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <WebView
-            android:id="@+id/ac_zhi_hu_essay_wv_content"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"></WebView>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     </android.support.v4.widget.NestedScrollView>
 
 
     <RelativeLayout
-        android:background="@color/white"
-        android:layout_gravity="bottom"
         android:layout_width="match_parent"
-        android:layout_height="40dp">
+        android:layout_height="40dp"
+        android:layout_gravity="bottom"
+        android:background="@color/white">
 
         <View
-            android:layout_marginTop="1dp"
-            android:background="@color/colorPrimary"
-            android:layout_alignParentTop="true"
             android:layout_width="match_parent"
-            android:layout_height="1px"></View>
+            android:layout_height="1px"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="1dp"
+            android:background="@color/colorPrimary"></View>
 
         <ImageView
-            android:layout_centerVertical="true"
             android:id="@+id/ac_zhi_hu_essay_iv_pre"
+            android:layout_width="40dp"
+            android:layout_height="30dp"
             android:layout_alignParentLeft="true"
-            android:src="@mipmap/pre"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="60dp"
-            android:layout_width="30dp"
-            android:layout_height="30dp" />
+            android:background="@drawable/bg_ripple"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:src="@mipmap/pre" />
 
 
         <ImageView
             android:id="@+id/ac_zhi_hu_essay_iv_lile"
+            android:layout_width="40dp"
+            android:layout_height="25dp"
             android:layout_centerInParent="true"
-            android:src="@mipmap/play_operator_love"
-            android:layout_width="25dp"
-            android:layout_height="25dp" />
+            android:background="@drawable/bg_ripple"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:src="@mipmap/play_operator_love" />
 
         <ImageView
             android:id="@+id/ac_zhi_hu_essay_iv_next"
+            android:layout_width="40dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="60dp"
-            android:layout_alignParentRight="true"
-            android:src="@mipmap/next"
-            android:layout_width="30dp"
-            android:layout_height="30dp" />
-
+            android:background="@drawable/bg_ripple"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:src="@mipmap/next" />
     </RelativeLayout>
 
 

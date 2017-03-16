@@ -7,12 +7,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.susion.boring.R;
-import com.susion.boring.music.model.DownTask;
-import com.susion.boring.music.model.Song;
-import com.susion.boring.music.presenter.FileDownloadPresenter;
-import com.susion.boring.music.presenter.itf.MediaPlayerContract;
-import com.susion.boring.music.presenter.itf.MusicServiceContract;
-import com.susion.boring.utils.ToastUtils;
+import com.susion.boring.music.mvp.contract.MusicServiceContract;
 
 /**
  * Created by susion on 17/2/21.

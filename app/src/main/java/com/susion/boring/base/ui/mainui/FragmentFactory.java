@@ -25,7 +25,6 @@ public class FragmentFactory implements MainUIFragmentIndex{
         if (mMainUIFragments == null) {
             mMainUIFragments = new ArrayList<>();
             mMainUIFragments.add(ITEM_MUSIC, new MusicPageFragment());
-            mMainUIFragments.add(ITEM_PLAYER, new PlayerPageFragment());
             mMainUIFragments.add(ITEM_INTERESTING, new InterestingPageFragment());
         }
         return mMainUIFragments;

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.susion.boring.R;
 import com.susion.boring.base.adapter.BaseRVAdapter;
 import com.susion.boring.base.view.LoadMoreRecycleView;
+import com.susion.boring.base.view.ViewPageFragment;
 import com.susion.boring.utils.RVUtils;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import java.util.List;
 /**
  * Created by susion on 17/3/6.
  */
-public abstract class ListFragment<T> extends BaseFragment{
+public abstract class ListFragment<T> extends ViewPageFragment{
 
     private LoadMoreRecycleView mRv;
     private List<T> mData = new ArrayList<>();
@@ -91,5 +92,4 @@ public abstract class ListFragment<T> extends BaseFragment{
 
     protected abstract RecyclerView.ItemDecoration getItemDecoration();
 
-    public abstract String getTitle();
 }

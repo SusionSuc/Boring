@@ -1,10 +1,12 @@
 package com.susion.boring.base.ui;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +14,9 @@ import android.view.ViewGroup;
 /**
  * Created by susion on 17/1/19.
  */
-public abstract  class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment {
 
     private static final String STATE_SAVE_IS_HIDDEN = "STATE_SAVE_IS_HIDDEN";
-
     protected View mView;
 
     @Override
@@ -28,6 +29,7 @@ public abstract  class BaseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+        Log.e("init fragment", this.toString());
         if (mView == null) {
             mView = initContentView(inflater, container);
             initListener();
@@ -40,8 +42,11 @@ public abstract  class BaseFragment extends Fragment {
         return mView;
     }
 
+
     public abstract View initContentView(LayoutInflater inflater, ViewGroup container);
+
     public abstract void initListener();
+
     public abstract void initData();
 
     //resolve fragment overlap issue

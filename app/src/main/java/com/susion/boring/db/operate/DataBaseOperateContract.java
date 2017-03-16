@@ -1,8 +1,6 @@
 package com.susion.boring.db.operate;
 
-import com.susion.boring.db.model.SimpleSong;
-import com.susion.boring.music.model.PlayList;
-import com.susion.boring.music.model.PlayQueueSong;
+import com.susion.boring.music.mvp.model.SimpleSong;
 
 import java.util.List;
 

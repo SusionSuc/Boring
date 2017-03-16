@@ -6,10 +6,6 @@ import android.media.MediaMetadataRetriever;
 import android.util.Log;
 import android.widget.ImageView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
-import com.susion.boring.db.model.SimpleSong;
-import com.susion.boring.music.model.Song;
-
 import java.io.File;
 
 import rx.Observable;
