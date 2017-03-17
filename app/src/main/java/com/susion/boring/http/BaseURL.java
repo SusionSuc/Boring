@@ -18,7 +18,7 @@ public interface BaseURL {
     String ZHI_HU_ESSAY_CONTENT = "http://news-at.zhihu.com/api/4/news";
 
 
-    //joke pic
-    String JU_HE_APP_KEY_FOR_JOKE = "9ce3fed0e5ac5442ec6dc52f7e2d770a";
-
+    //picture
+    String PICTURE_GET_CLASS = "http://route.showapi.com/852-1?showapi_sign=7a0e1eaf10af43c0a30ba74319a6d3fd&showapi_appid=33839";
+    String PICTURE_GET_TYPE = "http://route.showapi.com/852-2?showapi_sign=7a0e1eaf10af43c0a30ba74319a6d3fd&showapi_appid=33839";
 }

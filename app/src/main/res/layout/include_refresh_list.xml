@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.susion.boring.base.view.LoadMoreRecycleView
+            android:id="@+id/list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></com.susion.boring.base.view.LoadMoreRecycleView>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/tv_update_tip"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/update_tip_height"
+        android:layout_gravity="top"
+        android:background="@color/colorAccent"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="15sp" />
+</FrameLayout>

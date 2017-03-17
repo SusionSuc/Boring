@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/white"
-    android:padding="10dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:padding="10dp">
 
     <TextView
-        android:lineSpacingExtra="2dp"
-        android:textColor="@color/black"
-        android:text="小奥读三年级，一次外语考试只考了3分。 老师很是生气，就质问道：“你咋考的？” 小奥道：“老师，我是爱国的。” 没想到，第二次考试外语居然考了8分。 老师就鼓励小奥说：“好好学，有进步啊。” 小奥不好意思的说：“老师你见笑了，我的确有点崇洋媚外"
         android:id="@+id/item_joke_tv_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:lineSpacingExtra="2dp"
+        android:text="小奥读三年级，一次外语考试只考了3分。 老师很是生气，就质问道：“你咋考的？” 小奥道：“老师，我是爱国的。” 没想到，第二次考试外语居然考了8分。 老师就鼓励小奥说：“好好学，有进步啊。” 小奥不好意思的说：“老师你见笑了，我的确有点崇洋媚外"
+        android:textColor="@color/black"
         android:textSize="16sp" />
 
 
     <ImageView
-        android:background="@drawable/bg_ripple"
         android:id="@+id/item_joke_iv_like"
-        android:src="@mipmap/play_operator_un_love"
-        android:layout_marginRight="10dp"
-        android:layout_below="@id/item_joke_tv_content"
-        android:layout_alignParentRight="true"
-        android:padding="10dp"
         android:layout_width="40dp"
-        android:layout_height="40dp" />
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/item_joke_tv_content"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/bg_ripple"
+        android:padding="10dp"
+        android:src="@mipmap/play_operator_un_love" />
 
 </RelativeLayout>

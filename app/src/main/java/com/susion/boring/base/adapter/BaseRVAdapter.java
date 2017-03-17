@@ -13,6 +13,7 @@ import com.susion.boring.base.ui.ItemHandler;
 import com.susion.boring.base.ui.ItemHandlerFactory;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by susion on 17/1/18.
@@ -49,6 +50,7 @@ public abstract class BaseRVAdapter extends RecyclerView.Adapter{
         mActivity = fragment.getActivity();
         initHandlers();
     }
+
 
     public void refreshData(List<?> data){
         mData = data;

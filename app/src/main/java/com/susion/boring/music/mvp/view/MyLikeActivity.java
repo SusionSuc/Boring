@@ -91,6 +91,7 @@ public class MyLikeActivity extends BaseActivity {
     public void initData() {
 
     }
+
     public static class LocalMusicFragment extends ListFragment<SimpleSong> {
         private MusicDbOperator mDbOperator;
 
@@ -144,9 +145,10 @@ public class MyLikeActivity extends BaseActivity {
         protected void findView() {
 
         }
+
     }
 
-    public  static class PlayListFragment extends ListFragment<PlayList> {
+    public static class PlayListFragment extends ListFragment<PlayList> {
         private DbBaseOperate<PlayList> mDbOperator;
 
         @Override
@@ -186,7 +188,7 @@ public class MyLikeActivity extends BaseActivity {
                 @Override
                 protected void bindData(ViewHolder vh, PlayList data, int position) {
                     vh.getTextView(R.id.item_local_music_tv_music_name).setText(data.getName().trim());
-                    vh.getTextView(R.id.item_local_music_tv_artist_album).setText(data.getPlayCount()+"");
+                    vh.getTextView(R.id.item_local_music_tv_artist_album).setText(data.getPlayCount() + "");
                     vh.getTextView(R.id.item_local_music_tv_duration).setVisibility(View.GONE);
                     mSdvAlbum.setImageURI(data.getCoverImgUrl());
                 }
@@ -212,5 +214,6 @@ public class MyLikeActivity extends BaseActivity {
         protected void findView() {
 
         }
+
     }
 }

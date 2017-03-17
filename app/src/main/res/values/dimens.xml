@@ -4,4 +4,5 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="status_bar_height">25dp</dimen>
     <dimen name="drawer_left_padding">88dp</dimen>
+    <dimen name="update_tip_height">25dp</dimen>
 </resources>

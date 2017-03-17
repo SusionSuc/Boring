@@ -85,4 +85,32 @@ public class APIHelper {
     public static JokeService getJokeService() {
         return getInstance().getService(JokeService.class);
     }
+
+    public static PictureService getPictureService() {
+        return getInstance().getService(PictureService.class);
+    }
+
+    public final static Observable.Transformer schedulersTransformer = new Observable.Transformer() {
+        @Override
+        public Object call(Object observable) {
+            return ((Observable) observable).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
+        }
+    };
+
+    public final static Observable.Transformer schedulersTransformerBackThread = new Observable.Transformer() {
+        @Override
+        public Object call(Object observable) {
+            return ((Observable) observable).subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io());
+        }
+    };
+
+    public static Observable.Transformer applyMainThreadSchedulers() {
+        return schedulersTransformer;
+    }
+
+    public static Observable.Transformer applyBackThreadSchedulers() {
+        return schedulersTransformerBackThread;
+    }
 }

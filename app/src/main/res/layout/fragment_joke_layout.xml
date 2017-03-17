@@ -4,10 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <include layout="@layout/include_refresh_list"></include>
 
-    <com.susion.boring.base.view.LoadMoreRecycleView
-        android:id="@+id/list_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"></com.susion.boring.base.view.LoadMoreRecycleView>
 
 </LinearLayout>
