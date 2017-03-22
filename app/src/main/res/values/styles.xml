@@ -10,6 +10,11 @@
         <item name="android:screenOrientation">portrait</item>
     </style>
 
+    <style name="TranslucentTheme" parent="AppTheme">
+        <item name="android:windowBackground" >@color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
     <declare-styleable name="MediaSeekBar">
         <attr name="hasPlayColor" format="color|reference" />
         <attr name="originBackgroundColor" format="color|reference" />
@@ -56,6 +61,8 @@
     <style name="viewClickRipple">
         <item name="android:foreground">?attr/selectableItemBackground</item>
     </style>
+
+
 
 
 </resources>

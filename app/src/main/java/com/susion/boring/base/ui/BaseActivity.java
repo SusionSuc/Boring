@@ -13,19 +13,19 @@ import com.susion.boring.base.view.SToolBar;
 /**
  * Created by susion on 17/1/19.
  */
-public abstract  class BaseActivity extends SwipeBackActivity {
+public abstract class BaseActivity extends SwipeBackActivity {
 
     public SToolBar mToolBar;
     private SwipeBackLayout mSwipeBackLayout;
 
     @LayoutRes
-    public  abstract int getLayoutId();
+    public abstract int getLayoutId();
 
     public abstract void findView();
 
     public abstract void initView();
 
-    public  abstract void initListener();
+    public abstract void initListener();
 
     public abstract void initData();
 
@@ -42,7 +42,7 @@ public abstract  class BaseActivity extends SwipeBackActivity {
 
         View view = findViewById(R.id.toolbar);
         if (view instanceof SToolBar) {
-            mToolBar = (SToolBar)view;
+            mToolBar = (SToolBar) view;
         }
 
         findView();

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_marginTop="10dp"
-    android:layout_margin="8dp"
     android:layout_width="match_parent"
     android:layout_height="200dp"
+    android:layout_margin="8dp"
+    android:layout_marginTop="10dp"
     android:orientation="vertical">
 
     <com.facebook.drawee.view.SimpleDraweeView
+        android:transitionName="@string/transition_name_iv"
         android:id="@+id/item_simple_picture_sdv"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

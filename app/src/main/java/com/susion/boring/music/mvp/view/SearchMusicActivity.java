@@ -60,7 +60,6 @@ public class SearchMusicActivity extends BaseActivity implements OnLastItemVisib
         mSearchBar.setSearchButtonVisible(View.VISIBLE);
         mRV.setLayoutManager(RVUtils.getLayoutManager(this, LinearLayoutManager.VERTICAL));
 
-
         mRV.setAdapter(new BaseRVAdapter(this, mData) {
             @Override
             protected void initHandlers() {
@@ -71,6 +70,7 @@ public class SearchMusicActivity extends BaseActivity implements OnLastItemVisib
                     }
                 });
             }
+
             @Override
             protected int getViewType(int position) {
                 return 0;

@@ -52,12 +52,12 @@ public class SearchBar extends LinearLayout {
 
         initListener();
         initView();
-        
+
     }
 
     private void initView() {
 //        setTextViewHintContent();
-     }
+    }
 
     private void setTextViewHintContent() {
         Drawable searchDrawable = mContext.getResources().getDrawable(R.drawable.search_bar_search);
@@ -120,11 +120,11 @@ public class SearchBar extends LinearLayout {
         }
     }
 
-    public void setBackground(int colorId){
+    public void setBackground(int colorId) {
         setBackgroundColor(getResources().getColor(colorId));
     }
 
-    public void setSearchButtonVisible(int visible){
+    public void setSearchButtonVisible(int visible) {
         mBtSearch.setVisibility(visible);
     }
 
@@ -132,11 +132,11 @@ public class SearchBar extends LinearLayout {
         mBtSearch.setEnabled(false);
     }
 
-    public void enableSearchBt(){
+    public void enableSearchBt() {
         mBtSearch.setEnabled(true);
     }
 
-    public interface OnSearchButtonClickListener{
+    public interface OnSearchButtonClickListener {
         void doSearch(String searchContent);
     }
 
