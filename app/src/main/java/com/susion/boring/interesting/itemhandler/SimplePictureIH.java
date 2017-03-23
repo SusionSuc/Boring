@@ -1,6 +1,7 @@
 package com.susion.boring.interesting.itemhandler;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import com.susion.boring.interesting.mvp.view.PictureViewActivity;
 public class SimplePictureIH extends SimpleItemHandler<SimplePicture> {
 
     private SimpleDraweeView mSdvPicture;
+    private Bitmap mBitmap;
 
     @Override
     public void onCreateItemHandler(ViewHolder vh, ViewGroup parent) {

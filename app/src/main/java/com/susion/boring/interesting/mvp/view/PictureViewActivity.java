@@ -4,15 +4,29 @@ import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.ImageView;
 
+import com.facebook.common.executors.UiThreadImmediateExecutorService;
+import com.facebook.datasource.BaseDataSubscriber;
+import com.facebook.datasource.DataSource;
+import com.facebook.datasource.DataSubscriber;
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.core.ImagePipeline;
+import com.facebook.imagepipeline.datasource.BaseBitmapDataSubscriber;
 import com.susion.boring.R;
 import com.susion.boring.base.ui.BaseActivity;
 import com.susion.boring.base.ui.mainui.MainActivity;
@@ -23,12 +37,12 @@ public class PictureViewActivity extends BaseActivity {
     private static final String IMAGE_URL = "image_url";
     private static final String ORIGIN_IMAGE_POS = "origin_image_pos";
     private DrawScaleImageView mDrawerScaleIv;
-    private String mImageURL;
     private Rect mOriginIvPos;
+    private String mImageUrl;
 
-    public static void start(Activity ac, String big, Rect imageViewPos) {
+    public static void start(Activity ac, String imageUrl, Rect imageViewPos) {
         Intent intent = new Intent();
-        intent.putExtra(IMAGE_URL, big);
+        intent.putExtra(IMAGE_URL, imageUrl);
         intent.putExtra(ORIGIN_IMAGE_POS, imageViewPos);
         intent.setClass(ac, PictureViewActivity.class);
         ac.startActivity(intent);
@@ -46,9 +60,8 @@ public class PictureViewActivity extends BaseActivity {
 
     @Override
     public void findView() {
-        mImageURL = getIntent().getStringExtra(IMAGE_URL);
+        mImageUrl = getIntent().getStringExtra(IMAGE_URL);
         mOriginIvPos = getIntent().getParcelableExtra(ORIGIN_IMAGE_POS);
-
         mDrawerScaleIv = (DrawScaleImageView) findViewById(R.id.draw_scale_iv);
     }
 
@@ -58,8 +71,8 @@ public class PictureViewActivity extends BaseActivity {
             @Override
             public void onGlobalLayout() {
                 mDrawerScaleIv.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                mDrawerScaleIv.setImageURI(mImageURL);
-                mDrawerScaleIv.startEntryScaleAnimation(mOriginIvPos);
+                mDrawerScaleIv.setImageURI(mImageUrl);
+//                mDrawerScaleIv.startEntryScaleAnimation(mOriginIvPos);
             }
         });
     }
@@ -69,10 +82,8 @@ public class PictureViewActivity extends BaseActivity {
 
     }
 
-
     @Override
     public void initData() {
-
     }
 
 

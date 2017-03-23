@@ -1,9 +1,16 @@
 package com.susion.boring.interesting.view;
 
+import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
+import android.widget.ImageView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -14,88 +21,242 @@ import com.facebook.drawee.view.SimpleDraweeView;
 public class DrawScaleImageView extends SimpleDraweeView {
 
 
-    private float mScaleX;
-    private float mScaleY;
-    private float mTranslationX;
-    private float mTranslationY;
+    private Paint mPaint;
+    private float mDownX;    // downX
+    private float mDownY;   // down Y
+    private float mTranslateY;
+    private float mTranslateX;
+    private float mScale = 1;
+    private int mWidth;
+    private int mHeight;
+    private float mMinScale = 0.5f;
+    private int mAlpha = 255;
+    private final static int MAX_TRANSLATE_Y = 500;
+
+    private final static long DURATION = 300;
+    private boolean canFinish = false;
+    private boolean isAnimate = false;
+
+    //is event on PhotoView
+    private boolean isTouchEvent = false;
+    private OnTapListener mTapListener;
+    private OnExitListener mExitListener;
+
+    public DrawScaleImageView(Context context) {
+        this(context, null);
+    }
 
     public DrawScaleImageView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
     }
 
     public DrawScaleImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        mPaint = new Paint();
+        mPaint.setColor(Color.BLACK);
     }
 
-    public void startEntryScaleAnimation(Rect mOriginIvPos) {
-        calculateScaleValue(mOriginIvPos);
-        performScaleAnimation();
+    @Override
+    protected void onDraw(Canvas canvas) {
+        mPaint.setAlpha(mAlpha);
+        canvas.drawRect(0, 0, 2000, 3000, mPaint);
+        canvas.translate(mTranslateX, mTranslateY);
+        canvas.scale(mScale, mScale, mWidth / 2, mHeight / 2);
+        super.onDraw(canvas);
     }
 
-    private void calculateScaleValue(Rect mOriginIvPos) {
-        int originLeft = mOriginIvPos.left;
-        int originTop = mOriginIvPos.top;
-        int originWidth = mOriginIvPos.right;
-        int originHeight = mOriginIvPos.bottom;
 
-        int[] location = new int[2];
-        getLocationOnScreen(location);
-        float mCenterX = location[0] + getWidth() / 2;
-        float mCenterY = location[1] + getHeight() / 2;
-
-        mScaleX = (float) originWidth / getWidth();
-        mScaleY = (float) originHeight / getHeight();
-        mTranslationX = originLeft - mCenterX;
-        mTranslationY = originTop - mCenterY;
-
-
-        setTranslationX(mTranslationX);
-        setTranslationX(mTranslationY);
-
-        setScaleX(mScaleX);
-        setScaleY(mScaleY);
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        mWidth = w;
+        mHeight = h;
     }
 
-    private void performScaleAnimation() {
-        ValueAnimator translateXAnimator = ValueAnimator.ofFloat(getX(), 0);
-        translateXAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                DrawScaleImageView.this.setX((Float) valueAnimator.getAnimatedValue());
-            }
-        });
-        translateXAnimator.setDuration(300);
-        translateXAnimator.start();
 
-        ValueAnimator translateYAnimator = ValueAnimator.ofFloat(getY(), 0);
-        translateYAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                DrawScaleImageView.this.setY((Float) valueAnimator.getAnimatedValue());
-            }
-        });
-        translateYAnimator.setDuration(300);
-        translateYAnimator.start();
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                mDownX = event.getX();
+                mDownY = event.getY();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                //in viewpager
+                if (mTranslateY == 0 && mTranslateX != 0) {
+                    //如果不消费事件，则不作操作
+                    if (!isTouchEvent) {
+                        mScale = 1;
+                        return super.dispatchTouchEvent(event);
+                    }
+                }
 
-        ValueAnimator scaleYAnimator = ValueAnimator.ofFloat(mScaleY, 1);
-        scaleYAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                DrawScaleImageView.this.setScaleY((Float) valueAnimator.getAnimatedValue());
-            }
-        });
-        scaleYAnimator.setDuration(300);
-        scaleYAnimator.start();
+                //single finger drag  down
+                if (mTranslateY >= 0 && event.getPointerCount() == 1) {
+                    onActionMove(event);
 
-        ValueAnimator scaleXAnimator = ValueAnimator.ofFloat(mScaleX, 1);
-        scaleXAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    //如果有上下位移 则不交给viewpager
+                    if (mTranslateY != 0) {
+                        isTouchEvent = true;
+                    }
+                    return true;
+                }
+
+                //防止下拉的时候双手缩放
+                if (mTranslateY >= 0 && mScale < 0.95) {
+                    return true;
+                }
+                break;
+
+            case MotionEvent.ACTION_UP:
+                mTranslateX = 0;
+                mTranslateY = 0;
+                mScale = 1;
+        }
+
+        return true;
+    }
+
+    private void onActionMove(MotionEvent event) {
+        float moveY = event.getY();
+        float moveX = event.getX();
+        mTranslateX = moveX - mDownX;
+        mTranslateY = moveY - mDownY;
+
+        //保证上划到到顶还可以继续滑动
+        if (mTranslateY < 0) {
+            mTranslateY = 0;
+        }
+
+        float percent = mTranslateY / MAX_TRANSLATE_Y;
+        if (mScale >= mMinScale && mScale <= 1f) {
+            mScale = 1 - percent;
+
+            mAlpha = (int) (255 * (1 - percent));
+            if (mAlpha > 255) {
+                mAlpha = 255;
+            } else if (mAlpha < 0) {
+                mAlpha = 0;
+            }
+        }
+        if (mScale < mMinScale) {
+            mScale = mMinScale;
+        } else if (mScale > 1f) {
+            mScale = 1;
+        }
+
+        invalidate();
+    }
+
+    private void performAnimation() {
+        getScaleAnimation().start();
+        getTranslateXAnimation().start();
+        getTranslateYAnimation().start();
+        getAlphaAnimation().start();
+    }
+
+    private ValueAnimator getAlphaAnimation() {
+        final ValueAnimator animator = ValueAnimator.ofInt(mAlpha, 255);
+        animator.setDuration(DURATION);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                DrawScaleImageView.this.setScaleX((Float) valueAnimator.getAnimatedValue());
+                mAlpha = (int) valueAnimator.getAnimatedValue();
             }
         });
-        scaleXAnimator.setDuration(300);
-        scaleXAnimator.start();
+
+        return animator;
+    }
+
+    private ValueAnimator getTranslateYAnimation() {
+        final ValueAnimator animator = ValueAnimator.ofFloat(mTranslateY, 0);
+        animator.setDuration(DURATION);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                mTranslateY = (float) valueAnimator.getAnimatedValue();
+            }
+        });
+
+        return animator;
+    }
+
+    private ValueAnimator getTranslateXAnimation() {
+        final ValueAnimator animator = ValueAnimator.ofFloat(mTranslateX, 0);
+        animator.setDuration(DURATION);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                mTranslateX = (float) valueAnimator.getAnimatedValue();
+            }
+        });
+        return animator;
+    }
+
+    private ValueAnimator getScaleAnimation() {
+        final ValueAnimator animator = ValueAnimator.ofFloat(mScale, 1);
+        animator.setDuration(DURATION);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                mScale = (float) valueAnimator.getAnimatedValue();
+                invalidate();
+            }
+        });
+
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+                isAnimate = true;
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                isAnimate = false;
+                animator.removeAllListeners();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+        return animator;
+    }
+
+    public float getMinScale() {
+        return mMinScale;
+    }
+
+    public void setMinScale(float minScale) {
+        mMinScale = minScale;
+    }
+
+    public void setOnTapListener(OnTapListener listener) {
+        mTapListener = listener;
+    }
+
+    public void setOnExitListener(OnExitListener listener) {
+        mExitListener = listener;
+    }
+
+    public interface OnTapListener {
+        void onTap(DrawScaleImageView view);
+    }
+
+    public interface OnExitListener {
+        void onExit(DrawScaleImageView view, float translateX, float translateY, float w, float h);
+    }
+
+    public void finishAnimationCallBack() {
+        mTranslateX = -mWidth / 2 + mWidth * mScale / 2;
+        mTranslateY = -mHeight / 2 + mHeight * mScale / 2;
+        invalidate();
     }
 
 }

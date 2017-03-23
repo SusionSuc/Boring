@@ -65,12 +65,12 @@ public class ZhiHuFragment extends ViewPageFragment implements ZhiHuDailyContrac
 
             @Override
             public String getTitle(int position) {
-                if (position == 0) {
-                    return "今日新闻";
+                if (position < 0 || position >= mData.size()) {
+                    return "";
                 }
 
-                if (position >= mData.size()) {
-                    return "";
+                if (position == 0) {
+                    return "今日新闻";
                 }
 
                 if (mData.get(position) instanceof TitleMark) {
