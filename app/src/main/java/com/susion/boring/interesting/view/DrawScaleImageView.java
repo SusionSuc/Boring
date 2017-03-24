@@ -1,6 +1,7 @@
 package com.susion.boring.interesting.view;
 
 import android.animation.Animator;
+import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -10,6 +11,8 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
 import android.widget.ImageView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -19,7 +22,6 @@ import com.facebook.drawee.view.SimpleDraweeView;
  * thinking by https://github.com/githubwing/DragPhotoView
  */
 public class DrawScaleImageView extends SimpleDraweeView {
-
 
     private Paint mPaint;
     private float mDownX;    // downX
@@ -37,10 +39,10 @@ public class DrawScaleImageView extends SimpleDraweeView {
     private boolean canFinish = false;
     private boolean isAnimate = false;
 
+    public DrawScaleImageViewListener mListener;
+
     //is event on PhotoView
     private boolean isTouchEvent = false;
-    private OnTapListener mTapListener;
-    private OnExitListener mExitListener;
 
     public DrawScaleImageView(Context context) {
         this(context, null);
@@ -82,12 +84,10 @@ public class DrawScaleImageView extends SimpleDraweeView {
                 mDownY = event.getY();
                 break;
             case MotionEvent.ACTION_MOVE:
-                //in viewpager
-                if (mTranslateY == 0 && mTranslateX != 0) {
+                if (mTranslateY == 0 && mTranslateX != 0) { //in viewpager
                     //如果不消费事件，则不作操作
                     if (!isTouchEvent) {
-                        mScale = 1;
-                        return super.dispatchTouchEvent(event);
+                        restoreImageState();
                     }
                 }
 
@@ -109,12 +109,18 @@ public class DrawScaleImageView extends SimpleDraweeView {
                 break;
 
             case MotionEvent.ACTION_UP:
-                mTranslateX = 0;
-                mTranslateY = 0;
-                mScale = 1;
+                restoreImageState();
+                break;
         }
 
         return true;
+    }
+
+    private void restoreImageState() {
+        AnimatorSet animationSet = new AnimatorSet();
+        animationSet.playTogether(restoreAlpha(),restoreScale(),restoreX(),restoreY());
+        animationSet.setDuration(300);
+        animationSet.start();
     }
 
     private void onActionMove(MotionEvent event) {
@@ -138,6 +144,10 @@ public class DrawScaleImageView extends SimpleDraweeView {
             } else if (mAlpha < 0) {
                 mAlpha = 0;
             }
+
+            if (mListener != null) {
+                mListener.onScaleChange(mAlpha);
+            }
         }
         if (mScale < mMinScale) {
             mScale = mMinScale;
@@ -148,27 +158,24 @@ public class DrawScaleImageView extends SimpleDraweeView {
         invalidate();
     }
 
-    private void performAnimation() {
-        getScaleAnimation().start();
-        getTranslateXAnimation().start();
-        getTranslateYAnimation().start();
-        getAlphaAnimation().start();
-    }
 
-    private ValueAnimator getAlphaAnimation() {
+    private ValueAnimator restoreAlpha() {
         final ValueAnimator animator = ValueAnimator.ofInt(mAlpha, 255);
         animator.setDuration(DURATION);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 mAlpha = (int) valueAnimator.getAnimatedValue();
+                if (mListener != null) {
+                    mListener.onScaleChange(mAlpha);
+                }
             }
         });
 
         return animator;
     }
 
-    private ValueAnimator getTranslateYAnimation() {
+    private ValueAnimator restoreY() {
         final ValueAnimator animator = ValueAnimator.ofFloat(mTranslateY, 0);
         animator.setDuration(DURATION);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -181,7 +188,7 @@ public class DrawScaleImageView extends SimpleDraweeView {
         return animator;
     }
 
-    private ValueAnimator getTranslateXAnimation() {
+    private ValueAnimator restoreX() {
         final ValueAnimator animator = ValueAnimator.ofFloat(mTranslateX, 0);
         animator.setDuration(DURATION);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -193,7 +200,7 @@ public class DrawScaleImageView extends SimpleDraweeView {
         return animator;
     }
 
-    private ValueAnimator getScaleAnimation() {
+    private ValueAnimator restoreScale() {
         final ValueAnimator animator = ValueAnimator.ofFloat(mScale, 1);
         animator.setDuration(DURATION);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -204,28 +211,6 @@ public class DrawScaleImageView extends SimpleDraweeView {
             }
         });
 
-        animator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animator) {
-                isAnimate = true;
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animator) {
-                isAnimate = false;
-                animator.removeAllListeners();
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animator) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animator) {
-
-            }
-        });
         return animator;
     }
 
@@ -237,20 +222,13 @@ public class DrawScaleImageView extends SimpleDraweeView {
         mMinScale = minScale;
     }
 
-    public void setOnTapListener(OnTapListener listener) {
-        mTapListener = listener;
+
+    public interface DrawScaleImageViewListener{
+        void onScaleChange(int alpha);
     }
 
-    public void setOnExitListener(OnExitListener listener) {
-        mExitListener = listener;
-    }
-
-    public interface OnTapListener {
-        void onTap(DrawScaleImageView view);
-    }
-
-    public interface OnExitListener {
-        void onExit(DrawScaleImageView view, float translateX, float translateY, float w, float h);
+    public void setScaleListener(DrawScaleImageViewListener mListener) {
+        this.mListener = mListener;
     }
 
     public void finishAnimationCallBack() {

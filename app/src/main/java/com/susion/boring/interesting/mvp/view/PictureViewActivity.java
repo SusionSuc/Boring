@@ -5,6 +5,7 @@ import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -16,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
@@ -67,12 +69,11 @@ public class PictureViewActivity extends BaseActivity {
 
     @Override
     public void initView() {
-        mDrawerScaleIv.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        mDrawerScaleIv.setImageURI(mImageUrl);
+        mDrawerScaleIv.setScaleListener(new DrawScaleImageView.DrawScaleImageViewListener() {
             @Override
-            public void onGlobalLayout() {
-                mDrawerScaleIv.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                mDrawerScaleIv.setImageURI(mImageUrl);
-//                mDrawerScaleIv.startEntryScaleAnimation(mOriginIvPos);
+            public void onScaleChange(int alpha) {
+                ((ViewGroup)getWindow().getDecorView().findViewById(android.R.id.content)).getChildAt(0).setBackgroundColor(Color.argb(alpha, 0, 0, 0));
             }
         });
     }
