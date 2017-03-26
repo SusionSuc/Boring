@@ -73,7 +73,12 @@ public class PictureViewActivity extends BaseActivity {
         mDrawerScaleIv.setScaleListener(new DrawScaleImageView.DrawScaleImageViewListener() {
             @Override
             public void onScaleChange(int alpha) {
-                ((ViewGroup)getWindow().getDecorView().findViewById(android.R.id.content)).getChildAt(0).setBackgroundColor(Color.argb(alpha, 0, 0, 0));
+                ((ViewGroup) getWindow().getDecorView().findViewById(android.R.id.content)).getChildAt(0).setBackgroundColor(Color.argb(alpha, 0, 0, 0));
+            }
+
+            @Override
+            public void onExitViewImage() {
+                PictureViewActivity.this.finish();
             }
         });
     }

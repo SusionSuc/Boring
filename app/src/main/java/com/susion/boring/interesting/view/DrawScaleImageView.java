@@ -31,13 +31,11 @@ public class DrawScaleImageView extends SimpleDraweeView {
     private float mScale = 1;
     private int mWidth;
     private int mHeight;
-    private float mMinScale = 0.5f;
+    private float mMinScale = 0.4f;
     private int mAlpha = 255;
-    private final static int MAX_TRANSLATE_Y = 500;
 
+    private final static int MAX_TRANSLATE_Y = 500;
     private final static long DURATION = 300;
-    private boolean canFinish = false;
-    private boolean isAnimate = false;
 
     public DrawScaleImageViewListener mListener;
 
@@ -109,7 +107,13 @@ public class DrawScaleImageView extends SimpleDraweeView {
                 break;
 
             case MotionEvent.ACTION_UP:
-                restoreImageState();
+                if (mScale < 0.5) {
+                    if (mListener != null) {
+                        mListener.onExitViewImage();
+                    }
+                } else {
+                    restoreImageState();
+                }
                 break;
         }
 
@@ -118,7 +122,7 @@ public class DrawScaleImageView extends SimpleDraweeView {
 
     private void restoreImageState() {
         AnimatorSet animationSet = new AnimatorSet();
-        animationSet.playTogether(restoreAlpha(),restoreScale(),restoreX(),restoreY());
+        animationSet.playTogether(restoreAlpha(), restoreScale(), restoreX(), restoreY());
         animationSet.setDuration(300);
         animationSet.start();
     }
@@ -171,7 +175,6 @@ public class DrawScaleImageView extends SimpleDraweeView {
                 }
             }
         });
-
         return animator;
     }
 
@@ -214,27 +217,14 @@ public class DrawScaleImageView extends SimpleDraweeView {
         return animator;
     }
 
-    public float getMinScale() {
-        return mMinScale;
-    }
-
-    public void setMinScale(float minScale) {
-        mMinScale = minScale;
-    }
-
-
-    public interface DrawScaleImageViewListener{
+    public interface DrawScaleImageViewListener {
         void onScaleChange(int alpha);
+
+        void onExitViewImage();
     }
 
     public void setScaleListener(DrawScaleImageViewListener mListener) {
         this.mListener = mListener;
-    }
-
-    public void finishAnimationCallBack() {
-        mTranslateX = -mWidth / 2 + mWidth * mScale / 2;
-        mTranslateY = -mHeight / 2 + mHeight * mScale / 2;
-        invalidate();
     }
 
 }
