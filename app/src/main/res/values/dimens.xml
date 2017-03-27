@@ -5,4 +5,5 @@
     <dimen name="status_bar_height">25dp</dimen>
     <dimen name="drawer_left_padding">88dp</dimen>
     <dimen name="update_tip_height">25dp</dimen>
+    <dimen name="zhi_hu_sticker_height">20dp</dimen>
 </resources>

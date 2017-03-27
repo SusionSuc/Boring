@@ -14,13 +14,20 @@ import com.susion.boring.base.ui.ItemHandlerFactory;
 import com.susion.boring.base.ui.OnLastItemVisibleListener;
 import com.susion.boring.base.view.LoadMoreRecycleView;
 import com.susion.boring.base.view.ViewPageFragment;
+import com.susion.boring.event.CategoryPictureLoadErrorEvent;
+import com.susion.boring.event.PictureCategorySelectedEvent;
 import com.susion.boring.http.APIHelper;
 import com.susion.boring.interesting.itemhandler.SimplePictureIH;
 import com.susion.boring.interesting.mvp.model.SimplePicture;
 import com.susion.boring.interesting.mvp.model.SimplePictureList;
 import com.susion.boring.interesting.view.PictureCategoryWindow;
+import com.susion.boring.utils.PictureLoadHelper;
 import com.susion.boring.utils.RVUtils;
-import com.susion.boring.utils.ToastUtils;
+import com.susion.boring.utils.UIUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,14 +44,16 @@ public class PictureFragment extends ViewPageFragment implements OnLastItemVisib
     private FloatingActionButton mFlMenu;
     private LoadMoreRecycleView mRv;
     private List<SimplePicture> mData = new ArrayList<>();
-    private int mPage = 1;
+    private int mPage = 0;
     private SwipeRefreshLayout mRefreshLayout;
-    private boolean mRefreshing;
+    private boolean mIsRefresh;
     private PictureCategoryWindow mCategoryWindow;
+    private String mTypeId;
 
     @Override
     public View initContentView(LayoutInflater inflater, ViewGroup container) {
         mView = inflater.inflate(R.layout.fragment_picture_layout, container, false);
+        EventBus.getDefault().register(this);
         return mView;
     }
 
@@ -80,6 +89,7 @@ public class PictureFragment extends ViewPageFragment implements OnLastItemVisib
 
 
         mCategoryWindow = new PictureCategoryWindow(getActivity());
+        mTypeId = "2004";  //中国男明星
     }
 
     @Override
@@ -87,71 +97,82 @@ public class PictureFragment extends ViewPageFragment implements OnLastItemVisib
         mFlMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (mCategoryWindow.isShowing()) {
                     mCategoryWindow.dismiss();
                     return;
                 }
-
-                mCategoryWindow.showAsDropDown(mFlMenu, 0, 0, Gravity.RIGHT);
+                mCategoryWindow.showAsDropDown(mFlMenu, 0, UIUtils.dp2Px(10), Gravity.RIGHT);
             }
         });
     }
 
     @Override
     public void initData() {
-        loadData();
+        mRefreshLayout.setRefreshing(true);
+        mIsRefresh = true;
+        onRefresh();
     }
 
     private void loadData() {
+        int requestPage = mIsRefresh ? 1 : mPage + 1;
         APIHelper.getPictureService()
-                .getPicturesByType("2004", String.valueOf(mPage))
-                .compose(APIHelper.applyBackThreadSchedulers())
+                .getPicturesByType(mTypeId, String.valueOf(requestPage))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<SimplePictureList>() {
                     @Override
                     public void onCompleted() {
-
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        mRefreshLayout.setRefreshing(false);
                     }
 
                     @Override
                     public void onNext(SimplePictureList simplePictureList) {
-                        if (simplePictureList != null && simplePictureList.getShowapi_res_body().getPagebean().getContentlist() != null) {
-                            List<SimplePictureList.ShowapiResBodyBean.PagebeanBean.ContentlistBean> contentList = simplePictureList.getShowapi_res_body().getPagebean().getContentlist();
-                            if (!mRefreshing) {
-                                for (SimplePictureList.ShowapiResBodyBean.PagebeanBean.ContentlistBean bean : contentList) {
-                                    mData.addAll(bean.getList());
-                                }
+                        if (simplePictureList == null) {
+                            return;
+                        }
 
-                                mRv.getAdapter().notifyDataSetChanged();
-                                mPage++;
-                            } else {
-                                mRefreshing = false;
-                                mRefreshLayout.setRefreshing(mRefreshing);
+                        List<SimplePictureList.ShowapiResBodyBean.PagebeanBean.ContentlistBean> contentList = simplePictureList.getShowapi_res_body().getPagebean().getContentlist();
+                        if (mIsRefresh) {
+                            mIsRefresh = false;
+                            mRefreshLayout.setRefreshing(mIsRefresh);
 
-                                mData.clear();
-                                for (SimplePictureList.ShowapiResBodyBean.PagebeanBean.ContentlistBean bean : contentList) {
-                                    mData.addAll(bean.getList());
-                                }
-                                mRv.getAdapter().notifyDataSetChanged();
+                            mData.clear();
+                            for (SimplePictureList.ShowapiResBodyBean.PagebeanBean.ContentlistBean bean : contentList) {
+                                mData.addAll(bean.getList());
                             }
+                            mRv.getAdapter().notifyDataSetChanged();
                         } else {
-                            mRefreshing = false;
-                            mRefreshLayout.setRefreshing(mRefreshing);
+                            for (SimplePictureList.ShowapiResBodyBean.PagebeanBean.ContentlistBean bean : contentList) {
+                                mData.addAll(bean.getList());
+                            }
+
+                            mRv.getAdapter().notifyDataSetChanged();
+                            mPage++;
                         }
                     }
                 });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(PictureCategorySelectedEvent event) {
+        mCategoryWindow.dismiss();
+        mTypeId = event.id;
+        onRefresh();
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(CategoryPictureLoadErrorEvent event) {
+        PictureLoadHelper.addLoadErrorTimeForType(mTypeId);
     }
 
     @Override
     public String getTitle() {
         return "图片精选";
     }
-
 
     @Override
     public void onLastItemVisible() {
@@ -160,8 +181,13 @@ public class PictureFragment extends ViewPageFragment implements OnLastItemVisib
 
     @Override
     public void onRefresh() {
-        mPage = 1;
+        mIsRefresh = true;
         loadData();
-        mRefreshing = true;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

@@ -68,7 +68,7 @@ public class PictureCategoryResult {
              */
 
             private String name;
-            private List<ListBean> list;
+            private List<Column> list;
 
             public String getName() {
                 return name;
@@ -78,28 +78,28 @@ public class PictureCategoryResult {
                 this.name = name;
             }
 
-            public List<ListBean> getList() {
+            public List<Column> getList() {
                 return list;
             }
 
-            public void setList(List<ListBean> list) {
+            public void setList(List<Column> list) {
                 this.list = list;
             }
 
-            public static class ListBean {
+            public static class Column {
                 /**
                  * id : 1001
                  * name : 社会新闻
                  */
 
-                private int id;
+                private String id;
                 private String name;
 
-                public int getId() {
+                public String getId() {
                     return id;
                 }
 
-                public void setId(int id) {
+                public void setId(String id) {
                     this.id = id;
                 }
 

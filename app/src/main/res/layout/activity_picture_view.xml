@@ -1,16 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black">
 
     <com.susion.boring.interesting.view.DrawScaleImageView
-        android:paddingTop="50dp"
-        android:paddingBottom="50dp"
-        android:id="@+id/draw_scale_iv"
+        android:id="@+id/ac_picture_iv_draw_scale"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingBottom="70dp"
+        android:paddingTop="50dp"
         android:transitionName="@string/transition_name_iv" />
 
-</LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/ac_picture_rl_picture_operator"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_gravity="bottom"
+        android:background="@color/transparent">
+
+        <ImageView
+            android:id="@+id/ac_picture_iv_love"
+            android:layout_width="70dp"
+            android:layout_height="30dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="80dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:src="@mipmap/un_love" />
+
+        <ImageView
+            android:id="@+id/ac_picture_iv_download"
+            android:layout_width="70dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="80dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:src="@mipmap/ic_download" />
+
+    </RelativeLayout>
+
+</FrameLayout>

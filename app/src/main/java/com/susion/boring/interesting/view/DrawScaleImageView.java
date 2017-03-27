@@ -1,19 +1,13 @@
 package com.susion.boring.interesting.view;
 
-import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.widget.ImageView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -33,7 +27,7 @@ public class DrawScaleImageView extends SimpleDraweeView {
     private int mHeight;
     private float mMinScale = 0.4f;
     private int mAlpha = 255;
-
+    private long mTime;
     private final static int MAX_TRANSLATE_Y = 500;
     private final static long DURATION = 300;
 
@@ -73,13 +67,13 @@ public class DrawScaleImageView extends SimpleDraweeView {
         mHeight = h;
     }
 
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 mDownX = event.getX();
                 mDownY = event.getY();
+                mTime = System.currentTimeMillis();
                 break;
             case MotionEvent.ACTION_MOVE:
                 if (mTranslateY == 0 && mTranslateX != 0) { //in viewpager
@@ -107,6 +101,10 @@ public class DrawScaleImageView extends SimpleDraweeView {
                 break;
 
             case MotionEvent.ACTION_UP:
+                if (isTapEvent()) {
+                    break;
+                }
+
                 if (mScale < 0.5) {
                     if (mListener != null) {
                         mListener.onExitViewImage();
@@ -118,6 +116,17 @@ public class DrawScaleImageView extends SimpleDraweeView {
         }
 
         return true;
+    }
+
+    private boolean isTapEvent() {
+        if (System.currentTimeMillis() - mTime < 200) {
+            if (mListener != null) {
+                mListener.onClickImage();
+            }
+            return true;
+        }
+
+        return false;
     }
 
     private void restoreImageState() {
@@ -221,6 +230,9 @@ public class DrawScaleImageView extends SimpleDraweeView {
         void onScaleChange(int alpha);
 
         void onExitViewImage();
+
+        void onClickImage();
+
     }
 
     public void setScaleListener(DrawScaleImageViewListener mListener) {

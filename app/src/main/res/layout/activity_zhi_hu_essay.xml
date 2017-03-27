@@ -75,7 +75,7 @@
             android:background="@drawable/bg_ripple"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:src="@mipmap/play_operator_love" />
+            android:src="@mipmap/un_love" />
 
         <ImageView
             android:id="@+id/ac_zhi_hu_essay_iv_next"

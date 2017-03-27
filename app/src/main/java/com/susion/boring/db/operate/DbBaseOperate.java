@@ -1,8 +1,11 @@
 package com.susion.boring.db.operate;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.litesuits.orm.LiteOrm;
+import com.litesuits.orm.db.assit.QueryBuilder;
+import com.susion.boring.music.mvp.model.SimpleSong;
 
 import java.util.List;
 
@@ -142,4 +145,14 @@ public class DbBaseOperate<T> implements DataBaseOperateContract.BaseOperate<T> 
         });
     }
 
+    @Override
+    public Observable<List<T>> getLikeData() {
+        return Observable.create(new Observable.OnSubscribe<List<T>>() {
+            @Override
+            public void call(Subscriber<? super List<T>> subscriber) {
+                List<T> likes = mLiteOrm.query(new QueryBuilder<>(mClass).whereEquals("favorite", true));
+                subscriber.onNext(likes);
+            }
+        });
+    }
 }

@@ -19,7 +19,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-                <showapi_res_body android:name="android.intent.showapi_res_body.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity

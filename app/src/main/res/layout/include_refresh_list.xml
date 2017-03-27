@@ -2,7 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -16,7 +17,6 @@
 
 
     <TextView
-        android:visibility="gone"
         android:id="@+id/tv_update_tip"
         android:layout_width="match_parent"
         android:layout_height="@dimen/update_tip_height"
@@ -24,5 +24,6 @@
         android:background="@color/colorAccent"
         android:gravity="center"
         android:textColor="@color/white"
-        android:textSize="15sp" />
+        android:textSize="15sp"
+        android:visibility="gone" />
 </FrameLayout>

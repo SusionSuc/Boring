@@ -49,7 +49,7 @@ import java.util.List;
 
 import rx.Observer;
 
-public class PlayMusicActivity extends BaseActivity implements MediaPlayerContract.PlayView, PlayMusicPageContract.View{
+public class PlayMusicActivity extends BaseActivity implements MediaPlayerContract.PlayView, PlayMusicPageContract.View {
     private static final String TO_PLAY_MUSIC_INFO = "played_music";
     private static final String FROM_LITTLE_PANEL = "from_little_panel";
     private static final String NEED_LOAD = "needLoad";
@@ -394,7 +394,7 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(ChangeSongEvent event){
+    public void onMessageEvent(ChangeSongEvent event) {
         Song song = event.song;
         mPlayQueueCommand.changeMusic(song);
     }

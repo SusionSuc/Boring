@@ -5,13 +5,9 @@ import android.content.Intent;
 import android.support.v4.widget.NestedScrollView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.JavascriptInterface;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.susion.boring.R;
@@ -92,7 +88,7 @@ public class ZhiHuEssayActivity extends BaseActivity implements ZhiHuEssayContra
             mWbParent.removeViewAt(0);
         }
         mWebView = new WebView(this);
-        mWebView.loadDataWithBaseURL(null,contentHtml,"text/html", "utf-8", null);
+        mWebView.loadDataWithBaseURL(null, contentHtml, "text/html", "utf-8", null);
         mWbParent.addView(mWebView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
     }
 
@@ -104,10 +100,10 @@ public class ZhiHuEssayActivity extends BaseActivity implements ZhiHuEssayContra
     @Override
     public void refreshLikeStatus(boolean status) {
         if (status) {
-            mIvLike.setImageResource(R.mipmap.play_operator_un_love);
+            mIvLike.setImageResource(R.mipmap.love);
             return;
         }
-        mIvLike.setImageResource(R.mipmap.play_operator_love);
+        mIvLike.setImageResource(R.mipmap.un_love);
     }
 
     @Override

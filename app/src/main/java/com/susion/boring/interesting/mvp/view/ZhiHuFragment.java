@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -34,13 +35,15 @@ import java.util.List;
 /**
  * Created by susion on 17/3/15.
  */
-public class ZhiHuFragment extends ViewPageFragment implements ZhiHuDailyContract.View, OnLastItemVisibleListener {
+public class ZhiHuFragment extends ViewPageFragment implements ZhiHuDailyContract.View, OnLastItemVisibleListener, SwipeRefreshLayout.OnRefreshListener {
 
     private LoadMoreRecycleView mRv;
     private List<Object> mData = new ArrayList<>();
 
     private ZhiHuDailyContract.Presenter mPresenter;
     private LinearLayoutManager mManager;
+    private SwipeRefreshLayout mRefreshLayout;
+    private boolean mIsRefresh;
 
     @Override
     public View initContentView(LayoutInflater inflater, ViewGroup container) {
@@ -53,6 +56,7 @@ public class ZhiHuFragment extends ViewPageFragment implements ZhiHuDailyContrac
         mPresenter = new ZhiHuDailyNewsPresenter(this);
         mPresenter.setCurrentDate(new Date(System.currentTimeMillis()));
         mRv = (LoadMoreRecycleView) mView.findViewById(R.id.list_view);
+        mRefreshLayout = (SwipeRefreshLayout) mView.findViewById(R.id.refresh_layout);
     }
 
     @Override
@@ -61,6 +65,7 @@ public class ZhiHuFragment extends ViewPageFragment implements ZhiHuDailyContrac
         mRv.setLayoutManager(mManager);
         mRv.setAdapter(new ZhiHuDailyAdapter((Activity) getContext(), mData));
         mRv.setOnLastItemVisibleListener(this);
+        mRefreshLayout.setOnRefreshListener(this);
         mRv.addItemDecoration(RVUtils.getZhiHuDailyNewsDecoration(getContext(), UIUtils.dp2Px(20), new ZhiHuDailyContract.DailyNewsStickHeader() {
 
             @Override
@@ -116,6 +121,11 @@ public class ZhiHuFragment extends ViewPageFragment implements ZhiHuDailyContrac
 
     @Override
     public void setDataForViewPage(List<DailyNews.TopStoriesBean> banners) {
+        if (mIsRefresh) {
+            mIsRefresh = false;
+            mRefreshLayout.setRefreshing(false);
+        }
+
         mData.add(banners);
         mRv.getAdapter().notifyDataSetChanged();
     }
@@ -137,5 +147,12 @@ public class ZhiHuFragment extends ViewPageFragment implements ZhiHuDailyContrac
     @Override
     public String getTitle() {
         return "知乎日报";
+    }
+
+    @Override
+    public void onRefresh() {
+        mIsRefresh = true;
+        mData.clear();
+        mPresenter.loadData(ZhiHuDailyContract.LATEST_NEWS);
     }
 }

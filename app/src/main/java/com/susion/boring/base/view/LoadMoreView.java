@@ -98,7 +98,6 @@ public class LoadMoreView extends TextView{
                 setVisibility(VISIBLE);
                 setText(NO_MORE_DATA);
                 break;
-
             case NO_LOAD:
                 setVisibility(GONE);
                 break;

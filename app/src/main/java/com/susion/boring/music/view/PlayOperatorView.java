@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 
 import com.susion.boring.R;
 import com.susion.boring.music.mvp.contract.MusicServiceContract;
+import com.susion.boring.utils.UIUtils;
 
 /**
  * Created by susion on 17/2/21.
@@ -90,7 +91,7 @@ public class PlayOperatorView extends LinearLayout implements View.OnClickListen
                 break;
             case R.id.view_play_operator_iv_like:
                 mPseudoLike = !mPseudoLike;
-                refreshLikeStatus(mPseudoLike);  //pseudo refresh
+                UIUtils.refreshLikeStatus(mIvLike, mPseudoLike);
                 itemClickListener.onLikeItemClick(mPseudoLike);
                 break;
         }
@@ -109,21 +110,16 @@ public class PlayOperatorView extends LinearLayout implements View.OnClickListen
         }
     }
 
-    public void refreshLikeStatus(boolean like) {
-        this.mPseudoLike = like;
-        if (mPseudoLike) {
-            mIvLike.setImageResource(R.mipmap.play_operator_un_love);
-        } else {
-            mIvLike.setImageResource(R.mipmap.play_operator_love);
-        }
-    }
-
     public void hideNextPlay() {
         mIvList.setVisibility(GONE);
     }
 
     public void setItemClickListener(OnItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
+    }
+
+    public void refreshLikeStatus(Boolean flag) {
+        UIUtils.refreshLikeStatus(mIvLike, flag);
     }
 
 

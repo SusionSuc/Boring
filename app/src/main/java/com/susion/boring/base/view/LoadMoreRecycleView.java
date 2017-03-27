@@ -58,9 +58,10 @@ public class LoadMoreRecycleView extends RecyclerView {
 
     @IntDef({LoadMoreView.LOADING, LoadMoreView.LOAD_FAILED, LoadMoreView.NO_LOAD, LoadMoreView.NO_DATA})
     @Retention(RetentionPolicy.SOURCE)
-    public @interface LoadMoreStatus{}
+    public @interface LoadMoreStatus {
+    }
 
-    public void setLoadStatus(@LoadMoreStatus int status){
+    public void setLoadStatus(@LoadMoreStatus int status) {
         if (mLoadMoreAdapter != null) {
             mLoadMoreAdapter.setLoadStatus(status);
         }
@@ -71,10 +72,6 @@ public class LoadMoreRecycleView extends RecyclerView {
         hasLastListener = true;
     }
 
-
-    public boolean hasLoadMoreView(){
-        return hasLastListener;
-    }
 
     public class LoadMoreAdapter extends Adapter<ViewHolder> {
 
@@ -155,6 +152,7 @@ public class LoadMoreRecycleView extends RecyclerView {
             public VH(View itemView) {
                 super(itemView);
             }
+
             public void onBindViewHolder() {
             }
         }

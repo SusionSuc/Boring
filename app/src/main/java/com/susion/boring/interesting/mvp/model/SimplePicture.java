@@ -1,12 +1,22 @@
 package com.susion.boring.interesting.mvp.model;
 
+import com.litesuits.orm.db.annotation.PrimaryKey;
+import com.litesuits.orm.db.annotation.Table;
+import com.litesuits.orm.db.enums.AssignType;
+
+import java.io.Serializable;
+
 /**
  * Created by susion on 17/3/17.
  */
-public class SimplePicture {
+@Table("picture")
+public class SimplePicture implements Serializable{
 
+    @PrimaryKey(AssignType.BY_MYSELF)
     private String id;
-    private boolean isFavorite;
+
+    public boolean favorite;
+
     private String big;
     private String small;
     private String middle;

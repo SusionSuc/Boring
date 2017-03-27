@@ -24,6 +24,6 @@
         android:layout_marginRight="10dp"
         android:background="@drawable/bg_ripple"
         android:padding="10dp"
-        android:src="@mipmap/play_operator_un_love" />
+        android:src="@mipmap/love" />
 
 </RelativeLayout>

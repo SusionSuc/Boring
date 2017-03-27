@@ -29,7 +29,7 @@ import java.util.List;
  */
 public class RVUtils {
 
-    public static LinearLayoutManager getLayoutManager(Context context, int orientation){
+    public static LinearLayoutManager getLayoutManager(Context context, int orientation) {
         LinearLayoutManager manager = new LinearLayoutManager(context);
         manager.setOrientation(orientation);
         return manager;
@@ -50,17 +50,16 @@ public class RVUtils {
     }
 
 
-
-    public  static  RecyclerView.ItemDecoration getItemDecorationDivider(Context context, @ColorRes int color, int divideHeight){
+    public static RecyclerView.ItemDecoration getItemDecorationDivider(Context context, @ColorRes int color, int divideHeight) {
         return new SimpleDividerDecoration(context, color, divideHeight);
     }
 
 
-    public  static  RecyclerView.ItemDecoration getItemDecorationDivider(Context context, int color, int divideHeight, int dividerNumber, int leftMargin){
+    public static RecyclerView.ItemDecoration getItemDecorationDivider(Context context, int color, int divideHeight, int dividerNumber, int leftMargin) {
         return new SimpleDividerDecoration(context, color, divideHeight, dividerNumber, leftMargin);
     }
 
-    public static RecyclerView.ItemDecoration getDrawerItemDecorationDivider(Context context, int color, Rect margin, List<DividerMark> data){
+    public static RecyclerView.ItemDecoration getDrawerItemDecorationDivider(Context context, int color, Rect margin, List<DividerMark> data) {
         return new DrawerDividerDecoration(context, color, margin, data);
     }
 
@@ -69,7 +68,7 @@ public class RVUtils {
 
     }
 
-    public  static  class SimpleDividerDecoration extends RecyclerView.ItemDecoration {
+    public static class SimpleDividerDecoration extends RecyclerView.ItemDecoration {
         public Paint mDividerPaint;
         int mDividerHeight;
         int mDividerNumber = -1;
@@ -129,7 +128,7 @@ public class RVUtils {
         }
     }
 
-    private static class DrawerDividerDecoration  extends RecyclerView.ItemDecoration  {
+    private static class DrawerDividerDecoration extends RecyclerView.ItemDecoration {
         private List<DividerMark> mData;
         private Rect mMargin;
         public Paint mDividerPaint;
@@ -167,6 +166,7 @@ public class RVUtils {
             }
         }
     }
+
     private static class ZhiHuDailyNewsDecoration extends RecyclerView.ItemDecoration {
         private ZhiHuDailyContract.DailyNewsStickHeader stickHeader;
         private TextPaint textPaint;
@@ -230,7 +230,7 @@ public class RVUtils {
                 if (position + 1 < itemCount) {                 //下一个和当前不一样移动当前
                     String nextTitle = stickHeader.getTitle(position + 1);
                     int viewBottom = view.getBottom();
-                    if (!nextTitle.equals(title) && viewBottom < textY ) {      //组内最后一个view进入了header
+                    if (!nextTitle.equals(title) && viewBottom < textY) {      //组内最后一个view进入了header
                         textY = viewBottom;
                     }
                 }
