@@ -1,5 +1,6 @@
 package com.susion.boring.music.mvp.view;
 
+import android.graphics.Rect;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,6 +14,7 @@ import com.susion.boring.base.ui.OnLastItemVisibleListener;
 import com.susion.boring.base.view.LoadMoreRecycleView;
 import com.susion.boring.base.view.LoadMoreView;
 import com.susion.boring.http.APIHelper;
+import com.susion.boring.http.CommonObserver;
 import com.susion.boring.music.itemhandler.SearchMusicResultIH;
 import com.susion.boring.music.mvp.model.MusicSearchResult;
 import com.susion.boring.music.mvp.model.Song;
@@ -77,7 +79,7 @@ public class SearchMusicActivity extends BaseActivity implements OnLastItemVisib
             }
         });
 
-        mRV.addItemDecoration(RVUtils.getItemDecorationDivider(this, R.color.divider, 1));
+        mRV.addItemDecoration(new RVUtils.NoLastDividerDecoration(this, R.color.red_divider, 1, new Rect(UIUtils.dp2Px(15), 0, 0, 0)));
         mRV.setOnLastItemVisibleListener(this);
     }
 
@@ -116,7 +118,7 @@ public class SearchMusicActivity extends BaseActivity implements OnLastItemVisib
 
     private void loadData() {
         APIHelper.subscribeSimpleRequest(APIHelper.getMusicServices().searchMusic(mSearchContent, PAGE_SIZE, 1, mPage * PAGE_SIZE),
-                new Observer<MusicSearchResult>() {
+                new CommonObserver<MusicSearchResult>() {
                     @Override
                     public void onCompleted() {
 
@@ -124,6 +126,7 @@ public class SearchMusicActivity extends BaseActivity implements OnLastItemVisib
 
                     @Override
                     public void onError(Throwable e) {
+                        super.onError(e);
                         mRV.setLoadStatus(LoadMoreView.LOAD_FAILED);
                     }
 

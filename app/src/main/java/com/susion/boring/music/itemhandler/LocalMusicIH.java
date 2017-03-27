@@ -26,21 +26,21 @@ public class LocalMusicIH extends SimpleMusicIH<SimpleSong> {
 
     @Override
     protected void bindData(ViewHolder vh, SimpleSong data, int position) {
-        vh.getTextView(R.id.item_local_music_tv_music_name).setText(data.getDisplayName() + "");
+        mTvTile.setText(data.getDisplayName() + "");
         String desc = data.getArtist();
 
         if (!TextUtils.isEmpty(data.getAlbum())) {
             desc += "-" + data.getAlbum();
         }
 
-        vh.getTextView(R.id.item_local_music_tv_artist_album).setText(desc);
+        mTvSecondTile.setText(desc);
 
         if (data.isHasDown()) {
             AlbumUtils.setAlbum(mSdvAlbum, data.getPath());
-            vh.getTextView(R.id.item_local_music_tv_duration).setText(TimeUtils.formatDuration(data.getDuration()));
+            mTvDuration.setText(TimeUtils.formatDuration(data.getDuration()));
         } else {
             mSdvAlbum.setImageURI(data.getPicPath());
-            vh.getTextView(R.id.item_local_music_tv_duration).setVisibility(View.GONE);
+            mTvDuration.setVisibility(View.GONE);
         }
     }
 }

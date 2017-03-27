@@ -5,38 +5,38 @@
     android:orientation="horizontal">
 
     <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="30dp"
-        android:src="@mipmap/search"
-        android:layout_width="20dp"
-        android:layout_height="20dp" />
+        android:src="@mipmap/search" />
 
     <EditText
-        android:layout_marginLeft="5dp"
-        android:textSize="16sp"
-        android:textColor="@color/white"
         android:id="@+id/search_bar_tv_text"
-        android:layout_marginRight="50dp"
-        android:layout_gravity="bottom"
-        android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:hint="Search Music"
-        android:textColorHint="@color/search_bar_text_color"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="50dp"
+        android:layout_weight="1"
         android:backgroundTint="@color/search_bar_text_color"
-        android:focusable="false" />
+        android:focusable="false"
+        android:hint="Search Music"
+        android:textColor="@color/white"
+        android:textColorHint="@color/search_bar_text_color"
+        android:textSize="16sp" />
 
     <Button
         android:id="@+id/search_bar_bt_search"
-        android:visibility="gone"
-        android:layout_gravity="center_vertical"
-        android:text="搜索"
-        android:textSize="13sp"
-        android:background="@drawable/bg_search_bar_bt"
-        android:textColor="@color/white"
-        android:layout_marginRight="15dp"
         android:layout_width="40dp"
-        android:layout_height="25dp" />
+        android:layout_height="25dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/bg_search_bar_bt"
+        android:text="搜索"
+        android:textColor="@color/white"
+        android:textSize="13sp"
+        android:visibility="gone" />
 
 
 </LinearLayout>

@@ -22,10 +22,10 @@ public class FileUtils {
     public static final String SD_ROOT_DIR = Environment.getExternalStorageDirectory() + "/Boring/";
     public static final String SD_MUSIC_DIR = SD_ROOT_DIR + "music/";
     public static final String SD_INTERESTING_DIR = SD_ROOT_DIR + "interesting/";
-    public static final String SD_INTERESTING_DAILY_NEWS = SD_INTERESTING_DIR+"daily_news/";
+    public static final String SD_INTERESTING_DAILY_NEWS = SD_INTERESTING_DIR + "daily_news/";
     private static final String UNKNOWN = "unknown";
-    public static final String SD_TEMP_CSS = SD_INTERESTING_DAILY_NEWS+"css/";
-    public static final String TEMP_CSS_FILE = SD_TEMP_CSS+"temp_css.css";
+    public static final String SD_TEMP_CSS = SD_INTERESTING_DAILY_NEWS + "css/";
+    public static final String TEMP_CSS_FILE = SD_TEMP_CSS + "temp_css.css";
 
     public static void initAppDir() {
         // 不存在SD卡
@@ -33,8 +33,8 @@ public class FileUtils {
             return;
         }
 
-        String[] initPath = new String[]{SD_MUSIC_DIR, SD_INTERESTING_DIR, SD_INTERESTING_DAILY_NEWS,SD_TEMP_CSS};
-        for (String path : initPath){
+        String[] initPath = new String[]{SD_MUSIC_DIR, SD_INTERESTING_DIR, SD_INTERESTING_DAILY_NEWS, SD_TEMP_CSS};
+        for (String path : initPath) {
             File dir = new File(path);
             if (!dir.exists()) {
                 dir.mkdirs();
@@ -114,7 +114,7 @@ public class FileUtils {
             byte[] buff = new byte[1024];
             int len;
 
-            while ( (len = in.read(buff))!= -1) {
+            while ((len = in.read(buff)) != -1) {
                 out.write(buff, 0, len);
             }
 
@@ -131,14 +131,15 @@ public class FileUtils {
     public static String getTempCssString() {
         try {
             return getStringFromFile(TEMP_CSS_FILE);
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
-        return  null;
+        return null;
     }
 
     private static String getStringFromFile(String tempCssFile) throws FileNotFoundException {
-        FileInputStream in = new FileInputStream(new File(tempCssFile));;
+        FileInputStream in = new FileInputStream(new File(tempCssFile));
+        ;
         return getStringFromInputStream(in);
     }
 
@@ -149,11 +150,11 @@ public class FileUtils {
             byteOS = new ByteArrayOutputStream();
             byte[] buff = new byte[1024];
             int len;
-            while ( (len = in.read(buff))!= -1) {
+            while ((len = in.read(buff)) != -1) {
                 byteOS.write(buff, 0, len);
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 

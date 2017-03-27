@@ -32,7 +32,7 @@ public class SAppApplication extends Application {
     }
 
     public static Context getAppContext() {
-        return  sContext;
+        return sContext;
     }
 
     @Override

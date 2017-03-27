@@ -29,8 +29,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
                 android:layout_marginTop="@dimen/status_bar_height"
-                app:layout_collapseMode="pin">
-            </com.susion.boring.base.view.SToolBar>
+                app:layout_collapseMode="pin"></com.susion.boring.base.view.SToolBar>
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
@@ -40,9 +39,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         android:orientation="vertical"
         android:paddingTop="20dp"
-        android:background="@color/white"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
@@ -56,8 +55,7 @@
         <com.susion.boring.music.view.PlayOperatorView
             android:id="@+id/play_operator"
             android:layout_width="match_parent"
-            android:layout_height="40dp">
-        </com.susion.boring.music.view.PlayOperatorView>
+            android:layout_height="40dp"></com.susion.boring.music.view.PlayOperatorView>
 
 
         <View
@@ -65,11 +63,30 @@
             android:layout_height="1dp"
             android:background="@color/colorPrimary"></View>
 
-        <com.susion.boring.base.view.LoadMoreRecycleView
-            android:id="@+id/list_view"
+
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="5dp"></com.susion.boring.base.view.LoadMoreRecycleView>
+            android:layout_marginTop="5dp">
+
+
+            <com.susion.boring.base.view.LoadMoreRecycleView
+                android:id="@+id/list_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></com.susion.boring.base.view.LoadMoreRecycleView>
+
+
+            <ImageView
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/iv_loading"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="10dp"
+                android:src="@mipmap/image_long_loading" />
+
+        </FrameLayout>
+
+
     </LinearLayout>
 
 

@@ -16,6 +16,7 @@ import com.susion.boring.base.ui.OnLastItemVisibleListener;
 import com.susion.boring.base.view.LoadMoreRecycleView;
 import com.susion.boring.base.view.ViewPageFragment;
 import com.susion.boring.http.APIHelper;
+import com.susion.boring.http.CommonObserver;
 import com.susion.boring.interesting.itemhandler.JokeIH;
 import com.susion.boring.interesting.mvp.model.Joke;
 import com.susion.boring.interesting.mvp.model.JokeList;
@@ -64,6 +65,7 @@ public class JokeFragment extends ViewPageFragment implements OnLastItemVisibleL
     @Override
     protected void initView() {
         mRefreshLayout.setOnRefreshListener(this);
+        mRefreshLayout.setColorSchemeColors(new int[]{getResources().getColor(R.color.colorAccent)});
         mRv.setLayoutManager(RVUtils.getLayoutManager(getContext(), LinearLayoutManager.VERTICAL));
         mRv.addItemDecoration(RVUtils.getItemDecorationDivider(getContext(), R.color.shallow_red_divider, UIUtils.dp2Px(10)));
         mRv.setOnLastItemVisibleListener(this);
@@ -98,54 +100,48 @@ public class JokeFragment extends ViewPageFragment implements OnLastItemVisibleL
 
     private void loadData() {
         String timestampStr = String.valueOf(new Date().getTime()).substring(0, 10);
-        APIHelper.getJokeService()
-                .getJokes(mPage, 10, timestampStr)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<JokeList>() {
-                    @Override
-                    public void onCompleted() {
-                    }
 
-                    @Override
-                    public void onError(Throwable e) {
+        APIHelper.subscribeSimpleRequest(APIHelper.getJokeService().getJokes(mPage, 10, timestampStr), new CommonObserver<JokeList>() {
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                mIsRefreshing = false;
+                mRefreshLayout.setRefreshing(mIsRefreshing);
+            }
+
+            @Override
+            public void onNext(JokeList jokeList) {
+                List<Joke> list = jokeList.getResult();
+                if (jokeList != null && list != null) {
+                    if (!mIsRefreshing) {
+                        for (Joke joke : list) {
+                            if (mIds.add(joke.getHashId())) {
+                                mData.add(joke);
+                            }
+                        }
+                        mRv.getAdapter().notifyDataSetChanged();
+                        mPage++;
+
+                    } else {
                         mIsRefreshing = false;
                         mRefreshLayout.setRefreshing(mIsRefreshing);
-                    }
 
-                    @Override
-                    public void onNext(JokeList jokeList) {
-                        List<Joke> list = jokeList.getResult();
-                        if (jokeList != null && list != null) {
-                            if (!mIsRefreshing) {
-                                for (Joke joke : list) {
-                                    if (mIds.add(joke.getHashId())) {
-                                        mData.add(joke);
-                                    }
-                                }
-                                mRv.getAdapter().notifyDataSetChanged();
-                                mPage++;
-
-                            } else {
-                                mIsRefreshing = false;
-                                mRefreshLayout.setRefreshing(mIsRefreshing);
-
-                                int a = 0;
-                                for (Joke joke : list) {
-                                    if (mIds.add(joke.getHashId())) {
-                                        mData.add(0, joke);
-                                        a++;
-                                    }
-                                }
-                                showUpdateTip(a + " 条新笑话");
-                                mRv.getAdapter().notifyDataSetChanged();
+                        int a = 0;
+                        for (Joke joke : list) {
+                            if (mIds.add(joke.getHashId())) {
+                                mData.add(0, joke);
+                                a++;
                             }
-                        } else {
-                            mIsRefreshing = false;
-                            mRefreshLayout.setRefreshing(mIsRefreshing);
                         }
+                        showUpdateTip(a + " 条新笑话");
+                        mRv.getAdapter().notifyDataSetChanged();
                     }
-                });
+                } else {
+                    mIsRefreshing = false;
+                    mRefreshLayout.setRefreshing(mIsRefreshing);
+                }
+            }
+        });
     }
 
     @Override

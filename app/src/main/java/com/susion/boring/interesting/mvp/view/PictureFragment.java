@@ -17,6 +17,7 @@ import com.susion.boring.base.view.ViewPageFragment;
 import com.susion.boring.event.CategoryPictureLoadErrorEvent;
 import com.susion.boring.event.PictureCategorySelectedEvent;
 import com.susion.boring.http.APIHelper;
+import com.susion.boring.http.CommonObserver;
 import com.susion.boring.interesting.itemhandler.SimplePictureIH;
 import com.susion.boring.interesting.mvp.model.SimplePicture;
 import com.susion.boring.interesting.mvp.model.SimplePictureList;
@@ -115,19 +116,8 @@ public class PictureFragment extends ViewPageFragment implements OnLastItemVisib
 
     private void loadData() {
         int requestPage = mIsRefresh ? 1 : mPage + 1;
-        APIHelper.getPictureService()
-                .getPicturesByType(mTypeId, String.valueOf(requestPage))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<SimplePictureList>() {
-                    @Override
-                    public void onCompleted() {
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                    }
-
+        APIHelper.subscribeSimpleRequest(APIHelper.getPictureService().getPicturesByType(mTypeId, String.valueOf(requestPage)),
+                new CommonObserver<SimplePictureList>() {
                     @Override
                     public void onNext(SimplePictureList simplePictureList) {
                         if (simplePictureList == null) {
@@ -178,6 +168,7 @@ public class PictureFragment extends ViewPageFragment implements OnLastItemVisib
     public void onLastItemVisible() {
         loadData();
     }
+
 
     @Override
     public void onRefresh() {

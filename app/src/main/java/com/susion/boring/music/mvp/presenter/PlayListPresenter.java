@@ -3,6 +3,7 @@ package com.susion.boring.music.mvp.presenter;
 import com.susion.boring.db.DbManager;
 import com.susion.boring.db.operate.DbBaseOperate;
 import com.susion.boring.http.APIHelper;
+import com.susion.boring.http.CommonObserver;
 import com.susion.boring.music.mvp.model.PlayList;
 import com.susion.boring.music.mvp.model.PlayListDetail;
 import com.susion.boring.music.mvp.contract.PlayListContract;
@@ -26,19 +27,14 @@ public class PlayListPresenter implements PlayListContract.Presenter {
 
     @Override
     public void loadData(PlayList playList) {
-        APIHelper.subscribeSimpleRequest(APIHelper.getMusicServices().getPlayListDetail(Integer.valueOf(playList.getId())), new Observer<PlayListDetail>() {
+        APIHelper.subscribeSimpleRequest(APIHelper.getMusicServices().getPlayListDetail(Integer.valueOf(playList.getId())), new CommonObserver<PlayListDetail>() {
             @Override
             public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
             }
 
             @Override
             public void onNext(PlayListDetail playListDetail) {
-               mView.addData(playListDetail);
+                mView.addData(playListDetail);
             }
         });
     }

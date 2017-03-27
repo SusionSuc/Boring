@@ -1,6 +1,7 @@
 package com.susion.boring.interesting.mvp.presenter;
 
 import com.susion.boring.http.APIHelper;
+import com.susion.boring.http.CommonObserver;
 import com.susion.boring.interesting.mvp.contract.ZhiHuDailyContract;
 import com.susion.boring.interesting.mvp.model.Banner;
 import com.susion.boring.interesting.mvp.model.DailyNews;
@@ -47,28 +48,15 @@ public class ZhiHuDailyNewsPresenter implements ZhiHuDailyContract.Presenter {
 
         mCurrentDate.setTime(mCurrentDate.getTime() - 1000 * 60 * 60 * page * 24);
         String date = TimeUtils.formatDate(mCurrentDate, "yyyyMMdd");
-        APIHelper.getZhiHuService()
-                .getFixDateNews(date)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<DailyNews>() {
-                    @Override
-                    public void onCompleted() {
 
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(DailyNews dailyNews) {
-                        if (dailyNews != null) {
-                            mView.addNewsData(addHeaderTitle(dailyNews.getStories()));
-                        }
-                    }
-                });
+        APIHelper.subscribeSimpleRequest(APIHelper.getZhiHuService().getFixDateNews(date), new CommonObserver<DailyNews>() {
+            @Override
+            public void onNext(DailyNews dailyNews) {
+                if (dailyNews != null) {
+                    mView.addNewsData(addHeaderTitle(dailyNews.getStories()));
+                }
+            }
+        });
     }
 
     private List<DailyNews.StoriesBean> addHeaderTitle(List<DailyNews.StoriesBean> stories) {
@@ -80,31 +68,17 @@ public class ZhiHuDailyNewsPresenter implements ZhiHuDailyContract.Presenter {
     }
 
     private void requestForLatestNews(final int page) {
-        APIHelper.getZhiHuService()
-                .getLatestNews()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<DailyNews>() {
-                    @Override
-                    public void onCompleted() {
-
+        APIHelper.subscribeSimpleRequest(APIHelper.getZhiHuService().getLatestNews(), new CommonObserver<DailyNews>() {
+            @Override
+            public void onNext(DailyNews dailyNews) {
+                if (dailyNews != null) {
+                    if (page == 0) {
+                        mView.setDataForViewPage(dailyNews.getTop_stories());
                     }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        int b = 0;
-                    }
-
-                    @Override
-                    public void onNext(DailyNews dailyNews) {
-                        if (dailyNews != null) {
-                            if (page == 0) {
-                                mView.setDataForViewPage(dailyNews.getTop_stories());
-                            }
-                            mView.addNewsData(addHeaderTitle(dailyNews.getStories()));
-                        }
-                    }
-                });
+                    mView.addNewsData(addHeaderTitle(dailyNews.getStories()));
+                }
+            }
+        });
     }
 
     @Override

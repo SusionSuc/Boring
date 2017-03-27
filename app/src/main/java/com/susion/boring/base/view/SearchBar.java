@@ -56,18 +56,8 @@ public class SearchBar extends LinearLayout {
     }
 
     private void initView() {
-//        setTextViewHintContent();
     }
 
-    private void setTextViewHintContent() {
-        Drawable searchDrawable = mContext.getResources().getDrawable(R.drawable.search_bar_search);
-        searchDrawable.setBounds(UIUtils.dp2Px(15), 0, UIUtils.dp2Px(35), UIUtils.dp2Px(20));
-        mEtText.setCompoundDrawables(searchDrawable, null, null, null);
-        mEtText.setCompoundDrawablePadding(UIUtils.dp2Px(25));
-
-        mEtText.setHint("搜索音乐");
-        mEtText.setHintTextColor(getResources().getColor(R.color.colorSecondaryText));
-    }
 
     private void initListener() {
         mEtText.setOnClickListener(new OnClickListener() {

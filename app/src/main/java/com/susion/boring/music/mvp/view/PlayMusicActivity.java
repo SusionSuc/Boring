@@ -17,6 +17,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.susion.boring.R;
 import com.susion.boring.base.ui.BaseActivity;
 import com.susion.boring.http.APIHelper;
+import com.susion.boring.http.CommonObserver;
 import com.susion.boring.music.event.ChangeSongEvent;
 import com.susion.boring.music.event.SongDeleteFromPlayQueueEvent;
 import com.susion.boring.music.mvp.model.PlayListSong;
@@ -152,14 +153,10 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
         mSong = (Song) getIntent().getSerializableExtra(TO_PLAY_MUSIC_INFO);
 
         if (needLoadFromInt) {
-            APIHelper.subscribeSimpleRequest(APIHelper.getMusicServices().getSongDetail(Integer.valueOf(mSong.id)), new Observer<PlayListSong>() {
+            APIHelper.subscribeSimpleRequest(APIHelper.getMusicServices().getSongDetail(Integer.valueOf(mSong.id)), new CommonObserver<PlayListSong>() {
                 @Override
                 public void onCompleted() {
-                }
 
-                @Override
-                public void onError(Throwable e) {
-                    int b = 0;
                 }
 
                 @Override

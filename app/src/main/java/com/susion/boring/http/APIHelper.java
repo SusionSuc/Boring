@@ -60,7 +60,7 @@ public class APIHelper {
     }
 
 
-    public static <T> void subscribeSimpleRequest(Observable<T> observable, Observer<T> observer) {
+    public static <T> void subscribeSimpleRequest(Observable<T> observable, CommonObserver<T> observer) {
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(observer);
     }
 

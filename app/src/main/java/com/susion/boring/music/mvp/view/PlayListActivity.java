@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.susion.boring.R;
@@ -33,7 +34,7 @@ import com.susion.boring.utils.UIUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayListActivity extends BaseActivity implements PlayListContract.View{
+public class PlayListActivity extends BaseActivity implements PlayListContract.View {
     private static final String PLAY_LIST = "PLAY_LIST";
     private SimpleDraweeView mSdvBg;
     private PlayList mPlayList;
@@ -47,6 +48,7 @@ public class PlayListActivity extends BaseActivity implements PlayListContract.V
     private PlayOperatorView mPlayOperatorView;
     private MediaPlayerContract.ClientPlayModeCommand mPlayModeCommand;
     private PlayListContract.Presenter mPresenter;
+    private ImageView mIvLoading;
 
     public static void start(Context mContext, PlayList mData) {
         Intent intent = new Intent();
@@ -76,6 +78,7 @@ public class PlayListActivity extends BaseActivity implements PlayListContract.V
         mToolBar2 = (SToolBar) findViewById(R.id.ac_play_list_tool_bar2);
         mAppBarLayout = (AppBarLayout) findViewById(R.id.ac_play_list_app_bar_layout);
         mPlayOperatorView = (PlayOperatorView) findViewById(R.id.play_operator);
+        mIvLoading = (ImageView) findViewById(R.id.iv_loading);
     }
 
     @Override
@@ -88,6 +91,7 @@ public class PlayListActivity extends BaseActivity implements PlayListContract.V
         mToolBar2.setBackgroundResource(R.color.white);
         mToolBar2.setTitleColorRes(R.color.black);
 
+        mIvLoading.setVisibility(View.VISIBLE);
         mRv.setLayoutManager(RVUtils.getLayoutManager(this, LinearLayoutManager.VERTICAL));
         mRv.setAdapter(new BaseRVAdapter(this, mData) {
             @Override
@@ -99,6 +103,7 @@ public class PlayListActivity extends BaseActivity implements PlayListContract.V
                     }
                 });
             }
+
             @Override
             protected int getViewType(int position) {
                 return 0;
@@ -175,6 +180,7 @@ public class PlayListActivity extends BaseActivity implements PlayListContract.V
 
     @Override
     public void addData(PlayListDetail playListDetail) {
+        mIvLoading.setVisibility(View.INVISIBLE);
         mData.addAll(new MusicModelTranslatePresenter().translateTracksToSimpleSong(playListDetail.getPlaylist().getTracks()));
         mRv.getAdapter().notifyDataSetChanged();
     }

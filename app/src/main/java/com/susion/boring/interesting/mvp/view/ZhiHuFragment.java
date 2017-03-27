@@ -62,6 +62,7 @@ public class ZhiHuFragment extends ViewPageFragment implements ZhiHuDailyContrac
     @Override
     public void initView() {
         mManager = RVUtils.getLayoutManager(getContext(), LinearLayoutManager.VERTICAL);
+        mRefreshLayout.setColorSchemeColors(new int[]{getResources().getColor(R.color.colorAccent)});
         mRv.setLayoutManager(mManager);
         mRv.setAdapter(new ZhiHuDailyAdapter((Activity) getContext(), mData));
         mRv.setOnLastItemVisibleListener(this);

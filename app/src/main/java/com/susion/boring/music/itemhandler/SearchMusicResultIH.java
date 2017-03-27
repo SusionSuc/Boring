@@ -15,39 +15,30 @@ import com.susion.boring.utils.ToastUtils;
 /**
  * Created by susion on 17/1/20.
  */
-public class SearchMusicResultIH extends SimpleItemHandler<Song>{
-
-    private SimpleDraweeView ivPic;
+public class SearchMusicResultIH extends SimpleMusicIH<Song> {
 
     @Override
     public void onCreateItemHandler(ViewHolder vh, ViewGroup parent) {
         super.onCreateItemHandler(vh, parent);
+        mTvDuration.setVisibility(View.INVISIBLE);
+        mTvOperator.setVisibility(View.INVISIBLE);
     }
 
     @Override
-    public void onBindDataView(ViewHolder vh, Song data, int position) {
-
-        vh.getTextView(R.id.item_music_search_tv_song_name).setText(data.name);
-
-        if (!data.artists.isEmpty()) {
-            vh.getTextView(R.id.item_music_search_tv_art_album).setText(data.artists.get(0).name+"-"+data.album.name);
-        }
-        ivPic = vh.get(R.id.item_music_search_siv_pic);
-        ivPic.setImageURI(data.album.picUrl);  //the image size may to big
-    }
-
-    @Override
-    public int getLayoutResId() {
-        return R.layout.item_music_search_music_result;
-    }
-
-    @Override
-    public void onClick(View view) {
+    protected void onClickEvent() {
         if (TextUtils.isEmpty(mData.audio)) {
             ToastUtils.showShort("抱歉啦! 暂时没有播放资源");
         }
-
         PlayMusicActivity.start(mContext, mData, false);
-
     }
+
+    @Override
+    protected void bindData(ViewHolder vh, Song data, int position) {
+        mTvTile.setText(data.name);
+        if (!data.artists.isEmpty()) {
+            mTvSecondTile.setText(data.artists.get(0).name + "-" + data.album.name);
+        }
+        mSdvAlbum.setImageURI(data.album.picUrl);
+    }
+
 }

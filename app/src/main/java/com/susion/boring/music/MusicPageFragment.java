@@ -12,6 +12,7 @@ import com.susion.boring.base.ui.OnLastItemVisibleListener;
 import com.susion.boring.base.view.LoadMoreRecycleView;
 import com.susion.boring.base.view.LoadMoreView;
 import com.susion.boring.db.DbManager;
+import com.susion.boring.http.CommonObserver;
 import com.susion.boring.music.mvp.model.SimpleSong;
 import com.susion.boring.db.operate.DbBaseOperate;
 import com.susion.boring.http.APIHelper;
@@ -125,14 +126,10 @@ public class MusicPageFragment extends BaseFragment implements OnLastItemVisible
 
     private void loadMusicRecommendList() {
         mRV.setLoadStatus(LoadMoreView.LOADING);
-        APIHelper.subscribeSimpleRequest(APIHelper.getMusicServices().getPlayList(page * PLAY_LIST_PAGE_SIZE, PLAY_LIST_PAGE_SIZE), new Observer<GetPlayListResult>() {
+        APIHelper.subscribeSimpleRequest(APIHelper.getMusicServices().getPlayList(page * PLAY_LIST_PAGE_SIZE, PLAY_LIST_PAGE_SIZE), new CommonObserver<GetPlayListResult>() {
             @Override
             public void onCompleted() {
 
-            }
-
-            @Override
-            public void onError(Throwable e) {
             }
 
             @Override

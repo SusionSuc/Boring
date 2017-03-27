@@ -6,10 +6,9 @@
 
     <com.susion.boring.base.view.SearchBar
         android:id="@+id/search_bar"
-        android:transitionName="@string/transition_name_search_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </com.susion.boring.base.view.SearchBar>
+        android:layout_height="wrap_content"
+        android:transitionName="@string/transition_name_search_bar"></com.susion.boring.base.view.SearchBar>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -19,8 +18,7 @@
             android:id="@+id/list_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="invisible">
-        </com.susion.boring.base.view.LoadMoreRecycleView>
+            android:visibility="invisible"></com.susion.boring.base.view.LoadMoreRecycleView>
 
         <RelativeLayout
             android:id="@+id/place_holder_view"
@@ -32,7 +30,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_centerInParent="true"
-                android:src="@mipmap/music_mutil_color" />
+                android:src="@mipmap/bg_search_music" />
 
 
             <TextView
@@ -40,9 +38,9 @@
                 android:layout_height="20dp"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="15dp"
-                android:text="搜索支持 : 网易云音乐"
-                android:textColor="@color/colorSecondaryText" />
+                android:layout_marginBottom="50dp"
+                android:text="search by cloud music"
+                android:textColor="@color/colorAccent" />
 
         </RelativeLayout>
 

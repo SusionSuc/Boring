@@ -1,6 +1,7 @@
 package com.susion.boring.music.mvp.presenter;
 
 import com.susion.boring.base.mvp.ModelTranslateContract;
+import com.susion.boring.http.CommonObserver;
 import com.susion.boring.music.mvp.model.SimpleSong;
 import com.susion.boring.http.APIHelper;
 import com.susion.boring.music.mvp.model.PlayList;
@@ -21,19 +22,14 @@ import rx.Subscriber;
 public class MusicModelTranslatePresenter implements ModelTranslateContract.MusicModeTranslate {
 
     @Override
-    public Observable<List<Song>> getSongFromPlayList(final  PlayList playList) {
+    public Observable<List<Song>> getSongFromPlayList(final PlayList playList) {
         return Observable.create(new Observable.OnSubscribe<List<Song>>() {
             @Override
             public void call(final Subscriber<? super List<Song>> subscriber) {
-                APIHelper.subscribeSimpleRequest(APIHelper.getMusicServices().getPlayListDetail(Integer.valueOf(playList.getId())), new Observer<PlayListDetail>() {
+                APIHelper.subscribeSimpleRequest(APIHelper.getMusicServices().getPlayListDetail(Integer.valueOf(playList.getId())), new CommonObserver<PlayListDetail>() {
                     @Override
                     public void onCompleted() {
 
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        subscriber.onError(e);
                     }
 
                     @Override
@@ -48,7 +44,7 @@ public class MusicModelTranslatePresenter implements ModelTranslateContract.Musi
     @Override
     public List<SimpleSong> translateTracksToSimpleSong(List<PlayListDetail.PlaylistBean.TracksBean> tracks) {
         List<SimpleSong> datas = new ArrayList<>();
-        for(PlayListDetail.PlaylistBean.TracksBean track : tracks) {
+        for (PlayListDetail.PlaylistBean.TracksBean track : tracks) {
             datas.add(track.translateToSimpleSong());
         }
         return datas;
@@ -57,7 +53,7 @@ public class MusicModelTranslatePresenter implements ModelTranslateContract.Musi
     @Override
     public List<Song> translateTracksToSong(List<PlayListDetail.PlaylistBean.TracksBean> tracks) {
         List<Song> datas = new ArrayList<>();
-        for(PlayListDetail.PlaylistBean.TracksBean track : tracks) {
+        for (PlayListDetail.PlaylistBean.TracksBean track : tracks) {
             Song song = track.translateToSimpleSong().translateToSong();
             song.fromPlayList = true;
             datas.add(song);
@@ -70,15 +66,10 @@ public class MusicModelTranslatePresenter implements ModelTranslateContract.Musi
         return Observable.create(new Observable.OnSubscribe<Boolean>() {
             @Override
             public void call(final Subscriber<? super Boolean> subscriber) {
-                APIHelper.subscribeSimpleRequest(APIHelper.getMusicServices().getSongDetail(Integer.valueOf(song.id)), new Observer<PlayListSong>() {
+                APIHelper.subscribeSimpleRequest(APIHelper.getMusicServices().getSongDetail(Integer.valueOf(song.id)), new CommonObserver<PlayListSong>() {
                     @Override
                     public void onCompleted() {
 
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        subscriber.onNext(false);
                     }
 
                     @Override
@@ -86,7 +77,7 @@ public class MusicModelTranslatePresenter implements ModelTranslateContract.Musi
                         if (songs != null && !songs.getData().isEmpty()) {
                             song.audio = songs.getData().get(0).getUrl();
                             subscriber.onNext(true);
-                        }else {
+                        } else {
                             subscriber.onNext(false);
                         }
                     }

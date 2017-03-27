@@ -27,6 +27,7 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".music.mvp.view.SearchMusicActivity"
+            android:windowSoftInputMode="adjustPan"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".music.mvp.view.PlayMusicActivity"
