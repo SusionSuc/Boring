@@ -299,5 +299,54 @@ public class RVUtils {
         });
     }
 
+    public static class NoLastDividerDecoration extends RecyclerView.ItemDecoration {
+        public Paint mDividerPaint;
+        int mDividerHeight;
+        Rect mMargin;
+
+        public NoLastDividerDecoration(Context context, int colorId, int dividerHeight, Rect margin) {
+            init(context, colorId, dividerHeight);
+            mMargin = margin;
+        }
+
+        private void init(Context context, int colorId, int dividerHeight) {
+            mDividerPaint = new Paint();
+            mDividerPaint.setColor(context.getResources().getColor(colorId));
+            mDividerHeight = dividerHeight;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            super.getItemOffsets(outRect, view, parent, state);
+            outRect.bottom = mDividerHeight;
+        }
+
+        @Override
+        public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+            int childCount = parent.getChildCount();
+            int left, right;
+
+            if (mMargin.left > 0) {
+                left = parent.getPaddingLeft() + mMargin.left;
+            } else {
+                left = parent.getPaddingLeft();
+            }
+
+            if (mMargin.right > 0) {
+                right = parent.getWidth() - parent.getPaddingRight() - mMargin.right;
+            } else {
+                right = parent.getWidth() - parent.getPaddingRight();
+            }
+
+            for (int i = 0; i < childCount - 1; i++) {
+                View view = parent.getChildAt(i);
+                float top = view.getBottom();
+                float bottom = view.getBottom() + mDividerHeight;
+                c.drawRect(left, top, right, bottom, mDividerPaint);
+            }
+
+        }
+    }
+
 
 }

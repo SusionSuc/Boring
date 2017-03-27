@@ -2,6 +2,7 @@ package com.susion.boring.interesting.mvp.view;
 
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.susion.boring.http.APIHelper;
 import com.susion.boring.interesting.itemhandler.SimplePictureIH;
 import com.susion.boring.interesting.mvp.model.SimplePicture;
 import com.susion.boring.interesting.mvp.model.SimplePictureList;
+import com.susion.boring.interesting.view.PictureCategoryWindow;
 import com.susion.boring.utils.RVUtils;
 import com.susion.boring.utils.ToastUtils;
 
@@ -38,6 +40,7 @@ public class PictureFragment extends ViewPageFragment implements OnLastItemVisib
     private int mPage = 1;
     private SwipeRefreshLayout mRefreshLayout;
     private boolean mRefreshing;
+    private PictureCategoryWindow mCategoryWindow;
 
     @Override
     public View initContentView(LayoutInflater inflater, ViewGroup container) {
@@ -74,6 +77,9 @@ public class PictureFragment extends ViewPageFragment implements OnLastItemVisib
                 return 0;
             }
         });
+
+
+        mCategoryWindow = new PictureCategoryWindow(getActivity());
     }
 
     @Override
@@ -81,7 +87,13 @@ public class PictureFragment extends ViewPageFragment implements OnLastItemVisib
         mFlMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToastUtils.showShort("是时候展现真正的技术了");
+
+                if (mCategoryWindow.isShowing()) {
+                    mCategoryWindow.dismiss();
+                    return;
+                }
+
+                mCategoryWindow.showAsDropDown(mFlMenu, 0, 0, Gravity.RIGHT);
             }
         });
     }
