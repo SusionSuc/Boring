@@ -50,7 +50,7 @@ public class MainDrawerAdapter extends BaseRVAdapter {
             return ITEM_HANDLER_ITEM;
         }
 
-        return  -1;
+        return -1;
     }
 
 }

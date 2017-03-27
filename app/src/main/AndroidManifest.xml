@@ -27,8 +27,8 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".music.mvp.view.SearchMusicActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".music.mvp.view.PlayMusicActivity"
             android:theme="@style/AppTheme" />
@@ -58,10 +58,13 @@
             android:name=".interesting.mvp.view.ZhiHuEssayActivity"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".interesting.mvp.view.PictureViewActivity"
-            android:theme="@style/TranslucentTheme"></activity>
+            android:theme="@style/TranslucentTheme" />
+        <activity android:name=".base.ui.AuthorActivity" />
+        <activity android:name=".base.ui.CollectActivity" />
+        <activity android:name=".base.ui.AppInfoActivity" />
+        <activity android:name=".base.ui.SettingActivity"></activity>
     </application>
 
 </manifest>

@@ -20,12 +20,10 @@ public class DrawerItemHandler extends SimpleItemHandler<DrawerData.DrawerItem> 
     @Override
 
     public void onBindDataView(ViewHolder vh, DrawerData.DrawerItem data, int position) {
-        vh.getTextView(R.id.drawer_item_title).setText(data.item);
-
+        vh.getTextView(R.id.drawer_item_title).setText(data.type);
         if (data.imageRes != -1) {
             vh.getImageView(R.id.drawer_item_image).setImageResource(data.imageRes);
         }
-
     }
 
     @Override
@@ -35,6 +33,6 @@ public class DrawerItemHandler extends SimpleItemHandler<DrawerData.DrawerItem> 
 
     @Override
     public void onClick(View view) {
-
+        DrawerData.onItemClick(mData.type);
     }
 }
