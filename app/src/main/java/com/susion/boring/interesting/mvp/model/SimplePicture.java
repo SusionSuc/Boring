@@ -3,6 +3,7 @@ package com.susion.boring.interesting.mvp.model;
 import com.litesuits.orm.db.annotation.PrimaryKey;
 import com.litesuits.orm.db.annotation.Table;
 import com.litesuits.orm.db.enums.AssignType;
+import com.susion.boring.base.mvp.model.FavoriteOb;
 
 import java.io.Serializable;
 
@@ -10,12 +11,10 @@ import java.io.Serializable;
  * Created by susion on 17/3/17.
  */
 @Table("picture")
-public class SimplePicture implements Serializable{
+public class SimplePicture extends FavoriteOb implements Serializable {
 
     @PrimaryKey(AssignType.BY_MYSELF)
     private String id;
-
-    public boolean favorite;
 
     private String big;
     private String small;

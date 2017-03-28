@@ -21,9 +21,12 @@ public class FileUtils {
 
     public static final String SD_ROOT_DIR = Environment.getExternalStorageDirectory() + "/Boring/";
     public static final String SD_MUSIC_DIR = SD_ROOT_DIR + "music/";
+    public static final String SD_CACHE_DIR = SD_ROOT_DIR + "cache/";
     public static final String SD_INTERESTING_DIR = SD_ROOT_DIR + "interesting/";
     public static final String SD_INTERESTING_DAILY_NEWS = SD_INTERESTING_DIR + "daily_news/";
     private static final String UNKNOWN = "unknown";
+
+
     public static final String SD_TEMP_CSS = SD_INTERESTING_DAILY_NEWS + "css/";
     public static final String TEMP_CSS_FILE = SD_TEMP_CSS + "temp_css.css";
 
@@ -42,29 +45,29 @@ public class FileUtils {
         }
     }
 
-//    public static boolean saveFile(File file, String destDir) {
-//        try {
-//            FileInputStream in = new FileInputStream(file);
-//            FileOutputStream out = new FileOutputStream(destDir+file.getName());
-//
-//            byte[] buff = new byte[1024];
-//            int len = 0;
-//
-//            while ( (len = in.read(buff))!= -1) {
-//                out.write(buff, 0, len);
-//            }
-//
-//            in.close();
-//            out.close();
-//            return true;
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//
-//        }
-//
-//        return false;
-//    }
+    public static boolean saveFile(File file, String destDir) {
+        try {
+            FileInputStream in = new FileInputStream(file);
+            FileOutputStream out = new FileOutputStream(destDir + file.getName());
+
+            byte[] buff = new byte[1024];
+            int len = 0;
+
+            while ((len = in.read(buff)) != -1) {
+                out.write(buff, 0, len);
+            }
+
+            in.close();
+            out.close();
+            return true;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
+
+        return false;
+    }
 
     public static SimpleSong fileToMusic(File file) {
         if (file.length() == 0) return null;
@@ -139,7 +142,6 @@ public class FileUtils {
 
     private static String getStringFromFile(String tempCssFile) throws FileNotFoundException {
         FileInputStream in = new FileInputStream(new File(tempCssFile));
-        ;
         return getStringFromInputStream(in);
     }
 
@@ -163,5 +165,17 @@ public class FileUtils {
         }
 
         return byteOS.toString();
+    }
+
+    public static File getCacheDir() {
+        return createFile(SD_CACHE_DIR, "");
+    }
+
+    public static File createFile(String folderPath, String fileName) {
+        File destDir = new File(folderPath);
+        if (!destDir.exists()) {
+            destDir.mkdirs();
+        }
+        return new File(folderPath, fileName);
     }
 }

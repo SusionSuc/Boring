@@ -34,7 +34,7 @@ public abstract class SimpleMusicIH<T> extends SimpleItemHandler<T> {
     }
 
     @Override
-    public void onBindDataView(ViewHolder vh, final  T data, int position) {
+    public void onBindDataView(ViewHolder vh, final T data, int position) {
         bindData(vh, data, position);
     }
 
@@ -49,5 +49,6 @@ public abstract class SimpleMusicIH<T> extends SimpleItemHandler<T> {
     }
 
     protected abstract void onClickEvent();
-    protected abstract void bindData(ViewHolder vh, final  T data, int position);
+
+    protected abstract void bindData(ViewHolder vh, final T data, int position);
 }

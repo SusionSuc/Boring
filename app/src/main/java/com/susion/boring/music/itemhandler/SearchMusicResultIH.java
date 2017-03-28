@@ -1,10 +1,16 @@
 package com.susion.boring.music.itemhandler;
 
+import android.net.Uri;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.backends.pipeline.PipelineDraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.susion.boring.R;
 import com.susion.boring.base.ui.SimpleItemHandler;
 import com.susion.boring.base.adapter.ViewHolder;
@@ -38,7 +44,16 @@ public class SearchMusicResultIH extends SimpleMusicIH<Song> {
         if (!data.artists.isEmpty()) {
             mTvSecondTile.setText(data.artists.get(0).name + "-" + data.album.name);
         }
-        mSdvAlbum.setImageURI(data.album.picUrl);
+        int width = 50, height = 50;
+        ImageRequest request = ImageRequestBuilder
+                .newBuilderWithSource(Uri.parse(data.album.picUrl))
+                .setResizeOptions(new ResizeOptions(width, height))
+                .build();
+        PipelineDraweeController controller = (PipelineDraweeController) Fresco.newDraweeControllerBuilder()
+                .setOldController(mSdvAlbum.getController())
+                .setImageRequest(request)
+                .build();
+        mSdvAlbum.setController(controller);
     }
 
 }

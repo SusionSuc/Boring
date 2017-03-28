@@ -33,6 +33,6 @@ public class DrawerItemHandler extends SimpleItemHandler<DrawerData.DrawerItem> 
 
     @Override
     public void onClick(View view) {
-        DrawerData.onItemClick(mData.type);
+        DrawerData.onItemClick(mContext, mData.type);
     }
 }

@@ -13,6 +13,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.susion.boring.R;
 import com.susion.boring.base.ui.BaseActivity;
 import com.susion.boring.interesting.mvp.contract.ZhiHuEssayContract;
+import com.susion.boring.interesting.mvp.model.ZhiHuEssay;
 import com.susion.boring.interesting.mvp.presenter.ZhiHuEssayPresenter;
 import com.susion.boring.utils.UIUtils;
 
@@ -22,7 +23,7 @@ public class ZhiHuEssayActivity extends BaseActivity implements ZhiHuEssayContra
 
     private static final String ESSAY_ID = "ESSAY_ID";
     private static final String ESSAY_DATE = "ESSAY_DATE";
-    private String mEssayId;
+    private ZhiHuEssay mEssay;
     private WebView mWebView;
     private SimpleDraweeView mSdvNewsHeader;
     private ImageView mIvPre;
@@ -51,7 +52,6 @@ public class ZhiHuEssayActivity extends BaseActivity implements ZhiHuEssayContra
 
     @Override
     public void findView() {
-
         initMVP();
         mWbParent = (NestedScrollView) findViewById(R.id.ac_zhi_hu_essay_wv_parent);
         mSdvNewsHeader = (SimpleDraweeView) findViewById(R.id.ac_zhi_hu_essay_sdv_news_header);
@@ -61,7 +61,7 @@ public class ZhiHuEssayActivity extends BaseActivity implements ZhiHuEssayContra
     }
 
     private void initMVP() {
-        mEssayId = getIntent().getStringExtra(ESSAY_ID);
+        mEssay.id = getIntent().getStringExtra(ESSAY_ID);
         Date date = (Date) getIntent().getSerializableExtra(ESSAY_DATE);
         mPresenter = new ZhiHuEssayPresenter(this, date);
     }
@@ -79,7 +79,7 @@ public class ZhiHuEssayActivity extends BaseActivity implements ZhiHuEssayContra
 
     @Override
     public void initData() {
-        mPresenter.loadEssay(mEssayId);
+        mPresenter.loadEssay(mEssay.id);
     }
 
     @Override

@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.susion.boring.R;
+import com.susion.boring.base.SAppApplication;
 import com.susion.boring.base.ui.BaseActivity;
 import com.susion.boring.base.adapter.BaseRVAdapter;
 import com.susion.boring.base.ui.ItemHandler;
@@ -117,12 +118,9 @@ public class SearchMusicActivity extends BaseActivity implements OnLastItemVisib
     }
 
     private void loadData() {
+        SystemOperationUtils.closeSystemKeyBoard(this);
         APIHelper.subscribeSimpleRequest(APIHelper.getMusicServices().searchMusic(mSearchContent, PAGE_SIZE, 1, mPage * PAGE_SIZE),
                 new CommonObserver<MusicSearchResult>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
 
                     @Override
                     public void onError(Throwable e) {
@@ -132,11 +130,9 @@ public class SearchMusicActivity extends BaseActivity implements OnLastItemVisib
 
                     @Override
                     public void onNext(MusicSearchResult musicSearchResult) {
-
                         if (musicSearchResult.result.songCount <= 0) {
                             mRV.setLoadStatus(LoadMoreView.NO_DATA);
                         }
-
                         mRV.setLoadStatus(LoadMoreView.NO_LOAD);
 
                         if (musicSearchResult.code != APIHelper.REQUEST_SUCCESS) {
@@ -148,7 +144,6 @@ public class SearchMusicActivity extends BaseActivity implements OnLastItemVisib
                             mTvHolderImageView.clearAnimation();
                             mRV.setVisibility(View.VISIBLE);
                             mHolderView.setVisibility(View.INVISIBLE);
-                            SystemOperationUtils.closeSystemKeyBoard(SearchMusicActivity.this);
                             mIsNewSearch = false;
 
                             mData.clear();
@@ -156,7 +151,6 @@ public class SearchMusicActivity extends BaseActivity implements OnLastItemVisib
                         } else {
                             mData.addAll(musicSearchResult.result.songs);
                         }
-
                         mRV.getAdapter().notifyDataSetChanged();
                     }
                 }

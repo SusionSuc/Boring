@@ -3,12 +3,13 @@ package com.susion.boring.interesting.mvp.model;
 import com.litesuits.orm.db.annotation.PrimaryKey;
 import com.litesuits.orm.db.annotation.Table;
 import com.litesuits.orm.db.enums.AssignType;
+import com.susion.boring.base.mvp.model.FavoriteOb;
 
 /**
  * Created by susion on 17/3/16.
  */
 @Table("joke")
-public class Joke {
+public class Joke extends FavoriteOb {
 
     @PrimaryKey(AssignType.BY_MYSELF)
     private String hashId;
@@ -16,7 +17,6 @@ public class Joke {
     private String content;
     private String unixtime;
 
-    public boolean isFavorite;
 
     public String getContent() {
         return content;

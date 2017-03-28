@@ -1,5 +1,6 @@
 package com.susion.boring.base.ui.mainui;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
@@ -13,6 +14,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -42,6 +44,10 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSwipeBackLayout().setEnableGesture(false);
+
+        ActivityManager manager = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
+        int heapSize = manager.getMemoryClass();
+        Log.e("堆大小为", heapSize+" MB");
     }
 
     @Override

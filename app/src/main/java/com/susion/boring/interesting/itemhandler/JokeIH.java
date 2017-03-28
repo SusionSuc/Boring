@@ -19,7 +19,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by susion on 17/3/16.
  */
-public class JokeIH extends SimpleItemHandler<Joke>{
+public class JokeIH extends SimpleItemHandler<Joke> {
 
     private ImageView mIvLike;
 
@@ -44,20 +44,21 @@ public class JokeIH extends SimpleItemHandler<Joke>{
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.item_joke_iv_like) {
-            mData.isFavorite = !mData.isFavorite;
+            mData.favorite = !mData.favorite;
             new DbBaseOperate<Joke>(DbManager.getLiteOrm(), mContext, Joke.class)
                     .add(mData)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<Boolean>() {
                         private Boolean success;
+
                         @Override
                         public void onCompleted() {
                             if (!success) {
-                                mData.isFavorite = !mData.isFavorite;
+                                mData.favorite = !mData.favorite;
                                 ToastUtils.showShort("喜欢失败");
                             } else {
-                                if (mData.isFavorite) {
+                                if (mData.favorite) {
                                     ToastUtils.showShort("已喜欢");
                                 } else {
                                     ToastUtils.showShort("已从喜欢列表删除");
@@ -65,10 +66,12 @@ public class JokeIH extends SimpleItemHandler<Joke>{
                             }
                             refreshLikeUI();
                         }
+
                         @Override
                         public void onError(Throwable e) {
                             success = false;
                         }
+
                         @Override
                         public void onNext(Boolean success) {
                             this.success = success;
@@ -76,8 +79,9 @@ public class JokeIH extends SimpleItemHandler<Joke>{
                     });
         }
     }
+
     private void refreshLikeUI() {
-        if (mData.isFavorite) {
+        if (mData.favorite) {
             mIvLike.setImageResource(R.mipmap.love);
         } else {
             mIvLike.setImageResource(R.mipmap.un_love);

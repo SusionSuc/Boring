@@ -7,6 +7,7 @@ import com.litesuits.orm.db.annotation.PrimaryKey;
 import com.litesuits.orm.db.annotation.Table;
 import com.litesuits.orm.db.annotation.Unique;
 import com.litesuits.orm.db.enums.AssignType;
+import com.susion.boring.base.mvp.model.FavoriteOb;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,33 +16,22 @@ import java.util.List;
  * store in local database
  */
 @Table("simple_song")
-public class SimpleSong implements Parcelable, PlayQueueSong {
+public class SimpleSong extends FavoriteOb implements Parcelable, PlayQueueSong {
 
     @PrimaryKey(AssignType.BY_MYSELF)
     private String id;
-
     private String title;
-
     private String displayName;
-
     private String artist;
-
     private String album;
 
     @Unique
     private String path;
 
     private int duration;
-
     private int size;
-
-    private boolean favorite;
-
-
     private boolean hasDown;
-
     private String picPath;  //url for :  no store in play, play online
-
 
     private boolean fromPlayList;
 

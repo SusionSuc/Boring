@@ -2,6 +2,8 @@ package com.susion.boring.music.mvp.model;
 
 import android.text.TextUtils;
 
+import com.susion.boring.base.mvp.model.FavoriteOb;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -9,23 +11,19 @@ import java.util.List;
  * Created by susion on 17/1/20.
  * model for request accept wang yi music API
  */
-public class Song implements Serializable, PlayQueueSong{
+public class Song extends FavoriteOb implements Serializable, PlayQueueSong {
     public String id;
     public String name;
     public List<Singer> artists;
     public Album album;
     public String audio;
-    public String djProgramId;
-    public String page;
 
     public String mp3Url;
-
     public boolean hasDown;
-    public boolean favorite;
     public boolean fromPlayList;
     public boolean isPlaying;
 
-    public SimpleSong translateToSimpleSong(){
+    public SimpleSong translateToSimpleSong() {
         SimpleSong simpleSong = new SimpleSong();
 
         if (!TextUtils.isEmpty(audio)) {
@@ -44,14 +42,14 @@ public class Song implements Serializable, PlayQueueSong{
     }
 
 
-    public String getArtist(){
+    public String getArtist() {
         String artist = "";
         if (artists != null && !artists.isEmpty()) {
-            for (int i=0; i<artists.size(); i++) {
+            for (int i = 0; i < artists.size(); i++) {
                 if (i == 0) {
                     artist = artists.get(i).name;
                 } else {
-                    artist += "、"+artists.get(i).name;
+                    artist += "、" + artists.get(i).name;
                 }
             }
         }
