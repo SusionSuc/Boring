@@ -13,7 +13,7 @@
         android:layout_weight="1"
         android:layout_height="40dp"
         android:background="@drawable/bg_ripple"
-        android:src="@mipmap/play_operator_circle" />
+        android:src="@mipmap/ic_play_operator_circle" />
 
     <ImageView
         android:id="@+id/view_play_operator_iv_random"
@@ -23,7 +23,7 @@
         android:layout_weight="1"
         android:layout_height="40dp"
         android:background="@drawable/bg_ripple"
-        android:src="@mipmap/play_operator_random" />
+        android:src="@mipmap/ic_play_operator_random" />
 
     <ImageView
         android:id="@+id/view_play_operator_iv_like"
@@ -33,7 +33,7 @@
         android:layout_weight="1"
         android:layout_height="40dp"
         android:background="@drawable/bg_ripple"
-        android:src="@mipmap/un_love" />
+        android:src="@mipmap/ic_un_love" />
 
     <ImageView
         android:id="@+id/view_play_operator_iv_list"
@@ -43,7 +43,7 @@
         android:layout_weight="1"
         android:layout_height="40dp"
         android:background="@drawable/bg_ripple"
-        android:src="@mipmap/play_operator_music_list" />
+        android:src="@mipmap/ic_play_operator_music_list" />
 
 
 </LinearLayout>

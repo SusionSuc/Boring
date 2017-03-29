@@ -11,9 +11,9 @@
         android:id="@+id/item_simple_picture_sdv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:failureImage="@mipmap/image_load_failed"
+        app:failureImage="@mipmap/placeholder_load_failed"
         app:failureImageScaleType="centerInside"
-        app:progressBarImage="@mipmap/image_loading"
+        app:progressBarImage="@mipmap/placeholder_loading"
         app:progressBarImageScaleType="centerInside" />
 
 </LinearLayout>

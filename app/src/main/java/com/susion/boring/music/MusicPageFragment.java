@@ -180,8 +180,8 @@ public class MusicPageFragment extends BaseFragment implements OnLastItemVisible
 
 
     private void initConstantItem() {
-        mData.add(new MusicPageConstantItem(R.mipmap.icon_local_music, "本地音乐", MusicPageConstantIH.LOCAL_MUSIC));
-        mData.add(new MusicPageConstantItem(R.mipmap.icon_my_collect, "我的喜欢", MusicPageConstantIH.MY_COLLECT));
+        mData.add(new MusicPageConstantItem(R.mipmap.ic_local_music, "本地音乐", MusicPageConstantIH.LOCAL_MUSIC));
+        mData.add(new MusicPageConstantItem(R.mipmap.ic_my_music_collect, "我的喜欢", MusicPageConstantIH.MY_COLLECT));
         mData.add(new SimpleTitle());
     }
 

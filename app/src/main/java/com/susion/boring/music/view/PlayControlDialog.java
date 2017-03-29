@@ -77,7 +77,7 @@ public class PlayControlDialog extends Dialog {
 
     private void initRv() {
         mRV.setLayoutManager(RVUtils.getLayoutManager(mContext, LinearLayoutManager.VERTICAL));
-        mRV.addItemDecoration(RVUtils.getItemDecorationDivider(mContext, R.color.red_divider, 1, -1, UIUtils.dp2Px(15)));
+        mRV.addItemDecoration(RVUtils.getItemDecorationDivider(mContext, R.color.divider, 1, -1, UIUtils.dp2Px(15)));
         mRV.setAdapter(new BaseRVAdapter((Activity) mContext, mDialogData) {
             final int TYPE_MUSIC = 1;
 

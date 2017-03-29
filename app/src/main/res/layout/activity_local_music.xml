@@ -39,7 +39,7 @@
             <ImageView
                 android:layout_centerHorizontal="true"
                 android:id="@+id/refresh"
-                android:src="@mipmap/music_loading"
+                android:src="@mipmap/ic_music_loading"
                 android:layout_width="35dp"
                 android:layout_height="35dp" />
 

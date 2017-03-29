@@ -67,7 +67,7 @@ public class JokeFragment extends ViewPageFragment implements OnLastItemVisibleL
         mRefreshLayout.setOnRefreshListener(this);
         mRefreshLayout.setColorSchemeColors(new int[]{getResources().getColor(R.color.colorAccent)});
         mRv.setLayoutManager(RVUtils.getLayoutManager(getContext(), LinearLayoutManager.VERTICAL));
-        mRv.addItemDecoration(RVUtils.getItemDecorationDivider(getContext(), R.color.shallow_red_divider, UIUtils.dp2Px(10)));
+        mRv.addItemDecoration(RVUtils.getItemDecorationDivider(getContext(), R.color.divider, UIUtils.dp2Px(10)));
         mRv.setOnLastItemVisibleListener(this);
         mRv.setAdapter(new BaseRVAdapter(getActivity(), mData) {
             @Override

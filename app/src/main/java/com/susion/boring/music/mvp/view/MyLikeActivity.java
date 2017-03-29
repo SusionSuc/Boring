@@ -55,7 +55,7 @@ public class MyLikeActivity extends BaseActivity {
     @Override
     public void initView() {
         mToolBar.setTitle("我的喜欢");
-        mToolBar.setLeftIcon(R.mipmap.tool_bar_back);
+        mToolBar.setLeftIcon(R.mipmap.ic_back);
         initMyFragment();
 
         mViewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {

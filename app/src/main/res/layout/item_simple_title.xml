@@ -22,7 +22,7 @@
         <ImageView
             android:id="@+id/item_simple_title_iv_icon"
             android:layout_marginLeft="15dp"
-            android:src="@mipmap/icon_recommend_play_list"
+            android:src="@mipmap/ic_recommend_play_list"
             android:layout_width="30dp"
             android:layout_height="30dp" />
 

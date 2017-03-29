@@ -24,6 +24,6 @@
         android:layout_marginRight="10dp"
         android:background="@drawable/bg_ripple"
         android:padding="10dp"
-        android:src="@mipmap/love" />
+        android:src="@mipmap/ic_love" />
 
 </RelativeLayout>

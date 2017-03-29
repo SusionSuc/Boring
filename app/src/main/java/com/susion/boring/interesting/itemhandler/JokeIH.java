@@ -82,9 +82,9 @@ public class JokeIH extends SimpleItemHandler<Joke> {
 
     private void refreshLikeUI() {
         if (mData.favorite) {
-            mIvLike.setImageResource(R.mipmap.love);
+            mIvLike.setImageResource(R.mipmap.ic_love);
         } else {
-            mIvLike.setImageResource(R.mipmap.un_love);
+            mIvLike.setImageResource(R.mipmap.ic_un_love);
         }
     }
 }

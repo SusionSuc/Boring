@@ -1,51 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="black">#000000</color>
+    <color name="topBarColor">#ee4647</color>
+    <color name="topBarColorLow">#F27979</color>
+    <color name="search_bar_text_color">#f49f9f</color>
+
     <color name="colorPrimaryDark">@color/topBarColor</color>
     <color name="colorPrimary">@color/colorPrimaryDark</color>
     <color name="colorAccent">#00BCD4</color>
     <color name="colorLightPrimary">@color/topBarColorLow</color>
     <color name="colorPrimaryText">#212121</color>
-    <color name="colorGrey">#607D8B</color>
-
-
-    <color name="colorBlueAccent">#03A9F4</color>
-
-
-    <color name="accentRed">#FF4081</color>
-
-    <color name="colorSecondaryText">#757575</color>
-    <color name="divider">#BDBDBD</color>
-
-
-    <color name="transparent_white">#EEFFFFFF</color>
-
 
     <color name="has_play_color">#FF5468</color>
     <color name="origin_background_color">#70ffffff</color>
     <color name="has_buffer_color">#ffffff</color>
+    <color name="thumb_out">#70ffffff</color>
 
-    <color name="whiteChild">#F0F8FF</color>
-
+    <color name="black">#000000</color>
     <color name="white">#ffffff</color>
     <color name="transparent">#00000000</color>
-    <color name="thumb_out">#70ffffff</color>
-    <color name="lyric_color">#000000</color>
-
-
-    <color name="topBarColor">#ee4647</color>
-    <color name="topBarColorLow">#F27979</color>
-
-    <color name="shallow_red_divider">#e9e9e9</color>
-
-    <color name="red_divider">#e4e4e4</color>
-
-    <color name="red_font_divider">#c7c7c7</color>
-
-    <color name="transparent_gray">#88c7c7c7</color>
-
-    <color name="search_bar_text_color">#f49f9f</color>
-
+    <color name="transparent_white">#EEFFFFFF</color>
+    <color name="divider">#c7c7c7</color>
+    <color name="shadow_divider">#e4e4e4</color>
+    <color name="gray_divider">#88c7c7c7</color>
 
 </resources>

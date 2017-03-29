@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp" />
     <View
-        android:background="@color/red_divider"
+        android:background="@color/shadow_divider"
         android:layout_width="match_parent"
         android:layout_height="1px" />
 
@@ -31,7 +31,7 @@
         </android.support.v7.widget.RecyclerView>
 
         <ImageView
-            android:src="@mipmap/music_loading"
+            android:src="@mipmap/ic_music_loading"
             android:layout_gravity="center"
             android:id="@+id/loading"
             android:layout_width="40dp"

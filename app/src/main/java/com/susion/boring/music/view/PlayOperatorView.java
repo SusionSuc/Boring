@@ -98,15 +98,15 @@ public class PlayOperatorView extends LinearLayout implements View.OnClickListen
     }
 
     public void refreshPlayMode(int mode) {
-        mIvCircle.setImageResource(R.mipmap.play_operator_circle);
-        mIvRandom.setImageResource(R.mipmap.play_operator_random);
+        mIvCircle.setImageResource(R.mipmap.ic_play_operator_circle);
+        mIvRandom.setImageResource(R.mipmap.ic_play_operator_random);
 
         if (mode == MusicServiceContract.PlayQueueControlPresenter.CIRCLE_MODE) {
-            mIvCircle.setImageResource(R.mipmap.play_operator_circle_enable);
+            mIvCircle.setImageResource(R.mipmap.ic_play_operator_circle_enable);
         }
 
         if (mode == MusicServiceContract.PlayQueueControlPresenter.RANDOM_MODE) {
-            mIvRandom.setImageResource(R.mipmap.play_operator_random_enable);
+            mIvRandom.setImageResource(R.mipmap.ic_play_operator_random_enable);
         }
     }
 

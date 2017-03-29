@@ -6,11 +6,11 @@
 
 
     <solid
-        android:color="@color/red_font_divider" />
+        android:color="@color/divider" />
 
     <stroke
         android:width="8dp"
-        android:color="@color/red_divider" />
+        android:color="@color/shadow_divider" />
 
     <size android:width="20dp"
         android:height="20dp" />

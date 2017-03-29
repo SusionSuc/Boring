@@ -30,10 +30,10 @@ public class DrawerData {
         if (sData == null) {
             sData = new ArrayList<>();
             sData.add(new DrawerHeader("susion", true));
-            sData.add(new DrawerItem(DRAWER_AUTHOR, R.mipmap.drawer_author, false));
-            sData.add(new DrawerItem(DRAWER_COLLECT, R.mipmap.drawer_collect, false));
-            sData.add(new DrawerItem(DRAWER_APP_INFO, R.mipmap.drawer_app_info, true));
-            sData.add(new DrawerItem(DRAWER_SETTING, R.mipmap.drawer_setting, false));
+            sData.add(new DrawerItem(DRAWER_AUTHOR, R.mipmap.ic_drawer_author, false));
+            sData.add(new DrawerItem(DRAWER_COLLECT, R.mipmap.ic_drawer_collect, false));
+            sData.add(new DrawerItem(DRAWER_APP_INFO, R.mipmap.ic_drawer_app_info, true));
+            sData.add(new DrawerItem(DRAWER_SETTING, R.mipmap.ic_drawer_setting, false));
         }
         return sData;
     }

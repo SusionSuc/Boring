@@ -48,8 +48,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
-import rx.Observer;
-
 public class PlayMusicActivity extends BaseActivity implements MediaPlayerContract.PlayView, PlayMusicPageContract.View {
     private static final String TO_PLAY_MUSIC_INFO = "played_music";
     private static final String FROM_LITTLE_PANEL = "from_little_panel";
@@ -141,7 +139,7 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
         getParamAndInitReceiver();
         mToolBar.setMainPage(false);
         mToolBar.setTitle("");
-        mToolBar.setLeftIcon(R.mipmap.tool_bar_back);
+        mToolBar.setLeftIcon(R.mipmap.ic_back);
         mToolBar.setBackgroundColor(getResources().getColor(R.color.transparent));
         initListener();
         refreshSong(mSong);

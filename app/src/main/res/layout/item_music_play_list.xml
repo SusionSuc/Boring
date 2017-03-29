@@ -8,7 +8,7 @@
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/item_play_list_iv_cover"
         android:scaleType="centerCrop"
-        android:src="@mipmap/icon"
+        android:src="@mipmap/ic_my_icon"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="30dp"/>
@@ -16,7 +16,7 @@
 
     <TextView
         android:id="@+id/item_play_list_tv_play_count"
-        android:background="@color/transparent_gray"
+        android:background="@color/gray_divider"
         android:gravity="right"
         android:text="63万"
         android:layout_width="match_parent"

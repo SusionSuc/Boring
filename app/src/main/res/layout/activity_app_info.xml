@@ -25,7 +25,7 @@
             android:layout_height="80dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="40dp"
-            android:src="@mipmap/logo" />
+            android:src="@mipmap/ic_logo" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -51,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_marginTop="20dp"
-            android:background="@color/red_font_divider"></View>
+            android:background="@color/divider"></View>
 
     </LinearLayout>
 
@@ -63,6 +63,6 @@
         android:layout_marginBottom="10dp"
         android:gravity="center"
         android:text="copyright @ susion"
-        android:textColor="@color/red_font_divider" />
+        android:textColor="@color/divider" />
 
 </RelativeLayout>

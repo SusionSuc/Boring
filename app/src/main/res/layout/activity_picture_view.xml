@@ -29,7 +29,7 @@
             android:layout_marginLeft="80dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:src="@mipmap/un_love" />
+            android:src="@mipmap/ic_un_love" />
 
         <ImageView
             android:id="@+id/ac_picture_iv_download"
@@ -40,7 +40,7 @@
             android:layout_marginRight="80dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:src="@mipmap/ic_download" />
+            android:src="@mipmap/ic_picture_download" />
 
     </RelativeLayout>
 

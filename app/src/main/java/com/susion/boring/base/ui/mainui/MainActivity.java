@@ -71,7 +71,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void initView() {
-        mToolBar.setLeftIcon(R.mipmap.top_menu);
+        mToolBar.setLeftIcon(R.mipmap.ic_menu);
         mDrawerList.setLayoutManager(RVUtils.getLayoutManager(this, LinearLayoutManager.VERTICAL));
         mDrawerList.addItemDecoration(RVUtils.getDrawerItemDecorationDivider(this, R.color.divider, new Rect(UIUtils.dp2Px(40), UIUtils.dp2Px(40), UIUtils.dp2Px(30), 0), DrawerData.getData()));
 

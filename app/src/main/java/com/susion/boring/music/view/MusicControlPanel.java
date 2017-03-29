@@ -100,9 +100,9 @@ public class MusicControlPanel extends LinearLayout {
     public void setPlay(boolean isPlay) {
         mIsPlay = isPlay;
         if (mIsPlay) {
-            mIvPlay.setImageResource(R.mipmap.little_stop);
+            mIvPlay.setImageResource(R.mipmap.ic_music_pannel_stop);
         } else {
-            mIvPlay.setImageResource(R.mipmap.little_play);
+            mIvPlay.setImageResource(R.mipmap.ic_music_panner_play);
         }
     }
 

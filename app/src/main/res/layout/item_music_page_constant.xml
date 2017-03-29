@@ -28,7 +28,7 @@
         android:layout_centerVertical="true"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:src="@mipmap/icon_more"/>
+        android:src="@mipmap/ic_right_more"/>
 
 
     <TextView
@@ -43,7 +43,7 @@
 
     <View
         android:layout_marginLeft="35dp"
-        android:background="@color/red_divider"
+        android:background="@color/shadow_divider"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="1px"></View>

@@ -6,7 +6,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.PixelFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -135,9 +134,9 @@ public class UIUtils {
 
     public static void refreshLikeStatus(ImageView imageView, boolean like) {
         if (like) {
-            imageView.setImageResource(R.mipmap.love);
+            imageView.setImageResource(R.mipmap.ic_love);
         } else {
-            imageView.setImageResource(R.mipmap.un_love);
+            imageView.setImageResource(R.mipmap.ic_un_love);
         }
     }
 }

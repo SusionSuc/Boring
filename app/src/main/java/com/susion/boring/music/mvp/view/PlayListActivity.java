@@ -2,7 +2,6 @@ package com.susion.boring.music.mvp.view;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
@@ -28,7 +27,6 @@ import com.susion.boring.music.mvp.contract.PlayListContract;
 import com.susion.boring.music.view.PlayOperatorView;
 import com.susion.boring.utils.RVUtils;
 import com.susion.boring.base.view.SToolBar;
-import com.susion.boring.utils.SystemOperationUtils;
 import com.susion.boring.utils.UIUtils;
 
 import java.util.ArrayList;
@@ -85,7 +83,7 @@ public class PlayListActivity extends BaseActivity implements PlayListContract.V
     public void initView() {
         mToolBar.setTitle(mPlayList.getName());
         mToolBar.setBackgroundResource(R.color.transparent);
-        mToolBar.setLeftIcon(R.mipmap.tool_bar_back);
+        mToolBar.setLeftIcon(R.mipmap.ic_back);
         mSdvBg.setImageURI(mPlayList.getCoverImgUrl());
         mToolBar2.setTitle("共 " + mPlayList.getTrackCount() + " 首");
         mToolBar2.setBackgroundResource(R.color.white);
@@ -129,7 +127,7 @@ public class PlayListActivity extends BaseActivity implements PlayListContract.V
                 if (currentScrollPercentage >= PERCENTAGE_TO_SHOW_IMAGE) {
                     mToolBar2.setBackgroundResource(R.color.transparent);
                     mToolBar2.setTitle(mPlayList.getName());
-                    mToolBar2.setLeftIcon(R.mipmap.tool_bar_back_black);
+                    mToolBar2.setLeftIcon(R.mipmap.ic_black_back);
                 } else {
                     mToolBar2.setLeftIcon(SToolBar.HIDDEN_LEFT_ICON_RES);
                     mToolBar2.setBackgroundResource(R.color.white);

@@ -101,10 +101,10 @@ public class ZhiHuEssayActivity extends BaseActivity implements ZhiHuEssayContra
     @Override
     public void refreshLikeStatus(boolean status) {
         if (status) {
-            mIvLike.setImageResource(R.mipmap.love);
+            mIvLike.setImageResource(R.mipmap.ic_love);
             return;
         }
-        mIvLike.setImageResource(R.mipmap.un_love);
+        mIvLike.setImageResource(R.mipmap.ic_un_love);
     }
 
     @Override

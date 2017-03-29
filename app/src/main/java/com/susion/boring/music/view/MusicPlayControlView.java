@@ -69,9 +69,9 @@ public class MusicPlayControlView extends LinearLayout implements View.OnClickLi
 
     private void setPlayBtn() {
         if (mIsPlay) {
-            mIvStartStop.setImageResource(R.mipmap.music_player_play);
+            mIvStartStop.setImageResource(R.mipmap.ic_music_player_play);
         } else {
-            mIvStartStop.setImageResource(R.mipmap.music_player_stop);
+            mIvStartStop.setImageResource(R.mipmap.ic_music_player_stop);
         }
     }
 

@@ -101,7 +101,7 @@ public class ZhiHuFragment extends ViewPageFragment implements ZhiHuDailyContrac
                 return false;
             }
         }));
-        mRv.addItemDecoration(RVUtils.getItemDecorationDivider(getContext(), R.color.red_divider, 1, -1, UIUtils.dp2Px(15)));
+        mRv.addItemDecoration(RVUtils.getItemDecorationDivider(getContext(), R.color.divider, 1, -1, UIUtils.dp2Px(15)));
     }
 
 

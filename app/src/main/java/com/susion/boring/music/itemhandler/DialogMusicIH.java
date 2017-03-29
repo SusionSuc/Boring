@@ -47,7 +47,7 @@ public class DialogMusicIH extends SimpleItemHandler<Song> {
         } else {
             vh.getImageView(R.id.item_dialog_music_iv_volum).setVisibility(View.INVISIBLE);
             mTvMusicName.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryText));
-            mTvArtist.setTextColor(mContext.getResources().getColor(R.color.red_divider));
+            mTvArtist.setTextColor(mContext.getResources().getColor(R.color.shadow_divider));
         }
 
         mTvMusicName.setText(data.name+"");

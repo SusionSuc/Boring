@@ -24,7 +24,7 @@ public class DrawerHeaderItemHandler extends SimpleItemHandler<DrawerData.Drawer
 
     @Override
     public int getLayoutResId() {
-        return R.layout.drawer_header;
+        return R.layout.item_drawer_header;
     }
 
 

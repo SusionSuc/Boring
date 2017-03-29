@@ -80,7 +80,7 @@ public class SearchMusicActivity extends BaseActivity implements OnLastItemVisib
             }
         });
 
-        mRV.addItemDecoration(new RVUtils.NoLastDividerDecoration(this, R.color.red_divider, 1, new Rect(UIUtils.dp2Px(15), 0, 0, 0)));
+        mRV.addItemDecoration(new RVUtils.NoLastDividerDecoration(this, R.color.divider, 1, new Rect(UIUtils.dp2Px(15), 0, 0, 0)));
         mRV.setOnLastItemVisibleListener(this);
     }
 

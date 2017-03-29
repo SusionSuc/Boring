@@ -11,21 +11,10 @@ import com.google.gson.Gson;
 public class SPUtils {
 
     public static final String MUSIC_CONFIG = "music_config";
-
     public static final String MUSIC_CONFIG_LAST_PLAY_MUSIC = "last_play_music";
 
+    private SPUtils() {
 
-
-    private static Gson mGson;
-    private SPUtils(){
-
-    }
-
-    public static Gson getGson(){
-        if (mGson == null) {
-            mGson = new Gson();
-        }
-        return mGson;
     }
 
     public static void writeStringToMusicConfig(String key, String value, Context c) {
@@ -35,8 +24,7 @@ public class SPUtils {
         edit.commit();
     }
 
-
-    public static String getStringFromMusicConfig(String key, Context c){
+    public static String getStringFromMusicConfig(String key, Context c) {
         SharedPreferences mSp = c.getSharedPreferences(MUSIC_CONFIG, c.MODE_PRIVATE);
         return mSp.getString(key, "");
     }

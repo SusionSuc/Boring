@@ -57,7 +57,7 @@
 
             <TextView
                 android:text="05:00"
-                android:textColor="@color/red_font_divider"
+                android:textColor="@color/divider"
                 android:id="@+id/tv_left_time"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
@@ -76,8 +76,8 @@
                 android:layout_height="match_parent"
                 app:progressWidth="1.5dp"
                 app:hasPlayColor="@color/topBarColor"
-                app:hasBufferColor="@color/red_font_divider"
-                app:originBackgroundColor="@color/red_divider"
+                app:hasBufferColor="@color/divider"
+                app:originBackgroundColor="@color/shadow_divider"
                 app:customThumb="@drawable/play_music_thumb"/>
 
         </RelativeLayout>

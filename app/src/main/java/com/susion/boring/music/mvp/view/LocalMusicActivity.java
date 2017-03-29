@@ -68,11 +68,11 @@ public class LocalMusicActivity extends BaseActivity implements LocalMusicContra
         mPresenter = new LocalMusicPresenter(this, mMusicDbOperator);
 
         mToolBar.setTitle("本地音乐");
-        mToolBar.setLeftIcon(R.mipmap.tool_bar_back);
-        mToolBar.setRightIcon(R.mipmap.scan_local_music);
+        mToolBar.setLeftIcon(R.mipmap.ic_back);
+        mToolBar.setRightIcon(R.mipmap.ic_scan_local_music);
 
         mRV.setLayoutManager(RVUtils.getLayoutManager(this, LinearLayoutManager.VERTICAL));
-        mRV.addItemDecoration(RVUtils.getItemDecorationDivider(this, R.color.red_divider, 2, -1, UIUtils.dp2Px(70)));
+        mRV.addItemDecoration(RVUtils.getItemDecorationDivider(this, R.color.divider, 2, -1, UIUtils.dp2Px(70)));
         mRV.setAdapter(new BaseRVAdapter(this, mData) {
             @Override
             protected void initHandlers() {

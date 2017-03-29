@@ -14,11 +14,11 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/bg_ripple"
-        android:src="@mipmap/pic_menu"
+        android:src="@mipmap/ic_flaot_bt_pic_menu"
         app:backgroundTint="@color/colorAccent"
         app:borderWidth="0dp"
         app:elevation="5dp"
         app:pressedTranslationZ="5dp"
-        app:rippleColor="@color/red_divider" />
+        app:rippleColor="@color/shadow_divider" />
 
 </FrameLayout>

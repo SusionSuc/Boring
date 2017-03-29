@@ -82,7 +82,7 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginTop="10dp"
-                android:src="@mipmap/image_long_loading" />
+                android:src="@mipmap/placeholder_long_loading" />
 
         </FrameLayout>
 

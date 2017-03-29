@@ -64,7 +64,7 @@
             android:background="@drawable/bg_ripple"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:src="@mipmap/pre" />
+            android:src="@mipmap/ic_zhihu_essay_pre" />
 
 
         <ImageView
@@ -75,7 +75,7 @@
             android:background="@drawable/bg_ripple"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:src="@mipmap/un_love" />
+            android:src="@mipmap/ic_un_love" />
 
         <ImageView
             android:id="@+id/ac_zhi_hu_essay_iv_next"
@@ -87,7 +87,7 @@
             android:background="@drawable/bg_ripple"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:src="@mipmap/next" />
+            android:src="@mipmap/ic_zhihu_essay_next" />
     </RelativeLayout>
 
 
