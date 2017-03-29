@@ -41,10 +41,11 @@ public abstract class BaseActivity extends SwipeBackActivity {
         initTransitionAnim();
 
         View view = findViewById(R.id.toolbar);
-        if (view instanceof SToolBar) {
+        if (view != null && view instanceof SToolBar) {
             mToolBar = (SToolBar) view;
-        }
+            mToolBar.setLeftIcon(R.mipmap.tool_bar_back);
 
+        }
         findView();
         initView();
         initListener();

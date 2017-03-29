@@ -61,6 +61,7 @@ public class ZhiHuEssayActivity extends BaseActivity implements ZhiHuEssayContra
     }
 
     private void initMVP() {
+        mEssay = new ZhiHuEssay();
         mEssay.id = getIntent().getStringExtra(ESSAY_ID);
         Date date = (Date) getIntent().getSerializableExtra(ESSAY_DATE);
         mPresenter = new ZhiHuEssayPresenter(this, date);
