@@ -2,51 +2,117 @@ package com.susion.boring.base.ui;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.WindowManager;
 
 import com.susion.boring.R;
 import com.susion.boring.base.ui.mainui.MainActivity;
-import com.yanzhenjie.permission.AndPermission;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
-public class SplashActivity extends Activity  {
+public class SplashActivity extends Activity {
+
+    private static final int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 200;
+    private boolean mHasSkip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);     //no status bar
         setContentView(R.layout.activity_splash);
-
-        skipToMainActivity(this, getWindow().getDecorView());
-        requestPermission(this);
+        requestPermission();
     }
 
 
-
-    public void skipToMainActivity(final Activity context, View view) {
-        view.postDelayed(new Runnable() {
+    public void skipToMainActivity() {
+        if (mHasSkip) {
+            return;
+        }
+        mHasSkip = true;
+        getWindow().getDecorView().findViewById(android.R.id.content).postDelayed(new Runnable() {
             @Override
             public void run() {
-                MainActivity.start(context);
-                context.finish();
+                MainActivity.start(SplashActivity.this);
+                SplashActivity.this.finish();
             }
         }, 3000);
     }
 
+    public void requestPermission() {
+        String[] needPermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.MEDIA_CONTENT_CONTROL};
+        final List<String> requestPermissions = new ArrayList<>();
 
-    public void requestPermission(Activity activity) {
-        AndPermission.with(activity)
-                .requestCode(100)
-                .permission(Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.INTERNET, Manifest.permission.MEDIA_CONTENT_CONTROL, Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS)
-                .send();
+        for (int i = 0; i < needPermissions.length; i++) {
+            if (ActivityCompat.checkSelfPermission(this, needPermissions[i]) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions.add(needPermissions[i]);
+            }
+        }
+
+        if (!requestPermissions.isEmpty()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    skipToMainActivity();
+                }
+            });
+            builder.setTitle("老板, 你需要开启以下权限")
+                    .setMessage("访问存储空间, 读取媒体信息")
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ActivityCompat.requestPermissions(SplashActivity.this, requestPermissions.toArray(new String[requestPermissions.size()]),
+                                    REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS);
+                        }
+                    });
+            builder.show();
+        } else {
+            skipToMainActivity();
+        }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (permissions == null || permissions.length == 0) {
+            skipToMainActivity();
+            return;
+        }
+
+        switch (requestCode) {
+            case REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS:
+                Map<String, Integer> perms = new HashMap<>();
+                for (int i = 0; i < permissions.length; i++)
+                    perms.put(permissions[i], grantResults[i]);
+
+                if (perms.get(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                    skipToMainActivity();
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this);
+                    builder.setTitle("老板, 这些权限拒绝的话, 你将不能很好的使用 随心")
+                            .setMessage("访问存储空间, 读取媒体信息")
+                            .setPositiveButton("设置", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                    intent.setData(Uri.fromParts("package", getPackageName(), null));
+                                    startActivity(intent);
+                                }
+                            }).show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 }
