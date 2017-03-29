@@ -39,7 +39,6 @@ public class PlayControlDialog extends Dialog {
     private List<Object> mDialogData = new ArrayList<>();
     private ImageView mIvLoading;
     private Context mContext;
-    private TextView mTvTitle;
 
     public PlayControlDialog(Context context) {
         super(context);

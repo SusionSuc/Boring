@@ -9,8 +9,15 @@ import com.susion.boring.base.adapter.ViewHolder;
 import com.susion.boring.base.ui.SimpleItemHandler;
 import com.susion.boring.db.DbManager;
 import com.susion.boring.db.operate.DbBaseOperate;
+import com.susion.boring.event.JokeDeleteFormLikeEvent;
+import com.susion.boring.http.APIHelper;
+import com.susion.boring.http.CommonObserver;
 import com.susion.boring.interesting.mvp.model.Joke;
+import com.susion.boring.interesting.mvp.model.SimplePicture;
 import com.susion.boring.utils.ToastUtils;
+import com.susion.boring.utils.UIUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
@@ -21,19 +28,58 @@ import rx.schedulers.Schedulers;
  */
 public class JokeIH extends SimpleItemHandler<Joke> {
 
-    private ImageView mIvLike;
+    private ImageView mIvLove;
+    private boolean mIsLove;
+    private DbBaseOperate<Joke> mDbOperator;
+
+    public JokeIH(DbBaseOperate<Joke> mDbOperator) {
+        this.mDbOperator = mDbOperator;
+    }
 
     @Override
     public void onCreateItemHandler(ViewHolder vh, ViewGroup parent) {
         super.onCreateItemHandler(vh, parent);
-        mIvLike = vh.getImageView(R.id.item_joke_iv_like);
-        mIvLike.setOnClickListener(this);
+        mIvLove = vh.getImageView(R.id.item_joke_iv_like);
+        mIvLove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mIsLove) {
+                    APIHelper.subscribeSimpleRequest(mDbOperator.delete(mData), new CommonObserver<Boolean>() {
+                        @Override
+                        public void onNext(Boolean flag) {
+                            ToastUtils.showShort(flag ? "已经从喜欢列表移除" : "从喜欢列表移除失败");
+                            mIsLove = flag ? false : true;
+                            UIUtils.refreshLikeStatus(mIvLove, mIsLove);
+                            if (!mIsLove) {
+                                EventBus.getDefault().post(new JokeDeleteFormLikeEvent(mData));
+                            }
+                        }
+                    });
+                } else {
+                    APIHelper.subscribeSimpleRequest(mDbOperator.add(mData), new CommonObserver<Boolean>() {
+                        @Override
+                        public void onNext(Boolean flag) {
+                            ToastUtils.showShort(flag ? "已喜欢" : "喜欢失败");
+                            mIsLove = flag ? true : false;
+                            UIUtils.refreshLikeStatus(mIvLove, mIsLove);
+                        }
+                    });
+                }
+            }
+        });
     }
 
     @Override
     public void onBindDataView(ViewHolder vh, Joke data, int position) {
         vh.getTextView(R.id.item_joke_tv_content).setText(data.getContent());
-        refreshLikeUI();
+
+        APIHelper.subscribeSimpleRequest(mDbOperator.query(mData.getHashId()), new CommonObserver<Joke>() {
+            @Override
+            public void onNext(Joke joke) {
+                mIsLove = joke != null ? true : false;
+                UIUtils.refreshLikeStatus(mIvLove, mIsLove);
+            }
+        });
     }
 
     @Override
@@ -43,48 +89,6 @@ public class JokeIH extends SimpleItemHandler<Joke> {
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.item_joke_iv_like) {
-            mData.favorite = !mData.favorite;
-            new DbBaseOperate<Joke>(DbManager.getLiteOrm(), mContext, Joke.class)
-                    .add(mData)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Observer<Boolean>() {
-                        private Boolean success;
 
-                        @Override
-                        public void onCompleted() {
-                            if (!success) {
-                                mData.favorite = !mData.favorite;
-                                ToastUtils.showShort("喜欢失败");
-                            } else {
-                                if (mData.favorite) {
-                                    ToastUtils.showShort("已喜欢");
-                                } else {
-                                    ToastUtils.showShort("已从喜欢列表删除");
-                                }
-                            }
-                            refreshLikeUI();
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            success = false;
-                        }
-
-                        @Override
-                        public void onNext(Boolean success) {
-                            this.success = success;
-                        }
-                    });
-        }
-    }
-
-    private void refreshLikeUI() {
-        if (mData.favorite) {
-            mIvLike.setImageResource(R.mipmap.ic_love);
-        } else {
-            mIvLike.setImageResource(R.mipmap.ic_un_love);
-        }
     }
 }

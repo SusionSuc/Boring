@@ -23,23 +23,23 @@
         <ImageView
             android:id="@+id/ac_picture_iv_love"
             android:layout_width="70dp"
-            android:layout_height="30dp"
+            android:layout_height="25dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="80dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
+            android:paddingLeft="22.5dp"
+            android:paddingRight="22.5dp"
             android:src="@mipmap/ic_un_love" />
 
         <ImageView
             android:id="@+id/ac_picture_iv_download"
             android:layout_width="70dp"
-            android:layout_height="30dp"
+            android:layout_height="25dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="80dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
+            android:paddingLeft="22.5dp"
+            android:paddingRight="22.5dp"
             android:src="@mipmap/ic_picture_download" />
 
     </RelativeLayout>

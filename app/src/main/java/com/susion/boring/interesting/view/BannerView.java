@@ -16,7 +16,7 @@ import java.util.Date;
 /**
  * Created by susion on 17/3/9.
  */
-public class BannerView extends LinearLayout{
+public class BannerView extends LinearLayout {
 
     private SimpleDraweeView mSdvImag;
     private TextView mTvTitle;
@@ -46,11 +46,11 @@ public class BannerView extends LinearLayout{
         });
     }
 
-    public void setTitle(String title){
-        mTvTitle.setText(title+"");
+    public void setTitle(String title) {
+        mTvTitle.setText(title + "");
     }
 
-    public void setImgUrl(String url){
+    public void setImgUrl(String url) {
         mSdvImag.setImageURI(url);
     }
 

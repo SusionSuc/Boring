@@ -4,7 +4,6 @@ package com.susion.boring.http;
  * Created by susion on 17/1/20.
  */
 public interface BaseURL {
-
     //music
     String MUSIC = "http://s.music.163.com";
     String MUSIC_SEARCH_LYRIC = "http://music.163.com";
@@ -16,7 +15,6 @@ public interface BaseURL {
     String ZHI_HU_DAILY_LATEST_NEWS = "http://news-at.zhihu.com/api/4/news/latest";
     String ZHI_HU_DAILY_FIX_DATE_NEWS = "http://news-at.zhihu.com/api/4/news/before";
     String ZHI_HU_ESSAY_CONTENT = "http://news-at.zhihu.com/api/4/news";
-
 
     //picture
     String PICTURE_GET_CLASS = "http://route.showapi.com/852-1?showapi_sign=7a0e1eaf10af43c0a30ba74319a6d3fd&showapi_appid=33839";

@@ -25,8 +25,5 @@ public interface ZhiHuService {
     Observable<NewsDetail> getEssayContent(@Path("id") String id);
 
     @GET
-    Observable<ResponseBody> getImage(@Url String url);
-
-    @GET
     Observable<ResponseBody> getEssayCSS(@Url String url);
 }

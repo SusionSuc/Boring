@@ -14,7 +14,7 @@ import java.io.Serializable;
 public class SimplePicture extends FavoriteOb implements Serializable {
 
     @PrimaryKey(AssignType.BY_MYSELF)
-    private String id;
+    public String id;
 
     private String big;
     private String small;

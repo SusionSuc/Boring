@@ -16,6 +16,8 @@ import com.susion.boring.base.ui.ItemHandler;
 import com.susion.boring.base.ui.ListFragment;
 import com.susion.boring.base.adapter.ViewHolder;
 import com.susion.boring.db.DbManager;
+import com.susion.boring.http.APIHelper;
+import com.susion.boring.http.CommonObserver;
 import com.susion.boring.music.mvp.model.SimpleSong;
 import com.susion.boring.db.operate.DbBaseOperate;
 import com.susion.boring.db.operate.MusicDbOperator;
@@ -55,7 +57,6 @@ public class MyLikeActivity extends BaseActivity {
     @Override
     public void initView() {
         mToolBar.setTitle("我的喜欢");
-        mToolBar.setLeftIcon(R.mipmap.ic_back);
         initMyFragment();
 
         mViewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
@@ -91,6 +92,7 @@ public class MyLikeActivity extends BaseActivity {
     public void initData() {
 
     }
+
 
     public static class LocalMusicFragment extends ListFragment<SimpleSong> {
         private MusicDbOperator mDbOperator;
@@ -154,27 +156,14 @@ public class MyLikeActivity extends BaseActivity {
         @Override
         protected void loadData() {
             mDbOperator = new DbBaseOperate<>(DbManager.getLiteOrm(), getContext(), PlayList.class);
-            mDbOperator.getAll()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Observer<List<PlayList>>() {
-                        @Override
-                        public void onCompleted() {
-
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-
-                        }
-
-                        @Override
-                        public void onNext(List<PlayList> playLists) {
-                            if (playLists != null) {
-                                addData(playLists);
-                            }
-                        }
-                    });
+            APIHelper.subscribeSimpleRequest(mDbOperator.getAll(), new CommonObserver<List<PlayList>>() {
+                @Override
+                public void onNext(List<PlayList> playLists) {
+                    if (playLists != null) {
+                        addData(playLists);
+                    }
+                }
+            });
         }
 
         @Override

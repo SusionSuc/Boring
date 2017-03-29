@@ -18,10 +18,10 @@ import java.util.List;
 /**
  * Created by susion on 17/3/6.
  */
-public abstract class ListFragment<T> extends ViewPageFragment{
+public abstract class ListFragment<T> extends ViewPageFragment {
 
-    private LoadMoreRecycleView mRv;
-    private List<T> mData = new ArrayList<>();
+    protected LoadMoreRecycleView mRv;
+    protected List<T> mData = new ArrayList<>();
 
     @Override
     public View initContentView(LayoutInflater inflater, ViewGroup container) {
@@ -34,13 +34,12 @@ public abstract class ListFragment<T> extends ViewPageFragment{
     public void initView() {
         mRv = (LoadMoreRecycleView) mView.findViewById(R.id.list_view);
 
-
         RecyclerView.ItemDecoration itemDecoration = getItemDecoration();
         if (itemDecoration != null) {
-             mRv.addItemDecoration(getItemDecoration());
+            mRv.addItemDecoration(getItemDecoration());
         }
 
-        mRv.setLayoutManager(RVUtils.getLayoutManager(getContext(), LinearLayoutManager.VERTICAL));
+        mRv.setLayoutManager(getLayoutManager());
 
         mRv.setAdapter(new BaseRVAdapter(getActivity(), mData) {
             @Override
@@ -78,11 +77,6 @@ public abstract class ListFragment<T> extends ViewPageFragment{
         mData.addAll(datas);
         mRv.getAdapter().notifyDataSetChanged();
     }
-
-    public LoadMoreRecycleView getRv() {
-        return mRv;
-    }
-
 
     // call add data method to refresh data
     protected abstract void loadData();

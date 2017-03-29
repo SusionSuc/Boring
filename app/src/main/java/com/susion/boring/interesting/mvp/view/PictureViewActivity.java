@@ -2,8 +2,11 @@ package com.susion.boring.interesting.mvp.view;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -12,13 +15,26 @@ import com.susion.boring.R;
 import com.susion.boring.base.ui.BaseActivity;
 import com.susion.boring.db.DbManager;
 import com.susion.boring.db.operate.DbBaseOperate;
+import com.susion.boring.event.JokeDeleteFormLikeEvent;
+import com.susion.boring.event.PictureDeleteFormLikeEvent;
+import com.susion.boring.http.APIHelper;
+import com.susion.boring.http.CommonObserver;
 import com.susion.boring.interesting.mvp.model.SimplePicture;
 import com.susion.boring.interesting.view.DrawScaleImageView;
+import com.susion.boring.utils.FileUtils;
 import com.susion.boring.utils.ToastUtils;
 import com.susion.boring.utils.UIUtils;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.io.InputStream;
+import java.util.List;
+
+import okhttp3.ResponseBody;
 import rx.Observer;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 public class PictureViewActivity extends BaseActivity {
@@ -30,8 +46,8 @@ public class PictureViewActivity extends BaseActivity {
     private ImageView mIvLove;
     private ImageView mIvDown;
 
-    private boolean mPicOperatorShow;
     private DbBaseOperate<SimplePicture> mDbOperator;
+    private boolean mIsLove;
 
     public static void start(Activity ac, SimplePicture image, Rect imageViewPos) {
         Intent intent = new Intent();
@@ -39,10 +55,6 @@ public class PictureViewActivity extends BaseActivity {
         intent.putExtra(ORIGIN_IMAGE_POS, imageViewPos);
         intent.setClass(ac, PictureViewActivity.class);
         ac.startActivity(intent);
-    }
-
-    @Override
-    public void initTransitionAnim() {
     }
 
     @Override
@@ -63,8 +75,25 @@ public class PictureViewActivity extends BaseActivity {
 
     @Override
     public void initView() {
-        mRlPictureOperator.setVisibility(View.INVISIBLE);
         mDrawerScaleIv.setImageURI(mPicture.getBig());
+        if (TextUtils.isEmpty(mPicture.id)) {
+            mPicture.id = mPicture.getBig();
+        }
+        checkIsLiked();
+    }
+
+    private void checkIsLiked() {
+        APIHelper.subscribeSimpleRequest(mDbOperator.query(mPicture.id), new CommonObserver<SimplePicture>() {
+            @Override
+            public void onNext(SimplePicture simplePicture) {
+                mIsLove = simplePicture != null ? true : false;
+                UIUtils.refreshLikeStatus(mIvLove, mIsLove);
+            }
+        });
+    }
+
+    @Override
+    public void initListener() {
         mDrawerScaleIv.setScaleListener(new DrawScaleImageView.DrawScaleImageViewListener() {
             @Override
             public void onScaleChange(int alpha) {
@@ -76,40 +105,63 @@ public class PictureViewActivity extends BaseActivity {
             public void onExitViewImage() {
                 PictureViewActivity.this.finish();
             }
-
-            @Override
-            public void onClickImage() {
-                mPicOperatorShow = !mPicOperatorShow;
-                mRlPictureOperator.setVisibility(mPicOperatorShow ? View.VISIBLE : View.INVISIBLE);
-            }
         });
 
         mIvLove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPicture.favorite = !mPicture.favorite;
-                mDbOperator.add(mPicture);
-                UIUtils.refreshLikeStatus(mIvLove, mPicture.favorite);
+                if (mIsLove) {
+                    APIHelper.subscribeSimpleRequest(mDbOperator.delete(mPicture), new CommonObserver<Boolean>() {
+                        @Override
+                        public void onNext(Boolean flag) {
+                            ToastUtils.showShort(flag ? "已经从喜欢列表移除" : "从喜欢列表移除失败");
+                            mIsLove = flag ? false : true;
+                            UIUtils.refreshLikeStatus(mIvLove, mIsLove);
+                            if (!mIsLove) {
+                                EventBus.getDefault().post(new PictureDeleteFormLikeEvent(mPicture));
+                            }
+                        }
+                    });
+                } else {
+                    APIHelper.subscribeSimpleRequest(mDbOperator.add(mPicture), new CommonObserver<Boolean>() {
+                        @Override
+                        public void onNext(Boolean flag) {
+                            ToastUtils.showShort(flag ? "已喜欢" : "喜欢失败");
+                            mIsLove = flag ? true : false;
+                            UIUtils.refreshLikeStatus(mIvLove, mIsLove);
+                        }
+                    });
+                }
             }
         });
 
         mIvDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                APIHelper.subscribeSimpleRequest(APIHelper.getPictureService().getImage(mPicture.getMiddle()),
+                        new CommonObserver<ResponseBody>() {
+                            @Override
+                            public void onError(Throwable e) {
+                                super.onError(e);
+                                ToastUtils.showShort("下载图片失败");
+                            }
 
+                            @Override
+                            public void onNext(ResponseBody responseBody) {
+                                if (FileUtils.saveImage(responseBody.byteStream(), mPicture.getMiddle())) {
+                                    ToastUtils.showShort("图片已经保存");
+                                } else {
+                                    ToastUtils.showShort("图片保存失败");
+                                }
+                            }
+                        });
             }
         });
     }
 
-
-    @Override
-    public void initListener() {
-
-    }
-
     @Override
     public void initData() {
-    }
 
+    }
 
 }

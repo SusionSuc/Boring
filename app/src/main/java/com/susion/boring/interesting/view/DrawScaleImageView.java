@@ -101,10 +101,6 @@ public class DrawScaleImageView extends SimpleDraweeView {
                 break;
 
             case MotionEvent.ACTION_UP:
-                if (isTapEvent()) {
-                    break;
-                }
-
                 if (mScale < 0.5) {
                     if (mListener != null) {
                         mListener.onExitViewImage();
@@ -118,16 +114,6 @@ public class DrawScaleImageView extends SimpleDraweeView {
         return true;
     }
 
-    private boolean isTapEvent() {
-        if (System.currentTimeMillis() - mTime < 200) {
-            if (mListener != null) {
-                mListener.onClickImage();
-            }
-            return true;
-        }
-
-        return false;
-    }
 
     private void restoreImageState() {
         AnimatorSet animationSet = new AnimatorSet();
@@ -230,9 +216,6 @@ public class DrawScaleImageView extends SimpleDraweeView {
         void onScaleChange(int alpha);
 
         void onExitViewImage();
-
-        void onClickImage();
-
     }
 
     public void setScaleListener(DrawScaleImageViewListener mListener) {

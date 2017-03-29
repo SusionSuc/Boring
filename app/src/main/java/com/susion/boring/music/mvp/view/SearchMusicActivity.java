@@ -42,7 +42,6 @@ public class SearchMusicActivity extends BaseActivity implements OnLastItemVisib
     private String mSearchContent;
     private int PAGE_SIZE = 20;
 
-
     @Override
     public int getLayoutId() {
         return R.layout.activity_search_music;

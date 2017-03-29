@@ -24,19 +24,18 @@ public class FileUtils {
     public static final String SD_CACHE_DIR = SD_ROOT_DIR + "cache/";
     public static final String SD_INTERESTING_DIR = SD_ROOT_DIR + "interesting/";
     public static final String SD_INTERESTING_DAILY_NEWS = SD_INTERESTING_DIR + "daily_news/";
+    public static final String SD_INTERESTING_PICTURE = SD_INTERESTING_DIR + "picture/";
+
     private static final String UNKNOWN = "unknown";
-
-
     public static final String SD_TEMP_CSS = SD_INTERESTING_DAILY_NEWS + "css/";
     public static final String TEMP_CSS_FILE = SD_TEMP_CSS + "temp_css.css";
 
     public static void initAppDir() {
-        // 不存在SD卡
         if (!Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
             return;
         }
 
-        String[] initPath = new String[]{SD_MUSIC_DIR, SD_INTERESTING_DIR, SD_INTERESTING_DAILY_NEWS, SD_TEMP_CSS};
+        String[] initPath = new String[]{SD_MUSIC_DIR, SD_INTERESTING_DIR, SD_INTERESTING_DAILY_NEWS, TEMP_CSS_FILE, SD_INTERESTING_PICTURE};
         for (String path : initPath) {
             File dir = new File(path);
             if (!dir.exists()) {
@@ -65,7 +64,6 @@ public class FileUtils {
             e.printStackTrace();
 
         }
-
         return false;
     }
 
@@ -105,15 +103,14 @@ public class FileUtils {
         return value;
     }
 
-    public static String writeTempCssFile(InputStream in) {
+    public static boolean saveFile(InputStream in, File destFile) {
         try {
-            File css = new File(TEMP_CSS_FILE);
 
-            if (!css.exists()) {
-                css.createNewFile();
+            if (!destFile.exists()) {
+                destFile.createNewFile();
             }
 
-            FileOutputStream out = new FileOutputStream(css);
+            FileOutputStream out = new FileOutputStream(destFile);
             byte[] buff = new byte[1024];
             int len;
 
@@ -126,9 +123,26 @@ public class FileUtils {
 
         } catch (IOException e) {
             e.printStackTrace();
-
+            return false;
         }
-        return TEMP_CSS_FILE;
+        return true;
+    }
+
+    public static File getCacheDir() {
+        return createFile(SD_CACHE_DIR, "");
+    }
+
+    public static File createFile(String folderPath, String fileName) {
+        File destDir = new File(folderPath);
+        if (!destDir.exists()) {
+            destDir.mkdirs();
+        }
+        return new File(folderPath, fileName);
+    }
+
+    public static boolean saveImage(InputStream inputStream, String imageIdentifier) {
+        File image = new File(SD_INTERESTING_PICTURE + Md5Utils.md5(imageIdentifier) + ".png");
+        return saveFile(inputStream, image);
     }
 
     public static String getTempCssString() {
@@ -165,17 +179,5 @@ public class FileUtils {
         }
 
         return byteOS.toString();
-    }
-
-    public static File getCacheDir() {
-        return createFile(SD_CACHE_DIR, "");
-    }
-
-    public static File createFile(String folderPath, String fileName) {
-        File destDir = new File(folderPath);
-        if (!destDir.exists()) {
-            destDir.mkdirs();
-        }
-        return new File(folderPath, fileName);
     }
 }

@@ -13,7 +13,7 @@ import com.susion.boring.interesting.mvp.view.ZhiHuEssayActivity;
 /**
  * Created by susion on 17/3/9.
  */
-public class DailyNewsIH extends SimpleItemHandler<DailyNews.StoriesBean>{
+public class DailyNewsIH extends SimpleItemHandler<DailyNews.StoriesBean> {
 
     @Override
     public void onCreateItemHandler(ViewHolder vh, ViewGroup parent) {

@@ -50,7 +50,7 @@ public class SplashActivity extends Activity {
     }
 
     public void requestPermission() {
-        String[] needPermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.MEDIA_CONTENT_CONTROL};
+        String[] needPermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
         final List<String> requestPermissions = new ArrayList<>();
 
         for (int i = 0; i < needPermissions.length; i++) {

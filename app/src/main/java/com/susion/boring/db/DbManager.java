@@ -13,7 +13,6 @@ public class DbManager {
     private static final String DB_NAME = "boring.db";
 
     private DbManager() {
-
     }
 
     public static LiteOrm getLiteOrm() {

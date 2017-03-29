@@ -41,7 +41,6 @@ public class Md5Utils {
     }
 
     public static String encodeIdToIds(String ids) {
-
         String re = "%5B"+ids+"%5D";
         return re;
     }

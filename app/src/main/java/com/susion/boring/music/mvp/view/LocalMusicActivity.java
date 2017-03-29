@@ -34,7 +34,7 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class LocalMusicActivity extends BaseActivity implements LocalMusicContract.View{
+public class LocalMusicActivity extends BaseActivity implements LocalMusicContract.View {
 
     private LoadMoreRecycleView mRV;
     private List<SimpleSong> mData = new ArrayList<>();
@@ -83,6 +83,7 @@ public class LocalMusicActivity extends BaseActivity implements LocalMusicContra
                     }
                 });
             }
+
             @Override
             protected int getViewType(int position) {
                 return 0;
@@ -138,7 +139,7 @@ public class LocalMusicActivity extends BaseActivity implements LocalMusicContra
     @Override
     public LoaderManager getMyLoaderManager() {
         return getLoaderManager();
-}
+    }
 
     public void showScanLocalMusicUI() {
         mRV.setVisibility(View.INVISIBLE);

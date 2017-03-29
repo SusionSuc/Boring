@@ -1,4 +1,4 @@
-package com.susion.boring.interesting.view;
+package com.susion.boring.interesting.itemhandler;
 
 import android.view.View;
 import android.view.ViewGroup;
