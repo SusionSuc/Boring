@@ -20,7 +20,7 @@ import android.view.View;
 import com.susion.boring.R;
 import com.susion.boring.base.ui.mainui.drawer.DividerMark;
 import com.susion.boring.base.ui.OnLastItemVisibleListener;
-import com.susion.boring.interesting.mvp.contract.ZhiHuDailyContract;
+import com.susion.boring.read.mvp.contract.ZhiHuDailyContract;
 
 import java.util.List;
 

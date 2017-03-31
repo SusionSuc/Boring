@@ -30,15 +30,12 @@
 
 
     <android.support.v4.widget.NestedScrollView
-        android:paddingTop="@dimen/status_bar_height"
         android:id="@+id/ac_zhi_hu_essay_wv_parent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingBottom="40dp"
         android:scrollbars="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-    </android.support.v4.widget.NestedScrollView>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"></android.support.v4.widget.NestedScrollView>
 
 
     <RelativeLayout

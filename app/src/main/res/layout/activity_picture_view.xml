@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/black">
 
-    <com.susion.boring.interesting.view.DrawScaleImageView
+    <com.susion.boring.read.view.DrawScaleImageView
         android:id="@+id/ac_picture_iv_draw_scale"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

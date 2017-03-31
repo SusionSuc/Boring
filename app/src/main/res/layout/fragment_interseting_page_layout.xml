@@ -14,11 +14,11 @@
         app:tabSelectedTextColor="@color/colorPrimary"
         app:tabTextColor="@color/black"></android.support.design.widget.TabLayout>
 
-    <com.susion.boring.interesting.mvp.view.NestChildViewPager
+    <com.susion.boring.read.mvp.view.NestChildViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
-    </com.susion.boring.interesting.mvp.view.NestChildViewPager>
+    </com.susion.boring.read.mvp.view.NestChildViewPager>
 
 </LinearLayout>

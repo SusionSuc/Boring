@@ -3,7 +3,7 @@ package com.susion.boring.base.ui.mainui;
 import android.support.v4.app.Fragment;
 
 import com.susion.boring.base.view.MainUIFragmentIndex;
-import com.susion.boring.interesting.InterestingPageFragment;
+import com.susion.boring.read.ReadPageFragment;
 import com.susion.boring.music.MusicPageFragment;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ public class FragmentFactory implements MainUIFragmentIndex{
         if (mMainUIFragments == null) {
             mMainUIFragments = new ArrayList<>();
             mMainUIFragments.add(ITEM_MUSIC, new MusicPageFragment());
-            mMainUIFragments.add(ITEM_INTERESTING, new InterestingPageFragment());
+            mMainUIFragments.add(ITEM_INTERESTING, new ReadPageFragment());
         }
         return mMainUIFragments;
     }

@@ -1,6 +1,6 @@
 package com.susion.boring.event;
 
-import com.susion.boring.interesting.mvp.model.Joke;
+import com.susion.boring.read.mvp.model.Joke;
 
 /**
  * Created by susion on 17/3/29.

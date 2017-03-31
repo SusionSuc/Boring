@@ -13,20 +13,17 @@ import android.support.v7.widget.RecyclerView;
 import com.susion.boring.R;
 import com.susion.boring.db.DbManager;
 import com.susion.boring.db.operate.DbBaseOperate;
+import com.susion.boring.event.EssayDeleteFromLikeEvent;
 import com.susion.boring.event.JokeDeleteFormLikeEvent;
 import com.susion.boring.event.PictureDeleteFormLikeEvent;
 import com.susion.boring.http.APIHelper;
 import com.susion.boring.http.CommonObserver;
-import com.susion.boring.interesting.itemhandler.DailyNewsIH;
-import com.susion.boring.interesting.itemhandler.JokeIH;
-import com.susion.boring.interesting.itemhandler.PictureColumnIH;
-import com.susion.boring.interesting.itemhandler.SimplePictureIH;
-import com.susion.boring.interesting.mvp.model.DailyNews;
-import com.susion.boring.interesting.mvp.model.Joke;
-import com.susion.boring.interesting.mvp.model.NewsDetail;
-import com.susion.boring.interesting.mvp.model.SimplePicture;
-import com.susion.boring.interesting.mvp.model.ZhiHuEssay;
-import com.susion.boring.music.mvp.model.PlayList;
+import com.susion.boring.read.itemhandler.DailyNewsIH;
+import com.susion.boring.read.itemhandler.JokeIH;
+import com.susion.boring.read.itemhandler.SimplePictureIH;
+import com.susion.boring.read.mvp.model.Joke;
+import com.susion.boring.read.mvp.model.NewsDetail;
+import com.susion.boring.read.mvp.model.SimplePicture;
 import com.susion.boring.utils.RVUtils;
 import com.susion.boring.utils.UIUtils;
 
@@ -36,10 +33,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import rx.Observable;
-import rx.functions.Action1;
-import rx.functions.Func1;
 
 //知乎文章、 笑话、 图片
 public class CollectActivity extends BaseActivity {
@@ -90,7 +83,7 @@ public class CollectActivity extends BaseActivity {
     }
 
     private void initMyFragment() {
-//        mFragments.add(new ZhiHuLikeFragment());
+        mFragments.add(new ZhiHuLikeFragment());
         mFragments.add(new JokeLikeFragment());
         mFragments.add(new PictureLikeFragment());
     }
@@ -110,11 +103,11 @@ public class CollectActivity extends BaseActivity {
 
         @Override
         protected void loadData() {
-            mDbOperator = new DbBaseOperate<>(DbManager.getLiteOrm(), getActivity(), ZhiHuEssay.class);
+            mDbOperator = new DbBaseOperate<>(DbManager.getLiteOrm(), getActivity(), NewsDetail.class);
             APIHelper.subscribeSimpleRequest(mDbOperator.getAll(), new CommonObserver<List<NewsDetail>>() {
                 @Override
-                public void onNext(List<NewsDetail> zhiHuEssays) {
-                    addData(zhiHuEssays);
+                public void onNext(List<NewsDetail> loveNews) {
+                    addData(loveNews);
                 }
             });
         }
@@ -139,8 +132,29 @@ public class CollectActivity extends BaseActivity {
             return "文章";
         }
 
+
+        @Subscribe(threadMode = ThreadMode.MAIN)
+        public void onMessageEvent(EssayDeleteFromLikeEvent event) {
+            List<NewsDetail> pics = mData;
+            int i = 0;
+            for (; i < pics.size(); i++) {
+                if (pics.get(i).id.equals(event.newsDetail.id)) {
+                    break;
+                }
+            }
+            mData.remove(i);
+            mRv.getAdapter().notifyDataSetChanged();
+        }
+
         @Override
         protected void findView() {
+            EventBus.getDefault().register(this);
+        }
+
+        @Override
+        public void onDestroy() {
+            super.onDestroy();
+            EventBus.getDefault().unregister(this);
         }
     }
 

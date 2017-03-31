@@ -1,7 +1,7 @@
 package com.susion.boring.http;
 
-import com.susion.boring.interesting.mvp.model.DailyNews;
-import com.susion.boring.interesting.mvp.model.NewsDetail;
+import com.susion.boring.read.mvp.model.DailyNews;
+import com.susion.boring.read.mvp.model.NewsDetail;
 
 import okhttp3.ResponseBody;
 import retrofit2.http.GET;
