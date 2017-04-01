@@ -17,6 +17,7 @@ import com.susion.boring.base.adapter.ViewHolder;
 import com.susion.boring.music.mvp.view.PlayMusicActivity;
 import com.susion.boring.music.mvp.model.Song;
 import com.susion.boring.utils.ToastUtils;
+import com.susion.boring.utils.UIUtils;
 
 /**
  * Created by susion on 17/1/20.
@@ -44,16 +45,7 @@ public class SearchMusicResultIH extends SimpleMusicIH<Song> {
         if (!data.artists.isEmpty()) {
             mTvSecondTile.setText(data.artists.get(0).name + "-" + data.album.name);
         }
-        int width = 50, height = 50;
-        ImageRequest request = ImageRequestBuilder
-                .newBuilderWithSource(Uri.parse(data.album.picUrl))
-                .setResizeOptions(new ResizeOptions(width, height))
-                .build();
-        PipelineDraweeController controller = (PipelineDraweeController) Fresco.newDraweeControllerBuilder()
-                .setOldController(mSdvAlbum.getController())
-                .setImageRequest(request)
-                .build();
-        mSdvAlbum.setController(controller);
+        UIUtils.loadSmallPicture(mSdvAlbum, data.album.picUrl);
     }
 
 }

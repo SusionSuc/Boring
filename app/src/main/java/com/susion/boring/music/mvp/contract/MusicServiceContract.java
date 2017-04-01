@@ -69,6 +69,10 @@ public interface MusicServiceContract {
         void removeSongFromQueue(Song serializableExtra);
 
         void startQueueMode();
+
+        void addMusicToQueue(Song song);
+
+        void queryNeedToChangeMusic(Song serializableExtra);
     }
 
     interface ReceiverPresenter {
@@ -76,10 +80,10 @@ public interface MusicServiceContract {
     }
 
     interface PlayQueueControlPresenter {
-          int QUEUE_MODE = 0;
-          int RANDOM_MODE = 1;
-          int CIRCLE_MODE = 2;
-          int PLAY_LIST_CIRCLE_MODE = 3;
+        int QUEUE_MODE = 0;
+        int RANDOM_MODE = 1;
+        int CIRCLE_MODE = 2;
+        int PLAY_LIST_CIRCLE_MODE = 3;
 
         boolean addToPlayQueue(Song song);
 

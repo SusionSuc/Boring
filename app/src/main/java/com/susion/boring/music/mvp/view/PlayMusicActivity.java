@@ -39,6 +39,7 @@ import com.susion.boring.music.view.PlayOperatorView;
 import com.susion.boring.utils.AlbumUtils;
 import com.susion.boring.utils.BroadcastUtils;
 import com.susion.boring.utils.TimeUtils;
+import com.susion.boring.utils.ToastUtils;
 import com.susion.boring.utils.TransitionHelper;
 import com.susion.boring.base.view.SToolBar;
 
@@ -152,11 +153,6 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
 
         if (needLoadFromInt) {
             APIHelper.subscribeSimpleRequest(APIHelper.getMusicServices().getSongDetail(Integer.valueOf(mSong.id)), new CommonObserver<PlayListSong>() {
-                @Override
-                public void onCompleted() {
-
-                }
-
                 @Override
                 public void onNext(PlayListSong songs) {
                     if (songs != null && !songs.getData().isEmpty()) {
@@ -311,11 +307,12 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
         mSong = song;
         mPovMusicPlayControl.refreshLikeStatus(mSong.favorite);
         if (!mIsFromLittlePanel) {   //may be change music
+//            mPlayControlCommand.queryIfNeedChangeMusic(mSong);
             loadNewMusic();
         }
 
         if (mSong.hasDown) {
-            mSdvAlbym.setImageBitmap(AlbumUtils.parseAlbum(song.audio));
+            mSdvAlbym.setImageBitmap(AlbumUtils.parseAlbum(mSong.audio));
         } else {
             if (mSong.album.picUrl != null) {
                 mSdvAlbym.setImageURI(mSong.album.picUrl);
@@ -329,6 +326,8 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
     @Override
     public void loadNewMusic() {
         mPlayControlCommand.pausePlay();
+        mTvPlayedTime.setText("00:00");
+        mTvLeftTime.setText("--:--");
         mSeekBar.setCurrentProgress(0);
         isLoading = true;
         mPlayControlView.startLoadingAnimation();
@@ -340,6 +339,21 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
         if (mDialog != null) {
             mDialog.addMusicQueue(playQueue);
             mDialog.stopLoadingAnimation();
+        }
+    }
+
+    @Override
+    public void showNoMoreMusic() {
+        ToastUtils.showShort("播放列表没有音乐了哦");
+        isLoading = false;
+        mPlayControlView.endLoadingAnimationAndPlay();
+    }
+
+    @Override
+    public void canChangeMusic(boolean canChange) {
+        if (canChange) {
+            loadNewMusic();
+            mPlayControlCommand.tryToChangePlayingMusic(mSong);
         }
     }
 

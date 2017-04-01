@@ -17,6 +17,7 @@ public interface MediaPlayerContract {
     //for panel view
     interface BaseView extends IView {
         void tryToChangeMusicByCurrentCondition(boolean playStatus, boolean needLoadMusic);
+
         void refreshSong(Song song);
     }
 
@@ -42,6 +43,10 @@ public interface MediaPlayerContract {
         void loadNewMusic();
 
         void setPlayQueue(List<Song> playQueue);
+
+        void showNoMoreMusic();
+
+        void canChangeMusic(boolean canChange);
     }
 
 
@@ -73,7 +78,6 @@ public interface MediaPlayerContract {
         void saveLastPlayMusic(Song song, Context c);
     }
 
-
     //client broadcast receiver
     interface ClientReceiverPresenter {
         void registerReceiver();
@@ -100,15 +104,17 @@ public interface MediaPlayerContract {
 
         void loadMusicInfoToService(Song song, boolean autoPlay);
 
-        void getCurrentPlayMusic();
+        void playMusic();
 
         void pausePlay();
 
         void updatePlayMusic(Song song);
+
+        void queryIfNeedChangeMusic(Song mSong);
     }
 
 
-    interface ClientPlayModeCommand{
+    interface ClientPlayModeCommand {
         void queryCurrentPlayMode();
 
         void startCirclePlayMode();
@@ -128,6 +134,8 @@ public interface MediaPlayerContract {
         void removeSongFromQueue(Song song);
 
         void changeMusic(Song song);
+
+        void addMusicToQueue(Song song);
     }
 
 }

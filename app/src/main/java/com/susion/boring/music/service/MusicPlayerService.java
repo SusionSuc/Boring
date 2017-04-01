@@ -34,7 +34,7 @@ public class MusicPlayerService implements MediaPlayerContract.LittlePlayView, M
 
     private static final String PLAY_NOT_IS_PLAY_LIST = "PLAY_NOT_IS_PLAY_LIST";
 
-    private MediaPlayerContract.PlayMusicControlPresenter mPresenter;
+    private MediaPlayerContract.PlayMusicControlPresenter mMusicPlayContrlPresenter;
     private MusicDbOperator mDbOperator;
     private BaseServiceContract.ReceiverPresenter mReceiverPresenter;
     private MusicServiceContract.PlayQueueControlPresenter mPlayQueuePresenter;
@@ -54,7 +54,7 @@ public class MusicPlayerService implements MediaPlayerContract.LittlePlayView, M
     public void initService() {
         mQueueIsPrepare = false;
         mDbOperator = new MusicDbOperator(DbManager.getLiteOrm(), getContext(), SimpleSong.class);
-        mPresenter = new PlayMusicPresenter(this, mServiceParent);
+        mMusicPlayContrlPresenter = new PlayMusicPresenter(this, mServiceParent);
         mReceiverPresenter = new ServiceReceiverPresenter(this);
 
         mDbOperator.getInitPlayQueue()
@@ -80,18 +80,35 @@ public class MusicPlayerService implements MediaPlayerContract.LittlePlayView, M
     }
 
 
-
     @Override
     public void loadMusicInfo(Song song, boolean autoPlay) {
         mAutoPlay = autoPlay;
         if (song != null) {
             mSong = song;
             try {
-                mPresenter.initMediaPlayer(mSong.audio);
+                mMusicPlayContrlPresenter.initMediaPlayer(mSong.audio);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void queryNeedToChangeMusic(Song song) {
+        boolean canChange;
+        if (mSong != null && mMusicPlayContrlPresenter.isPrepared()) {
+            if (mSong.id.equals(song.id)) {
+                canChange = false;
+            } else {
+                canChange = true;
+            }
+        } else {
+            canChange = true;
+        }
+
+        Intent intent = new Intent(MusicServiceInstruction.CLIENT_RECEIVER_CAN_CHANGE_MUSIC);
+        intent.putExtra(MusicServiceInstruction.CLIENT_PARAM_CAN_CHANGE_MUSIC, canChange);
+        LocalBroadcastManager.getInstance(mServiceParent).sendBroadcast(intent);
     }
 
     @Override
@@ -136,8 +153,9 @@ public class MusicPlayerService implements MediaPlayerContract.LittlePlayView, M
 
     private void preparePlay() {
         mAutoPlay = true;
+
         try {
-            mPresenter.initMediaPlayer(mSong.audio);
+            mMusicPlayContrlPresenter.initMediaPlayer(mSong.audio);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -179,7 +197,7 @@ public class MusicPlayerService implements MediaPlayerContract.LittlePlayView, M
     @Override
     public void circlePlayPlayList(final PlayList playList) {
         if (mPlayQueuePresenter != null && !playList.getId().equals(mHasLoadPlayListId)) {
-            mPresenter.stopPlay();
+            mMusicPlayContrlPresenter.stopPlay();
             mQueueIsPrepare = false;
             mPlayQueuePresenter.reLoadPlayQueue(playList)
                     .subscribeOn(Schedulers.io())
@@ -209,33 +227,33 @@ public class MusicPlayerService implements MediaPlayerContract.LittlePlayView, M
     }
 
     @Override
-    public void randomPlayPlayList(final  PlayList playList) {
+    public void randomPlayPlayList(final PlayList playList) {
         if (mPlayQueuePresenter != null && !playList.getId().equals(mHasLoadPlayListId)) {
-            mPresenter.stopPlay();
+            mMusicPlayContrlPresenter.stopPlay();
             mQueueIsPrepare = false;
             mPlayQueuePresenter.reLoadPlayQueue(playList)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Observer<Boolean>() {
-                            @Override
-                            public void onCompleted() {
-                            }
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<Boolean>() {
+                        @Override
+                        public void onCompleted() {
+                        }
 
-                            @Override
-                            public void onError(Throwable e) {
-                                ToastUtils.showShort("装载音乐列表失败");
-                            }
+                        @Override
+                        public void onError(Throwable e) {
+                            ToastUtils.showShort("装载音乐列表失败");
+                        }
 
-                            @Override
-                            public void onNext(Boolean flag) {
-                                if (flag) {
-                                    mHasLoadPlayListId = playList.getId();
-                                    mQueueIsPrepare = true;
-                                    mPlayQueuePresenter.setPlayMode(MusicServiceContract.PlayQueueControlPresenter.RANDOM_MODE);
-                                    playNextMusic();
-                                }
+                        @Override
+                        public void onNext(Boolean flag) {
+                            if (flag) {
+                                mHasLoadPlayListId = playList.getId();
+                                mQueueIsPrepare = true;
+                                mPlayQueuePresenter.setPlayMode(MusicServiceContract.PlayQueueControlPresenter.RANDOM_MODE);
+                                playNextMusic();
                             }
-                        });
+                        }
+                    });
         }
     }
 
@@ -250,6 +268,12 @@ public class MusicPlayerService implements MediaPlayerContract.LittlePlayView, M
     }
 
     @Override
+    public void addMusicToQueue(Song song) {
+        mPlayQueuePresenter.addToPlayQueue(song);
+    }
+
+
+    @Override
     public void getPlayQueue() {
         Intent intent = new Intent(MusicServiceInstruction.CLIENT_RECEIVER_PLAY_QUEUE);
         intent.putExtra(MusicServiceInstruction.CLIENT_PARAM_PLAY_QUEUE, (Serializable) mPlayQueuePresenter.getPlayQueue());
@@ -259,7 +283,7 @@ public class MusicPlayerService implements MediaPlayerContract.LittlePlayView, M
     @Override
     public void notifyMediaDuration() {
         Intent intent = new Intent(MusicServiceInstruction.CLIENT_RECEIVER_SET_DURATION);
-        intent.putExtra(MusicServiceInstruction.CLIENT_PARAM_MEDIA_DURATION, mPresenter.getDuration());
+        intent.putExtra(MusicServiceInstruction.CLIENT_PARAM_MEDIA_DURATION, mMusicPlayContrlPresenter.getDuration());
         LocalBroadcastManager.getInstance(mServiceParent).sendBroadcast(intent);
     }
 
@@ -287,7 +311,7 @@ public class MusicPlayerService implements MediaPlayerContract.LittlePlayView, M
     public void preparedPlay(int duration) {
         mPlayQueuePresenter.markCurrentPlayMusic(mSong);
         if (mAutoPlay) {
-            mPresenter.startPlay();
+            mMusicPlayContrlPresenter.startPlay();
         }
         Intent intent = new Intent(MusicServiceInstruction.CLIENT_RECEIVER_PLAYER_PREPARED);
         intent.putExtra(MusicServiceInstruction.CLIENT_PARAM_PREPARED_TOTAL_DURATION, duration);
@@ -301,7 +325,7 @@ public class MusicPlayerService implements MediaPlayerContract.LittlePlayView, M
             return;
         }
 
-        String songId = SPUtils.getStringFromMusicConfig(SPUtils.MUSIC_CONFIG_LAST_PLAY_MUSIC, mServiceParent);
+        String songId = SPUtils.getStringFromConfig(SPUtils.KEY_LAST_PLAY_MUSIC);
         mDbOperator.query(songId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<SimpleSong>() {
             @Override
             public void onCompleted() {
@@ -333,34 +357,44 @@ public class MusicPlayerService implements MediaPlayerContract.LittlePlayView, M
     @Override
     public void informCurrentIfPlaying() {
         Intent intent = new Intent(MusicServiceInstruction.CLIENT_RECEIVER_CURRENT_IS_PALING);
-        if (mPresenter.isPrepared()) {
-            if (mPresenter.isPlaying()) {
-                intent.putExtra(MusicServiceInstruction.CLIENT_PARAM_IS_PLAYING, true);
+        boolean isPlaying, needLoad;
+        if (mMusicPlayContrlPresenter.isPrepared()) {
+            if (mMusicPlayContrlPresenter.isPlaying()) {
+                isPlaying = true;
             } else {
-                intent.putExtra(MusicServiceInstruction.CLIENT_PARAM_IS_PLAYING, false);
+                isPlaying = false;
             }
-            intent.putExtra(MusicServiceInstruction.CLIENT_PARAM_NEED_LOAD_MUSIC, false);
+            needLoad = false;
         } else {
-            intent.putExtra(MusicServiceInstruction.CLIENT_PARAM_NEED_LOAD_MUSIC, true);
-            intent.putExtra(MusicServiceInstruction.CLIENT_PARAM_IS_PLAYING, false);
+            needLoad = false;
+            isPlaying = false;
         }
+
+//        if (mSong != null) {
+//            if (mSong.id.equals(song.id)) {   什么用户体验, 去死吧
+//                needLoad = false;
+//            }
+//        }
+
+        intent.putExtra(MusicServiceInstruction.CLIENT_PARAM_IS_PLAYING, isPlaying);
+        intent.putExtra(MusicServiceInstruction.CLIENT_PARAM_NEED_LOAD_MUSIC, needLoad);
         LocalBroadcastManager.getInstance(mServiceParent).sendBroadcast(intent);
     }
 
     @Override
     public void informCurrentIfPlayProgress() {
-        if (mPresenter.isPrepared()) {
+        if (mMusicPlayContrlPresenter.isPrepared()) {
             Intent intent = new Intent(MusicServiceInstruction.CLIENT_RECEIVER_CURRENT_PLAY_PROGRESS);
-            intent.putExtra(MusicServiceInstruction.CLIENT_PARAM_CURRENT_PLAY_PROGRESS, mPresenter.getCurrentProgress());
-            intent.putExtra(MusicServiceInstruction.CLIENT_PARAM_MEDIA_DURATION, mPresenter.getDuration());
+            intent.putExtra(MusicServiceInstruction.CLIENT_PARAM_CURRENT_PLAY_PROGRESS, mMusicPlayContrlPresenter.getCurrentProgress());
+            intent.putExtra(MusicServiceInstruction.CLIENT_PARAM_MEDIA_DURATION, mMusicPlayContrlPresenter.getDuration());
             LocalBroadcastManager.getInstance(mServiceParent).sendBroadcast(intent);
         }
     }
 
     @Override
     public void saveLastPlayMusic() {
-        mPresenter.stopPlay();
-        mPresenter.saveLastPlayMusic(mSong, mServiceParent);
+        mMusicPlayContrlPresenter.stopPlay();
+        mMusicPlayContrlPresenter.saveLastPlayMusic(mSong, mServiceParent);
     }
 
     @Override
@@ -372,7 +406,7 @@ public class MusicPlayerService implements MediaPlayerContract.LittlePlayView, M
 
     @Override
     public void pausePlay() {
-        mPresenter.pausePlay();
+        mMusicPlayContrlPresenter.pausePlay();
     }
 
     @Override
@@ -382,37 +416,52 @@ public class MusicPlayerService implements MediaPlayerContract.LittlePlayView, M
 
     @Override
     public void seekTo(Intent intent) {
-        mPresenter.seekTo(intent.getIntExtra(MusicServiceInstruction.SERVICE_PARAM_SEEK_TO_POS, 0));
+        mMusicPlayContrlPresenter.seekTo(intent.getIntExtra(MusicServiceInstruction.SERVICE_PARAM_SEEK_TO_POS, 0));
+        if (!mMusicPlayContrlPresenter.isPlaying() && mMusicPlayContrlPresenter.isPrepared()) {
+            mMusicPlayContrlPresenter.startPlay();
+        }
     }
 
     @Override
     public void playMusic() {
-        if (!mPresenter.isPrepared()) {
+        if (!mMusicPlayContrlPresenter.isPrepared()) {
             mAutoPlay = true;
             return;
         }
-        mPresenter.startPlay();
+        mMusicPlayContrlPresenter.startPlay();
     }
 
     @Override
     public void clear() {
         saveLastPlayMusic();
-        mPresenter.releaseResource();
+        mMusicPlayContrlPresenter.releaseResource();
         mReceiverPresenter.releaseResource();
     }
 
     @Override
     public void playNextMusic() {
         if (!playQueueIsPrepare()) return;
-        mSong = mPlayQueuePresenter.getNextPlayMusic();
-        changeMusic();
+        changeMusicFromQueue(mPlayQueuePresenter.getNextPlayMusic());
     }
 
     @Override
     public void PlayPreMusic() {
         if (!playQueueIsPrepare()) return;
-        mSong = mPlayQueuePresenter.getPrePlayMusic();
+        changeMusicFromQueue(mPlayQueuePresenter.getPrePlayMusic());
+    }
+
+    private void changeMusicFromQueue(Song song) {
+        if (song == null) {
+            notifyQueueNoMoreMusic();
+            return;
+        }
+        mSong = song;
         changeMusic();
+    }
+
+    private void notifyQueueNoMoreMusic() {
+        Intent intent = new Intent(MusicServiceInstruction.CLIENT_RECEIVER_QUEUE_NO_MORE_MUSIC);
+        LocalBroadcastManager.getInstance(mServiceParent).sendBroadcast(intent);
     }
 
     private boolean playQueueIsPrepare() {

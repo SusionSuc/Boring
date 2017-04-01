@@ -22,7 +22,8 @@ public class ClientPlayControlCommand implements MediaPlayerContract.ClientPlayC
 
     @Override
     public void queryServiceIsPlaying() {
-        BroadcastUtils.sendIntentAction(mContext, MusicServiceInstruction.SERVICE_RECEIVER_QUERY_IS_PLAYING);
+        Intent intent = new Intent(MusicServiceInstruction.SERVICE_RECEIVER_QUERY_IS_PLAYING);
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
 
     @Override
@@ -53,7 +54,7 @@ public class ClientPlayControlCommand implements MediaPlayerContract.ClientPlayC
     }
 
     @Override
-    public void getCurrentPlayMusic() {
+    public void playMusic() {
         Intent intent = new Intent(MusicServiceInstruction.SERVICE_CURRENT_PLAY_MUSIC);
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
@@ -67,6 +68,13 @@ public class ClientPlayControlCommand implements MediaPlayerContract.ClientPlayC
     @Override
     public void updatePlayMusic(Song song) {
         Intent intent = new Intent(MusicServiceInstruction.SERVICE_PARAM_UPDATE_SONG);
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+    }
+
+    @Override
+    public void queryIfNeedChangeMusic(Song song) {
+        Intent intent = new Intent(MusicServiceInstruction.SERVICE_RECEIVER_QUERY_IF_NEED_CHANGE_MUSIC);
+        intent.putExtra(MusicServiceInstruction.SERVICE_PARAM_QUERY_IF_NEED_CHANGE_MUSIC_SONG, song);
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
 

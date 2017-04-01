@@ -8,8 +8,8 @@ import com.susion.boring.utils.SPUtils;
 
 /**
  * Created by susion on 17/2/8.
- *
- *  extension
+ * <p>
+ * extension
  */
 public class PlayMusicPresenter extends MediaPlayPresenter implements MediaPlayerContract.PlayMusicControlPresenter {
 
@@ -20,7 +20,7 @@ public class PlayMusicPresenter extends MediaPlayPresenter implements MediaPlaye
     @Override
     public void saveLastPlayMusic(Song song, Context c) {
         if (song != null && song.hasDown) {
-            SPUtils.writeStringToMusicConfig(SPUtils.MUSIC_CONFIG_LAST_PLAY_MUSIC, song.id, c);
+            SPUtils.writeStringConfig(SPUtils.KEY_LAST_PLAY_MUSIC, song.id);
         }
     }
 }

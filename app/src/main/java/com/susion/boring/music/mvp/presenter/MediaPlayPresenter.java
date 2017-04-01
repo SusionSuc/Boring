@@ -6,6 +6,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.susion.boring.music.mvp.contract.MediaPlayerContract;
@@ -14,7 +15,7 @@ import java.io.IOException;
 
 /**
  * Created by susion on 17/1/25.
- *
+ * <p>
  * control MediaPlayer
  */
 public class MediaPlayPresenter implements MediaPlayerContract.Presenter, MediaPlayer.OnPreparedListener,
@@ -57,7 +58,10 @@ public class MediaPlayPresenter implements MediaPlayerContract.Presenter, MediaP
 
     @Override
     public void initMediaPlayer(String mediaUri) throws Exception {
-        Log.e(TAG, "initMediaPlayer() uri=" + mediaUri);
+        if (TextUtils.isEmpty(mediaUri)) {
+            return;
+        }
+
         if (mPlayer == null) {
             mPlayer = new MediaPlayer();
             mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);

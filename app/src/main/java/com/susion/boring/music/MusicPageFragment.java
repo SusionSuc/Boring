@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.susion.boring.R;
-import com.susion.boring.base.SAppApplication;
 import com.susion.boring.base.ui.BaseFragment;
 import com.susion.boring.base.ui.OnLastItemVisibleListener;
 import com.susion.boring.base.view.LoadMoreRecycleView;
@@ -121,7 +120,7 @@ public class MusicPageFragment extends BaseFragment implements OnLastItemVisible
     public void onResume() {
         super.onResume();
         mControlCommand.queryServiceIsPlaying();
-        mControlCommand.getCurrentPlayMusic();
+        mControlCommand.playMusic();
     }
 
     private void loadMusicRecommendList() {
@@ -151,7 +150,7 @@ public class MusicPageFragment extends BaseFragment implements OnLastItemVisible
     }
 
     private void loadPLayHistory() {
-        String songId = SPUtils.getStringFromMusicConfig(SPUtils.MUSIC_CONFIG_LAST_PLAY_MUSIC, SAppApplication.getAppContext());
+        String songId = SPUtils.getStringFromConfig(SPUtils.KEY_LAST_PLAY_MUSIC);
         DbBaseOperate<SimpleSong> dbOperator = new DbBaseOperate<>(DbManager.getLiteOrm(), getContext(), SimpleSong.class);
         dbOperator.query(songId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<SimpleSong>() {
             @Override

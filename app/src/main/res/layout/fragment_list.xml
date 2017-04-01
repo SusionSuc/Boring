@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <com.susion.boring.base.view.LoadMoreRecycleView
         android:id="@+id/list_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </com.susion.boring.base.view.LoadMoreRecycleView>
+        android:layout_height="match_parent"></com.susion.boring.base.view.LoadMoreRecycleView>
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/empty_view"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:src="@mipmap/ic_empty" />
+
+</FrameLayout>

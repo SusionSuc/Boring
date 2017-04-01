@@ -13,6 +13,7 @@ import com.susion.boring.base.ui.BaseActivity;
 import com.susion.boring.base.adapter.BaseRVAdapter;
 import com.susion.boring.base.ui.ItemHandler;
 import com.susion.boring.base.ui.ItemHandlerFactory;
+import com.susion.boring.event.AddMusicToQueueEvent;
 import com.susion.boring.music.mvp.presenter.MusicModelTranslatePresenter;
 import com.susion.boring.base.view.LoadMoreRecycleView;
 import com.susion.boring.music.mvp.model.SimpleSong;
@@ -24,10 +25,15 @@ import com.susion.boring.music.service.action.ClientPlayModeCommand;
 import com.susion.boring.music.mvp.contract.MediaPlayerContract;
 import com.susion.boring.music.mvp.contract.MusicServiceContract;
 import com.susion.boring.music.mvp.contract.PlayListContract;
+import com.susion.boring.music.service.action.ClientPlayQueueControlCommand;
 import com.susion.boring.music.view.PlayOperatorView;
 import com.susion.boring.utils.RVUtils;
 import com.susion.boring.base.view.SToolBar;
 import com.susion.boring.utils.UIUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +51,7 @@ public class PlayListActivity extends BaseActivity implements PlayListContract.V
 
     private PlayOperatorView mPlayOperatorView;
     private MediaPlayerContract.ClientPlayModeCommand mPlayModeCommand;
+    private MediaPlayerContract.ClientPlayQueueControlCommand mPlayQueueCommand;
     private PlayListContract.Presenter mPresenter;
     private ImageView mIvLoading;
 
@@ -68,8 +75,10 @@ public class PlayListActivity extends BaseActivity implements PlayListContract.V
 
     @Override
     public void findView() {
+        EventBus.getDefault().register(this);
         mPresenter = new PlayListPresenter(this);
         mPlayModeCommand = new ClientPlayModeCommand(this);
+        mPlayQueueCommand = new ClientPlayQueueControlCommand(this);
 
         mSdvBg = (SimpleDraweeView) findViewById(R.id.ac_play_list_iv_bg);
         mRv = (LoadMoreRecycleView) findViewById(R.id.list_view);
@@ -191,5 +200,18 @@ public class PlayListActivity extends BaseActivity implements PlayListContract.V
     @Override
     public Context getViewContext() {
         return this;
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(AddMusicToQueueEvent event) {
+        mPlayQueueCommand.addMusicToQueue(event.song);
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

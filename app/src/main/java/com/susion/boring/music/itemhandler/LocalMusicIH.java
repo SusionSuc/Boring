@@ -3,12 +3,15 @@ package com.susion.boring.music.itemhandler;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.susion.boring.R;
 import com.susion.boring.base.adapter.ViewHolder;
+import com.susion.boring.event.AddMusicToQueueEvent;
 import com.susion.boring.music.mvp.model.SimpleSong;
 import com.susion.boring.music.mvp.view.PlayMusicActivity;
 import com.susion.boring.utils.AlbumUtils;
 import com.susion.boring.utils.TimeUtils;
+import com.susion.boring.utils.UIUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by susion on 17/3/6.
@@ -22,6 +25,8 @@ public class LocalMusicIH extends SimpleMusicIH<SimpleSong> {
         } else {
             PlayMusicActivity.start(mContext, mData.translateToSong(), true);
         }
+
+        EventBus.getDefault().post(new AddMusicToQueueEvent(mData.translateToSong()));
     }
 
     @Override
@@ -39,8 +44,10 @@ public class LocalMusicIH extends SimpleMusicIH<SimpleSong> {
             AlbumUtils.setAlbum(mSdvAlbum, data.getPath());
             mTvDuration.setText(TimeUtils.formatDuration(data.getDuration()));
         } else {
-            mSdvAlbum.setImageURI(data.getPicPath());
+            UIUtils.loadSmallPicture(mSdvAlbum, data.getPicPath());
             mTvDuration.setVisibility(View.GONE);
         }
     }
+
+
 }

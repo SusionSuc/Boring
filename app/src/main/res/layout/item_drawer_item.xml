@@ -3,26 +3,26 @@
     android:layout_width="match_parent"
     android:layout_height="40dp"
     android:layout_marginTop="30dp"
-    android:background="@color/white">
+    android:background="@drawable/bg_ripple">
 
     <ImageView
-        android:layout_marginLeft="30dp"
         android:id="@+id/drawer_item_image"
-        android:layout_centerVertical="true"
         android:layout_width="25dp"
-        android:layout_height="25dp" />
+        android:layout_height="25dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="30dp" />
 
 
     <TextView
-        android:layout_toRightOf="@id/drawer_item_image"
-        android:textSize="15sp"
-        android:text="我的消息"
-        android:layout_marginLeft="15dp"
         android:id="@+id/drawer_item_title"
-        android:textColor="@color/black"
-        android:layout_centerVertical="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="15dp"
+        android:layout_toRightOf="@id/drawer_item_image"
+        android:text="我的消息"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
 
 
 </RelativeLayout>

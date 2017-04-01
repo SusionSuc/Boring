@@ -8,13 +8,21 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.backends.pipeline.PipelineDraweeController;
+import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.susion.boring.R;
 
 import java.lang.reflect.Field;
@@ -138,5 +146,18 @@ public class UIUtils {
         } else {
             imageView.setImageResource(R.mipmap.ic_un_love);
         }
+    }
+
+    public static void loadSmallPicture(SimpleDraweeView simpleDraweeView, String picPath) {
+        int width = 50, height = 50;
+        ImageRequest request = ImageRequestBuilder
+                .newBuilderWithSource(Uri.parse(TextUtils.isEmpty(picPath) ? "" : picPath))
+                .setResizeOptions(new ResizeOptions(width, height))
+                .build();
+        PipelineDraweeController controller = (PipelineDraweeController) Fresco.newDraweeControllerBuilder()
+                .setOldController(simpleDraweeView.getController())
+                .setImageRequest(request)
+                .build();
+        simpleDraweeView.setController(controller);
     }
 }

@@ -18,7 +18,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by susion on 17/2/24.
  */
-public class MusicPlayQueueControlPresenter implements MusicServiceContract.PlayQueueControlPresenter{
+public class MusicPlayQueueControlPresenter implements MusicServiceContract.PlayQueueControlPresenter {
 
     private ModelTranslateContract.MusicModeTranslate musicModeTranslate;
     private List<Song> mQueue;
@@ -32,9 +32,12 @@ public class MusicPlayQueueControlPresenter implements MusicServiceContract.Play
             mQueue = new ArrayList<>();
         }
 
-        for (Song song : initQueue) {
-            mQueue.add(song);
+        if (initQueue != null) {
+            for (Song song : initQueue) {
+                mQueue.add(song);
+            }
         }
+
         mRandom = new Random();
         mCurrentIndex = 0;
         mPlayMode = QUEUE_MODE;
@@ -68,7 +71,7 @@ public class MusicPlayQueueControlPresenter implements MusicServiceContract.Play
     @Override
     public Song getNextPlayMusic() {
         if (mQueue.isEmpty()) {
-          return null;
+            return null;
         }
 
         if (mPlayMode == CIRCLE_MODE) {
@@ -97,7 +100,7 @@ public class MusicPlayQueueControlPresenter implements MusicServiceContract.Play
         }
 
         if (mPlayMode == QUEUE_MODE || mPlayMode == PLAY_LIST_CIRCLE_MODE) {
-            if (mCurrentIndex > 0){
+            if (mCurrentIndex > 0) {
                 mCurrentIndex--;
             } else {
                 mCurrentIndex = mQueue.size() - 1;
@@ -141,7 +144,7 @@ public class MusicPlayQueueControlPresenter implements MusicServiceContract.Play
         mQueue.clear();
         return Observable.create(new Observable.OnSubscribe<Boolean>() {
             @Override
-            public void call(final  Subscriber<? super Boolean> subscriber) {
+            public void call(final Subscriber<? super Boolean> subscriber) {
                 musicModeTranslate.getSongFromPlayList(playList)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -177,7 +180,7 @@ public class MusicPlayQueueControlPresenter implements MusicServiceContract.Play
 
         int songIndex = -1;
 
-        for (int i=0; i<mQueue.size(); i++) {
+        for (int i = 0; i < mQueue.size(); i++) {
             if (song.id.equals(mQueue.get(i).id)) {
                 songIndex = i;
             }

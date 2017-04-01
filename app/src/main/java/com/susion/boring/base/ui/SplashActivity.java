@@ -14,6 +14,8 @@ import android.view.WindowManager;
 
 import com.susion.boring.R;
 import com.susion.boring.base.ui.mainui.MainActivity;
+import com.susion.boring.utils.SystemOperationUtils;
+import com.susion.boring.utils.UIUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,11 +36,21 @@ public class SplashActivity extends Activity {
         requestPermission();
     }
 
+    private void installShortcut() {
+        String shortCutName = getString(R.string.app_name);
+        if (!SystemOperationUtils.hasShortcut(this, shortCutName)) {
+            SystemOperationUtils.createShortCut(this, shortCutName, R.mipmap.ic_logo);
+        }
+    }
+
 
     public void skipToMainActivity() {
         if (mHasSkip) {
             return;
         }
+
+        installShortcut();
+
         mHasSkip = true;
         getWindow().getDecorView().findViewById(android.R.id.content).postDelayed(new Runnable() {
             @Override

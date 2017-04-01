@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created by susion on 17/2/22.
  */
-public class ClientReceiverPresenter implements MediaPlayerContract.ClientReceiverPresenter{
+public class ClientReceiverPresenter implements MediaPlayerContract.ClientReceiverPresenter {
 
     protected ClientMusicReceiver mReceiver;
     protected MediaPlayerContract.BaseView mBaseView;
@@ -57,7 +57,7 @@ public class ClientReceiverPresenter implements MediaPlayerContract.ClientReceiv
 
 
     public class ClientMusicReceiver extends BroadcastReceiver {
-        public IntentFilter getIntentFilter(){
+        public IntentFilter getIntentFilter() {
             IntentFilter filter = new IntentFilter();
             filter.addAction(MusicServiceInstruction.CLIENT_RECEIVER_PLAYER_PREPARED);
             filter.addAction(MusicServiceInstruction.CLIENT_RECEIVER_UPDATE_BUFFERED_PROGRESS);
@@ -69,13 +69,16 @@ public class ClientReceiverPresenter implements MediaPlayerContract.ClientReceiv
             filter.addAction(MusicServiceInstruction.CLIENT_RECEIVER_CURRENT_IS_PALING);
             filter.addAction(MusicServiceInstruction.CLIENT_RECEIVER_CURRENT_PLAY_MUSIC);
             filter.addAction(MusicServiceInstruction.CLIENT_RECEIVER_PLAY_QUEUE);
+            filter.addAction(MusicServiceInstruction.CLIENT_RECEIVER_QUEUE_NO_MORE_MUSIC);
+            filter.addAction(MusicServiceInstruction.CLIENT_RECEIVER_QUEUE_NO_MORE_MUSIC);
+            filter.addAction(MusicServiceInstruction.CLIENT_RECEIVER_CAN_CHANGE_MUSIC);
             return filter;
         }
 
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            switch (action){
+            switch (action) {
                 case MusicServiceInstruction.CLIENT_RECEIVER_PLAYER_PREPARED:
                     if (mLittlePlayView != null) {
                         mLittlePlayView.preparedPlay(intent.getIntExtra(MusicServiceInstruction.CLIENT_PARAM_PREPARED_TOTAL_DURATION, 0));
@@ -160,7 +163,18 @@ public class ClientReceiverPresenter implements MediaPlayerContract.ClientReceiv
                     List<Song> songs = (List<Song>) intent.getSerializableExtra(MusicServiceInstruction.CLIENT_PARAM_PLAY_QUEUE);
                     if (mPlayView != null && songs != null) {
                         mPlayView.setPlayQueue(songs);
+                    }
+                    break;
 
+                case MusicServiceInstruction.CLIENT_RECEIVER_QUEUE_NO_MORE_MUSIC:
+                    if (mPlayView != null) {
+                        mPlayView.showNoMoreMusic();
+                    }
+                    break;
+                case MusicServiceInstruction.CLIENT_RECEIVER_CAN_CHANGE_MUSIC:
+                    boolean canChange = intent.getBooleanExtra(MusicServiceInstruction.CLIENT_PARAM_CAN_CHANGE_MUSIC, false);
+                    if (mPlayView != null) {
+                        mPlayView.canChangeMusic(canChange);
                     }
                     break;
             }

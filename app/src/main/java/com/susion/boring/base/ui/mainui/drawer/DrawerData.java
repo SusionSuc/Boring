@@ -3,6 +3,7 @@ package com.susion.boring.base.ui.mainui.drawer;
 import android.content.Context;
 
 import com.susion.boring.R;
+import com.susion.boring.base.SAppApplication;
 import com.susion.boring.base.ui.AppInfoActivity;
 import com.susion.boring.base.ui.AuthorActivity;
 import com.susion.boring.base.ui.CollectActivity;
@@ -29,17 +30,17 @@ public class DrawerData {
     public static List<DividerMark> getData() {
         if (sData == null) {
             sData = new ArrayList<>();
-            sData.add(new DrawerHeader("susion", true));
+            sData.add(new DrawerHeader(SAppApplication.getAppContext().getString(R.string.author_nickname), true));
             sData.add(new DrawerItem(DRAWER_AUTHOR, R.mipmap.ic_drawer_author, false));
             sData.add(new DrawerItem(DRAWER_COLLECT, R.mipmap.ic_drawer_collect, false));
-            sData.add(new DrawerItem(DRAWER_APP_INFO, R.mipmap.ic_drawer_app_info, true));
-            sData.add(new DrawerItem(DRAWER_SETTING, R.mipmap.ic_drawer_setting, false));
+            sData.add(new DrawerItem(DRAWER_APP_INFO, R.mipmap.ic_drawer_app_info, false));
+//            sData.add(new DrawerItem(DRAWER_SETTING, R.mipmap.ic_drawer_setting, false));
         }
         return sData;
     }
 
     public static void onItemClick(Context context, String type) {
-        switch (type){
+        switch (type) {
             case DRAWER_AUTHOR:
                 AuthorActivity.start(context);
                 break;

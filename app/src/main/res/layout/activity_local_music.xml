@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/white"
+    android:orientation="vertical"
     tools:context=".music.mvp.view.LocalMusicActivity">
 
     <com.susion.boring.base.view.SToolBar
-        android:transitionName="@string/transition_name_tool_bar"
         android:id="@+id/toolbar"
-        app:showTitle="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </com.susion.boring.base.view.SToolBar>
+        android:layout_height="wrap_content"
+        android:transitionName="@string/transition_name_tool_bar"
+        app:showTitle="true"></com.susion.boring.base.view.SToolBar>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -24,41 +22,44 @@
         <com.susion.boring.base.view.LoadMoreRecycleView
             android:id="@+id/list_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </com.susion.boring.base.view.LoadMoreRecycleView>
-
+            android:layout_height="match_parent"></com.susion.boring.base.view.LoadMoreRecycleView>
 
         <RelativeLayout
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="200dp"
-            android:visibility="gone"
             android:id="@+id/refresh_parent"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="200dp"
+            android:visibility="gone">
 
             <ImageView
-                android:layout_centerHorizontal="true"
                 android:id="@+id/refresh"
-                android:src="@mipmap/ic_music_loading"
                 android:layout_width="35dp"
-                android:layout_height="35dp" />
+                android:layout_height="35dp"
+                android:layout_centerHorizontal="true"
+                android:src="@mipmap/ic_music_loading" />
 
             <Button
                 android:id="@+id/local_music_bt_start_scan"
-                android:background="@drawable/bg_shape_corner_rectangle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/refresh"
                 android:layout_marginTop="10dp"
+                android:background="@drawable/bg_shape_corner_rectangle"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:text="扫描本地音乐"
-                android:textColor="@color/white"
-                android:layout_below="@id/refresh"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
+                android:textColor="@color/white" />
         </RelativeLayout>
 
-    </FrameLayout>
+        <ImageView
+            android:id="@+id/no_local_music"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:src="@mipmap/ic_scan_music" />
 
+    </FrameLayout>
 
 
 </LinearLayout>

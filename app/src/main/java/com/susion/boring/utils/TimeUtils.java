@@ -11,11 +11,7 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created with Android Studio.
- * User: ryan.hoo.j@gmail.com
- * Date: 9/2/16
- * Time: 6:07 PM
- * Desc: TimeUtils
+ * susion
  */
 public class TimeUtils {
 
@@ -49,23 +45,23 @@ public class TimeUtils {
 
     public static String formatDate(Date date, String pattern) {
         SimpleDateFormat format = new SimpleDateFormat(pattern);
-        return  format.format(date);
+        return format.format(date);
     }
 
     public static String getDateCnDescForZhiHu(Date date) {
         String dateDesc;
         Calendar calender = Calendar.getInstance();
         calender.setTime(date);
-        int month = calender.get(Calendar.MONTH)+1;
+        int month = calender.get(Calendar.MONTH) + 1;
         int day = calender.get(Calendar.DATE);
         int weekDay = calender.get(Calendar.DAY_OF_WEEK) - 1;
-        dateDesc = month+"月"+day+"日 "+"星期"+ translateToCn(weekDay);
+        dateDesc = month + "月" + day + "日 " + "星期" + translateToCn(weekDay);
         Log.e("dateDesc", dateDesc);
         return dateDesc;
     }
 
     private static String translateToCn(int weekDay) {
-        Log.e("weekDay: ", weekDay+"");
+        Log.e("weekDay: ", weekDay + "");
         switch (weekDay) {
             case 1:
                 return "一";
@@ -92,7 +88,6 @@ public class TimeUtils {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 }

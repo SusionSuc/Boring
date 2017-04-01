@@ -14,10 +14,10 @@ import com.susion.boring.music.service.MusicServiceInstruction;
 
 /**
  * Created by susion on 17/2/24.
- *
+ * <p>
  * Service Receiver
  */
-public class ServiceReceiverPresenter implements BaseServiceContract.ReceiverPresenter{
+public class ServiceReceiverPresenter implements BaseServiceContract.ReceiverPresenter {
 
     private final String TAG = getClass().getSimpleName();
     private ServiceMusicReceiver mReceiver;
@@ -35,7 +35,7 @@ public class ServiceReceiverPresenter implements BaseServiceContract.ReceiverPre
     }
 
     class ServiceMusicReceiver extends BroadcastReceiver {
-        IntentFilter getIntentFilter(){
+        IntentFilter getIntentFilter() {
             IntentFilter filter = new IntentFilter();
             filter.addAction(MusicServiceInstruction.SERVICE_RECEIVER_PLAY_MUSIC);
             filter.addAction(MusicServiceInstruction.SERVICE_RECEIVER_PAUSE_MUSIC);
@@ -60,13 +60,15 @@ public class ServiceReceiverPresenter implements BaseServiceContract.ReceiverPre
             filter.addAction(MusicServiceInstruction.SERVER_RECEIVER_RANDOM_PLAY_PLAY_LIST);
             filter.addAction(MusicServiceInstruction.SERVER_RECEIVER_REMOVE_SONG_FROM_QUEUE);
             filter.addAction(MusicServiceInstruction.SERVER_RECEIVER_PLAY_MODE_QUEUE);
+            filter.addAction(MusicServiceInstruction.SERVER_RECEIVER_ADD_MUSIC_TO_QUEUE);
+            filter.addAction(MusicServiceInstruction.SERVICE_RECEIVER_QUERY_IF_NEED_CHANGE_MUSIC);
             return filter;
         }
 
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            switch (action){
+            switch (action) {
                 case MusicServiceInstruction.SERVICE_LOAD_MUSIC_INFO:
                     mService.loadMusicInfo((Song) intent.getSerializableExtra(MusicServiceInstruction.SERVICE_PARAM_PLAY_SONG),
                             intent.getBooleanExtra(MusicServiceInstruction.SERVICE_PARAM_PLAY_SONG_AUTO_PLAY, false));
@@ -111,7 +113,7 @@ public class ServiceReceiverPresenter implements BaseServiceContract.ReceiverPre
                     mService.startRandomMode();
                     break;
                 case MusicServiceInstruction.SERVER_RECEIVER_SONG_TO_NEXT_PLAY:
-                    mService.songToNextPlay((Song)intent.getSerializableExtra(MusicServiceInstruction.SERVICE_PARAM_SONG_TO_NEXT_PLAY));
+                    mService.songToNextPlay((Song) intent.getSerializableExtra(MusicServiceInstruction.SERVICE_PARAM_SONG_TO_NEXT_PLAY));
                     break;
                 case MusicServiceInstruction.SERVER_RECEIVER_SONG_QUERY_CUR_MODE:
                     mService.notifyCurrentMode();
@@ -127,6 +129,15 @@ public class ServiceReceiverPresenter implements BaseServiceContract.ReceiverPre
                     break;
                 case MusicServiceInstruction.SERVER_RECEIVER_PLAY_MODE_QUEUE:
                     mService.startQueueMode();
+                    break;
+                case MusicServiceInstruction.SERVER_RECEIVER_ADD_MUSIC_TO_QUEUE:
+                    mService.addMusicToQueue((Song) intent.getSerializableExtra(MusicServiceInstruction.SERVICE_PARAM_QUEUE_ADD_SONG));
+                    break;
+                case MusicServiceInstruction.SERVER_RECEIVER_REMOVE_SONG_FROM_QUEUE:
+                    mService.removeSongFromQueue((Song) intent.getSerializableExtra(MusicServiceInstruction.SERVICE_PARAM_REMOVE_SONG));
+                    break;
+                case MusicServiceInstruction.SERVICE_RECEIVER_QUERY_IF_NEED_CHANGE_MUSIC:
+                    mService.queryNeedToChangeMusic((Song) intent.getSerializableExtra(MusicServiceInstruction.SERVICE_PARAM_REMOVE_SONG));
                     break;
             }
         }

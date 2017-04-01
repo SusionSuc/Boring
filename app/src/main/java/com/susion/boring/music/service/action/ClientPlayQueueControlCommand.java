@@ -38,4 +38,11 @@ public class ClientPlayQueueControlCommand implements MediaPlayerContract.Client
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
 
     }
+
+    @Override
+    public void addMusicToQueue(Song song) {
+        Intent intent = new Intent(MusicServiceInstruction.SERVER_RECEIVER_ADD_MUSIC_TO_QUEUE);
+        intent.putExtra(MusicServiceInstruction.SERVICE_PARAM_QUEUE_ADD_SONG, song);
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+    }
 }

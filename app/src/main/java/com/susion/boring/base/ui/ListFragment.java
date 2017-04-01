@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.susion.boring.R;
 import com.susion.boring.base.adapter.BaseRVAdapter;
@@ -22,6 +23,7 @@ public abstract class ListFragment<T> extends ViewPageFragment {
 
     protected LoadMoreRecycleView mRv;
     protected List<T> mData = new ArrayList<>();
+    private ImageView mEmptyView;
 
     @Override
     public View initContentView(LayoutInflater inflater, ViewGroup container) {
@@ -33,6 +35,7 @@ public abstract class ListFragment<T> extends ViewPageFragment {
     @Override
     public void initView() {
         mRv = (LoadMoreRecycleView) mView.findViewById(R.id.list_view);
+        mEmptyView = (ImageView) mView.findViewById(R.id.empty_view);
 
         RecyclerView.ItemDecoration itemDecoration = getItemDecoration();
         if (itemDecoration != null) {
@@ -71,6 +74,14 @@ public abstract class ListFragment<T> extends ViewPageFragment {
     }
 
     public void addData(List<T> datas) {
+        if (datas == null || datas.isEmpty()) {
+            mRv.setVisibility(View.INVISIBLE);
+            mEmptyView.setVisibility(View.VISIBLE);
+            return;
+        }
+
+        mRv.setVisibility(View.VISIBLE);
+        mEmptyView.setVisibility(View.INVISIBLE);
         if (mData == null) {
             mData = new ArrayList<>();
         }

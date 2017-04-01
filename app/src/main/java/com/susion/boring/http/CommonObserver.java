@@ -30,24 +30,27 @@ public abstract class CommonObserver<T> implements Observer<T> {
                 return;
             }
 
+            String msg;
             if (throwable instanceof ConnectException) {
-                showNetError();
+                msg = "网络有点不通畅哎";
             } else if (throwable instanceof SocketTimeoutException) {
-                showNetError();
+                msg = "网络有点不通畅哎";
             } else if (throwable instanceof HttpException) {
-                showNetError();
+                HttpException exception = (HttpException) throwable;
+                if (exception.code() >= 300 && exception.code() < 400) {
+                    msg = "网路迷路了哎";
+                } else if (exception.code() >= 400 && exception.code() < 500) {
+                    msg = "访问的资源好像不见了";
+                } else if (exception.code() >= 500 && exception.code() < 600) {
+                    msg = "服务器好像挂掉了哎";
+                } else {
+                    msg = "薯队长马上回来";
+                }
             } else {
-                showUnKnowError();
+                msg = "出现了未知错误哎";
             }
+
+            ToastUtils.showShort(msg);
         }
     }
-
-    private void showNetError() {
-        ToastUtils.showShort("网络好像不通畅哦....");
-    }
-
-    private void showUnKnowError() {
-        ToastUtils.showShort(" -_-,  出现了位置错误");
-    }
-
 }

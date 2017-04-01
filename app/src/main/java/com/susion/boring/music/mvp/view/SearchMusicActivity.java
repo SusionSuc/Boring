@@ -124,7 +124,8 @@ public class SearchMusicActivity extends BaseActivity implements OnLastItemVisib
                     @Override
                     public void onError(Throwable e) {
                         super.onError(e);
-                        mRV.setLoadStatus(LoadMoreView.LOAD_FAILED);
+                        mTvHolderImageView.clearAnimation();
+                        mSearchBar.enableSearchBt();
                     }
 
                     @Override

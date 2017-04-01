@@ -31,7 +31,7 @@ public class MainActivity extends BaseActivity {
 
     private DrawerLayout mDrawerLayout;
     private LinearLayout mDrawerMenu;
-    private RecyclerView mDrawerList;
+    private RecyclerView mRV;
     private ViewPager mViewPager;
 
     public static void start(Context srcContext) {
@@ -44,17 +44,8 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSwipeBackLayout().setEnableGesture(false);
-
-        ActivityManager manager = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
-        int heapSize = manager.getMemoryClass();
-        Log.e("堆大小为", heapSize+" MB");
     }
 
-    @Override
-    protected void setStatusBar() {
-//        int mStatusBarColor = getResources().getColor(R.color.colorPrimaryDark);
-//        StatusBarUtil.setColorForDrawerLayout(this, (DrawerLayout) findViewById(R.id.drawer_layout), mStatusBarColor, 0);
-    }
 
     @Override
     public int getLayoutId() {
@@ -65,15 +56,15 @@ public class MainActivity extends BaseActivity {
     public void findView() {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerMenu = (LinearLayout) findViewById(R.id.drawer);
-        mDrawerList = (RecyclerView) findViewById(R.id.list_view);
+        mRV = (RecyclerView) findViewById(R.id.list_view);
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
     }
 
     @Override
     public void initView() {
         mToolBar.setLeftIcon(R.mipmap.ic_menu);
-        mDrawerList.setLayoutManager(RVUtils.getLayoutManager(this, LinearLayoutManager.VERTICAL));
-        mDrawerList.addItemDecoration(RVUtils.getDrawerItemDecorationDivider(this, R.color.divider, new Rect(UIUtils.dp2Px(40), UIUtils.dp2Px(40), UIUtils.dp2Px(30), 0), DrawerData.getData()));
+        mRV.setLayoutManager(RVUtils.getLayoutManager(this, LinearLayoutManager.VERTICAL));
+        mRV.addItemDecoration(RVUtils.getDrawerItemDecorationDivider(this, R.color.divider, new Rect(UIUtils.dp2Px(40), UIUtils.dp2Px(40), UIUtils.dp2Px(30), 0), DrawerData.getData()));
 
         mViewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
@@ -124,7 +115,7 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        mDrawerList.setAdapter(new MainDrawerAdapter(this, DrawerData.getData()));
+        mRV.setAdapter(new MainDrawerAdapter(this, DrawerData.getData()));
         showCurrentSelectedFragment();
     }
 

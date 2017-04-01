@@ -17,6 +17,8 @@ import com.susion.boring.base.ui.ItemHandler;
 import com.susion.boring.base.ui.ItemHandlerFactory;
 import com.susion.boring.base.view.LoadMoreRecycleView;
 import com.susion.boring.db.DbManager;
+import com.susion.boring.http.APIHelper;
+import com.susion.boring.http.CommonObserver;
 import com.susion.boring.music.mvp.model.SimpleSong;
 import com.susion.boring.db.operate.MusicDbOperator;
 import com.susion.boring.music.itemhandler.LocalMusicIH;
@@ -43,6 +45,7 @@ public class LocalMusicActivity extends BaseActivity implements LocalMusicContra
     private Button mBtScanStart;
     private LocalMusicContract.Presenter mPresenter;
     private MusicDbOperator mMusicDbOperator;
+    private ImageView mIvNoLocalMusic;
 
     public static void start(Activity context) {
         Intent intent = new Intent(context, LocalMusicActivity.class);
@@ -60,6 +63,7 @@ public class LocalMusicActivity extends BaseActivity implements LocalMusicContra
         mRefreshParent = (ViewGroup) findViewById(R.id.refresh_parent);
         mRefreshView = (ImageView) findViewById(R.id.refresh);
         mBtScanStart = (Button) findViewById(R.id.local_music_bt_start_scan);
+        mIvNoLocalMusic = (ImageView) findViewById(R.id.no_local_music);
     }
 
     @Override
@@ -69,7 +73,7 @@ public class LocalMusicActivity extends BaseActivity implements LocalMusicContra
 
         mToolBar.setTitle("本地音乐");
         mToolBar.setLeftIcon(R.mipmap.ic_back);
-        mToolBar.setRightIcon(R.mipmap.ic_scan_local_music);
+        mToolBar.setRightIcon(R.mipmap.ic_search);
 
         mRV.setLayoutManager(RVUtils.getLayoutManager(this, LinearLayoutManager.VERTICAL));
         mRV.addItemDecoration(RVUtils.getItemDecorationDivider(this, R.color.divider, 2, -1, UIUtils.dp2Px(70)));
@@ -111,19 +115,17 @@ public class LocalMusicActivity extends BaseActivity implements LocalMusicContra
 
     @Override
     public void initData() {
-        mMusicDbOperator.getLocalMusic().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<List<SimpleSong>>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                ToastUtils.showShort("加载数据出错");
-            }
-
+        APIHelper.subscribeSimpleRequest(mMusicDbOperator.getLocalMusic(), new CommonObserver<List<SimpleSong>>() {
             @Override
             public void onNext(List<SimpleSong> simpleSongs) {
+                if (simpleSongs == null || simpleSongs.isEmpty()) {
+                    mIvNoLocalMusic.setVisibility(View.VISIBLE);
+                    mRefreshView.setVisibility(View.INVISIBLE);
+                    return;
+                }
+
+                mIvNoLocalMusic.setVisibility(View.VISIBLE);
+                mRefreshView.setVisibility(View.INVISIBLE);
                 mData.addAll(simpleSongs);
                 mRV.getAdapter().notifyDataSetChanged();
             }
