@@ -6,12 +6,13 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import com.susion.boring.music.mvp.model.PlayList;
 import com.susion.boring.music.mvp.contract.MediaPlayerContract;
+import com.susion.boring.music.mvp.model.Song;
 import com.susion.boring.music.service.MusicServiceInstruction;
 
 /**
  * Created by susion on 17/3/2.
  */
-public class ClientPlayModeCommand implements MediaPlayerContract.ClientPlayModeCommand{
+public class ClientPlayModeCommand implements MediaPlayerContract.ClientPlayModeCommand {
 
     private Context mContext;
 
@@ -34,14 +35,14 @@ public class ClientPlayModeCommand implements MediaPlayerContract.ClientPlayMode
     @Override
     public void circlePlayPlayList(PlayList mData) {
         Intent intent = new Intent(MusicServiceInstruction.SERVER_RECEIVER_CIRCLE_PLAY_PLAY_LIST);
-        intent.putExtra(MusicServiceInstruction.SERVICE_PARAM_PLAY_LIST, mData);
+        intent.putExtra(MusicServiceInstruction.SERVER_PARAM_PLAY_LIST, mData);
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
 
     @Override
     public void randomPlayPlayList(PlayList mPlayList) {
         Intent intent = new Intent(MusicServiceInstruction.SERVER_RECEIVER_RANDOM_PLAY_PLAY_LIST);
-        intent.putExtra(MusicServiceInstruction.SERVICE_PARAM_PLAY_LIST, mPlayList);
+        intent.putExtra(MusicServiceInstruction.SERVER_PARAM_PLAY_LIST, mPlayList);
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
 

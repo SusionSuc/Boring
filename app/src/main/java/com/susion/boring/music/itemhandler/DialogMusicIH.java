@@ -50,8 +50,8 @@ public class DialogMusicIH extends SimpleItemHandler<Song> {
             mTvArtist.setTextColor(mContext.getResources().getColor(R.color.shadow_divider));
         }
 
-        mTvMusicName.setText(data.name+"");
-        mTvArtist.setText(" - "+data.getArtist());
+        mTvMusicName.setText(data.name + "");
+        mTvArtist.setText(" - " + data.getArtist());
     }
 
     @Override

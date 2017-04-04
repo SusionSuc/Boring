@@ -28,19 +28,13 @@ public interface MusicServiceContract {
 
         void informCurrentPlayMusic();
 
-        void tryToChangeMusic(Song song);
-
-        void informCurrentIfPlaying();
-
         void informCurrentIfPlayProgress();
 
         void updateSong(Song song);
 
         Context getContext();
 
-        void notifyMediaDuration();
-
-        void notifyCurrentPlayMusic();
+        void notifyCurrentPlayMusic(boolean isPlaying);
 
         void clear();
 
@@ -48,9 +42,7 @@ public interface MusicServiceContract {
 
         void PlayPreMusic();
 
-        void changeMusic();
-
-        void notifyRefreshSong();
+        void changeMusic(Song song);
 
         void startCircleMode();
 
@@ -71,13 +63,8 @@ public interface MusicServiceContract {
         void startQueueMode();
 
         void addMusicToQueue(Song song);
-
-        void queryNeedToChangeMusic(Song serializableExtra);
     }
 
-    interface ReceiverPresenter {
-        void releaseResource();
-    }
 
     interface PlayQueueControlPresenter {
         int QUEUE_MODE = 0;

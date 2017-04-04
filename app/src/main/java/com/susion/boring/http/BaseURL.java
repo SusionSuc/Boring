@@ -5,7 +5,7 @@ package com.susion.boring.http;
  */
 public interface BaseURL {
     //music
-    String MUSIC = "http://s.music.163.com";
+    String MUSIC_SEARCH = "https://api.imjad.cn/cloudmusic";
     String MUSIC_SEARCH_LYRIC = "http://music.163.com";
     String CLOUD_MUSIC_API_MUSICINGO = "http://musicapi.duapp.com/api.php";
     String MUSIC_PLAY_LIST = "http://musicapi.duapp.com/api.php";

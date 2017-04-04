@@ -2,7 +2,9 @@ package com.susion.boring.music.mvp.model;
 
 import android.text.TextUtils;
 
+import com.google.gson.annotations.SerializedName;
 import com.susion.boring.base.mvp.model.FavoriteOb;
+import com.susion.boring.utils.Md5Utils;
 
 import java.io.Serializable;
 import java.util.List;
@@ -14,7 +16,10 @@ import java.util.List;
 public class Song extends FavoriteOb implements Serializable, PlayQueueSong {
     public String id;
     public String name;
+
+    @SerializedName("ar")
     public List<Singer> artists;
+    @SerializedName("al")
     public Album album;
     public String audio;
 
@@ -53,7 +58,22 @@ public class Song extends FavoriteOb implements Serializable, PlayQueueSong {
                 }
             }
         }
-
         return artist;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Song song = (Song) o;
+
+        return id.equals(song.id);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }

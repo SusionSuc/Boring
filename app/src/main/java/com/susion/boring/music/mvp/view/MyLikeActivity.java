@@ -16,15 +16,25 @@ import com.susion.boring.base.ui.ItemHandler;
 import com.susion.boring.base.ui.ListFragment;
 import com.susion.boring.base.adapter.ViewHolder;
 import com.susion.boring.db.DbManager;
+import com.susion.boring.event.AddToNextPlayEvent;
+import com.susion.boring.event.PlayListDeleteFromLikeEvent;
+import com.susion.boring.event.SongDeleteFromLikeEvent;
 import com.susion.boring.http.APIHelper;
 import com.susion.boring.http.CommonObserver;
+import com.susion.boring.music.mvp.contract.MediaPlayerContract;
 import com.susion.boring.music.mvp.model.SimpleSong;
 import com.susion.boring.db.operate.DbBaseOperate;
 import com.susion.boring.db.operate.MusicDbOperator;
 import com.susion.boring.music.itemhandler.LocalMusicIH;
 import com.susion.boring.music.itemhandler.SimpleMusicIH;
 import com.susion.boring.music.mvp.model.PlayList;
+import com.susion.boring.music.service.action.ClientPlayQueueControlCommand;
+import com.susion.boring.read.mvp.model.NewsDetail;
 import com.susion.boring.utils.RVUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,10 +47,18 @@ public class MyLikeActivity extends BaseActivity {
     private ViewPager mViewPager;
     private List<ListFragment> mFragments = new ArrayList<>();
     private TabLayout mTabLayout;
+    private MediaPlayerContract.ClientPlayQueueControlCommand mPlayQueueCommand;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, MyLikeActivity.class);
         context.startActivity(intent);
+    }
+
+    @Override
+    protected void initParamsAndPresenter() {
+        super.initParamsAndPresenter();
+        EventBus.getDefault().register(this);
+        mPlayQueueCommand = new ClientPlayQueueControlCommand(this);
     }
 
     @Override
@@ -100,32 +118,19 @@ public class MyLikeActivity extends BaseActivity {
         @Override
         protected void loadData() {
             mDbOperator = new MusicDbOperator(DbManager.getLiteOrm(), getContext(), SimpleSong.class);
-            mDbOperator.getLikeMusic()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Observer<List<SimpleSong>>() {
-                        @Override
-                        public void onCompleted() {
-
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-
-                        }
-
-                        @Override
-                        public void onNext(List<SimpleSong> simpleSongs) {
-                            if (simpleSongs != null) {
-                                addData(simpleSongs);
-                            }
-                        }
-                    });
+            APIHelper.subscribeSimpleRequest(mDbOperator.getLikeMusic(), new CommonObserver<List<SimpleSong>>() {
+                @Override
+                public void onNext(List<SimpleSong> simpleSongs) {
+                    if (simpleSongs != null) {
+                        addData(simpleSongs);
+                    }
+                }
+            });
         }
 
         @Override
         protected ItemHandler getSingletonItemHandler() {
-            return new LocalMusicIH();
+            return new LocalMusicIH(true);
         }
 
         @Override
@@ -145,9 +150,28 @@ public class MyLikeActivity extends BaseActivity {
 
         @Override
         protected void findView() {
-
+            EventBus.getDefault().register(this);
         }
 
+        @Subscribe(threadMode = ThreadMode.MAIN)
+        public void onMessageEvent(SongDeleteFromLikeEvent event) {
+            List<SimpleSong> pics = mData;
+            int i = 0;
+            for (; i < pics.size(); i++) {
+                if (pics.get(i).id.equals(event.song.id)) {
+                    break;
+                }
+            }
+            mData.remove(i);
+            mRv.getAdapter().notifyDataSetChanged();
+        }
+
+
+        @Override
+        public void onDestroy() {
+            super.onDestroy();
+            EventBus.getDefault().unregister(this);
+        }
     }
 
     public static class PlayListFragment extends ListFragment<PlayList> {
@@ -168,9 +192,14 @@ public class MyLikeActivity extends BaseActivity {
 
         @Override
         protected ItemHandler getSingletonItemHandler() {
-            return new SimpleMusicIH<PlayList>() {
+            return new SimpleMusicIH<PlayList>(false) {
                 @Override
-                protected void onClickEvent() {
+                protected void onAddToNextPlayClick() {
+
+                }
+
+                @Override
+                protected void onItemClick() {
                     PlayListActivity.start(getContext(), mData);
                 }
 
@@ -180,6 +209,7 @@ public class MyLikeActivity extends BaseActivity {
                     vh.getTextView(R.id.item_local_music_tv_artist_album).setText(data.getPlayCount() + "");
                     vh.getTextView(R.id.item_local_music_tv_duration).setVisibility(View.GONE);
                     mSdvAlbum.setImageURI(data.getCoverImgUrl());
+                    mIvNextPlay.setVisibility(View.INVISIBLE);
                 }
             };
         }
@@ -201,8 +231,37 @@ public class MyLikeActivity extends BaseActivity {
 
         @Override
         protected void findView() {
-
+            EventBus.getDefault().register(this);
         }
 
+        @Subscribe(threadMode = ThreadMode.MAIN)
+        public void onMessageEvent(PlayListDeleteFromLikeEvent event) {
+            List<PlayList> pics = mData;
+            int i = 0;
+            for (; i < pics.size(); i++) {
+                if (pics.get(i).id.equals(event.playList.id)) {
+                    break;
+                }
+            }
+            mData.remove(i);
+            mRv.getAdapter().notifyDataSetChanged();
+        }
+
+        @Override
+        public void onDestroy() {
+            super.onDestroy();
+            EventBus.getDefault().unregister(this);
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(AddToNextPlayEvent event) {
+        mPlayQueueCommand.addMusicToNextPlay(event.song);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

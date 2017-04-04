@@ -14,15 +14,22 @@ import com.susion.boring.base.ui.ItemHandlerFactory;
 import com.susion.boring.base.ui.OnLastItemVisibleListener;
 import com.susion.boring.base.view.LoadMoreRecycleView;
 import com.susion.boring.base.view.LoadMoreView;
+import com.susion.boring.event.AddToNextPlayEvent;
 import com.susion.boring.http.APIHelper;
 import com.susion.boring.http.CommonObserver;
 import com.susion.boring.music.itemhandler.SearchMusicResultIH;
+import com.susion.boring.music.mvp.contract.MediaPlayerContract;
 import com.susion.boring.music.mvp.model.MusicSearchResult;
 import com.susion.boring.music.mvp.model.Song;
+import com.susion.boring.music.service.action.ClientPlayQueueControlCommand;
 import com.susion.boring.utils.RVUtils;
 import com.susion.boring.utils.SystemOperationUtils;
 import com.susion.boring.utils.UIUtils;
 import com.susion.boring.base.view.SearchBar;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +43,7 @@ public class SearchMusicActivity extends BaseActivity implements OnLastItemVisib
     private View mHolderView;
     private ImageView mTvHolderImageView;
 
+    private MediaPlayerContract.ClientPlayQueueControlCommand mPlayQueueCommand;
     private List<Song> mData = new ArrayList<>();
     private boolean mIsNewSearch;
     private int mPage = 0;
@@ -45,6 +53,14 @@ public class SearchMusicActivity extends BaseActivity implements OnLastItemVisib
     @Override
     public int getLayoutId() {
         return R.layout.activity_search_music;
+    }
+
+
+    @Override
+    protected void initParamsAndPresenter() {
+        super.initParamsAndPresenter();
+        EventBus.getDefault().register(this);
+        mPlayQueueCommand = new ClientPlayQueueControlCommand(this);
     }
 
     @Override
@@ -68,7 +84,7 @@ public class SearchMusicActivity extends BaseActivity implements OnLastItemVisib
                 registerItemHandler(0, new ItemHandlerFactory() {
                     @Override
                     public ItemHandler newInstant(int viewType) {
-                        return new SearchMusicResultIH();
+                        return new SearchMusicResultIH(true);
                     }
                 });
             }
@@ -118,9 +134,8 @@ public class SearchMusicActivity extends BaseActivity implements OnLastItemVisib
 
     private void loadData() {
         SystemOperationUtils.closeSystemKeyBoard(this);
-        APIHelper.subscribeSimpleRequest(APIHelper.getMusicServices().searchMusic(mSearchContent, PAGE_SIZE, 1, mPage * PAGE_SIZE),
+        APIHelper.subscribeSimpleRequest(APIHelper.getMusicServices().searchMusic(mSearchContent, PAGE_SIZE, "search", mPage * PAGE_SIZE),
                 new CommonObserver<MusicSearchResult>() {
-
                     @Override
                     public void onError(Throwable e) {
                         super.onError(e);
@@ -155,5 +170,17 @@ public class SearchMusicActivity extends BaseActivity implements OnLastItemVisib
                     }
                 }
         );
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(AddToNextPlayEvent event) {
+        mPlayQueueCommand.addMusicToNextPlay(event.song);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

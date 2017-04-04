@@ -63,10 +63,18 @@
         <activity
             android:name=".read.mvp.view.PictureViewActivity"
             android:theme="@style/TranslucentTheme" />
-        <activity android:name=".base.ui.AuthorActivity" />
-        <activity android:name=".base.ui.CollectActivity" />
-        <activity android:name=".base.ui.AppInfoActivity" />
-        <activity android:name=".base.ui.SettingActivity"></activity>
+        <activity
+            android:name=".base.ui.AuthorActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".base.ui.CollectActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".base.ui.AppInfoActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".base.ui.SettingActivity"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

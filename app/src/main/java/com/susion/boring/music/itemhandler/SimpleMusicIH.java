@@ -20,8 +20,13 @@ public abstract class SimpleMusicIH<T> extends SimpleItemHandler<T> {
     protected TextView mTvTile;
     protected TextView mTvSecondTile;
     protected TextView mTvDuration;
-    protected ImageView mTvOperator;
+    protected ImageView mIvNextPlay;
 
+    private boolean mShowNextPlay;
+
+    public SimpleMusicIH(boolean showNextPlay) {
+        this.mShowNextPlay = showNextPlay;
+    }
 
     @Override
     public void onCreateItemHandler(ViewHolder vh, ViewGroup parent) {
@@ -30,7 +35,13 @@ public abstract class SimpleMusicIH<T> extends SimpleItemHandler<T> {
         mTvSecondTile = vh.getTextView(R.id.item_local_music_tv_artist_album);
         mTvTile = vh.getTextView(R.id.item_local_music_tv_music_name);
         mTvDuration = vh.getTextView(R.id.item_local_music_tv_duration);
-        mTvOperator = vh.getImageView(R.id.item_local_music_iv_operator_list);
+        mIvNextPlay = vh.getImageView(R.id.item_local_music_iv_add_to_next_play);
+
+        if (!mShowNextPlay) {
+            mIvNextPlay.setVisibility(View.INVISIBLE);
+        } else {
+            mIvNextPlay.setOnClickListener(this);
+        }
     }
 
     @Override
@@ -45,10 +56,17 @@ public abstract class SimpleMusicIH<T> extends SimpleItemHandler<T> {
 
     @Override
     public void onClick(View view) {
-        onClickEvent();
+        if (view.getId() == R.id.item_local_music_iv_add_to_next_play) {
+            onAddToNextPlayClick();
+            return;
+        }
+
+        onItemClick();
     }
 
-    protected abstract void onClickEvent();
+    protected abstract void onAddToNextPlayClick();
+
+    protected abstract void onItemClick();
 
     protected abstract void bindData(ViewHolder vh, final T data, int position);
 }

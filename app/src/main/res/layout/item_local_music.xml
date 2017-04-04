@@ -50,13 +50,15 @@
 
 
     <ImageView
-        android:id="@+id/item_local_music_iv_operator_list"
-        android:layout_width="25dp"
-        android:layout_height="30dp"
+        android:id="@+id/item_local_music_iv_add_to_next_play"
+        android:layout_width="45dp"
+        android:layout_height="25dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="15dp"
-        android:src="@mipmap/ic_play_operator_list" />
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:background="@drawable/bg_ripple"
+        android:src="@mipmap/ic_add_to_next_play" />
 
     <TextView
         android:id="@+id/item_local_music_tv_duration"
@@ -64,7 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginRight="10dp"
-        android:layout_toLeftOf="@id/item_local_music_iv_operator_list"
+        android:layout_toLeftOf="@id/item_local_music_iv_add_to_next_play"
         android:text="3:08"
         android:textColor="@color/divider"
         android:textSize="16sp" />

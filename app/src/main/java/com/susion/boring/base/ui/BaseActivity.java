@@ -1,5 +1,6 @@
 package com.susion.boring.base.ui;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
@@ -29,23 +30,29 @@ public abstract class BaseActivity extends SwipeBackActivity {
 
     public abstract void initData();
 
+
+    protected void initParamsAndPresenter() {
+
+    }
+
     protected void setStatusBar() {
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
         initSwipeBackLayout();
         setContentView(getLayoutId());
         setStatusBar();
         initTransitionAnim();
-
         View view = findViewById(R.id.toolbar);
         if (view != null && view instanceof SToolBar) {
             mToolBar = (SToolBar) view;
             mToolBar.setLeftIcon(R.mipmap.ic_back);
-
         }
+
+        initParamsAndPresenter();
         findView();
         initView();
         initListener();

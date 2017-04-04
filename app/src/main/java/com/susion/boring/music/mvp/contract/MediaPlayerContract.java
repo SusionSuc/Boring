@@ -16,16 +16,14 @@ public interface MediaPlayerContract {
 
     //for panel view
     interface BaseView extends IView {
-        void tryToChangeMusicByCurrentCondition(boolean playStatus, boolean needLoadMusic);
-
-        void refreshSong(Song song);
+        void refreshSong(Song song, boolean playStatus);
     }
 
     //media player notify view
     interface LittlePlayView {
         void updateBufferedProgress(int percent);
 
-        void updatePlayProgress(int curPos, int duration);
+        void updatePlayProgress(int curPos, int duration, int max);
 
         void preparedPlay(int duration);
 
@@ -45,8 +43,6 @@ public interface MediaPlayerContract {
         void setPlayQueue(List<Song> playQueue);
 
         void showNoMoreMusic();
-
-        void canChangeMusic(boolean canChange);
     }
 
 
@@ -86,31 +82,20 @@ public interface MediaPlayerContract {
 
         void setBaseView(BaseView view);
 
-        void setLittlePlayView(LittlePlayView view);
-
         void setPlayView(PlayView view);
     }
 
 
     //Client send command interact with play service
     interface ClientPlayControlCommand {
-        void queryServiceIsPlaying();
-
-        void tryToChangePlayingMusic(Song song);
 
         void changeToNextMusic();
 
         void changeToPreMusic();
 
-        void loadMusicInfoToService(Song song, boolean autoPlay);
-
-        void playMusic();
+        void getCurrentPlayMusic();
 
         void pausePlay();
-
-        void updatePlayMusic(Song song);
-
-        void queryIfNeedChangeMusic(Song mSong);
     }
 
 
@@ -126,6 +111,7 @@ public interface MediaPlayerContract {
         void randomPlayPlayList(PlayList mPlayList);
 
         void startQueuePlayMode();
+
     }
 
     interface ClientPlayQueueControlCommand {
@@ -136,6 +122,8 @@ public interface MediaPlayerContract {
         void changeMusic(Song song);
 
         void addMusicToQueue(Song song);
+
+        void addMusicToNextPlay(Song song);
     }
 
 }

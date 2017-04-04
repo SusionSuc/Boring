@@ -13,7 +13,7 @@ import java.io.Serializable;
 public class PlayList implements Serializable {
 
     @PrimaryKey(AssignType.BY_MYSELF)
-    private String id;
+    public String id;
 
     private String name;
     private String coverImgUrl;

@@ -5,10 +5,12 @@ import android.view.View;
 
 import com.susion.boring.base.adapter.ViewHolder;
 import com.susion.boring.event.AddMusicToQueueEvent;
+import com.susion.boring.event.AddToNextPlayEvent;
 import com.susion.boring.music.mvp.model.SimpleSong;
 import com.susion.boring.music.mvp.view.PlayMusicActivity;
 import com.susion.boring.utils.AlbumUtils;
 import com.susion.boring.utils.TimeUtils;
+import com.susion.boring.utils.ToastUtils;
 import com.susion.boring.utils.UIUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -18,8 +20,19 @@ import org.greenrobot.eventbus.EventBus;
  */
 public class LocalMusicIH extends SimpleMusicIH<SimpleSong> {
 
+
+    public LocalMusicIH(boolean showNextPlay) {
+        super(showNextPlay);
+    }
+
     @Override
-    protected void onClickEvent() {
+    protected void onAddToNextPlayClick() {
+        ToastUtils.showShort("已经添加下一首播放");
+        EventBus.getDefault().post(new AddToNextPlayEvent(mData));
+    }
+
+    @Override
+    protected void onItemClick() {
         if (!mData.isFromPlayList() && mData.isHasDown()) {
             PlayMusicActivity.start(mContext, mData.translateToSong(), false);
         } else {
@@ -42,12 +55,11 @@ public class LocalMusicIH extends SimpleMusicIH<SimpleSong> {
 
         if (data.isHasDown()) {
             AlbumUtils.setAlbum(mSdvAlbum, data.getPath());
-            mTvDuration.setText(TimeUtils.formatDuration(data.getDuration()));
+            String duration = TimeUtils.formatDuration(data.getDuration());
+            mTvDuration.setText(duration.equals("00:00") ? "" : duration);
         } else {
             UIUtils.loadSmallPicture(mSdvAlbum, data.getPicPath());
             mTvDuration.setVisibility(View.GONE);
         }
     }
-
-
 }

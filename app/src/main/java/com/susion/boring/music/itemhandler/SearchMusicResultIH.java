@@ -1,41 +1,41 @@
 package com.susion.boring.music.itemhandler;
 
-import android.net.Uri;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.backends.pipeline.PipelineDraweeController;
-import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.imagepipeline.common.ResizeOptions;
-import com.facebook.imagepipeline.request.ImageRequest;
-import com.facebook.imagepipeline.request.ImageRequestBuilder;
-import com.susion.boring.R;
-import com.susion.boring.base.ui.SimpleItemHandler;
 import com.susion.boring.base.adapter.ViewHolder;
+import com.susion.boring.event.AddToNextPlayEvent;
 import com.susion.boring.music.mvp.view.PlayMusicActivity;
 import com.susion.boring.music.mvp.model.Song;
 import com.susion.boring.utils.ToastUtils;
 import com.susion.boring.utils.UIUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by susion on 17/1/20.
  */
 public class SearchMusicResultIH extends SimpleMusicIH<Song> {
 
+    public SearchMusicResultIH(boolean showNextPlay) {
+        super(showNextPlay);
+    }
+
     @Override
     public void onCreateItemHandler(ViewHolder vh, ViewGroup parent) {
         super.onCreateItemHandler(vh, parent);
         mTvDuration.setVisibility(View.INVISIBLE);
-        mTvOperator.setVisibility(View.INVISIBLE);
     }
 
     @Override
-    protected void onClickEvent() {
-        if (TextUtils.isEmpty(mData.audio)) {
-            ToastUtils.showShort("抱歉啦! 暂时没有播放资源");
-        }
+    protected void onAddToNextPlayClick() {
+        ToastUtils.showShort("已经添加下一首播放");
+        EventBus.getDefault().post(new AddToNextPlayEvent(mData));
+    }
+
+    @Override
+    protected void onItemClick() {
         PlayMusicActivity.start(mContext, mData, false);
     }
 

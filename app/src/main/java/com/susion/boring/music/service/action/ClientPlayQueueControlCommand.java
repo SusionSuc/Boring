@@ -27,14 +27,14 @@ public class ClientPlayQueueControlCommand implements MediaPlayerContract.Client
     @Override
     public void removeSongFromQueue(Song song) {
         Intent intent = new Intent(MusicServiceInstruction.SERVER_RECEIVER_REMOVE_SONG_FROM_QUEUE);
-        intent.putExtra(MusicServiceInstruction.SERVICE_PARAM_REMOVE_SONG, song);
+        intent.putExtra(MusicServiceInstruction.SERVER_PARAM_REMOVE_SONG, song);
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
 
     @Override
     public void changeMusic(Song song) {
         Intent intent = new Intent(MusicServiceInstruction.SERVER_RECEIVER_CHANGE_MUSIC);
-        intent.putExtra(MusicServiceInstruction.SERVICE_PARAM_CHANGE_MUSIC, song);
+        intent.putExtra(MusicServiceInstruction.SERVER_PARAM_CHANGE_MUSIC, song);
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
 
     }
@@ -42,7 +42,15 @@ public class ClientPlayQueueControlCommand implements MediaPlayerContract.Client
     @Override
     public void addMusicToQueue(Song song) {
         Intent intent = new Intent(MusicServiceInstruction.SERVER_RECEIVER_ADD_MUSIC_TO_QUEUE);
-        intent.putExtra(MusicServiceInstruction.SERVICE_PARAM_QUEUE_ADD_SONG, song);
+        intent.putExtra(MusicServiceInstruction.SERVER_PARAM_QUEUE_ADD_SONG, song);
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
+
+    @Override
+    public void addMusicToNextPlay(Song song) {
+        Intent intent = new Intent(MusicServiceInstruction.SERVER_RECEIVER_SONG_TO_NEXT_PLAY);
+        intent.putExtra(MusicServiceInstruction.SERVER_PARAM_SONG_TO_NEXT_PLAY, song);
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+    }
+
 }

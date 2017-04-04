@@ -102,7 +102,7 @@ public class MusicControlPanel extends LinearLayout {
         if (mIsPlay) {
             mIvPlay.setImageResource(R.mipmap.ic_music_pannel_stop);
         } else {
-            mIvPlay.setImageResource(R.mipmap.ic_music_panner_play);
+            mIvPlay.setImageResource(R.mipmap.ic_music_pannel_paly);
         }
     }
 

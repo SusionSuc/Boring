@@ -6,8 +6,10 @@ import com.susion.boring.music.mvp.model.Song;
 import com.susion.boring.music.mvp.contract.MusicServiceContract;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import rx.Observable;
 import rx.Observer;
@@ -22,6 +24,7 @@ public class MusicPlayQueueControlPresenter implements MusicServiceContract.Play
 
     private ModelTranslateContract.MusicModeTranslate musicModeTranslate;
     private List<Song> mQueue;
+    private Set<String> mUniqueIds;
     private int mPlayMode;
     private int mCurrentIndex = 0;
     private final Random mRandom;
@@ -30,11 +33,12 @@ public class MusicPlayQueueControlPresenter implements MusicServiceContract.Play
 
         if (mQueue == null) {
             mQueue = new ArrayList<>();
+            mUniqueIds = new HashSet<>();
         }
 
         if (initQueue != null) {
             for (Song song : initQueue) {
-                mQueue.add(song);
+                addMusicToQueue(0, song);
             }
         }
 
@@ -44,9 +48,18 @@ public class MusicPlayQueueControlPresenter implements MusicServiceContract.Play
         musicModeTranslate = new MusicModelTranslatePresenter();
     }
 
+    private boolean addMusicToQueue(int index, Song song) {
+        if (!mUniqueIds.contains(song.id)) {
+            mQueue.add(index, song);
+            mUniqueIds.add(song.id);
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public boolean addToPlayQueue(Song song) {
-        return mQueue.add(song);
+        return addMusicToQueue(0, song);
     }
 
     @Override
@@ -57,12 +70,15 @@ public class MusicPlayQueueControlPresenter implements MusicServiceContract.Play
 
     @Override
     public boolean addToNextPlay(Song song) {
-        mPlayMode = QUEUE_MODE;
+        if (mQueue.isEmpty()) {
+            addMusicToQueue(0, song);
+            return true;
+        }
 
-        if (mCurrentIndex + 1 < mQueue.size()) {
-            mQueue.add(mCurrentIndex + 1, song);
+        if (mCurrentIndex + 1 >= mQueue.size()) {
+            addMusicToQueue(mQueue.size(), song);
         } else {
-            mQueue.add(0, song);
+            addMusicToQueue(mCurrentIndex + 1, song);
         }
 
         return true;
@@ -70,12 +86,11 @@ public class MusicPlayQueueControlPresenter implements MusicServiceContract.Play
 
     @Override
     public Song getNextPlayMusic() {
-        if (mQueue.isEmpty()) {
-            return null;
+        if (mQueue.isEmpty() || mCurrentIndex + 1 >= mQueue.size()) {
+            return mQueue.get(mCurrentIndex);
         }
 
         if (mPlayMode == CIRCLE_MODE) {
-
         }
 
         if (mPlayMode == QUEUE_MODE || mPlayMode == PLAY_LIST_CIRCLE_MODE) {
@@ -95,8 +110,8 @@ public class MusicPlayQueueControlPresenter implements MusicServiceContract.Play
 
     @Override
     public Song getPrePlayMusic() {
-        if (mQueue.isEmpty()) {
-            return null;
+        if (mQueue.isEmpty() || mCurrentIndex - 1 < 0) {
+            return mQueue.get(mCurrentIndex);
         }
 
         if (mPlayMode == QUEUE_MODE || mPlayMode == PLAY_LIST_CIRCLE_MODE) {

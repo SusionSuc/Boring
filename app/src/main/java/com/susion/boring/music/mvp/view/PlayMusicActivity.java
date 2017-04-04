@@ -16,21 +16,25 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.susion.boring.R;
 import com.susion.boring.base.ui.BaseActivity;
+import com.susion.boring.base.view.SToolBar;
+import com.susion.boring.db.DbManager;
+import com.susion.boring.db.operate.DbBaseOperate;
+import com.susion.boring.db.operate.MusicDbOperator;
+import com.susion.boring.event.JokeDeleteFormLikeEvent;
+import com.susion.boring.event.SongDeleteFromLikeEvent;
 import com.susion.boring.http.APIHelper;
 import com.susion.boring.http.CommonObserver;
 import com.susion.boring.music.event.ChangeSongEvent;
 import com.susion.boring.music.event.SongDeleteFromPlayQueueEvent;
-import com.susion.boring.music.mvp.model.PlayListSong;
+import com.susion.boring.music.mvp.contract.MediaPlayerContract;
+import com.susion.boring.music.mvp.contract.MusicServiceContract;
+import com.susion.boring.music.mvp.model.SimpleSong;
 import com.susion.boring.music.mvp.model.Song;
 import com.susion.boring.music.mvp.presenter.ClientReceiverPresenter;
-import com.susion.boring.music.mvp.presenter.PlayMusicPagePresenter;
+import com.susion.boring.music.service.MusicServiceInstruction;
 import com.susion.boring.music.service.action.ClientPlayControlCommand;
 import com.susion.boring.music.service.action.ClientPlayModeCommand;
 import com.susion.boring.music.service.action.ClientPlayQueueControlCommand;
-import com.susion.boring.music.mvp.contract.MediaPlayerContract;
-import com.susion.boring.music.mvp.contract.MusicServiceContract;
-import com.susion.boring.music.mvp.contract.PlayMusicPageContract;
-import com.susion.boring.music.service.MusicServiceInstruction;
 import com.susion.boring.music.view.LyricView;
 import com.susion.boring.music.view.MediaSeekBar;
 import com.susion.boring.music.view.MusicPlayControlView;
@@ -41,7 +45,7 @@ import com.susion.boring.utils.BroadcastUtils;
 import com.susion.boring.utils.TimeUtils;
 import com.susion.boring.utils.ToastUtils;
 import com.susion.boring.utils.TransitionHelper;
-import com.susion.boring.base.view.SToolBar;
+import com.susion.boring.utils.UIUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -49,7 +53,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
-public class PlayMusicActivity extends BaseActivity implements MediaPlayerContract.PlayView, PlayMusicPageContract.View {
+public class PlayMusicActivity extends BaseActivity implements MediaPlayerContract.PlayView {
     private static final String TO_PLAY_MUSIC_INFO = "played_music";
     private static final String FROM_LITTLE_PANEL = "from_little_panel";
     private static final String NEED_LOAD = "needLoad";
@@ -59,21 +63,21 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
     private MusicPlayControlView mPlayControlView;
     private TextView mTvPlayedTime;
     private TextView mTvLeftTime;
-    private SimpleDraweeView mSdvAlbym;
-    private LyricView mTvLyric;
+    private SimpleDraweeView mSdvAlbum;
+    private LyricView mTvMusicName;
     private PlayOperatorView mPovMusicPlayControl;
 
     private Song mSong;
     private boolean mIsFromLittlePanel;
     private boolean isLoading;
 
-    private PlayMusicPageContract.Presenter mPresenter;
+    private MusicDbOperator mDbOperator;
     private MediaPlayerContract.ClientPlayControlCommand mPlayControlCommand;
     private MediaPlayerContract.ClientPlayModeCommand mPlayModeCommand;
     private MediaPlayerContract.ClientReceiverPresenter mClientReceiver;
     private MediaPlayerContract.ClientPlayQueueControlCommand mPlayQueueCommand;
     private PlayControlDialog mDialog;
-    private boolean needLoadFromInt = false;
+    private boolean mIsLove;
 
     public static void start(Context context, Song song, boolean needLoad) {
         Intent intent = new Intent();
@@ -89,6 +93,7 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
         Intent intent = new Intent();
         intent.putExtra(TO_PLAY_MUSIC_INFO, song);
         intent.putExtra(FROM_LITTLE_PANEL, true);
+        intent.putExtra(NEED_LOAD, false);
         intent.setClass(activity, PlayMusicActivity.class);
         activity.startActivity(intent, transitionActivityOptions.toBundle());
     }
@@ -106,12 +111,17 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
         getWindow().setStatusBarColor(Color.TRANSPARENT);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-
     }
 
     @Override
     public int getLayoutId() {
         return R.layout.activity_play_music;
+    }
+
+    @Override
+    protected void initParamsAndPresenter() {
+        mIsFromLittlePanel = getIntent().getBooleanExtra(FROM_LITTLE_PANEL, false);
+        mSong = (Song) getIntent().getSerializableExtra(TO_PLAY_MUSIC_INFO);
     }
 
     @Override
@@ -121,49 +131,25 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
         mPlayModeCommand = new ClientPlayModeCommand(this);
         mPlayQueueCommand = new ClientPlayQueueControlCommand(this);
         mClientReceiver = new ClientReceiverPresenter(this);
-        mPresenter = new PlayMusicPagePresenter(this);
         mClientReceiver.setPlayView(this);
-
+        mDbOperator = new MusicDbOperator(DbManager.getLiteOrm(), this, SimpleSong.class);
 
         mToolBar = (SToolBar) findViewById(R.id.toolbar);
         mSeekBar = (MediaSeekBar) findViewById(R.id.seek_bar);
         mPlayControlView = (MusicPlayControlView) findViewById(R.id.control_view);
         mTvPlayedTime = (TextView) findViewById(R.id.tv_has_play_time);
         mTvLeftTime = (TextView) findViewById(R.id.tv_left_time);
-        mSdvAlbym = (SimpleDraweeView) findViewById(R.id.ac_play_music_sdv_album);
-        mTvLyric = (LyricView) findViewById(R.id.ac_play_tv_music_name);
+        mSdvAlbum = (SimpleDraweeView) findViewById(R.id.ac_play_music_sdv_album);
+        mTvMusicName = (LyricView) findViewById(R.id.ac_play_tv_music_name);
         mPovMusicPlayControl = (PlayOperatorView) findViewById(R.id.ac_play_music_pov);
     }
 
     @Override
     public void initView() {
-        getParamAndInitReceiver();
         mToolBar.setMainPage(false);
         mToolBar.setTitle("");
         mToolBar.setLeftIcon(R.mipmap.ic_back);
         mToolBar.setBackgroundColor(getResources().getColor(R.color.transparent));
-        initListener();
-        refreshSong(mSong);
-    }
-
-    private void getParamAndInitReceiver() {
-        mIsFromLittlePanel = getIntent().getBooleanExtra(FROM_LITTLE_PANEL, false);
-        needLoadFromInt = getIntent().getBooleanExtra(NEED_LOAD, false);
-        mSong = (Song) getIntent().getSerializableExtra(TO_PLAY_MUSIC_INFO);
-
-        if (needLoadFromInt) {
-            APIHelper.subscribeSimpleRequest(APIHelper.getMusicServices().getSongDetail(Integer.valueOf(mSong.id)), new CommonObserver<PlayListSong>() {
-                @Override
-                public void onNext(PlayListSong songs) {
-                    if (songs != null && !songs.getData().isEmpty()) {
-                        mSong.audio = songs.getData().get(0).getUrl();
-                        mPlayControlCommand.queryServiceIsPlaying();
-                    }
-                }
-            });
-        } else {
-            mPlayControlCommand.queryServiceIsPlaying();
-        }
     }
 
     @Override
@@ -184,9 +170,9 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
             @Override
             public void onStartOrStartItemClick(boolean isPlay) {
                 if (isPlay) {
-                    BroadcastUtils.sendIntentAction(PlayMusicActivity.this, MusicServiceInstruction.SERVICE_RECEIVER_PLAY_MUSIC);
+                    BroadcastUtils.sendIntentAction(PlayMusicActivity.this, MusicServiceInstruction.SERVER_RECEIVER_PLAY_MUSIC);
                 } else {
-                    BroadcastUtils.sendIntentAction(PlayMusicActivity.this, MusicServiceInstruction.SERVICE_RECEIVER_PAUSE_MUSIC);
+                    BroadcastUtils.sendIntentAction(PlayMusicActivity.this, MusicServiceInstruction.SERVER_RECEIVER_PAUSE_MUSIC);
                 }
             }
         });
@@ -203,8 +189,8 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
 
             @Override
             public void onStopDragThumb(int currentProgress) {
-                Intent intent = new Intent(MusicServiceInstruction.SERVICE_RECEIVER_SEEK_TO);
-                intent.putExtra(MusicServiceInstruction.SERVICE_PARAM_SEEK_TO_POS, currentProgress);
+                Intent intent = new Intent(MusicServiceInstruction.SERVER_RECEIVER_SEEK_TO);
+                intent.putExtra(MusicServiceInstruction.SERVER_PARAM_SEEK_TO_POS, currentProgress);
                 LocalBroadcastManager.getInstance(PlayMusicActivity.this).sendBroadcast(intent);
                 if (!mPlayControlView.ismIsPlay()) {
                     mPlayControlView.setIsPlay(true);
@@ -213,8 +199,8 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
 
             @Override
             public void onProgressChange(int currentProgress) {
-                Intent intent = new Intent(MusicServiceInstruction.SERVICE_RECEIVER_SEEK_TO);
-                intent.putExtra(MusicServiceInstruction.SERVICE_PARAM_SEEK_TO_POS, currentProgress);
+                Intent intent = new Intent(MusicServiceInstruction.SERVER_RECEIVER_SEEK_TO);
+                intent.putExtra(MusicServiceInstruction.SERVER_PARAM_SEEK_TO_POS, currentProgress);
                 LocalBroadcastManager.getInstance(PlayMusicActivity.this).sendBroadcast(intent);
             }
         });
@@ -240,8 +226,30 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
 
             @Override
             public void onLikeItemClick(boolean like) {
-                mSong.favorite = like;
-                mPresenter.doLikeOrDisLikeMusic(mSong);
+                final SimpleSong simpleSong = mSong.translateToSimpleSong();
+                simpleSong.favorite = !mIsLove;
+                if (mIsLove) {
+                    APIHelper.subscribeSimpleRequest(mDbOperator.add(simpleSong), new CommonObserver<Boolean>() {
+                        @Override
+                        public void onNext(Boolean flag) {
+                            ToastUtils.showShort(flag ? "已经从喜欢列表移除" : "从喜欢列表移除失败");
+                            mIsLove = flag ? false : true;
+                            mPovMusicPlayControl.refreshLikeStatus(mIsLove);
+                            if (!mIsLove) {
+                                EventBus.getDefault().post(new SongDeleteFromLikeEvent(simpleSong));
+                            }
+                        }
+                    });
+                } else {
+                    APIHelper.subscribeSimpleRequest(mDbOperator.add(simpleSong), new CommonObserver<Boolean>() {
+                        @Override
+                        public void onNext(Boolean flag) {
+                            ToastUtils.showShort(flag ? "已喜欢" : "喜欢失败");
+                            mIsLove = flag ? true : false;
+                            mPovMusicPlayControl.refreshLikeStatus(mIsLove);
+                        }
+                    });
+                }
             }
 
             @Override
@@ -256,7 +264,28 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
 
     @Override
     public void initData() {
-//        loadLyric();
+        initLike();
+        changeMusic();
+    }
+
+    private void initLike() {
+        SimpleSong simpleSong = mSong.translateToSimpleSong();
+        APIHelper.subscribeSimpleRequest(mDbOperator.query(simpleSong.getId()), new CommonObserver<SimpleSong>() {
+            @Override
+            public void onNext(SimpleSong song) {
+                mIsLove = song != null ? true : false;
+                mIsLove = song.isFavorite();
+                mPovMusicPlayControl.refreshLikeStatus(mIsLove);
+            }
+        });
+    }
+
+    private void changeMusic() {
+        if (mIsFromLittlePanel) {
+            mPlayControlCommand.getCurrentPlayMusic();
+            return;
+        }
+        mPlayQueueCommand.changeMusic(mSong);
     }
 
     @Override
@@ -294,33 +323,22 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
     }
 
     @Override
-    public void tryToChangeMusicByCurrentCondition(boolean playStatus, boolean needLoadMusic) {
-        if (!mIsFromLittlePanel) {
-            mPlayControlCommand.tryToChangePlayingMusic(mSong);             //ignore needLoadMusic --> must load
-            return;
-        }
-        mPlayControlView.setIsPlay(playStatus);
-    }
-
-    @Override
-    public void refreshSong(Song song) {
+    public void refreshSong(Song song, boolean playStatus) {
         mSong = song;
-        mPovMusicPlayControl.refreshLikeStatus(mSong.favorite);
-        if (!mIsFromLittlePanel) {   //may be change music
-//            mPlayControlCommand.queryIfNeedChangeMusic(mSong);
+        if (!mIsFromLittlePanel) {
             loadNewMusic();
         }
 
         if (mSong.hasDown) {
-            mSdvAlbym.setImageBitmap(AlbumUtils.parseAlbum(mSong.audio));
+            mSdvAlbum.setImageBitmap(AlbumUtils.parseAlbum(mSong.audio));
         } else {
             if (mSong.album.picUrl != null) {
-                mSdvAlbym.setImageURI(mSong.album.picUrl);
+                mSdvAlbum.setImageURI(mSong.album.picUrl);
             }
         }
-        mTvLyric.setText(mSong.name);
-
+        mTvMusicName.setText(mSong.name);
         mPlayModeCommand.queryCurrentPlayMode();
+        mPlayControlView.setIsPlay(playStatus);
     }
 
     @Override
@@ -350,14 +368,6 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
     }
 
     @Override
-    public void canChangeMusic(boolean canChange) {
-        if (canChange) {
-            loadNewMusic();
-            mPlayControlCommand.tryToChangePlayingMusic(mSong);
-        }
-    }
-
-    @Override
     public void refreshPlayMode(int mode) {
         mPovMusicPlayControl.refreshPlayMode(mode);
     }
@@ -373,15 +383,13 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
     }
 
     @Override
-    public void updatePlayProgress(int curPos, int left) {
+    public void updatePlayProgress(int curPos, int left, int dur) {
         mTvPlayedTime.setText(TimeUtils.getDurationString(curPos, false));
         mTvLeftTime.setText(TimeUtils.getDurationString(left, true));
         mSeekBar.setCurrentProgress(curPos);
-    }
-
-    @Override
-    public void refreshLikeStatus(boolean like) {
-        mPovMusicPlayControl.refreshLikeStatus(like);
+        if (mSeekBar.getMaxProgress() != dur) {
+            mSeekBar.setMaxProgress(dur);
+        }
     }
 
     @Override
@@ -404,8 +412,9 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(ChangeSongEvent event) {
-        Song song = event.song;
-        mPlayQueueCommand.changeMusic(song);
+        mSong = event.song;
+        mIsFromLittlePanel = false;
+        changeMusic();
     }
 
 }

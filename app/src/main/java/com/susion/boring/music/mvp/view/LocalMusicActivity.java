@@ -17,17 +17,24 @@ import com.susion.boring.base.ui.ItemHandler;
 import com.susion.boring.base.ui.ItemHandlerFactory;
 import com.susion.boring.base.view.LoadMoreRecycleView;
 import com.susion.boring.db.DbManager;
+import com.susion.boring.event.AddToNextPlayEvent;
 import com.susion.boring.http.APIHelper;
 import com.susion.boring.http.CommonObserver;
+import com.susion.boring.music.mvp.contract.MediaPlayerContract;
 import com.susion.boring.music.mvp.model.SimpleSong;
 import com.susion.boring.db.operate.MusicDbOperator;
 import com.susion.boring.music.itemhandler.LocalMusicIH;
 import com.susion.boring.music.mvp.contract.LocalMusicContract;
 import com.susion.boring.music.mvp.presenter.LocalMusicPresenter;
+import com.susion.boring.music.service.action.ClientPlayQueueControlCommand;
 import com.susion.boring.utils.RVUtils;
 import com.susion.boring.utils.ToastUtils;
 import com.susion.boring.utils.UIUtils;
 import com.susion.boring.base.view.SToolBar;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,12 +51,22 @@ public class LocalMusicActivity extends BaseActivity implements LocalMusicContra
     private ImageView mRefreshView;
     private Button mBtScanStart;
     private LocalMusicContract.Presenter mPresenter;
+    private MediaPlayerContract.ClientPlayQueueControlCommand mPlayQueueCommand;
     private MusicDbOperator mMusicDbOperator;
     private ImageView mIvNoLocalMusic;
 
     public static void start(Activity context) {
         Intent intent = new Intent(context, LocalMusicActivity.class);
         context.startActivity(intent);
+    }
+
+    @Override
+    protected void initParamsAndPresenter() {
+        super.initParamsAndPresenter();
+        EventBus.getDefault().register(this);
+        mMusicDbOperator = new MusicDbOperator(DbManager.getLiteOrm(), this, SimpleSong.class);
+        mPresenter = new LocalMusicPresenter(this, mMusicDbOperator);
+        mPlayQueueCommand = new ClientPlayQueueControlCommand(this);
     }
 
     @Override
@@ -68,12 +85,9 @@ public class LocalMusicActivity extends BaseActivity implements LocalMusicContra
 
     @Override
     public void initView() {
-        mMusicDbOperator = new MusicDbOperator(DbManager.getLiteOrm(), this, SimpleSong.class);
-        mPresenter = new LocalMusicPresenter(this, mMusicDbOperator);
-
         mToolBar.setTitle("本地音乐");
         mToolBar.setLeftIcon(R.mipmap.ic_back);
-        mToolBar.setRightIcon(R.mipmap.ic_search);
+        mToolBar.setRightIcon(R.mipmap.ic_scan_local_music);
 
         mRV.setLayoutManager(RVUtils.getLayoutManager(this, LinearLayoutManager.VERTICAL));
         mRV.addItemDecoration(RVUtils.getItemDecorationDivider(this, R.color.divider, 2, -1, UIUtils.dp2Px(70)));
@@ -83,7 +97,7 @@ public class LocalMusicActivity extends BaseActivity implements LocalMusicContra
                 registerItemHandler(0, new ItemHandlerFactory() {
                     @Override
                     public ItemHandler newInstant(int viewType) {
-                        return new LocalMusicIH();
+                        return new LocalMusicIH(true);
                     }
                 });
             }
@@ -98,9 +112,19 @@ public class LocalMusicActivity extends BaseActivity implements LocalMusicContra
 
     @Override
     public void initListener() {
+
+        mIvNoLocalMusic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mIvNoLocalMusic.setVisibility(View.INVISIBLE);
+                showScanLocalMusicUI();
+            }
+        });
+
         mToolBar.setRightIconClickListener(new SToolBar.OnRightIconClickListener() {
             @Override
             public void onRightIconClick() {
+                mIvNoLocalMusic.setVisibility(View.INVISIBLE);
                 showScanLocalMusicUI();
             }
         });
@@ -124,8 +148,7 @@ public class LocalMusicActivity extends BaseActivity implements LocalMusicContra
                     return;
                 }
 
-                mIvNoLocalMusic.setVisibility(View.VISIBLE);
-                mRefreshView.setVisibility(View.INVISIBLE);
+                mIvNoLocalMusic.setVisibility(View.INVISIBLE);
                 mData.addAll(simpleSongs);
                 mRV.getAdapter().notifyDataSetChanged();
             }
@@ -157,6 +180,11 @@ public class LocalMusicActivity extends BaseActivity implements LocalMusicContra
 
     @Override
     public void showScanResult(List<SimpleSong> songs) {
+        if (songs.isEmpty()) {
+            mIvNoLocalMusic.setVisibility(View.VISIBLE);
+            return;
+        }
+
         mData.clear();
         mData.addAll(songs);
         mRV.getAdapter().notifyDataSetChanged();
@@ -164,7 +192,6 @@ public class LocalMusicActivity extends BaseActivity implements LocalMusicContra
 
     @Override
     public void showScanErrorUI() {
-
     }
 
     @Override
@@ -172,4 +199,14 @@ public class LocalMusicActivity extends BaseActivity implements LocalMusicContra
         UIUtils.startSimpleRotateAnimation(mRefreshView);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(AddToNextPlayEvent event) {
+        mPlayQueueCommand.addMusicToNextPlay(event.song);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 }

@@ -38,7 +38,7 @@
 
         <ImageView
             android:layout_centerVertical="true"
-            android:src="@mipmap/ic_music_panner_play"
+            android:src="@mipmap/ic_music_pannel_paly"
             android:layout_marginRight="15dp"
             android:layout_toLeftOf="@id/view_music_control_iv_next"
             android:id="@+id/view_music_control_iv_play"

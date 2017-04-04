@@ -16,9 +16,9 @@ import rx.Observable;
  */
 public interface MusicServices {
 
-    @GET(BaseURL.MUSIC + "/ic_search/get/")
+    @GET(BaseURL.MUSIC_SEARCH)
     Observable<MusicSearchResult> searchMusic(@Query("s") String musicName, @Query("limit") int limit,
-                                              @Query("type") int type, @Query("offset") int page);
+                                              @Query("type") String type, @Query("offset") int page);
 
     @GET(BaseURL.MUSIC_SEARCH_LYRIC + "/api/song/lyric?os=pc&kv=-1&tv=-1&lv=-1")
     Observable<LyricResult> getMusicLyric(@Query("id") String songId);

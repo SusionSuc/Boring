@@ -13,22 +13,28 @@ import com.susion.boring.base.ui.BaseActivity;
 import com.susion.boring.base.adapter.BaseRVAdapter;
 import com.susion.boring.base.ui.ItemHandler;
 import com.susion.boring.base.ui.ItemHandlerFactory;
+import com.susion.boring.db.DbManager;
+import com.susion.boring.db.operate.DbBaseOperate;
 import com.susion.boring.event.AddMusicToQueueEvent;
+import com.susion.boring.event.AddToNextPlayEvent;
+import com.susion.boring.event.PlayListDeleteFromLikeEvent;
+import com.susion.boring.event.SongDeleteFromLikeEvent;
+import com.susion.boring.http.APIHelper;
+import com.susion.boring.http.CommonObserver;
 import com.susion.boring.music.mvp.presenter.MusicModelTranslatePresenter;
 import com.susion.boring.base.view.LoadMoreRecycleView;
 import com.susion.boring.music.mvp.model.SimpleSong;
 import com.susion.boring.music.itemhandler.LocalMusicIH;
 import com.susion.boring.music.mvp.model.PlayList;
 import com.susion.boring.music.mvp.model.PlayListDetail;
-import com.susion.boring.music.mvp.presenter.PlayListPresenter;
 import com.susion.boring.music.service.action.ClientPlayModeCommand;
 import com.susion.boring.music.mvp.contract.MediaPlayerContract;
 import com.susion.boring.music.mvp.contract.MusicServiceContract;
-import com.susion.boring.music.mvp.contract.PlayListContract;
 import com.susion.boring.music.service.action.ClientPlayQueueControlCommand;
 import com.susion.boring.music.view.PlayOperatorView;
 import com.susion.boring.utils.RVUtils;
 import com.susion.boring.base.view.SToolBar;
+import com.susion.boring.utils.ToastUtils;
 import com.susion.boring.utils.UIUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -38,7 +44,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayListActivity extends BaseActivity implements PlayListContract.View {
+public class PlayListActivity extends BaseActivity {
     private static final String PLAY_LIST = "PLAY_LIST";
     private SimpleDraweeView mSdvBg;
     private PlayList mPlayList;
@@ -47,12 +53,13 @@ public class PlayListActivity extends BaseActivity implements PlayListContract.V
     private SToolBar mToolBar2;
     private AppBarLayout mAppBarLayout;
     private int mMaxScrollSize;
+    private boolean mIsLove;
     private static final int PERCENTAGE_TO_SHOW_IMAGE = 90;
 
     private PlayOperatorView mPlayOperatorView;
     private MediaPlayerContract.ClientPlayModeCommand mPlayModeCommand;
     private MediaPlayerContract.ClientPlayQueueControlCommand mPlayQueueCommand;
-    private PlayListContract.Presenter mPresenter;
+    private DbBaseOperate<PlayList> mDbOperator;
     private ImageView mIvLoading;
 
     public static void start(Context mContext, PlayList mData) {
@@ -76,9 +83,9 @@ public class PlayListActivity extends BaseActivity implements PlayListContract.V
     @Override
     public void findView() {
         EventBus.getDefault().register(this);
-        mPresenter = new PlayListPresenter(this);
         mPlayModeCommand = new ClientPlayModeCommand(this);
         mPlayQueueCommand = new ClientPlayQueueControlCommand(this);
+        mDbOperator = new DbBaseOperate<>(DbManager.getLiteOrm(), this, PlayList.class);
 
         mSdvBg = (SimpleDraweeView) findViewById(R.id.ac_play_list_iv_bg);
         mRv = (LoadMoreRecycleView) findViewById(R.id.list_view);
@@ -92,7 +99,7 @@ public class PlayListActivity extends BaseActivity implements PlayListContract.V
     public void initView() {
         mToolBar.setTitle(mPlayList.getName());
         mToolBar.setBackgroundResource(R.color.transparent);
-        mToolBar.setLeftIcon(R.mipmap.ic_back);
+
         mSdvBg.setImageURI(mPlayList.getCoverImgUrl());
         mToolBar2.setTitle("共 " + mPlayList.getTrackCount() + " 首");
         mToolBar2.setBackgroundResource(R.color.white);
@@ -106,7 +113,7 @@ public class PlayListActivity extends BaseActivity implements PlayListContract.V
                 registerItemHandler(0, new ItemHandlerFactory() {
                     @Override
                     public ItemHandler newInstant(int viewType) {
-                        return new LocalMusicIH();
+                        return new LocalMusicIH(true);
                     }
                 });
             }
@@ -118,7 +125,6 @@ public class PlayListActivity extends BaseActivity implements PlayListContract.V
         });
 
         mPlayOperatorView.hideNextPlay();
-        mPresenter.queryPlayListLikeStatus(mPlayList);
     }
 
     @Override
@@ -142,7 +148,6 @@ public class PlayListActivity extends BaseActivity implements PlayListContract.V
                     mToolBar2.setBackgroundResource(R.color.white);
                     mToolBar2.setTitle("共 " + mPlayList.getTrackCount() + " 首");
                 }
-
             }
         });
 
@@ -167,47 +172,73 @@ public class PlayListActivity extends BaseActivity implements PlayListContract.V
 
             @Override
             public void onLikeItemClick(boolean like) {
-                if (like) {
-                    mPresenter.likePlayList(mPlayList);
+                if (mIsLove) {
+                    APIHelper.subscribeSimpleRequest(mDbOperator.delete(mPlayList), new CommonObserver<Boolean>() {
+                        @Override
+                        public void onNext(Boolean flag) {
+                            ToastUtils.showShort(flag ? "已经从喜欢列表移除" : "从喜欢列表移除失败");
+                            mIsLove = flag ? false : true;
+                            mPlayOperatorView.refreshLikeStatus(mIsLove);
+                            if (!mIsLove) {
+                                EventBus.getDefault().post(new PlayListDeleteFromLikeEvent(mPlayList));
+                            }
+                        }
+                    });
                 } else {
-                    mPresenter.disLikePlayList(mPlayList);
+                    APIHelper.subscribeSimpleRequest(mDbOperator.add(mPlayList), new CommonObserver<Boolean>() {
+                        @Override
+                        public void onNext(Boolean flag) {
+                            ToastUtils.showShort(flag ? "已喜欢" : "喜欢失败");
+                            mIsLove = flag ? true : false;
+                            mPlayOperatorView.refreshLikeStatus(mIsLove);
+                        }
+                    });
                 }
             }
 
             @Override
             public void onMusicListClick() {
+
             }
         });
     }
 
     @Override
     public void initData() {
-        mPresenter.loadData(mPlayList);
+        initLikeStatus();
+        APIHelper.subscribeSimpleRequest(APIHelper.getMusicServices().getPlayListDetail(Integer.valueOf(mPlayList.getId())), new CommonObserver<PlayListDetail>() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onNext(PlayListDetail playListDetail) {
+                mIvLoading.setVisibility(View.INVISIBLE);
+                mData.addAll(new MusicModelTranslatePresenter().translateTracksToSimpleSong(playListDetail.getPlaylist().getTracks()));
+                mRv.getAdapter().notifyDataSetChanged();
+            }
+        });
     }
 
-    @Override
-    public void addData(PlayListDetail playListDetail) {
-        mIvLoading.setVisibility(View.INVISIBLE);
-        mData.addAll(new MusicModelTranslatePresenter().translateTracksToSimpleSong(playListDetail.getPlaylist().getTracks()));
-        mRv.getAdapter().notifyDataSetChanged();
+    private void initLikeStatus() {
+        APIHelper.subscribeSimpleRequest(mDbOperator.query(mPlayList.getId()), new CommonObserver<PlayList>() {
+            @Override
+            public void onNext(PlayList playList) {
+                mIsLove = playList != null ? true : false;
+                mPlayOperatorView.refreshLikeStatus(mIsLove);
+            }
+        });
     }
-
-    @Override
-    public void refreshPlayListLikeStatus(Boolean flag) {
-        mPlayOperatorView.refreshLikeStatus(flag);
-    }
-
-    @Override
-    public Context getViewContext() {
-        return this;
-    }
-
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(AddMusicToQueueEvent event) {
         mPlayQueueCommand.addMusicToQueue(event.song);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(AddToNextPlayEvent event) {
+        mPlayQueueCommand.addMusicToNextPlay(event.song);
+    }
 
     @Override
     protected void onDestroy() {

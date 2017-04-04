@@ -7,7 +7,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import com.susion.boring.music.mvp.model.Song;
 import com.susion.boring.music.mvp.contract.MediaPlayerContract;
 import com.susion.boring.music.service.MusicServiceInstruction;
-import com.susion.boring.utils.BroadcastUtils;
 
 /**
  * Created by susion on 17/3/2.
@@ -18,19 +17,6 @@ public class ClientPlayControlCommand implements MediaPlayerContract.ClientPlayC
 
     public ClientPlayControlCommand(Context mContext) {
         this.mContext = mContext;
-    }
-
-    @Override
-    public void queryServiceIsPlaying() {
-        Intent intent = new Intent(MusicServiceInstruction.SERVICE_RECEIVER_QUERY_IS_PLAYING);
-        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
-    }
-
-    @Override
-    public void tryToChangePlayingMusic(Song song) {
-        Intent intent = new Intent(MusicServiceInstruction.SERVER_RECEIVER_CHANGE_MUSIC);
-        intent.putExtra(MusicServiceInstruction.SERVICE_PARAM_CHANGE_MUSIC, song);
-        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
 
     @Override
@@ -46,36 +32,14 @@ public class ClientPlayControlCommand implements MediaPlayerContract.ClientPlayC
     }
 
     @Override
-    public void loadMusicInfoToService(Song song, boolean autoPlay) {
-        Intent intent = new Intent(MusicServiceInstruction.SERVICE_LOAD_MUSIC_INFO);
-        intent.putExtra(MusicServiceInstruction.SERVICE_PARAM_PLAY_SONG, song);
-        intent.putExtra(MusicServiceInstruction.SERVICE_PARAM_PLAY_SONG_AUTO_PLAY, autoPlay);
-        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
-    }
-
-    @Override
-    public void playMusic() {
-        Intent intent = new Intent(MusicServiceInstruction.SERVICE_CURRENT_PLAY_MUSIC);
+    public void getCurrentPlayMusic() {
+        Intent intent = new Intent(MusicServiceInstruction.SERVER_RECEIVER_CURRENT_PLAY_MUSIC);
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
 
     @Override
     public void pausePlay() {
-        Intent intent = new Intent(MusicServiceInstruction.SERVICE_RECEIVER_PAUSE_MUSIC);
+        Intent intent = new Intent(MusicServiceInstruction.SERVER_RECEIVER_PAUSE_MUSIC);
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
-
-    @Override
-    public void updatePlayMusic(Song song) {
-        Intent intent = new Intent(MusicServiceInstruction.SERVICE_PARAM_UPDATE_SONG);
-        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
-    }
-
-    @Override
-    public void queryIfNeedChangeMusic(Song song) {
-        Intent intent = new Intent(MusicServiceInstruction.SERVICE_RECEIVER_QUERY_IF_NEED_CHANGE_MUSIC);
-        intent.putExtra(MusicServiceInstruction.SERVICE_PARAM_QUERY_IF_NEED_CHANGE_MUSIC_SONG, song);
-        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
-    }
-
 }

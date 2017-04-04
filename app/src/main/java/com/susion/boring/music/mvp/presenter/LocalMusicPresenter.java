@@ -104,16 +104,16 @@ public class LocalMusicPresenter implements LocalMusicContract.Presenter, Loader
                         return mDbOperator.add(songs);
                     }
                 }).doOnNext(new Action1<List<SimpleSong>>() {
+            @Override
+            public void call(List<SimpleSong> simpleSongs) {
+                Collections.sort(simpleSongs, new Comparator<SimpleSong>() {
                     @Override
-                    public void call(List<SimpleSong> simpleSongs) {
-                        Collections.sort(simpleSongs, new Comparator<SimpleSong>() {
-                            @Override
-                            public int compare(SimpleSong left, SimpleSong right) {
-                                return left.getDisplayName().compareTo(right.getDisplayName());
-                            }
-                        });
+                    public int compare(SimpleSong left, SimpleSong right) {
+                        return left.getDisplayName().compareTo(right.getDisplayName());
                     }
-                 })
+                });
+            }
+        })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<SimpleSong>>() {

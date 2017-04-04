@@ -14,12 +14,11 @@ import com.susion.boring.music.service.MusicServiceInstruction;
 
 /**
  * Created by susion on 17/2/24.
- * <p>
+ * <p/>
  * Service Receiver
  */
 public class ServiceReceiverPresenter implements BaseServiceContract.ReceiverPresenter {
 
-    private final String TAG = getClass().getSimpleName();
     private ServiceMusicReceiver mReceiver;
     private MusicServiceContract.Service mService;
 
@@ -37,17 +36,17 @@ public class ServiceReceiverPresenter implements BaseServiceContract.ReceiverPre
     class ServiceMusicReceiver extends BroadcastReceiver {
         IntentFilter getIntentFilter() {
             IntentFilter filter = new IntentFilter();
-            filter.addAction(MusicServiceInstruction.SERVICE_RECEIVER_PLAY_MUSIC);
-            filter.addAction(MusicServiceInstruction.SERVICE_RECEIVER_PAUSE_MUSIC);
-            filter.addAction(MusicServiceInstruction.SERVICE_RECEIVER_SEEK_TO);
-            filter.addAction(MusicServiceInstruction.SERVICE_SAVE_LAST_PLAY_MUSIC);
-            filter.addAction(MusicServiceInstruction.SERVICE_CURRENT_PLAY_MUSIC);
-            filter.addAction(MusicServiceInstruction.SERVICE_LOAD_MUSIC_INFO);
+            filter.addAction(MusicServiceInstruction.SERVER_RECEIVER_PLAY_MUSIC);
+            filter.addAction(MusicServiceInstruction.SERVER_RECEIVER_PAUSE_MUSIC);
+            filter.addAction(MusicServiceInstruction.SERVER_RECEIVER_SEEK_TO);
+            filter.addAction(MusicServiceInstruction.SERVER_RECEIVER_SAVE_LAST_PLAY_MUSIC);
+            filter.addAction(MusicServiceInstruction.SERVER_RECEIVER_CURRENT_PLAY_MUSIC);
+            filter.addAction(MusicServiceInstruction.SERVER_RECEIVER_LOAD_MUSIC_INFO);
             filter.addAction(MusicServiceInstruction.SERVER_RECEIVER_CHANGE_MUSIC);
-            filter.addAction(MusicServiceInstruction.SERVICE_RECEIVER_QUERY_CURRENT_STATE);
-            filter.addAction(MusicServiceInstruction.SERVICE_RECEIVER_QUERY_IS_PLAYING);
-            filter.addAction(MusicServiceInstruction.SERVICE_RECEIVER_GET_PLAY_PROGRESS);
-            filter.addAction(MusicServiceInstruction.SERVICE_RECEIVER_GET_PLAY_PROGRESS);
+            filter.addAction(MusicServiceInstruction.SERVER_RECEIVER_QUERY_CURRENT_STATE);
+            filter.addAction(MusicServiceInstruction.SERVER_RECEIVER_QUERY_IS_PLAYING);
+            filter.addAction(MusicServiceInstruction.SERVER_RECEIVER_GET_PLAY_PROGRESS);
+            filter.addAction(MusicServiceInstruction.SERVER_RECEIVER_GET_PLAY_PROGRESS);
             filter.addAction(MusicServiceInstruction.SERVER_RECEIVER_UPDATE_PLAY_MUSIC_INFO);
             filter.addAction(MusicServiceInstruction.SERVER_RECEIVER_PLAY_NEXT);
             filter.addAction(MusicServiceInstruction.SERVER_RECEIVER_PLAY_PRE);
@@ -61,7 +60,6 @@ public class ServiceReceiverPresenter implements BaseServiceContract.ReceiverPre
             filter.addAction(MusicServiceInstruction.SERVER_RECEIVER_REMOVE_SONG_FROM_QUEUE);
             filter.addAction(MusicServiceInstruction.SERVER_RECEIVER_PLAY_MODE_QUEUE);
             filter.addAction(MusicServiceInstruction.SERVER_RECEIVER_ADD_MUSIC_TO_QUEUE);
-            filter.addAction(MusicServiceInstruction.SERVICE_RECEIVER_QUERY_IF_NEED_CHANGE_MUSIC);
             return filter;
         }
 
@@ -69,36 +67,33 @@ public class ServiceReceiverPresenter implements BaseServiceContract.ReceiverPre
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             switch (action) {
-                case MusicServiceInstruction.SERVICE_LOAD_MUSIC_INFO:
-                    mService.loadMusicInfo((Song) intent.getSerializableExtra(MusicServiceInstruction.SERVICE_PARAM_PLAY_SONG),
-                            intent.getBooleanExtra(MusicServiceInstruction.SERVICE_PARAM_PLAY_SONG_AUTO_PLAY, false));
+                case MusicServiceInstruction.SERVER_RECEIVER_LOAD_MUSIC_INFO:
+                    mService.loadMusicInfo((Song) intent.getSerializableExtra(MusicServiceInstruction.SERVER_PARAM_PLAY_SONG),
+                            intent.getBooleanExtra(MusicServiceInstruction.SERVER_PARAM_PLAY_SONG_AUTO_PLAY, false));
                     break;
-                case MusicServiceInstruction.SERVICE_RECEIVER_PLAY_MUSIC:
+                case MusicServiceInstruction.SERVER_RECEIVER_PLAY_MUSIC:
                     mService.playMusic();
                     break;
-                case MusicServiceInstruction.SERVICE_RECEIVER_PAUSE_MUSIC:
+                case MusicServiceInstruction.SERVER_RECEIVER_PAUSE_MUSIC:
                     mService.pausePlay();
                     break;
-                case MusicServiceInstruction.SERVICE_RECEIVER_SEEK_TO:
+                case MusicServiceInstruction.SERVER_RECEIVER_SEEK_TO:
                     mService.seekTo(intent);
                     break;
-                case MusicServiceInstruction.SERVICE_SAVE_LAST_PLAY_MUSIC:
+                case MusicServiceInstruction.SERVER_RECEIVER_SAVE_LAST_PLAY_MUSIC:
                     mService.saveLastPlayMusic();
                     break;
-                case MusicServiceInstruction.SERVICE_CURRENT_PLAY_MUSIC:
+                case MusicServiceInstruction.SERVER_RECEIVER_CURRENT_PLAY_MUSIC:
                     mService.informCurrentPlayMusic();
                     break;
                 case MusicServiceInstruction.SERVER_RECEIVER_CHANGE_MUSIC:
-                    mService.tryToChangeMusic((Song) intent.getSerializableExtra(MusicServiceInstruction.SERVICE_PARAM_CHANGE_MUSIC));
+                    mService.changeMusic((Song) intent.getSerializableExtra(MusicServiceInstruction.SERVER_PARAM_CHANGE_MUSIC));
                     break;
-                case MusicServiceInstruction.SERVICE_RECEIVER_QUERY_IS_PLAYING:
-                    mService.informCurrentIfPlaying();
-                    break;
-                case MusicServiceInstruction.SERVICE_RECEIVER_GET_PLAY_PROGRESS:
+                case MusicServiceInstruction.SERVER_RECEIVER_GET_PLAY_PROGRESS:
                     mService.informCurrentIfPlayProgress();
                     break;
                 case MusicServiceInstruction.SERVER_RECEIVER_UPDATE_PLAY_MUSIC_INFO:
-                    mService.updateSong((Song) intent.getSerializableExtra(MusicServiceInstruction.SERVICE_PARAM_UPDATE_SONG));
+                    mService.updateSong((Song) intent.getSerializableExtra(MusicServiceInstruction.SERVER_PARAM_UPDATE_SONG));
                     break;
                 case MusicServiceInstruction.SERVER_RECEIVER_PLAY_NEXT:
                     mService.playNextMusic();
@@ -113,31 +108,28 @@ public class ServiceReceiverPresenter implements BaseServiceContract.ReceiverPre
                     mService.startRandomMode();
                     break;
                 case MusicServiceInstruction.SERVER_RECEIVER_SONG_TO_NEXT_PLAY:
-                    mService.songToNextPlay((Song) intent.getSerializableExtra(MusicServiceInstruction.SERVICE_PARAM_SONG_TO_NEXT_PLAY));
+                    mService.songToNextPlay((Song) intent.getSerializableExtra(MusicServiceInstruction.SERVER_PARAM_SONG_TO_NEXT_PLAY));
                     break;
                 case MusicServiceInstruction.SERVER_RECEIVER_SONG_QUERY_CUR_MODE:
                     mService.notifyCurrentMode();
                     break;
                 case MusicServiceInstruction.SERVER_RECEIVER_CIRCLE_PLAY_PLAY_LIST:
-                    mService.circlePlayPlayList((PlayList) intent.getSerializableExtra(MusicServiceInstruction.SERVICE_PARAM_PLAY_LIST));
+                    mService.circlePlayPlayList((PlayList) intent.getSerializableExtra(MusicServiceInstruction.SERVER_PARAM_PLAY_LIST));
                     break;
                 case MusicServiceInstruction.SERVER_RECEIVER_GET_PLAY_QUEUE:
                     mService.getPlayQueue();
                     break;
                 case MusicServiceInstruction.SERVER_RECEIVER_RANDOM_PLAY_PLAY_LIST:
-                    mService.randomPlayPlayList((PlayList) intent.getSerializableExtra(MusicServiceInstruction.SERVICE_PARAM_PLAY_LIST));
+                    mService.randomPlayPlayList((PlayList) intent.getSerializableExtra(MusicServiceInstruction.SERVER_PARAM_PLAY_LIST));
                     break;
                 case MusicServiceInstruction.SERVER_RECEIVER_PLAY_MODE_QUEUE:
                     mService.startQueueMode();
                     break;
                 case MusicServiceInstruction.SERVER_RECEIVER_ADD_MUSIC_TO_QUEUE:
-                    mService.addMusicToQueue((Song) intent.getSerializableExtra(MusicServiceInstruction.SERVICE_PARAM_QUEUE_ADD_SONG));
+                    mService.addMusicToQueue((Song) intent.getSerializableExtra(MusicServiceInstruction.SERVER_PARAM_QUEUE_ADD_SONG));
                     break;
                 case MusicServiceInstruction.SERVER_RECEIVER_REMOVE_SONG_FROM_QUEUE:
-                    mService.removeSongFromQueue((Song) intent.getSerializableExtra(MusicServiceInstruction.SERVICE_PARAM_REMOVE_SONG));
-                    break;
-                case MusicServiceInstruction.SERVICE_RECEIVER_QUERY_IF_NEED_CHANGE_MUSIC:
-                    mService.queryNeedToChangeMusic((Song) intent.getSerializableExtra(MusicServiceInstruction.SERVICE_PARAM_REMOVE_SONG));
+                    mService.removeSongFromQueue((Song) intent.getSerializableExtra(MusicServiceInstruction.SERVER_PARAM_REMOVE_SONG));
                     break;
             }
         }

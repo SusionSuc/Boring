@@ -1,6 +1,5 @@
 package com.susion.boring.base.ui.mainui;
 
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
@@ -14,7 +13,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -46,7 +44,6 @@ public class MainActivity extends BaseActivity {
         getSwipeBackLayout().setEnableGesture(false);
     }
 
-
     @Override
     public int getLayoutId() {
         return R.layout.activity_main;
@@ -63,6 +60,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public void initView() {
         mToolBar.setLeftIcon(R.mipmap.ic_menu);
+        mToolBar.setMainPage(true);
         mRV.setLayoutManager(RVUtils.getLayoutManager(this, LinearLayoutManager.VERTICAL));
         mRV.addItemDecoration(RVUtils.getDrawerItemDecorationDivider(this, R.color.divider, new Rect(UIUtils.dp2Px(40), UIUtils.dp2Px(40), UIUtils.dp2Px(30), 0), DrawerData.getData()));
 
@@ -131,7 +129,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Intent intent = new Intent(MusicServiceInstruction.SERVICE_SAVE_LAST_PLAY_MUSIC);
+        Intent intent = new Intent(MusicServiceInstruction.SERVER_RECEIVER_SAVE_LAST_PLAY_MUSIC);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 }

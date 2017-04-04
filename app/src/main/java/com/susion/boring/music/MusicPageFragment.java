@@ -55,9 +55,8 @@ public class MusicPageFragment extends BaseFragment implements OnLastItemVisible
     private Set<String> uniqueData = new HashSet<>();
     private int page = 0;
     private Song mSong;
-    private MediaPlayerContract.ClientPlayControlCommand mControlCommand;
+    private MediaPlayerContract.ClientPlayControlCommand mClientControlCommand;
     private MediaPlayerContract.ClientReceiverPresenter mClientReceiver;
-
 
     @Override
     public View initContentView(LayoutInflater inflater, ViewGroup container) {
@@ -80,7 +79,7 @@ public class MusicPageFragment extends BaseFragment implements OnLastItemVisible
 
     @Override
     protected void findView() {
-        mControlCommand = new ClientPlayControlCommand(getActivity());
+        mClientControlCommand = new ClientPlayControlCommand(getActivity());
         mClientReceiver = new ClientReceiverPresenter(getActivity());
         mClientReceiver.setBaseView(this);
 
@@ -95,9 +94,9 @@ public class MusicPageFragment extends BaseFragment implements OnLastItemVisible
             @Override
             public void onPlayClick(boolean isPlay) {
                 if (isPlay) {
-                    BroadcastUtils.sendIntentAction(getActivity(), MusicServiceInstruction.SERVICE_RECEIVER_PLAY_MUSIC);
+                    BroadcastUtils.sendIntentAction(getActivity(), MusicServiceInstruction.SERVER_RECEIVER_PLAY_MUSIC);
                 } else {
-                    BroadcastUtils.sendIntentAction(getActivity(), MusicServiceInstruction.SERVICE_RECEIVER_PAUSE_MUSIC);
+                    BroadcastUtils.sendIntentAction(getActivity(), MusicServiceInstruction.SERVER_RECEIVER_PAUSE_MUSIC);
                 }
             }
 
@@ -119,8 +118,7 @@ public class MusicPageFragment extends BaseFragment implements OnLastItemVisible
     @Override
     public void onResume() {
         super.onResume();
-        mControlCommand.queryServiceIsPlaying();
-        mControlCommand.playMusic();
+        mClientControlCommand.getCurrentPlayMusic();
     }
 
     private void loadMusicRecommendList() {
@@ -190,21 +188,12 @@ public class MusicPageFragment extends BaseFragment implements OnLastItemVisible
         loadMusicRecommendList();
     }
 
-
-    //implements CommunicateBaseView
     @Override
-    public void tryToChangeMusicByCurrentCondition(boolean playStatus, boolean needLoadMusic) {
-        mControlView.setPlay(playStatus);
-        if (!playStatus && needLoadMusic) {
-            mControlCommand.loadMusicInfoToService(mSong, false);
-        }
-    }
-
-    @Override
-    public void refreshSong(Song song) {
+    public void refreshSong(Song song, boolean playStatus) {
         mControlView.setVisibility(View.VISIBLE);
         mSong = song;
         mControlView.setMusic(song);
+        mControlView.setPlay(playStatus);
     }
 
     @Override

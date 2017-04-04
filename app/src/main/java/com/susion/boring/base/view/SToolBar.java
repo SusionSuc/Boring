@@ -25,7 +25,7 @@ public class SToolBar extends RelativeLayout implements View.OnClickListener, Ma
     private TextView mTvMusic;
 
     private int mCurrentSelectItem = 0;
-    private boolean isMainPage = true;
+    private boolean isMainPage = false;
 
     private OnItemClickListener listener;
     private OnRightIconClickListener rightIconClickListener;
@@ -55,27 +55,6 @@ public class SToolBar extends RelativeLayout implements View.OnClickListener, Ma
         setSelectedItem(mCurrentSelectItem);
         mLeftIcon.setSelected(true);
         setBackgroundColor(mContext.getResources().getColor(R.color.colorPrimary));
-        setAttrs(attrs);
-    }
-
-    private void setAttrs(AttributeSet attrs) {
-        if (attrs != null) {
-            TypedArray ta = getContext().obtainStyledAttributes(attrs, R.styleable.SToolBar);
-            isMainPage = !ta.getBoolean(R.styleable.SToolBar_showTitle, false);
-            isShowTitle();
-            ta.recycle();
-        }
-
-    }
-
-    private void isShowTitle() {
-        if (isMainPage) {
-            findViewById(R.id.toolbar_main_menu).setVisibility(VISIBLE);
-            mTvTitle.setVisibility(GONE);
-        } else {
-            findViewById(R.id.toolbar_main_menu).setVisibility(GONE);
-            mTvTitle.setVisibility(VISIBLE);
-        }
     }
 
     private void findView() {
@@ -152,7 +131,6 @@ public class SToolBar extends RelativeLayout implements View.OnClickListener, Ma
         }
     }
 
-
     private void clearSelectItem() {
         mTvInteresting.setTextColor(getResources().getColor(R.color.black));
         mTvMusic.setTextColor(getResources().getColor(R.color.black));
@@ -188,7 +166,6 @@ public class SToolBar extends RelativeLayout implements View.OnClickListener, Ma
 
     public void setMainPage(boolean mainPage) {
         isMainPage = mainPage;
-        isShowTitle();
     }
 
     public void setTitle(String title) {

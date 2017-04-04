@@ -44,7 +44,7 @@ public class MediaPlayPresenter implements MediaPlayerContract.Presenter, MediaP
             final int dur = mPlayer.getDuration();
             if (pos > dur) pos = dur;
 
-            mView.updatePlayProgress(pos, dur - pos);
+            mView.updatePlayProgress(pos, dur - pos, dur);
             if (mUpdateProgressHandler != null)
                 mUpdateProgressHandler.postDelayed(this, UPDATE_INTERVAL);
         }

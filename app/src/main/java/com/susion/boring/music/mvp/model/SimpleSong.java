@@ -19,7 +19,7 @@ import java.util.List;
 public class SimpleSong extends FavoriteOb implements Parcelable, PlayQueueSong {
 
     @PrimaryKey(AssignType.BY_MYSELF)
-    private String id;
+    public String id;
     private String title;
     private String displayName;
     private String artist;

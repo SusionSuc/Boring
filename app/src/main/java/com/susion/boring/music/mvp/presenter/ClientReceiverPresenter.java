@@ -20,7 +20,6 @@ public class ClientReceiverPresenter implements MediaPlayerContract.ClientReceiv
 
     protected ClientMusicReceiver mReceiver;
     protected MediaPlayerContract.BaseView mBaseView;
-    protected MediaPlayerContract.LittlePlayView mLittlePlayView;
     protected MediaPlayerContract.PlayView mPlayView;
 
     private Context mContext;
@@ -33,11 +32,6 @@ public class ClientReceiverPresenter implements MediaPlayerContract.ClientReceiv
 
     public void setBaseView(MediaPlayerContract.BaseView mBaseView) {
         this.mBaseView = mBaseView;
-    }
-
-    @Override
-    public void setLittlePlayView(MediaPlayerContract.LittlePlayView view) {
-        this.mLittlePlayView = view;
     }
 
     @Override
@@ -55,7 +49,6 @@ public class ClientReceiverPresenter implements MediaPlayerContract.ClientReceiv
         LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mReceiver);
     }
 
-
     public class ClientMusicReceiver extends BroadcastReceiver {
         public IntentFilter getIntentFilter() {
             IntentFilter filter = new IntentFilter();
@@ -64,7 +57,6 @@ public class ClientReceiverPresenter implements MediaPlayerContract.ClientReceiv
             filter.addAction(MusicServiceInstruction.CLIENT_RECEIVER_UPDATE_PLAY_PROGRESS);
             filter.addAction(MusicServiceInstruction.CLIENT_RECEIVER_SET_DURATION);
             filter.addAction(MusicServiceInstruction.CLIENT_RECEIVER_CURRENT_PLAY_PROGRESS);
-            filter.addAction(MusicServiceInstruction.CLIENT_RECEIVER_REFRESH_MUSIC);
             filter.addAction(MusicServiceInstruction.CLIENT_RECEIVER_REFRESH_MODE);
             filter.addAction(MusicServiceInstruction.CLIENT_RECEIVER_CURRENT_IS_PALING);
             filter.addAction(MusicServiceInstruction.CLIENT_RECEIVER_CURRENT_PLAY_MUSIC);
@@ -80,32 +72,20 @@ public class ClientReceiverPresenter implements MediaPlayerContract.ClientReceiv
             String action = intent.getAction();
             switch (action) {
                 case MusicServiceInstruction.CLIENT_RECEIVER_PLAYER_PREPARED:
-                    if (mLittlePlayView != null) {
-                        mLittlePlayView.preparedPlay(intent.getIntExtra(MusicServiceInstruction.CLIENT_PARAM_PREPARED_TOTAL_DURATION, 0));
-                    }
-
                     if (mPlayView != null) {
                         mPlayView.preparedPlay(intent.getIntExtra(MusicServiceInstruction.CLIENT_PARAM_PREPARED_TOTAL_DURATION, 0));
                     }
                     break;
                 case MusicServiceInstruction.CLIENT_RECEIVER_UPDATE_BUFFERED_PROGRESS:
-                    if (mLittlePlayView != null) {
-                        mLittlePlayView.updateBufferedProgress(intent.getIntExtra(MusicServiceInstruction.CLIENT_PARAM_BUFFERED_PROGRESS, 0));
-                    }
-
                     if (mPlayView != null) {
                         mPlayView.updateBufferedProgress(intent.getIntExtra(MusicServiceInstruction.CLIENT_PARAM_BUFFERED_PROGRESS, 0));
                     }
                     break;
                 case MusicServiceInstruction.CLIENT_RECEIVER_UPDATE_PLAY_PROGRESS:
-                    if (mLittlePlayView != null) {
-                        mLittlePlayView.updatePlayProgress(intent.getIntExtra(MusicServiceInstruction.CLIENT_PARAM_PLAY_PROGRESS_CUR_POS, 0),
-                                intent.getIntExtra(MusicServiceInstruction.CLIENT_PARAM_PLAY_PROGRESS_DURATION, 0));
-                    }
-
                     if (mPlayView != null) {
                         mPlayView.updatePlayProgress(intent.getIntExtra(MusicServiceInstruction.CLIENT_PARAM_PLAY_PROGRESS_CUR_POS, 0),
-                                intent.getIntExtra(MusicServiceInstruction.CLIENT_PARAM_PLAY_PROGRESS_DURATION, 0));
+                                intent.getIntExtra(MusicServiceInstruction.CLIENT_PARAM_PLAY_PROGRESS_DURATION, 0),
+                                intent.getIntExtra(MusicServiceInstruction.CLIENT_PARAM_PLAY_PROGRESS_MAX_DURATION, 0));
                     }
                     break;
                 case MusicServiceInstruction.CLIENT_RECEIVER_SET_DURATION:
@@ -113,33 +93,12 @@ public class ClientReceiverPresenter implements MediaPlayerContract.ClientReceiv
                         mPlayView.setPlayDuration(intent.getIntExtra(MusicServiceInstruction.CLIENT_PARAM_MEDIA_DURATION, 0));
                     }
                     break;
-                case MusicServiceInstruction.CLIENT_RECEIVER_CURRENT_IS_PALING:
-                    boolean playStatus = intent.getBooleanExtra(MusicServiceInstruction.CLIENT_PARAM_IS_PLAYING, false);
-                    boolean needLoadMusic = intent.getBooleanExtra(MusicServiceInstruction.CLIENT_PARAM_NEED_LOAD_MUSIC, false);
-                    BroadcastUtils.sendIntentAction(mContext, MusicServiceInstruction.SERVICE_RECEIVER_GET_PLAY_PROGRESS);
 
-                    if (mBaseView != null) {
-                        mBaseView.tryToChangeMusicByCurrentCondition(playStatus, needLoadMusic);
-                    }
-
-                    if (mPlayView != null) {
-                        mPlayView.tryToChangeMusicByCurrentCondition(playStatus, needLoadMusic);
-                    }
-
-                    break;
                 case MusicServiceInstruction.CLIENT_RECEIVER_CURRENT_PLAY_PROGRESS:
                     final int curPos = intent.getIntExtra(MusicServiceInstruction.CLIENT_PARAM_CURRENT_PLAY_PROGRESS, 0);
                     final int left = intent.getIntExtra(MusicServiceInstruction.CLIENT_PARAM_MEDIA_DURATION, 0);
                     if (mPlayView != null) {
                         mPlayView.updatePlayProgressForSetMax(curPos, left);
-                    }
-                    break;
-                case MusicServiceInstruction.CLIENT_RECEIVER_REFRESH_MUSIC:
-                    if (mBaseView != null) {
-                        mBaseView.refreshSong((Song) intent.getSerializableExtra(MusicServiceInstruction.CLIENT_PARAM_REFRESH_SONG));
-                    }
-                    if (mPlayView != null) {
-                        mPlayView.refreshSong((Song) intent.getSerializableExtra(MusicServiceInstruction.CLIENT_PARAM_REFRESH_SONG));
                     }
                     break;
                 case MusicServiceInstruction.CLIENT_RECEIVER_REFRESH_MODE:
@@ -149,13 +108,13 @@ public class ClientReceiverPresenter implements MediaPlayerContract.ClientReceiv
                     break;
                 case MusicServiceInstruction.CLIENT_RECEIVER_CURRENT_PLAY_MUSIC:
                     Song song = (Song) intent.getSerializableExtra(MusicServiceInstruction.CLIENT_PARAM_CURRENT_PLAY_MUSIC);
+                    boolean isPlaying = intent.getBooleanExtra(MusicServiceInstruction.CLIENT_PARAM_CURRENT_PLAY_MUSIC_PLAY_STATUS, false);
                     if (song != null) {
                         if (mBaseView != null) {
-                            mBaseView.refreshSong(song);
+                            mBaseView.refreshSong(song, isPlaying);
                         }
-
                         if (mPlayView != null) {
-                            mPlayView.refreshSong(song);
+                            mPlayView.refreshSong(song, isPlaying);
                         }
                     }
                     break;
@@ -169,12 +128,6 @@ public class ClientReceiverPresenter implements MediaPlayerContract.ClientReceiv
                 case MusicServiceInstruction.CLIENT_RECEIVER_QUEUE_NO_MORE_MUSIC:
                     if (mPlayView != null) {
                         mPlayView.showNoMoreMusic();
-                    }
-                    break;
-                case MusicServiceInstruction.CLIENT_RECEIVER_CAN_CHANGE_MUSIC:
-                    boolean canChange = intent.getBooleanExtra(MusicServiceInstruction.CLIENT_PARAM_CAN_CHANGE_MUSIC, false);
-                    if (mPlayView != null) {
-                        mPlayView.canChangeMusic(canChange);
                     }
                     break;
             }
