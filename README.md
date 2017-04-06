@@ -20,6 +20,7 @@
 
 ##APP截图
 
+<img src="./screenshot/mainpage1.jpg" width = "300" height = "200" alt="图片名称" align=center />
 ![screenshot](./screenshot/mainpage1.jpg =70x120)
 ![screenshot](./screenshot/mainpage2.jpg =70x120)
 ![screenshot](./screenshot/musicdetail.jpg =70x120)
