@@ -7,14 +7,13 @@ import android.widget.TextView;
 import com.susion.boring.R;
 import com.susion.boring.base.adapter.ViewHolder;
 import com.susion.boring.base.ui.SimpleItemHandler;
-import com.susion.boring.read.mvp.model.PictureCategoryResult;
+import com.susion.boring.read.mvp.entity.PictureCategoryResult;
 import com.susion.boring.utils.UIUtils;
 
 /**
  * Created by susion on 17/3/27.
  */
 public class PictureCategoryIH extends SimpleItemHandler<PictureCategoryResult.CategoryList.PictureCategory> {
-
 
     private TextView mTvTitle;
 
@@ -31,7 +30,6 @@ public class PictureCategoryIH extends SimpleItemHandler<PictureCategoryResult.C
     public void onBindDataView(ViewHolder vh, PictureCategoryResult.CategoryList.PictureCategory data, int position) {
         mTvTitle.setText(data.getName());
         mTvTitle.setTextColor(UIUtils.getColor(mContext, R.color.colorPrimary));
-
     }
 
     @Override
@@ -41,6 +39,5 @@ public class PictureCategoryIH extends SimpleItemHandler<PictureCategoryResult.C
 
     @Override
     public void onClick(View v) {
-
     }
 }

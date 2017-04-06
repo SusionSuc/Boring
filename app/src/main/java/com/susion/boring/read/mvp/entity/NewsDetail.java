@@ -1,9 +1,9 @@
-package com.susion.boring.read.mvp.model;
+package com.susion.boring.read.mvp.entity;
 
 import com.litesuits.orm.db.annotation.PrimaryKey;
 import com.litesuits.orm.db.annotation.Table;
 import com.litesuits.orm.db.enums.AssignType;
-import com.susion.boring.base.mvp.model.TitleMark;
+import com.susion.boring.base.entity.TitleMark;
 
 import java.util.Date;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
  * Created by susion on 17/3/12.
  */
 @Table("news_detail")
-public class NewsDetail extends TitleMark{
+public class NewsDetail extends TitleMark {
 
     @PrimaryKey(AssignType.BY_MYSELF)
     public String id;
@@ -27,7 +27,6 @@ public class NewsDetail extends TitleMark{
     private List<?> js;
     private List<String> images;
     private List<String> css;
-
     public String htmlStr;
     public boolean isLike;
 

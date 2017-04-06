@@ -1,6 +1,8 @@
 package com.susion.boring.music.mvp.presenter;
 
-import com.susion.boring.base.mvp.ModelTranslateContract;
+import com.susion.boring.base.entity.ModelTranslateContract;
+import com.susion.boring.http.APIHelper;
+import com.susion.boring.http.CommonObserver;
 import com.susion.boring.music.mvp.model.PlayList;
 import com.susion.boring.music.mvp.model.Song;
 import com.susion.boring.music.mvp.contract.MusicServiceContract;
@@ -160,17 +162,11 @@ public class MusicPlayQueueControlPresenter implements MusicServiceContract.Play
         return Observable.create(new Observable.OnSubscribe<Boolean>() {
             @Override
             public void call(final Subscriber<? super Boolean> subscriber) {
-                musicModeTranslate.getSongFromPlayList(playList)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Observer<List<Song>>() {
-                            @Override
-                            public void onCompleted() {
-
-                            }
-
+                APIHelper.subscribeSimpleRequest(musicModeTranslate.getSongFromPlayList(playList),
+                        new CommonObserver<List<Song>>() {
                             @Override
                             public void onError(Throwable e) {
+                                super.onError(e);
                                 subscriber.onNext(false);
                             }
 

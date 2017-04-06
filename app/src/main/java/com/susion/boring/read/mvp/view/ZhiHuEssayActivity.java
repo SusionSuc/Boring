@@ -17,15 +17,14 @@ import com.susion.boring.base.ui.BaseActivity;
 import com.susion.boring.db.DbManager;
 import com.susion.boring.db.operate.DbBaseOperate;
 import com.susion.boring.read.mvp.contract.ZhiHuEssayContract;
-import com.susion.boring.read.mvp.model.NewsDetail;
-import com.susion.boring.read.mvp.model.ZhiHuEssay;
+import com.susion.boring.read.mvp.entity.NewsDetail;
+import com.susion.boring.read.mvp.entity.ZhiHuEssay;
 import com.susion.boring.read.mvp.presenter.ZhiHuEssayPresenter;
 import com.susion.boring.utils.UIUtils;
 
 import java.util.Date;
 
 public class ZhiHuEssayActivity extends BaseActivity implements ZhiHuEssayContract.View, View.OnClickListener {
-
     private static final String ESSAY_ID = "ESSAY_ID";
     private static final String ESSAY_DATE = "ESSAY_DATE";
     private ZhiHuEssay mEssay;

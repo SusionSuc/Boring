@@ -21,7 +21,7 @@ public class StringUtils {
         }
         builder.append("<meta name=\\\"viewport\\\" content=\\\"width=device-width, user-scalable=yes\\\" />");
         builder.append("</head>");
-        return  builder.toString();
+        return builder.toString();
     }
 
     public static String getCSSStyle(String tempCssString) {
@@ -40,7 +40,7 @@ public class StringUtils {
         builder.append(body);
         builder.append("</body>");
         builder.append("</html>");
-        return  builder.toString();
+        return builder.toString();
     }
 
     public static String adjustEsssayHtmlStyle(String htmlString) {

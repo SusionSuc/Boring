@@ -1,8 +1,8 @@
 package com.susion.boring.read.mvp.contract;
 
-import com.susion.boring.base.mvp.view.IView;
-import com.susion.boring.read.mvp.model.DailyNews;
-import com.susion.boring.read.mvp.model.NewsDetail;
+import com.susion.boring.base.view.IView;
+import com.susion.boring.read.mvp.entity.DailyNews;
+import com.susion.boring.read.mvp.entity.NewsDetail;
 
 import java.util.Date;
 import java.util.List;
@@ -14,10 +14,10 @@ public interface ZhiHuDailyContract {
 
     int LATEST_NEWS = 0;
     int AFTER_DAY_NEWS = 1;
-    int BEFORE_DAY_NEWS = -1;
 
     interface View extends IView {
         void addNewsData(List<NewsDetail> news);
+
         void setDataForViewPage(List<DailyNews.TopStoriesBean> banners);
     }
 

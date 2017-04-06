@@ -18,7 +18,7 @@ import java.lang.annotation.RetentionPolicy;
 /**
  * Created by susion on 17/2/9.
  */
-public class LoadMoreView extends TextView{
+public class LoadMoreView extends TextView {
 
     private Context mContext;
     public static final String STR_LOADING = "正在加载更多...";
@@ -56,10 +56,10 @@ public class LoadMoreView extends TextView{
         setTextColor(getResources().getColor(R.color.colorPrimary));
         setTextSize(15);
         setTypeface(Typeface.DEFAULT_BOLD);
-        setPadding(getPaddingLeft(), getPaddingTop()+10, getPaddingRight(), getPaddingBottom()+10);
+        setPadding(getPaddingLeft(), getPaddingTop() + 10, getPaddingRight(), getPaddingBottom() + 10);
 //        setBackground(getResources().getDrawable(R.drawable.bg_view_load_more));
 
-        switch (mStatus){
+        switch (mStatus) {
             case LOADING:
                 setVisibility(VISIBLE);
                 setText(STR_LOADING);
@@ -81,10 +81,9 @@ public class LoadMoreView extends TextView{
     }
 
 
-
-    public void setLoadStatus(int status){
+    public void setLoadStatus(int status) {
         mStatus = status;
-        switch (status){
+        switch (status) {
             case LOADING:
                 setVisibility(VISIBLE);
                 setText(STR_LOADING);

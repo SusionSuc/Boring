@@ -12,10 +12,8 @@ import rx.functions.Action1;
 
 public abstract class CommonObserver<T> implements Observer<T> {
 
-
     @Override
     public void onCompleted() {
-
     }
 
     @Override
@@ -44,12 +42,11 @@ public abstract class CommonObserver<T> implements Observer<T> {
                 } else if (exception.code() >= 500 && exception.code() < 600) {
                     msg = "服务器好像挂掉了哎";
                 } else {
-                    msg = "薯队长马上回来";
+                    msg = "出现了未知错误哎";
                 }
             } else {
                 msg = "出现了未知错误哎";
             }
-
             ToastUtils.showShort(msg);
         }
     }

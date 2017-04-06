@@ -1,6 +1,7 @@
-package com.susion.boring.http;
+package com.susion.boring.http.service;
 
 
+import com.susion.boring.http.BaseURL;
 import com.susion.boring.music.mvp.model.GetPlayListResult;
 import com.susion.boring.music.mvp.model.LyricResult;
 import com.susion.boring.music.mvp.model.MusicSearchResult;

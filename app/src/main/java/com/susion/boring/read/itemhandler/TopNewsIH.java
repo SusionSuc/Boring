@@ -8,7 +8,7 @@ import com.susion.boring.R;
 import com.susion.boring.base.adapter.QuickPageAdapter;
 import com.susion.boring.base.adapter.ViewHolder;
 import com.susion.boring.base.ui.SimpleItemHandler;
-import com.susion.boring.read.mvp.model.DailyNews;
+import com.susion.boring.read.mvp.entity.DailyNews;
 import com.susion.boring.read.view.BannerView;
 
 import java.util.ArrayList;
@@ -47,6 +47,5 @@ public class TopNewsIH extends SimpleItemHandler<List<DailyNews.TopStoriesBean>>
 
     @Override
     public void onClick(View v) {
-
     }
 }

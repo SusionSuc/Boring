@@ -9,7 +9,6 @@ public class PlayListDetail {
 
     private PlaylistBean playlist;
     private int code;
-    private List<PrivilegesBean> privileges;
 
     public PlaylistBean getPlaylist() {
         return playlist;
@@ -25,14 +24,6 @@ public class PlayListDetail {
 
     public void setCode(int code) {
         this.code = code;
-    }
-
-    public List<PrivilegesBean> getPrivileges() {
-        return privileges;
-    }
-
-    public void setPrivileges(List<PrivilegesBean> privileges) {
-        this.privileges = privileges;
     }
 
     public static class PlaylistBean {
@@ -584,37 +575,6 @@ public class PlayListDetail {
         }
 
         public static class TracksBean {
-            /**
-             * name : 爱呀
-             * id : 28285912
-             * pst : 0
-             * t : 0
-             * ar : [{"id":893259,"name":"金玟岐","tns":[],"alias":[]}]
-             * alia : []
-             * pop : 100
-             * st : 0
-             * rt :
-             * fee : 0
-             * v : 43
-             * crbt : null
-             * cf :
-             * al : {"id":2767540,"name":"金玟岐作品集","picUrl":"https://p3.music.126.net/54wdQi_3rpjreY2oo2jb7w==/5998935441219557.jpg","tns":[],"pic":5998935441219557}
-             * dt : 252648
-             * h : {"br":320000,"fid":1376588571189890,"size":10108387,"vd":-1.18}
-             * m : {"br":160000,"fid":3412884109763355,"size":5054216,"vd":-0.74}
-             * l : {"br":96000,"fid":3413983621387083,"size":3032547,"vd":-0.76}
-             * a : null
-             * cd : 1
-             * no : 3
-             * rtUrl : null
-             * ftype : 0
-             * rtUrls : []
-             * rtype : 0
-             * rurl : null
-             * mst : 9
-             * cp : 0
-             * mv : 0
-             */
 
             private String name;
             private int id;
@@ -1173,149 +1133,4 @@ public class PlayListDetail {
         }
     }
 
-    public static class PrivilegesBean {
-        /**
-         * id : 28285912
-         * fee : 0
-         * payed : 0
-         * st : 0
-         * pl : 320000
-         * dl : 320000
-         * sp : 7
-         * cp : 1
-         * subp : 1
-         * cs : false
-         * maxbr : 320000
-         * fl : 320000
-         * toast : false
-         * flag : 2
-         */
-
-        private int id;
-        private int fee;
-        private int payed;
-        private int st;
-        private int pl;
-        private int dl;
-        private int sp;
-        private int cp;
-        private int subp;
-        private boolean cs;
-        private int maxbr;
-        private int fl;
-        private boolean toast;
-        private int flag;
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public int getFee() {
-            return fee;
-        }
-
-        public void setFee(int fee) {
-            this.fee = fee;
-        }
-
-        public int getPayed() {
-            return payed;
-        }
-
-        public void setPayed(int payed) {
-            this.payed = payed;
-        }
-
-        public int getSt() {
-            return st;
-        }
-
-        public void setSt(int st) {
-            this.st = st;
-        }
-
-        public int getPl() {
-            return pl;
-        }
-
-        public void setPl(int pl) {
-            this.pl = pl;
-        }
-
-        public int getDl() {
-            return dl;
-        }
-
-        public void setDl(int dl) {
-            this.dl = dl;
-        }
-
-        public int getSp() {
-            return sp;
-        }
-
-        public void setSp(int sp) {
-            this.sp = sp;
-        }
-
-        public int getCp() {
-            return cp;
-        }
-
-        public void setCp(int cp) {
-            this.cp = cp;
-        }
-
-        public int getSubp() {
-            return subp;
-        }
-
-        public void setSubp(int subp) {
-            this.subp = subp;
-        }
-
-        public boolean isCs() {
-            return cs;
-        }
-
-        public void setCs(boolean cs) {
-            this.cs = cs;
-        }
-
-        public int getMaxbr() {
-            return maxbr;
-        }
-
-        public void setMaxbr(int maxbr) {
-            this.maxbr = maxbr;
-        }
-
-        public int getFl() {
-            return fl;
-        }
-
-        public void setFl(int fl) {
-            this.fl = fl;
-        }
-
-        public boolean isToast() {
-            return toast;
-        }
-
-        public void setToast(boolean toast) {
-            this.toast = toast;
-        }
-
-        public int getFlag() {
-            return flag;
-        }
-
-        public void setFlag(int flag) {
-            this.flag = flag;
-        }
-    }
 }

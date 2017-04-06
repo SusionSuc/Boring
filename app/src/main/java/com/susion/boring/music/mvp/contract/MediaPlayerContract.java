@@ -2,8 +2,7 @@ package com.susion.boring.music.mvp.contract;
 
 import android.content.Context;
 
-import com.susion.boring.base.mvp.presenter.BasePresenter;
-import com.susion.boring.base.mvp.view.IView;
+import com.susion.boring.base.view.IView;
 import com.susion.boring.music.mvp.model.PlayList;
 import com.susion.boring.music.mvp.model.Song;
 
@@ -20,7 +19,7 @@ public interface MediaPlayerContract {
     }
 
     //media player notify view
-    interface LittlePlayView {
+    interface MediaPlayerRefreshView {
         void updateBufferedProgress(int percent);
 
         void updatePlayProgress(int curPos, int duration, int max);
@@ -31,7 +30,7 @@ public interface MediaPlayerContract {
     }
 
     //play music activity
-    interface PlayView extends BaseView, LittlePlayView {
+    interface PlayView extends BaseView, MediaPlayerRefreshView {
         void setPlayDuration(int duration);
 
         void refreshPlayMode(int playMode);
@@ -45,9 +44,8 @@ public interface MediaPlayerContract {
         void showNoMoreMusic();
     }
 
-
     //media player
-    interface Presenter extends BasePresenter {
+    interface Presenter {
         void initMediaPlayer(String mediaUri) throws Exception;
 
         boolean startPlay();

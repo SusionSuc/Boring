@@ -102,7 +102,6 @@ public class SearchBar extends LinearLayout {
 
     public void setJumpToSearchPage(boolean JumpToSearchPage) {
         this.mJumpToSearchPage = JumpToSearchPage;
-
         if (!mJumpToSearchPage) {
             mEtText.setFocusable(true);
             mEtText.setFocusableInTouchMode(true);

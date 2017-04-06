@@ -1,4 +1,4 @@
-package com.susion.boring.base.mvp;
+package com.susion.boring.base.entity;
 
 import com.susion.boring.music.mvp.model.SimpleSong;
 import com.susion.boring.music.mvp.model.PlayList;
@@ -14,8 +14,7 @@ import rx.Observable;
  */
 public interface ModelTranslateContract {
 
-
-    interface MusicModeTranslate{
+    interface MusicModeTranslate {
         Observable<List<Song>> getSongFromPlayList(PlayList playList);
 
         List<SimpleSong> translateTracksToSimpleSong(List<PlayListDetail.PlaylistBean.TracksBean> tracks);

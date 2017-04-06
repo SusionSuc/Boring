@@ -1,9 +1,8 @@
-package com.susion.boring.read.mvp.model;
+package com.susion.boring.read.mvp.entity;
 
 import com.litesuits.orm.db.annotation.PrimaryKey;
 import com.litesuits.orm.db.annotation.Table;
 import com.litesuits.orm.db.enums.AssignType;
-import com.susion.boring.base.mvp.model.FavoriteOb;
 
 import java.io.Serializable;
 

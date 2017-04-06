@@ -22,7 +22,6 @@ public class ZhiHuEssayQueuePresenter implements ZhiHuEssayContract.EssayQueue {
         if (mCurrentIndex >= 0 && mCurrentIndex < mEssayIds.size()) {
             return mEssayIds.get(mCurrentIndex);
         }
-
         return null;
     }
 

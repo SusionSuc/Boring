@@ -54,11 +54,9 @@ public class ReadPageFragment extends BaseFragment {
     @Override
     public void initView() {
         initFragments();
-        //shit!!!  getChildFragmentManager()!!!
         mViewPager.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
-                Log.e("getItem position", position + "");
                 return mFragments.get(position);
             }
 
@@ -81,6 +79,5 @@ public class ReadPageFragment extends BaseFragment {
 
     @Override
     public void initData() {
-        Log.e("InterestingPageFragment", "initData");
     }
 }

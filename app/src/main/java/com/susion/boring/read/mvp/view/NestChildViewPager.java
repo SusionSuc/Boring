@@ -27,6 +27,4 @@ public class NestChildViewPager extends ViewPager {
         mCurPoint = new PointF();
     }
 
-
-
 }

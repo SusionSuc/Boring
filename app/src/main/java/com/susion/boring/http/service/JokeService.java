@@ -1,6 +1,6 @@
-package com.susion.boring.http;
+package com.susion.boring.http.service;
 
-import com.susion.boring.read.mvp.model.JokeList;
+import com.susion.boring.read.mvp.entity.JokeList;
 
 import retrofit2.http.GET;
 import retrofit2.http.Query;

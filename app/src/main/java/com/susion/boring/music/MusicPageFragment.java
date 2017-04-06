@@ -125,14 +125,8 @@ public class MusicPageFragment extends BaseFragment implements OnLastItemVisible
         mRV.setLoadStatus(LoadMoreView.LOADING);
         APIHelper.subscribeSimpleRequest(APIHelper.getMusicServices().getPlayList(page * PLAY_LIST_PAGE_SIZE, PLAY_LIST_PAGE_SIZE), new CommonObserver<GetPlayListResult>() {
             @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
             public void onNext(GetPlayListResult playLists) {
                 mRV.setLoadStatus(LoadMoreView.NO_LOAD);
-
                 List<PlayList> playlists = playLists.getPlaylists();
 
                 for (PlayList playList : playlists) {  //discard repeat data
@@ -140,7 +134,6 @@ public class MusicPageFragment extends BaseFragment implements OnLastItemVisible
                         mData.add(playList);
                     }
                 }
-
                 page++;
                 mRV.getAdapter().notifyDataSetChanged();
             }
@@ -150,17 +143,7 @@ public class MusicPageFragment extends BaseFragment implements OnLastItemVisible
     private void loadPLayHistory() {
         String songId = SPUtils.getStringFromConfig(SPUtils.KEY_LAST_PLAY_MUSIC);
         DbBaseOperate<SimpleSong> dbOperator = new DbBaseOperate<>(DbManager.getLiteOrm(), getContext(), SimpleSong.class);
-        dbOperator.query(songId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<SimpleSong>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
+        APIHelper.subscribeSimpleRequest(dbOperator.query(songId), new CommonObserver<SimpleSong>() {
             @Override
             public void onNext(SimpleSong song) {
                 if (song != null) {
@@ -175,13 +158,11 @@ public class MusicPageFragment extends BaseFragment implements OnLastItemVisible
         });
     }
 
-
     private void initConstantItem() {
         mData.add(new MusicPageConstantItem(R.mipmap.ic_local_music, "本地音乐", MusicPageConstantIH.LOCAL_MUSIC));
         mData.add(new MusicPageConstantItem(R.mipmap.ic_my_music_collect, "我的喜欢", MusicPageConstantIH.MY_COLLECT));
         mData.add(new SimpleTitle());
     }
-
 
     @Override
     public void onLastItemVisible() {
@@ -200,6 +181,5 @@ public class MusicPageFragment extends BaseFragment implements OnLastItemVisible
     public Context getViewContext() {
         return getActivity();
     }
-
 
 }

@@ -1,7 +1,8 @@
-package com.susion.boring.http;
+package com.susion.boring.http.service;
 
-import com.susion.boring.read.mvp.model.DailyNews;
-import com.susion.boring.read.mvp.model.NewsDetail;
+import com.susion.boring.http.BaseURL;
+import com.susion.boring.read.mvp.entity.DailyNews;
+import com.susion.boring.read.mvp.entity.NewsDetail;
 
 import okhttp3.ResponseBody;
 import retrofit2.http.GET;

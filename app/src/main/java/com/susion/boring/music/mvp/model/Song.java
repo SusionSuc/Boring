@@ -3,8 +3,7 @@ package com.susion.boring.music.mvp.model;
 import android.text.TextUtils;
 
 import com.google.gson.annotations.SerializedName;
-import com.susion.boring.base.mvp.model.FavoriteOb;
-import com.susion.boring.utils.Md5Utils;
+import com.susion.boring.base.entity.FavoriteMark;
 
 import java.io.Serializable;
 import java.util.List;
@@ -13,7 +12,7 @@ import java.util.List;
  * Created by susion on 17/1/20.
  * model for request accept wang yi music API
  */
-public class Song extends FavoriteOb implements Serializable, PlayQueueSong {
+public class Song extends FavoriteMark implements Serializable, PlayQueueSong {
     public String id;
     public String name;
 

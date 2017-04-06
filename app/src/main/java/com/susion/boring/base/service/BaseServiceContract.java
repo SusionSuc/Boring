@@ -5,11 +5,11 @@ package com.susion.boring.base.service;
  */
 public interface BaseServiceContract {
 
-
     void initService();
-    void onTaskMoved();
-    void onDestroy();
 
+    void onTaskMoved();
+
+    void onDestroy();
 
     interface ReceiverPresenter {
         void releaseResource();

@@ -21,9 +21,9 @@ import com.susion.boring.http.CommonObserver;
 import com.susion.boring.read.itemhandler.DailyNewsIH;
 import com.susion.boring.read.itemhandler.JokeIH;
 import com.susion.boring.read.itemhandler.SimplePictureIH;
-import com.susion.boring.read.mvp.model.Joke;
-import com.susion.boring.read.mvp.model.NewsDetail;
-import com.susion.boring.read.mvp.model.SimplePicture;
+import com.susion.boring.read.mvp.entity.Joke;
+import com.susion.boring.read.mvp.entity.NewsDetail;
+import com.susion.boring.read.mvp.entity.SimplePicture;
 import com.susion.boring.utils.RVUtils;
 import com.susion.boring.utils.UIUtils;
 

@@ -1,7 +1,8 @@
-package com.susion.boring.http;
+package com.susion.boring.http.service;
 
-import com.susion.boring.read.mvp.model.PictureCategoryResult;
-import com.susion.boring.read.mvp.model.SimplePictureList;
+import com.susion.boring.http.BaseURL;
+import com.susion.boring.read.mvp.entity.PictureCategoryResult;
+import com.susion.boring.read.mvp.entity.SimplePictureList;
 
 import okhttp3.ResponseBody;
 import retrofit2.http.GET;

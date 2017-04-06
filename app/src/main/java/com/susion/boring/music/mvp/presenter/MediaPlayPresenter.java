@@ -15,7 +15,6 @@ import java.io.IOException;
 
 /**
  * Created by susion on 17/1/25.
- * <p>
  * control MediaPlayer
  */
 public class MediaPlayPresenter implements MediaPlayerContract.Presenter, MediaPlayer.OnPreparedListener,
@@ -23,7 +22,7 @@ public class MediaPlayPresenter implements MediaPlayerContract.Presenter, MediaP
 
     private static final String TAG = MediaPlayPresenter.class.getSimpleName();
 
-    private MediaPlayerContract.LittlePlayView mView;
+    private MediaPlayerContract.MediaPlayerRefreshView mView;
     private Context mContext;
     private MediaPlayer mPlayer;
     private Uri mSource;
@@ -51,7 +50,7 @@ public class MediaPlayPresenter implements MediaPlayerContract.Presenter, MediaP
     };
 
 
-    public MediaPlayPresenter(MediaPlayerContract.LittlePlayView mView, Context mContext) {
+    public MediaPlayPresenter(MediaPlayerContract.MediaPlayerRefreshView mView, Context mContext) {
         this.mView = mView;
         this.mContext = mContext;
     }

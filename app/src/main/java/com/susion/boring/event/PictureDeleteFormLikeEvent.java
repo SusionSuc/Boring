@@ -1,6 +1,6 @@
 package com.susion.boring.event;
 
-import com.susion.boring.read.mvp.model.SimplePicture;
+import com.susion.boring.read.mvp.entity.SimplePicture;
 
 /**
  * Created by susion on 17/3/29.

@@ -30,9 +30,7 @@ public abstract class BaseActivity extends SwipeBackActivity {
 
     public abstract void initData();
 
-
     protected void initParamsAndPresenter() {
-
     }
 
     protected void setStatusBar() {

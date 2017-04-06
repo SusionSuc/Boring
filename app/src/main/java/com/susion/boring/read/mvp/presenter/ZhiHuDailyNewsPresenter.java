@@ -3,8 +3,8 @@ package com.susion.boring.read.mvp.presenter;
 import com.susion.boring.http.APIHelper;
 import com.susion.boring.http.CommonObserver;
 import com.susion.boring.read.mvp.contract.ZhiHuDailyContract;
-import com.susion.boring.read.mvp.model.DailyNews;
-import com.susion.boring.read.mvp.model.NewsDetail;
+import com.susion.boring.read.mvp.entity.DailyNews;
+import com.susion.boring.read.mvp.entity.NewsDetail;
 import com.susion.boring.utils.TimeUtils;
 
 import java.util.Date;

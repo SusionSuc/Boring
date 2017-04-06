@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.susion.boring.R;
-import com.susion.boring.read.mvp.model.DailyNews;
+import com.susion.boring.read.mvp.entity.DailyNews;
 import com.susion.boring.read.mvp.view.ZhiHuEssayActivity;
 
 import java.util.Date;

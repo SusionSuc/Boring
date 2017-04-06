@@ -12,7 +12,7 @@ import com.susion.boring.base.SAppApplication;
 
 
 /**
- * Created by sam on 11/7/16.
+ * Created by susion on 11/7/16.
  */
 public class FixedPopupWindow extends PopupWindow {
     public FixedPopupWindow(Context context) {

@@ -5,7 +5,7 @@ import android.view.View;
 import com.susion.boring.R;
 import com.susion.boring.base.ui.SimpleItemHandler;
 import com.susion.boring.base.adapter.ViewHolder;
-import com.susion.boring.read.mvp.model.DailyNewsDate;
+import com.susion.boring.read.mvp.entity.DailyNewsDate;
 
 /**
  * Created by susion on 17/3/9.
@@ -24,6 +24,5 @@ public class DailyNewsDateIH extends SimpleItemHandler<DailyNewsDate>{
 
     @Override
     public void onClick(View v) {
-
     }
 }

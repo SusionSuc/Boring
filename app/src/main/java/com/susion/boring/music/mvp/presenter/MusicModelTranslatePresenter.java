@@ -1,6 +1,6 @@
 package com.susion.boring.music.mvp.presenter;
 
-import com.susion.boring.base.mvp.ModelTranslateContract;
+import com.susion.boring.base.entity.ModelTranslateContract;
 import com.susion.boring.http.CommonObserver;
 import com.susion.boring.music.mvp.model.SimpleSong;
 import com.susion.boring.http.APIHelper;
@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
-import rx.Observer;
 import rx.Subscriber;
 
 /**

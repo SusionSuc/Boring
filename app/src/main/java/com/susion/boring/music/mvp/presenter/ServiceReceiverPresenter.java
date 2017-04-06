@@ -14,7 +14,6 @@ import com.susion.boring.music.service.MusicServiceInstruction;
 
 /**
  * Created by susion on 17/2/24.
- * <p/>
  * Service Receiver
  */
 public class ServiceReceiverPresenter implements BaseServiceContract.ReceiverPresenter {

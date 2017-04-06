@@ -15,7 +15,7 @@ import com.susion.boring.base.ui.ItemHandlerFactory;
 import com.susion.boring.http.APIHelper;
 import com.susion.boring.read.itemhandler.PictureCategoryIH;
 import com.susion.boring.read.itemhandler.PictureColumnIH;
-import com.susion.boring.read.mvp.model.PictureCategoryResult;
+import com.susion.boring.read.mvp.entity.PictureCategoryResult;
 import com.susion.boring.utils.PictureLoadHelper;
 import com.susion.boring.utils.RVUtils;
 import com.susion.boring.utils.UIUtils;

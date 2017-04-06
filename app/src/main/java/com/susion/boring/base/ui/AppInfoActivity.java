@@ -54,6 +54,7 @@ public class AppInfoActivity extends BaseActivity {
     @Override
     public void initView() {
         mToolBar.setTitle("关于随心");
+        mToolBar.setContext(this);
         mTvVersion.setText("版本 v" + SystemOperationUtils.getAppVersion(this));
 
         mLogMarginTop = (int) (getResources().getDimension(R.dimen.app_info_log_margin_top));

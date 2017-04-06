@@ -29,7 +29,6 @@ import com.susion.boring.music.itemhandler.LocalMusicIH;
 import com.susion.boring.music.itemhandler.SimpleMusicIH;
 import com.susion.boring.music.mvp.model.PlayList;
 import com.susion.boring.music.service.action.ClientPlayQueueControlCommand;
-import com.susion.boring.read.mvp.model.NewsDetail;
 import com.susion.boring.utils.RVUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -38,10 +37,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import rx.Observer;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 public class MyLikeActivity extends BaseActivity {
     private ViewPager mViewPager;

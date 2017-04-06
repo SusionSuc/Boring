@@ -1,14 +1,12 @@
 package com.susion.boring.music.mvp.contract;
 
-import com.susion.boring.base.mvp.presenter.BasePresenter;
-import com.susion.boring.base.mvp.view.IView;
+import com.susion.boring.base.view.IView;
 import com.susion.boring.music.mvp.model.DownTask;
 
 import java.util.List;
 
 /**
  * Created by susion on 17/2/20.
- *
  *
  * because copyright , no use
  */
@@ -22,7 +20,7 @@ public interface FileDownContract {
         void successDownTask(DownTask mCurrentTask);
     }
 
-    interface Presenter extends BasePresenter {
+    interface Presenter {
 
         boolean addDownTask(DownTask url);
 
@@ -35,6 +33,5 @@ public interface FileDownContract {
         boolean stopDown(DownTask task);
 
         boolean isDowning(DownTask task);
-
     }
 }

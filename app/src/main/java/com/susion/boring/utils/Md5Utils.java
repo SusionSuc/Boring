@@ -9,7 +9,7 @@ import java.security.NoSuchAlgorithmException;
  */
 public class Md5Utils {
 
-    public static String md5(String str){
+    public static String md5(String str) {
         MessageDigest messageDigest = null;
 
         try {
@@ -38,10 +38,5 @@ public class Md5Utils {
         //16位加密，从第9位到25位
         return md5StrBuff.toString().toUpperCase();
 
-    }
-
-    public static String encodeIdToIds(String ids) {
-        String re = "%5B"+ids+"%5D";
-        return re;
     }
 }

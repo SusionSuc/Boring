@@ -8,8 +8,8 @@ import com.susion.boring.base.ui.ItemHandlerFactory;
 import com.susion.boring.read.itemhandler.DailyNewsDateIH;
 import com.susion.boring.read.itemhandler.DailyNewsIH;
 import com.susion.boring.read.itemhandler.TopNewsIH;
-import com.susion.boring.read.mvp.model.DailyNewsDate;
-import com.susion.boring.read.mvp.model.NewsDetail;
+import com.susion.boring.read.mvp.entity.DailyNewsDate;
+import com.susion.boring.read.mvp.entity.NewsDetail;
 
 import java.util.List;
 

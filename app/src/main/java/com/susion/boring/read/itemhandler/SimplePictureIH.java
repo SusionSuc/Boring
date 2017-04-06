@@ -17,7 +17,7 @@ import com.susion.boring.R;
 import com.susion.boring.base.adapter.ViewHolder;
 import com.susion.boring.base.ui.SimpleItemHandler;
 import com.susion.boring.event.CategoryPictureLoadErrorEvent;
-import com.susion.boring.read.mvp.model.SimplePicture;
+import com.susion.boring.read.mvp.entity.SimplePicture;
 import com.susion.boring.read.mvp.view.PictureViewActivity;
 
 import org.greenrobot.eventbus.EventBus;

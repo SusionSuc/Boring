@@ -3,6 +3,7 @@ package com.susion.boring.music.view;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Rect;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -10,14 +11,13 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.susion.boring.R;
 import com.susion.boring.base.adapter.BaseRVAdapter;
 import com.susion.boring.base.ui.ItemHandler;
 import com.susion.boring.base.ui.ItemHandlerFactory;
-import com.susion.boring.music.event.ChangeSongEvent;
-import com.susion.boring.music.event.SongDeleteFromPlayQueueEvent;
+import com.susion.boring.event.ChangeSongEvent;
+import com.susion.boring.event.SongDeleteFromPlayQueueEvent;
 import com.susion.boring.music.itemhandler.DialogMusicIH;
 import com.susion.boring.music.mvp.model.Song;
 import com.susion.boring.utils.RVUtils;
@@ -76,7 +76,7 @@ public class PlayControlDialog extends Dialog {
 
     private void initRv() {
         mRV.setLayoutManager(RVUtils.getLayoutManager(mContext, LinearLayoutManager.VERTICAL));
-        mRV.addItemDecoration(RVUtils.getItemDecorationDivider(mContext, R.color.divider, 1, -1, UIUtils.dp2Px(15)));
+        mRV.addItemDecoration(new RVUtils.NoLastDividerDecoration(getContext(), R.color.divider, 1, new Rect(UIUtils.dp2Px(15), 0, 0, 0)));
         mRV.setAdapter(new BaseRVAdapter((Activity) mContext, mDialogData) {
             final int TYPE_MUSIC = 1;
 

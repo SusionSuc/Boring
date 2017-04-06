@@ -14,10 +14,10 @@ public class AuthorActivity extends AppCompatActivity {
         intent.setClass(context, AuthorActivity.class);
         context.startActivity(intent);
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_author);
     }
-
 }

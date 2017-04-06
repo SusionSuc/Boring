@@ -1,6 +1,6 @@
 package com.susion.boring.read.mvp.contract;
 
-import com.susion.boring.base.mvp.view.IView;
+import com.susion.boring.base.view.IView;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface ZhiHuEssayContract {
 
-    interface View extends IView{
+    interface View extends IView {
         void showEssayContent(String contentHtml);
 
         void setHeaderImage(String url);

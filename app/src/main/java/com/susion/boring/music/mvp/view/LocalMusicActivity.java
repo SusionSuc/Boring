@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,11 +87,10 @@ public class LocalMusicActivity extends BaseActivity implements LocalMusicContra
     @Override
     public void initView() {
         mToolBar.setTitle("本地音乐");
-        mToolBar.setLeftIcon(R.mipmap.ic_back);
         mToolBar.setRightIcon(R.mipmap.ic_scan_local_music);
 
         mRV.setLayoutManager(RVUtils.getLayoutManager(this, LinearLayoutManager.VERTICAL));
-        mRV.addItemDecoration(RVUtils.getItemDecorationDivider(this, R.color.divider, 2, -1, UIUtils.dp2Px(70)));
+        mRV.addItemDecoration(new RVUtils.NoLastDividerDecoration(this, R.color.divider, 1, new Rect(UIUtils.dp2Px(70), 0, 0, 0)));
         mRV.setAdapter(new BaseRVAdapter(this, mData) {
             @Override
             protected void initHandlers() {

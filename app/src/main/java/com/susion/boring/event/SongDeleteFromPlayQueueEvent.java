@@ -1,4 +1,4 @@
-package com.susion.boring.music.event;
+package com.susion.boring.event;
 
 import com.susion.boring.music.mvp.model.Song;
 

@@ -8,8 +8,8 @@ import android.widget.TextView;
 import com.susion.boring.R;
 import com.susion.boring.base.ui.SimpleItemHandler;
 import com.susion.boring.base.adapter.ViewHolder;
-import com.susion.boring.music.event.ChangeSongEvent;
-import com.susion.boring.music.event.SongDeleteFromPlayQueueEvent;
+import com.susion.boring.event.ChangeSongEvent;
+import com.susion.boring.event.SongDeleteFromPlayQueueEvent;
 import com.susion.boring.music.mvp.model.Song;
 
 import org.greenrobot.eventbus.EventBus;

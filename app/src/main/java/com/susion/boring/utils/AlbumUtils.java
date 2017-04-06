@@ -22,7 +22,6 @@ public class AlbumUtils {
 
     private static final String TAG = "AlbumUtils";
 
-
     public static Bitmap parseAlbum(String path) {
         File file = new File(path);
         MediaMetadataRetriever metadataRetriever = new MediaMetadataRetriever();
@@ -38,7 +37,7 @@ public class AlbumUtils {
         return null;
     }
 
-    public static void setAlbum(final ImageView view, final String  path){
+    public static void setAlbum(final ImageView view, final String path) {
         Observable.create(new Observable.OnSubscribe<Bitmap>() {
             @Override
             public void call(Subscriber<? super Bitmap> subscriber) {
@@ -46,26 +45,26 @@ public class AlbumUtils {
                 subscriber.onNext(bitmap);
             }
         })
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Observer<Bitmap>() {
-            @Override
-            public void onCompleted() {
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Bitmap>() {
+                    @Override
+                    public void onCompleted() {
 
-            }
+                    }
 
-            @Override
-            public void onError(Throwable e) {
+                    @Override
+                    public void onError(Throwable e) {
 
-            }
+                    }
 
-            @Override
-            public void onNext(Bitmap bitmap) {
-                if (bitmap != null) {
-                    view.setImageBitmap(bitmap);
-                }
-            }
-        });
+                    @Override
+                    public void onNext(Bitmap bitmap) {
+                        if (bitmap != null) {
+                            view.setImageBitmap(bitmap);
+                        }
+                    }
+                });
     }
 
     public static Bitmap pressPicture(ImageView view, byte[] bitmaps) {
@@ -76,15 +75,13 @@ public class AlbumUtils {
             int height = options.outHeight;
             int width = options.outWidth;
 
-            Log.e("AlbumUtils", "height :"+height+" width :"+width);
-
             int sampleSize = 1;
             int reqWidth = view.getWidth();
             int reqHeight = view.getHeight();
 
             if (height > reqHeight || width > reqWidth) {
-                int heightRadio = Math.round((float) height/(float)reqHeight);
-                int widthRadio = Math.round((float) width/(float)reqWidth);
+                int heightRadio = Math.round((float) height / (float) reqHeight);
+                int widthRadio = Math.round((float) width / (float) reqWidth);
                 sampleSize = heightRadio < widthRadio ? heightRadio : widthRadio;
             }
 
@@ -97,7 +94,7 @@ public class AlbumUtils {
         return null;
     }
 
-    public static byte[] parseAlbumFromFile(File file){
+    public static byte[] parseAlbumFromFile(File file) {
         MediaMetadataRetriever metadataRetriever = new MediaMetadataRetriever();
         try {
             metadataRetriever.setDataSource(file.getAbsolutePath());

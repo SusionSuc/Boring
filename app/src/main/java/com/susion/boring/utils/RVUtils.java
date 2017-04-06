@@ -42,21 +42,10 @@ public class RVUtils {
                 try {
                     super.onLayoutChildren(recycler, state);
                 } catch (IndexOutOfBoundsException e) {
-                    Log.e("probe", "meet a IOOBE in RecyclerView");
                 }
             }
         };
         return staggeredGridLayoutManager;
-    }
-
-
-    public static RecyclerView.ItemDecoration getItemDecorationDivider(Context context, @ColorRes int color, int divideHeight) {
-        return new SimpleDividerDecoration(context, color, divideHeight);
-    }
-
-
-    public static RecyclerView.ItemDecoration getItemDecorationDivider(Context context, int color, int divideHeight, int dividerNumber, int leftMargin) {
-        return new SimpleDividerDecoration(context, color, divideHeight, dividerNumber, leftMargin);
     }
 
     public static RecyclerView.ItemDecoration getDrawerItemDecorationDivider(Context context, int color, Rect margin, List<DividerMark> data) {
@@ -65,67 +54,6 @@ public class RVUtils {
 
     public static RecyclerView.ItemDecoration getZhiHuDailyNewsDecoration(Context context, int headerHeight, ZhiHuDailyContract.DailyNewsStickHeader dailyNewsStickHeader) {
         return new ZhiHuDailyNewsDecoration(context, dailyNewsStickHeader, headerHeight);
-
-    }
-
-    public static class SimpleDividerDecoration extends RecyclerView.ItemDecoration {
-        public Paint mDividerPaint;
-        int mDividerHeight;
-        int mDividerNumber = -1;
-        int mLeftMargin = -1;
-
-        public SimpleDividerDecoration(Context context, int colorId, int dividerHeight) {
-            init(context, colorId, dividerHeight);
-        }
-
-        public SimpleDividerDecoration(Context context, int colorId, int dividerHeight, int dividerNumber, int leftMargin) {
-            init(context, colorId, dividerHeight);
-            mDividerNumber = dividerNumber;
-            mLeftMargin = leftMargin;
-        }
-
-        private void init(Context context, int colorId, int dividerHeight) {
-            mDividerPaint = new Paint();
-            mDividerPaint.setColor(context.getResources().getColor(colorId));
-            mDividerHeight = dividerHeight;
-        }
-
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            super.getItemOffsets(outRect, view, parent, state);
-            outRect.bottom = mDividerHeight;
-        }
-
-        @Override
-        public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
-            int childCount = parent.getChildCount();
-            int left;
-
-            if (mLeftMargin > 0) {
-                left = parent.getPaddingLeft() + mLeftMargin;
-            } else {
-                left = parent.getPaddingLeft();
-            }
-
-            int right = parent.getWidth() - parent.getPaddingRight();
-
-            if (mDividerNumber > 0 && mDividerNumber <= childCount) {
-                for (int i = 0; i < mDividerNumber; i++) {
-                    View view = parent.getChildAt(i);
-                    float top = view.getBottom();
-                    float bottom = view.getBottom() + mDividerHeight;
-                    c.drawRect(left, top, right, bottom, mDividerPaint);
-                }
-                return;
-            }
-
-            for (int i = 0; i < childCount; i++) {
-                View view = parent.getChildAt(i);
-                float top = view.getBottom();
-                float bottom = view.getBottom() + mDividerHeight;
-                c.drawRect(left, top, right, bottom, mDividerPaint);
-            }
-        }
     }
 
     private static class DrawerDividerDecoration extends RecyclerView.ItemDecoration {
@@ -275,7 +203,6 @@ public class RVUtils {
                         int last[] = new int[staggeredGridLayoutManager.getSpanCount()];
                         staggeredGridLayoutManager.findLastVisibleItemPositions(last);
                         for (int i = 0; i < last.length; i++) {
-                            //Log.e("ddd", last[i] + "    " + recyclerView.getAdapter().getItemCount());
                             if (last[i] >= recyclerView.getAdapter().getItemCount() - 3) {
                                 onLastItemVisibleListener.onLastItemVisible();
                                 break;
@@ -344,9 +271,6 @@ public class RVUtils {
                 float bottom = view.getBottom() + mDividerHeight;
                 c.drawRect(left, top, right, bottom, mDividerPaint);
             }
-
         }
     }
-
-
 }

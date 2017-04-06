@@ -7,7 +7,7 @@ import com.litesuits.orm.db.annotation.PrimaryKey;
 import com.litesuits.orm.db.annotation.Table;
 import com.litesuits.orm.db.annotation.Unique;
 import com.litesuits.orm.db.enums.AssignType;
-import com.susion.boring.base.mvp.model.FavoriteOb;
+import com.susion.boring.base.entity.FavoriteMark;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
  * store in local database
  */
 @Table("simple_song")
-public class SimpleSong extends FavoriteOb implements Parcelable, PlayQueueSong {
+public class SimpleSong extends FavoriteMark implements Parcelable, PlayQueueSong {
 
     @PrimaryKey(AssignType.BY_MYSELF)
     public String id;

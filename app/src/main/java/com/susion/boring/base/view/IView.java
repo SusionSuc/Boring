@@ -1,4 +1,4 @@
-package com.susion.boring.base.mvp.view;
+package com.susion.boring.base.view;
 
 import android.content.Context;
 

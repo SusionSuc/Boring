@@ -1,4 +1,4 @@
-package com.susion.boring.read.mvp.model;
+package com.susion.boring.read.mvp.entity;
 
 import java.util.List;
 

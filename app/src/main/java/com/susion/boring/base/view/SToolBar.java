@@ -2,7 +2,6 @@ package com.susion.boring.base.view;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -10,11 +9,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.susion.boring.R;
+import com.susion.boring.base.ui.mainui.FragmentFactory;
 
 /**
  * Created by susion on 17/1/17.
  */
-public class SToolBar extends RelativeLayout implements View.OnClickListener, MainUIFragmentIndex {
+public class SToolBar extends RelativeLayout implements View.OnClickListener {
 
     public static final int HIDDEN_LEFT_ICON_RES = -1;
 
@@ -33,27 +33,29 @@ public class SToolBar extends RelativeLayout implements View.OnClickListener, Ma
 
     public SToolBar(Context context) {
         super(context);
-        mContext = context;
-        init(null);
+        init();
     }
 
     public SToolBar(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mContext = context;
-        init(attrs);
+        init();
     }
 
     public SToolBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        mContext = context;
-        init(attrs);
+        init();
+    }
+    
+    public void setContext(Activity activity)
+    {
+        mContext = activity;
     }
 
-    private void init(AttributeSet attrs) {
+    private void init() {
+        mContext = getContext();
         View.inflate(mContext, R.layout.view_tool_bar, this);
         findView();
         setSelectedItem(mCurrentSelectItem);
-        mLeftIcon.setSelected(true);
         setBackgroundColor(mContext.getResources().getColor(R.color.colorPrimary));
     }
 
@@ -70,12 +72,9 @@ public class SToolBar extends RelativeLayout implements View.OnClickListener, Ma
         mTvInteresting.setOnClickListener(this);
     }
 
-
     @Override
     public void onClick(View view) {
-
         int clickId = view.getId();
-
         switch (clickId) {
             case R.id.toolbar_left_icon:
                 if (isMainPage) {
@@ -89,11 +88,11 @@ public class SToolBar extends RelativeLayout implements View.OnClickListener, Ma
                 }
                 break;
             case R.id.toolbar_tv_music:
-                mCurrentSelectItem = ITEM_MUSIC;
+                mCurrentSelectItem = FragmentFactory.ITEM_MUSIC;
                 break;
 
             case R.id.toolbar_tv_interesting:
-                mCurrentSelectItem = ITEM_INTERESTING;
+                mCurrentSelectItem = FragmentFactory.ITEM_INTERESTING;
                 break;
             case R.id.toolbar_right_icon:
                 if (rightIconClickListener != null) {
@@ -106,7 +105,7 @@ public class SToolBar extends RelativeLayout implements View.OnClickListener, Ma
     }
 
     private void notifyListener(int clickId, View view) {
-        if (listener != null) {
+        if (listener != null && isMainPage) {
             switch (clickId) {
                 case R.id.toolbar_tv_music:
                     listener.onMusicItemClick(view);
@@ -122,10 +121,10 @@ public class SToolBar extends RelativeLayout implements View.OnClickListener, Ma
     public void setSelectedItem(int selectedItem) {
         clearSelectItem();
         switch (selectedItem) {
-            case ITEM_MUSIC:
+            case FragmentFactory.ITEM_MUSIC:
                 mTvMusic.setTextColor(getResources().getColor(R.color.white));
                 break;
-            case ITEM_INTERESTING:
+            case FragmentFactory.ITEM_INTERESTING:
                 mTvInteresting.setTextColor(getResources().getColor(R.color.white));
                 break;
         }
@@ -150,7 +149,6 @@ public class SToolBar extends RelativeLayout implements View.OnClickListener, Ma
         mRightIcon.setImageResource(resId);
     }
 
-
     public int getCurrentSelectItem() {
         return mCurrentSelectItem;
     }
@@ -163,12 +161,12 @@ public class SToolBar extends RelativeLayout implements View.OnClickListener, Ma
         this.rightIconClickListener = rightIconClickListener;
     }
 
-
     public void setMainPage(boolean mainPage) {
         isMainPage = mainPage;
     }
 
     public void setTitle(String title) {
+        isMainPage = false;
         mTvTitle.setText(title);
         findViewById(R.id.toolbar_main_menu).setVisibility(GONE);
         mTvTitle.setVisibility(VISIBLE);

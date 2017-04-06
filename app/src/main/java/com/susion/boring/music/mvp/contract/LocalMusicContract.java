@@ -1,9 +1,7 @@
 package com.susion.boring.music.mvp.contract;
 
 import android.app.LoaderManager;
-
-import com.susion.boring.base.mvp.presenter.BasePresenter;
-import com.susion.boring.base.mvp.view.IView;
+import com.susion.boring.base.view.IView;
 import com.susion.boring.music.mvp.model.SimpleSong;
 
 import java.util.List;
@@ -29,7 +27,7 @@ import java.util.List;
         void startScanLocalMusic();
     }
 
-    interface Presenter extends BasePresenter {
+    interface Presenter{
         void loadLocalMusic();
     }
 }

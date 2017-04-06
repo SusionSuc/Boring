@@ -35,9 +35,9 @@ public class TransitionHelper {
      * Create the transition participants required during a activity transition while
      * avoiding glitches with the system UI.
      *
-     * @param activity The activity used as start for the transition.
+     * @param activity         The activity used as start for the transition.
      * @param includeStatusBar If false, the status bar will not be added as the transition
-     *        participant.
+     *                         participant.
      * @return All transition participants.
      */
     public static Pair<View, String>[] createSafeTransitionParticipants(@NonNull Activity activity,
@@ -69,8 +69,6 @@ public class TransitionHelper {
         }
         participants.add(new Pair<>(view, view.getTransitionName()));
     }
-
-
 
 
 }

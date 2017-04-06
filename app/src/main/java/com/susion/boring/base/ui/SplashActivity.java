@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,26 +32,17 @@ public class SplashActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);     //no status bar
         setContentView(R.layout.activity_splash);
         requestPermission();
     }
 
-    private void installShortcut() {
-        String shortCutName = getString(R.string.app_name);
-        if (!SystemOperationUtils.hasShortcut(this, shortCutName)) {
-            SystemOperationUtils.createShortCut(this, shortCutName, R.mipmap.ic_logo);
-        }
-    }
-
-
     public void skipToMainActivity() {
         if (mHasSkip) {
             return;
         }
-
         installShortcut();
-
         mHasSkip = true;
         getWindow().getDecorView().findViewById(android.R.id.content).postDelayed(new Runnable() {
             @Override
@@ -59,6 +51,13 @@ public class SplashActivity extends Activity {
                 SplashActivity.this.finish();
             }
         }, 3000);
+    }
+
+    private void installShortcut() {
+        String shortCutName = getString(R.string.app_name);
+        if (!SystemOperationUtils.hasShortcut(this, shortCutName)) {
+            SystemOperationUtils.createShortCut(this, shortCutName, R.mipmap.ic_logo);
+        }
     }
 
     public void requestPermission() {
@@ -79,7 +78,7 @@ public class SplashActivity extends Activity {
                     skipToMainActivity();
                 }
             });
-            builder.setTitle("老板, 你需要开启以下权限")
+            builder.setTitle("你需要开启以下权限")
                     .setMessage("访问存储空间, 读取媒体信息")
                     .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
@@ -111,7 +110,7 @@ public class SplashActivity extends Activity {
                     skipToMainActivity();
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this);
-                    builder.setTitle("老板, 这些权限拒绝的话, 你将不能很好的使用 随心")
+                    builder.setTitle("拒绝这些权限, 你将不能很好的使用")
                             .setMessage("访问存储空间, 读取媒体信息")
                             .setPositiveButton("设置", new DialogInterface.OnClickListener() {
                                 @Override

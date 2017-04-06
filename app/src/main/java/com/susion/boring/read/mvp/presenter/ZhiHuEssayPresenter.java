@@ -5,8 +5,8 @@ import com.susion.boring.event.EssayDeleteFromLikeEvent;
 import com.susion.boring.http.APIHelper;
 import com.susion.boring.http.CommonObserver;
 import com.susion.boring.read.mvp.contract.ZhiHuEssayContract;
-import com.susion.boring.read.mvp.model.DailyNews;
-import com.susion.boring.read.mvp.model.NewsDetail;
+import com.susion.boring.read.mvp.entity.DailyNews;
+import com.susion.boring.read.mvp.entity.NewsDetail;
 import com.susion.boring.utils.FileUtils;
 import com.susion.boring.utils.StringUtils;
 import com.susion.boring.utils.TimeUtils;
@@ -106,29 +106,15 @@ public class ZhiHuEssayPresenter implements ZhiHuEssayContract.Presenter {
     }
 
     private void getDailyNews(String date) {
-        APIHelper.getZhiHuService()
-                .getFixDateNews(date)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<DailyNews>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(DailyNews dailyNews) {
-                        if (dailyNews == null) {
-                            return;
-                        }
-                        initEssayQueue(dailyNews);
-                    }
-                });
+        APIHelper.subscribeSimpleRequest(APIHelper.getZhiHuService().getFixDateNews(date), new CommonObserver<DailyNews>() {
+            @Override
+            public void onNext(DailyNews dailyNews) {
+                if (dailyNews == null) {
+                    return;
+                }
+                initEssayQueue(dailyNews);
+            }
+        });
     }
 
     private void initEssayQueue(DailyNews dailyNews) {
@@ -143,7 +129,7 @@ public class ZhiHuEssayPresenter implements ZhiHuEssayContract.Presenter {
     public void loadPreEssay() {
         String id = mEssayQueue.getPreEssayId();
         if (id == null) {
-            ToastUtils.showShort("向前。。没有更多新闻了!");
+            ToastUtils.showShort("向前..没有更多新闻了!");
             return;
         }
         loadEssay(id);
@@ -153,7 +139,7 @@ public class ZhiHuEssayPresenter implements ZhiHuEssayContract.Presenter {
     public void loadNextEssay() {
         String id = mEssayQueue.getNextEssayId();
         if (id == null) {
-            ToastUtils.showShort("向后。。没有更多新闻了");
+            ToastUtils.showShort("向后..没有更多新闻了");
             return;
         }
         loadEssay(id);

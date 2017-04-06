@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Created by susion on 17/1/21.
  */
-public class MusicPageAdapter extends BaseRVAdapter{
+public class MusicPageAdapter extends BaseRVAdapter {
 
     private static final int MUSIC_PAGE_CONSTANT_ITEM = 1;
     private static final int MUSIC_PAGE_TITLE_ITEM = 2;
@@ -51,7 +51,6 @@ public class MusicPageAdapter extends BaseRVAdapter{
             }
         });
 
-
     }
 
     @Override
@@ -70,7 +69,6 @@ public class MusicPageAdapter extends BaseRVAdapter{
         if (o instanceof PlayList) {
             return MUSIC_PAGE_PLAY_LIST_ITEM;
         }
-
 
         return 0;
     }

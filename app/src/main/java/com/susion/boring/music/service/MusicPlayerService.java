@@ -26,17 +26,12 @@ import com.susion.boring.utils.ToastUtils;
 import java.io.Serializable;
 import java.util.List;
 
-import rx.Observer;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-
 /**
  * Created by susion on 17/2/13.
  */
-public class MusicPlayerService implements MediaPlayerContract.LittlePlayView, MusicServiceContract.Service, BaseServiceContract {
+public class MusicPlayerService implements MediaPlayerContract.MediaPlayerRefreshView, MusicServiceContract.Service, BaseServiceContract {
 
     private static final String PLAY_NOT_IS_PLAY_LIST = "PLAY_NOT_IS_PLAY_LIST";
-
     private MediaPlayerContract.PlayMusicControlPresenter mMusicPlayControlPresenter;
     private MusicDbOperator mDbOperator;
     private BaseServiceContract.ReceiverPresenter mReceiverPresenter;
@@ -46,7 +41,6 @@ public class MusicPlayerService implements MediaPlayerContract.LittlePlayView, M
     private Song mSong;    //current play music
     private String mHasLoadPlayListId = PLAY_NOT_IS_PLAY_LIST;
     private boolean mAutoPlay;
-
     private Service mServiceParent;
 
     public MusicPlayerService(Service mServiceParent) {
@@ -68,7 +62,6 @@ public class MusicPlayerService implements MediaPlayerContract.LittlePlayView, M
             }
         });
     }
-
 
     @Override
     public void loadMusicInfo(Song song, boolean autoPlay) {
@@ -258,9 +251,7 @@ public class MusicPlayerService implements MediaPlayerContract.LittlePlayView, M
             notifyCurrentPlayMusic(mMusicPlayControlPresenter.isPlaying());
             return;
         }
-
         String songId = SPUtils.getStringFromConfig(SPUtils.KEY_LAST_PLAY_MUSIC);
-
         APIHelper.subscribeSimpleRequest(mDbOperator.query(songId), new CommonObserver<SimpleSong>() {
             @Override
             public void onNext(SimpleSong s) {

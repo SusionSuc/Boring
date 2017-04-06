@@ -8,12 +8,12 @@ import com.susion.boring.utils.SPUtils;
 
 /**
  * Created by susion on 17/2/8.
- * <p>
+ * <p/>
  * extension
  */
 public class PlayMusicPresenter extends MediaPlayPresenter implements MediaPlayerContract.PlayMusicControlPresenter {
 
-    public PlayMusicPresenter(MediaPlayerContract.LittlePlayView mView, Context mContext) {
+    public PlayMusicPresenter(MediaPlayerContract.MediaPlayerRefreshView mView, Context mContext) {
         super(mView, mContext);
     }
 

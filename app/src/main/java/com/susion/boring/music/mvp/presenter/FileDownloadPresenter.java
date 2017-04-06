@@ -21,13 +21,13 @@ public class FileDownloadPresenter implements FileDownContract.Presenter {
     private static FileDownloadPresenter mInstance;
     private List<FileDownContract.View> mViews = new ArrayList<>();
 
-    private FileDownloadPresenter(){
+    private FileDownloadPresenter() {
 
     }
 
-    public static FileDownloadPresenter getInstance(){
+    public static FileDownloadPresenter getInstance() {
         if (mInstance == null) {
-            synchronized (FileDownloadPresenter.class){
+            synchronized (FileDownloadPresenter.class) {
                 if (mInstance == null) {
                     mInstance = new FileDownloadPresenter();
                 }
@@ -61,7 +61,7 @@ public class FileDownloadPresenter implements FileDownContract.Presenter {
             return true;
         }
 
-        for (int i=0; i<mTasks.size(); i++) {
+        for (int i = 0; i < mTasks.size(); i++) {
             if (task.uri.equals(mTasks.get(i).uri)) {
                 mTasks.remove(i);
                 mUris.remove(task.uri);
@@ -113,8 +113,8 @@ public class FileDownloadPresenter implements FileDownContract.Presenter {
         }
     }
 
-   public void addFileDownLoadView(FileDownContract.View view){
-       mViews.add(view);
-   }
+    public void addFileDownLoadView(FileDownContract.View view) {
+        mViews.add(view);
+    }
 
 }

@@ -2,6 +2,7 @@ package com.susion.boring.read.mvp.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Rect;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
@@ -9,14 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.susion.boring.R;
-import com.susion.boring.base.mvp.model.TitleMark;
+import com.susion.boring.base.entity.TitleMark;
 import com.susion.boring.base.ui.OnLastItemVisibleListener;
 import com.susion.boring.base.view.LoadMoreRecycleView;
 import com.susion.boring.base.view.ViewPageFragment;
 import com.susion.boring.read.adapter.ZhiHuDailyAdapter;
 import com.susion.boring.read.mvp.contract.ZhiHuDailyContract;
-import com.susion.boring.read.mvp.model.DailyNews;
-import com.susion.boring.read.mvp.model.NewsDetail;
+import com.susion.boring.read.mvp.entity.DailyNews;
+import com.susion.boring.read.mvp.entity.NewsDetail;
 import com.susion.boring.read.mvp.presenter.ZhiHuDailyNewsPresenter;
 import com.susion.boring.utils.RVUtils;
 import com.susion.boring.utils.UIUtils;
@@ -94,9 +95,8 @@ public class ZhiHuFragment extends ViewPageFragment implements ZhiHuDailyContrac
                 return false;
             }
         }));
-        mRv.addItemDecoration(RVUtils.getItemDecorationDivider(getContext(), R.color.divider, 1, -1, UIUtils.dp2Px(15)));
+        mRv.addItemDecoration(new RVUtils.NoLastDividerDecoration(getContext(), R.color.divider, 1, new Rect(UIUtils.dp2Px(15), 0, 0, 0)));
     }
-
 
     @Override
     public void initData() {

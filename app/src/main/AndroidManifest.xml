@@ -51,9 +51,6 @@
         </service>
 
         <activity
-            android:name=".music.mvp.view.MusicDownLoadListActivity"
-            android:theme="@style/AppTheme" />
-        <activity
             android:name=".music.mvp.view.PlayListActivity"
             android:theme="@style/AppTheme" />
         <activity

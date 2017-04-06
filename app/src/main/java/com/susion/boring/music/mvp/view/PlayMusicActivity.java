@@ -18,14 +18,12 @@ import com.susion.boring.R;
 import com.susion.boring.base.ui.BaseActivity;
 import com.susion.boring.base.view.SToolBar;
 import com.susion.boring.db.DbManager;
-import com.susion.boring.db.operate.DbBaseOperate;
 import com.susion.boring.db.operate.MusicDbOperator;
-import com.susion.boring.event.JokeDeleteFormLikeEvent;
 import com.susion.boring.event.SongDeleteFromLikeEvent;
 import com.susion.boring.http.APIHelper;
 import com.susion.boring.http.CommonObserver;
-import com.susion.boring.music.event.ChangeSongEvent;
-import com.susion.boring.music.event.SongDeleteFromPlayQueueEvent;
+import com.susion.boring.event.ChangeSongEvent;
+import com.susion.boring.event.SongDeleteFromPlayQueueEvent;
 import com.susion.boring.music.mvp.contract.MediaPlayerContract;
 import com.susion.boring.music.mvp.contract.MusicServiceContract;
 import com.susion.boring.music.mvp.model.SimpleSong;
@@ -45,7 +43,6 @@ import com.susion.boring.utils.BroadcastUtils;
 import com.susion.boring.utils.TimeUtils;
 import com.susion.boring.utils.ToastUtils;
 import com.susion.boring.utils.TransitionHelper;
-import com.susion.boring.utils.UIUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -146,9 +143,7 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
 
     @Override
     public void initView() {
-        mToolBar.setMainPage(false);
         mToolBar.setTitle("");
-        mToolBar.setLeftIcon(R.mipmap.ic_back);
         mToolBar.setBackgroundColor(getResources().getColor(R.color.transparent));
     }
 
@@ -273,8 +268,7 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
         APIHelper.subscribeSimpleRequest(mDbOperator.query(simpleSong.getId()), new CommonObserver<SimpleSong>() {
             @Override
             public void onNext(SimpleSong song) {
-                mIsLove = song != null ? true : false;
-                mIsLove = song.isFavorite();
+                mIsLove = song != null ? song.isFavorite() : false;
                 mPovMusicPlayControl.refreshLikeStatus(mIsLove);
             }
         });

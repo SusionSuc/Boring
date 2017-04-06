@@ -1,5 +1,10 @@
 package com.susion.boring.http;
 
+import com.susion.boring.http.service.JokeService;
+import com.susion.boring.http.service.MusicServices;
+import com.susion.boring.http.service.PictureService;
+import com.susion.boring.http.service.ZhiHuService;
+
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -87,29 +92,5 @@ public class APIHelper {
 
     public static PictureService getPictureService() {
         return getInstance().getService(PictureService.class);
-    }
-
-    public final static Observable.Transformer schedulersTransformer = new Observable.Transformer() {
-        @Override
-        public Object call(Object observable) {
-            return ((Observable) observable).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread());
-        }
-    };
-
-    public final static Observable.Transformer schedulersTransformerBackThread = new Observable.Transformer() {
-        @Override
-        public Object call(Object observable) {
-            return ((Observable) observable).subscribeOn(Schedulers.io())
-                    .observeOn(Schedulers.io());
-        }
-    };
-
-    public static Observable.Transformer applyMainThreadSchedulers() {
-        return schedulersTransformer;
-    }
-
-    public static Observable.Transformer applyBackThreadSchedulers() {
-        return schedulersTransformerBackThread;
     }
 }

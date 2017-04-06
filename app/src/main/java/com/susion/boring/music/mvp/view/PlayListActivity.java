@@ -98,6 +98,7 @@ public class PlayListActivity extends BaseActivity {
     @Override
     public void initView() {
         mToolBar.setTitle(mPlayList.getName());
+        mToolBar.setContext(this);
         mToolBar.setBackgroundResource(R.color.transparent);
 
         mSdvBg.setImageURI(mPlayList.getCoverImgUrl());
@@ -143,10 +144,12 @@ public class PlayListActivity extends BaseActivity {
                     mToolBar2.setBackgroundResource(R.color.transparent);
                     mToolBar2.setTitle(mPlayList.getName());
                     mToolBar2.setLeftIcon(R.mipmap.ic_black_back);
+                    getWindow().setStatusBarColor(UIUtils.getColor(PlayListActivity.this, R.color.colorPrimary));
                 } else {
                     mToolBar2.setLeftIcon(SToolBar.HIDDEN_LEFT_ICON_RES);
                     mToolBar2.setBackgroundResource(R.color.white);
                     mToolBar2.setTitle("共 " + mPlayList.getTrackCount() + " 首");
+                    getWindow().setStatusBarColor(UIUtils.getColor(PlayListActivity.this, R.color.transparent));
                 }
             }
         });

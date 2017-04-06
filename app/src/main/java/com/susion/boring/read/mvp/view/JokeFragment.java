@@ -2,6 +2,7 @@ package com.susion.boring.read.mvp.view;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.graphics.Rect;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
@@ -22,8 +23,8 @@ import com.susion.boring.db.operate.DbBaseOperate;
 import com.susion.boring.http.APIHelper;
 import com.susion.boring.http.CommonObserver;
 import com.susion.boring.read.itemhandler.JokeIH;
-import com.susion.boring.read.mvp.model.Joke;
-import com.susion.boring.read.mvp.model.JokeList;
+import com.susion.boring.read.mvp.entity.Joke;
+import com.susion.boring.read.mvp.entity.JokeList;
 import com.susion.boring.utils.RVUtils;
 import com.susion.boring.utils.UIUtils;
 
@@ -69,7 +70,7 @@ public class JokeFragment extends ViewPageFragment implements OnLastItemVisibleL
         mRefreshLayout.setOnRefreshListener(this);
         mRefreshLayout.setColorSchemeColors(new int[]{getResources().getColor(R.color.colorAccent)});
         mRv.setLayoutManager(RVUtils.getLayoutManager(getContext(), LinearLayoutManager.VERTICAL));
-        mRv.addItemDecoration(RVUtils.getItemDecorationDivider(getContext(), R.color.divider, UIUtils.dp2Px(10)));
+        mRv.addItemDecoration(new RVUtils.NoLastDividerDecoration(getContext(), R.color.divider, 1, new Rect(0, 0, 0, 0)));
         mRv.setOnLastItemVisibleListener(this);
         mRv.setAdapter(new BaseRVAdapter(getActivity(), mData) {
             @Override

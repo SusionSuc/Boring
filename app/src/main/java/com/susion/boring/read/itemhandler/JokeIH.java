@@ -11,7 +11,7 @@ import com.susion.boring.db.operate.DbBaseOperate;
 import com.susion.boring.event.JokeDeleteFormLikeEvent;
 import com.susion.boring.http.APIHelper;
 import com.susion.boring.http.CommonObserver;
-import com.susion.boring.read.mvp.model.Joke;
+import com.susion.boring.read.mvp.entity.Joke;
 import com.susion.boring.utils.ToastUtils;
 import com.susion.boring.utils.UIUtils;
 

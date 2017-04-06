@@ -49,7 +49,6 @@ public class MusicDbOperator extends DbBaseOperate<SimpleSong> implements DataBa
         });
     }
 
-
     @Override
     public Observable<List<SimpleSong>> getLocalMusic() {
         return Observable.create(new Observable.OnSubscribe<List<SimpleSong>>() {

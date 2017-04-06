@@ -1,4 +1,4 @@
-package com.susion.boring.base.mvp.model;
+package com.susion.boring.base.entity;
 
 /**
  * Created by susion on 17/3/10.
