@@ -42,4 +42,17 @@ public class ClientPlayControlCommand implements MediaPlayerContract.ClientPlayC
         Intent intent = new Intent(MusicServiceInstruction.SERVER_RECEIVER_PAUSE_MUSIC);
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
+
+    @Override
+    public void play() {
+        Intent intent = new Intent(MusicServiceInstruction.SERVER_RECEIVER_PLAY_MUSIC);
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+    }
+
+    @Override
+    public void seekProgressTo(int currentProgress) {
+        Intent intent = new Intent(MusicServiceInstruction.SERVER_RECEIVER_SEEK_TO);
+        intent.putExtra(MusicServiceInstruction.SERVER_PARAM_SEEK_TO_POS, currentProgress);
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+    }
 }

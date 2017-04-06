@@ -5,68 +5,72 @@
     android:orientation="vertical">
 
     <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:background="@color/colorPrimary"
-        android:layout_width="match_parent"
-        android:layout_height="1dp">
-    </View>
+        android:background="@color/colorPrimary"></View>
 
     <RelativeLayout
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:background="@color/transparent_white"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/transparent_white"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp">
+
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/view_music_control_sdv_album"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="15dp"
-            android:scaleType="centerCrop"
-            android:layout_width="40dp"
-            android:layout_height="40dp" />
+            android:scaleType="centerCrop" />
 
 
         <ImageView
+            android:id="@+id/view_music_control_iv_next"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
-            android:src="@mipmap/ic_music_pannel_next"
-            android:layout_alignParentRight="true"
-            android:id="@+id/view_music_control_iv_next"
-            android:layout_width="20dp"
-            android:layout_height="20dp" />
+            android:background="@drawable/bg_transparent_ripple"
+            android:padding="10dp"
+            android:src="@mipmap/ic_music_pannel_next" />
 
         <ImageView
+            android:id="@+id/view_music_control_iv_play"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_centerVertical="true"
-            android:src="@mipmap/ic_music_pannel_paly"
             android:layout_marginRight="15dp"
             android:layout_toLeftOf="@id/view_music_control_iv_next"
-            android:id="@+id/view_music_control_iv_play"
-            android:layout_width="25dp"
-            android:layout_height="25dp" />
+            android:background="@drawable/bg_transparent_ripple"
+            android:padding="5dp"
+            android:src="@mipmap/ic_music_pannel_paly" />
 
         <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:layout_toLeftOf="@id/view_music_control_iv_play"
             android:layout_toRightOf="@id/view_music_control_sdv_album"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/view_music_control_tv_song_name"
-                android:text="绅士"
-                android:maxLength="18"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:maxLength="18"
+                android:text="绅士" />
 
             <TextView
                 android:id="@+id/view_music_control_tv_song_artist"
-                android:text="薛之谦"
-                android:maxLength="15"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:maxLength="15"
+                android:text="薛之谦" />
         </LinearLayout>
 
 

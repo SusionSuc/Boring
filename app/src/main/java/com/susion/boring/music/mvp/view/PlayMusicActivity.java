@@ -165,9 +165,9 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
             @Override
             public void onStartOrStartItemClick(boolean isPlay) {
                 if (isPlay) {
-                    BroadcastUtils.sendIntentAction(PlayMusicActivity.this, MusicServiceInstruction.SERVER_RECEIVER_PLAY_MUSIC);
+                    mPlayControlCommand.play();
                 } else {
-                    BroadcastUtils.sendIntentAction(PlayMusicActivity.this, MusicServiceInstruction.SERVER_RECEIVER_PAUSE_MUSIC);
+                    mPlayControlCommand.pausePlay();
                 }
             }
         });
@@ -184,19 +184,12 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
 
             @Override
             public void onStopDragThumb(int currentProgress) {
-                Intent intent = new Intent(MusicServiceInstruction.SERVER_RECEIVER_SEEK_TO);
-                intent.putExtra(MusicServiceInstruction.SERVER_PARAM_SEEK_TO_POS, currentProgress);
-                LocalBroadcastManager.getInstance(PlayMusicActivity.this).sendBroadcast(intent);
-                if (!mPlayControlView.ismIsPlay()) {
-                    mPlayControlView.setIsPlay(true);
-                }
+                seekTo(currentProgress);
             }
 
             @Override
             public void onProgressChange(int currentProgress) {
-                Intent intent = new Intent(MusicServiceInstruction.SERVER_RECEIVER_SEEK_TO);
-                intent.putExtra(MusicServiceInstruction.SERVER_PARAM_SEEK_TO_POS, currentProgress);
-                LocalBroadcastManager.getInstance(PlayMusicActivity.this).sendBroadcast(intent);
+                seekTo(currentProgress);
             }
         });
 
@@ -255,6 +248,13 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
                 mDialog.startLoadingAnimation();
             }
         });
+    }
+
+    private void seekTo(int currentProgress) {
+        mPlayControlCommand.seekProgressTo(currentProgress);
+        if (!mPlayControlView.ismIsPlay()) {
+            mPlayControlView.setIsPlay(true);
+        }
     }
 
     @Override

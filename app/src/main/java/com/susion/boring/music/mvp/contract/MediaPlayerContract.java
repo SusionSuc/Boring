@@ -94,6 +94,10 @@ public interface MediaPlayerContract {
         void getCurrentPlayMusic();
 
         void pausePlay();
+
+        void play();
+
+        void seekProgressTo(int currentProgress);
     }
 
 

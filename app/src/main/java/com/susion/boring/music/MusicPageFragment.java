@@ -94,16 +94,15 @@ public class MusicPageFragment extends BaseFragment implements OnLastItemVisible
             @Override
             public void onPlayClick(boolean isPlay) {
                 if (isPlay) {
-                    BroadcastUtils.sendIntentAction(getActivity(), MusicServiceInstruction.SERVER_RECEIVER_PLAY_MUSIC);
+                    mClientControlCommand.play();
                 } else {
-                    BroadcastUtils.sendIntentAction(getActivity(), MusicServiceInstruction.SERVER_RECEIVER_PAUSE_MUSIC);
+                    mClientControlCommand.pausePlay();
                 }
             }
 
             @Override
             public void onNextClick() {
-                mControlView.setPlay(false);
-                mControlView.setMusic(mSong);
+                mClientControlCommand.changeToNextMusic();
             }
         });
     }

@@ -64,7 +64,7 @@ public class MusicPageConstantIH extends SimpleItemHandler<MusicPageConstantItem
 
                         @Override
                         public void onNext(Long count) {
-                            vh.getTextView(R.id.item_music_page_constant_tv_append_dec).setText(""+count);
+                            vh.getTextView(R.id.item_music_page_constant_tv_append_dec).setText("" + count);
                         }
                     });
         }
@@ -89,7 +89,7 @@ public class MusicPageConstantIH extends SimpleItemHandler<MusicPageConstantItem
 
                         @Override
                         public void onNext(Long count) {
-                            vh.getTextView(R.id.item_music_page_constant_tv_append_dec).setText(""+count);
+                            vh.getTextView(R.id.item_music_page_constant_tv_append_dec).setText("" + count);
                         }
                     });
         }
@@ -103,7 +103,7 @@ public class MusicPageConstantIH extends SimpleItemHandler<MusicPageConstantItem
 
     @Override
     public void onClick(View view) {
-        switch (mData.type){
+        switch (mData.type) {
             case LOCAL_MUSIC:
                 LocalMusicActivity.start((Activity) mContext);
                 break;

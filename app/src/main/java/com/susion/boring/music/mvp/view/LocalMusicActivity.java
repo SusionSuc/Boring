@@ -90,7 +90,6 @@ public class LocalMusicActivity extends BaseActivity implements LocalMusicContra
         mToolBar.setRightIcon(R.mipmap.ic_scan_local_music);
 
         mRV.setLayoutManager(RVUtils.getLayoutManager(this, LinearLayoutManager.VERTICAL));
-        mRV.addItemDecoration(new RVUtils.NoLastDividerDecoration(this, R.color.divider, 1, new Rect(UIUtils.dp2Px(70), 0, 0, 0)));
         mRV.setAdapter(new BaseRVAdapter(this, mData) {
             @Override
             protected void initHandlers() {

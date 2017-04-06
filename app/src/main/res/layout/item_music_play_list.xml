@@ -3,35 +3,36 @@
     android:layout_width="match_parent"
     android:layout_height="200dp"
     android:layout_margin="8dp"
-    android:layout_marginTop="10dp">
+    android:layout_marginTop="10dp"
+    android:background="@drawable/bg_ripple">
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/item_play_list_iv_cover"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/ic_my_icon"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="30dp"/>
+        android:layout_marginBottom="30dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_my_icon" />
 
 
     <TextView
         android:id="@+id/item_play_list_tv_play_count"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/gray_divider"
         android:gravity="right"
-        android:text="63万"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:text="63万" />
 
 
     <TextView
         android:id="@+id/item_play_list_tv_name"
-        android:textColor="@color/black"
-        android:gravity="center"
-        android:text="薛之谦的音乐就是棒"
-        android:layout_gravity="bottom"
-        android:singleLine="true"
         android:layout_width="match_parent"
-        android:layout_height="20dp" />
+        android:layout_height="20dp"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:singleLine="true"
+        android:text="薛之谦的音乐就是棒"
+        android:textColor="@color/black" />
 
 
 </FrameLayout>

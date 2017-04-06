@@ -2,51 +2,51 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white">
+    android:background="@drawable/bg_ripple">
 
     <ImageView
         android:id="@+id/item_music_page_constant_iv_icon"
-        android:layout_margin="15dp"
         android:layout_width="30dp"
-        android:layout_height="30dp" />
+        android:layout_height="30dp"
+        android:layout_margin="15dp" />
 
     <TextView
         android:id="@+id/item_music_page_constant_tv_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_toRightOf="@id/item_music_page_constant_iv_icon"
         android:text="本地音乐"
-        android:textSize="16sp"
         android:textColor="@color/colorPrimaryText"
-        android:layout_centerVertical="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:textSize="16sp" />
 
 
     <ImageView
         android:id="@+id/item_music_page_constant_iv_more"
-        android:layout_margin="15dp"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:src="@mipmap/ic_right_more"/>
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="15dp"
+        android:src="@mipmap/ic_right_more" />
 
 
     <TextView
         android:id="@+id/item_music_page_constant_tv_append_dec"
-        android:textSize="16sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/item_music_page_constant_iv_more"
         android:text="15"
         android:textColor="@color/colorPrimaryText"
-        android:layout_toLeftOf="@id/item_music_page_constant_iv_more"
-        android:layout_centerVertical="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:textSize="16sp" />
 
     <View
-        android:layout_marginLeft="35dp"
-        android:background="@color/shadow_divider"
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="1px"></View>
+        android:layout_height="1px"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="35dp"
+        android:background="@color/shadow_divider"></View>
 
 
 </RelativeLayout>

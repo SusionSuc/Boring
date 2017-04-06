@@ -1,33 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".music.mvp.view.MyLikeActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".music.mvp.view.MyLikeActivity">
 
     <com.susion.boring.base.view.SToolBar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </com.susion.boring.base.view.SToolBar>
+        android:layout_height="wrap_content"></com.susion.boring.base.view.SToolBar>
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
-        app:tabTextColor="@color/black"
+        android:layout_height="40dp"
+        app:tabBackground="@drawable/bg_ripple"
         app:tabIndicatorColor="@color/colorPrimary"
-        app:tabBackground="@color/white"
         app:tabSelectedTextColor="@color/colorPrimary"
-        android:layout_height="40dp">
-    </android.support.design.widget.TabLayout>
+        app:tabTextColor="@color/black"></android.support.design.widget.TabLayout>
 
     <android.support.v4.view.ViewPager
-        android:background="@color/white"
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </android.support.v4.view.ViewPager>
+        android:layout_height="match_parent"
+        android:background="@color/white"></android.support.v4.view.ViewPager>
 
 </LinearLayout>

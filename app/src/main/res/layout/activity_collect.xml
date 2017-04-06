@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
     tools:context=".base.ui.CollectActivity">
 
@@ -17,7 +18,7 @@
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        app:tabBackground="@color/white"
+        app:tabBackground="@drawable/bg_ripple"
         app:tabIndicatorColor="@color/colorPrimary"
         app:tabSelectedTextColor="@color/colorPrimary"
         app:tabTextColor="@color/black"></android.support.design.widget.TabLayout>
