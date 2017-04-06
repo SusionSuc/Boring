@@ -11,7 +11,7 @@ import java.io.Serializable;
  * Created by susion on 17/3/17.
  */
 @Table("picture")
-public class SimplePicture extends FavoriteOb implements Serializable {
+public class SimplePicture implements Serializable {
 
     @PrimaryKey(AssignType.BY_MYSELF)
     public String id;

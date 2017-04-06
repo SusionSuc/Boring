@@ -9,7 +9,7 @@ import com.susion.boring.base.mvp.model.FavoriteOb;
  * Created by susion on 17/3/16.
  */
 @Table("joke")
-public class Joke extends FavoriteOb {
+public class Joke{
 
     @PrimaryKey(AssignType.BY_MYSELF)
     private String hashId;

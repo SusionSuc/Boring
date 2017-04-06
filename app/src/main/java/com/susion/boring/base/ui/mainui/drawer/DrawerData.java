@@ -31,7 +31,7 @@ public class DrawerData {
         if (sData == null) {
             sData = new ArrayList<>();
             sData.add(new DrawerHeader(SAppApplication.getAppContext().getString(R.string.author_nickname), true));
-            sData.add(new DrawerItem(DRAWER_AUTHOR, R.mipmap.ic_drawer_author, false));
+//            sData.add(new DrawerItem(DRAWER_AUTHOR, R.mipmap.ic_drawer_author, false));
             sData.add(new DrawerItem(DRAWER_COLLECT, R.mipmap.ic_drawer_collect, false));
             sData.add(new DrawerItem(DRAWER_APP_INFO, R.mipmap.ic_drawer_app_info, false));
 //            sData.add(new DrawerItem(DRAWER_SETTING, R.mipmap.ic_drawer_setting, false));

@@ -7,11 +7,6 @@ import java.util.List;
  */
 public class PlayListSong {
 
-    /**
-     * data : [{"id":28285912,"url":"http://m8.music.126.net/20170225163525/89227a9621cc31ced65b808b44f05ba3/ymusic/d5a1/e293/6ae4/5ad3ecec595bbe407f28a0263c56f839.mp3","br":320000,"size":10108387,"md5":"5ad3ecec595bbe407f28a0263c56f839","code":200,"expi":1200,"type":"mp3","gain":-1.1799,"fee":0,"uf":null,"payed":0,"flag":2,"canExtend":false}]
-     * code : 200
-     */
-
     private int code;
     private List<DataBean> data;
 
@@ -32,23 +27,6 @@ public class PlayListSong {
     }
 
     public static class DataBean {
-        /**
-         * id : 28285912
-         * url : http://m8.music.126.net/20170225163525/89227a9621cc31ced65b808b44f05ba3/ymusic/d5a1/e293/6ae4/5ad3ecec595bbe407f28a0263c56f839.mp3
-         * br : 320000
-         * size : 10108387
-         * md5 : 5ad3ecec595bbe407f28a0263c56f839
-         * code : 200
-         * expi : 1200
-         * type : mp3
-         * gain : -1.1799
-         * fee : 0
-         * uf : null
-         * payed : 0
-         * flag : 2
-         * canExtend : false
-         */
-
         private int id;
         private String url;
         private int br;
