@@ -20,15 +20,15 @@
 
 ## APP截图
 
-<img src="./screenshot/mainpage1.jpg" width = "70" height = "125" alt="图片名称" align=center />
-<img src="./screenshot/mainpage2.jpg " width = "70" height = "125" alt="图片名称" align=center />
-<img src="./screenshot/musicdetail.jpg" width = "70" height = "125" alt="图片名称" align=center />
-<img src="./screenshot/palylist.jpg" width = "70" height = "125" alt="图片名称" align=center />
-<img src="./screenshot/readingpage.jpg" width = "70" height = "125" alt="图片名称" align=center />
-<img src="./screenshot/essaydetail.jpg" width = "70" height = "125" alt="图片名称" align=center />
-<img src="./screenshot/drawerpage.jpg" width = "70" height = "125" alt="图片名称" align=center />
-<img src="./screenshot/joke.jpg" width = "70" height = "125" alt="图片名称" align=center />
-<img src="./screenshot/imagepage.jpg" width = "70" height = "125" alt="图片名称" align=center />
-<img src="./screenshot/changepage.jpg" width = "70" height = "125" alt="图片名称" align=center />
+<img src="./screenshot/mainpage1.jpg" width = "210" height = "375" alt="图片名称" align=center />
+<img src="./screenshot/mainpage2.jpg " width = "210" height = "375" alt="图片名称" align=center />
+<img src="./screenshot/musicdetail.jpg" width = "210" height = "375" alt="图片名称" align=center />
+<img src="./screenshot/palylist.jpg" width = "210" height = "375" alt="图片名称" align=center />
+<img src="./screenshot/readingpage.jpg" width = "210" height = "375" alt="图片名称" align=center />
+<img src="./screenshot/essaydetail.jpg" width = "210" height = "375" alt="图片名称" align=center />
+<img src="./screenshot/drawerpage.jpg" width = "210" height = "375" alt="图片名称" align=center />
+<img src="./screenshot/joke.jpg" width = "210" height = "375" alt="图片名称" align=center />
+<img src="./screenshot/imagepage.jpg" width = "210" height = "375" alt="图片名称" align=center />
+<img src="./screenshot/changepage.jpg" width = "210" height = "375" alt="图片名称" align=center />
 
 
