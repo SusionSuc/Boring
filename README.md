@@ -5,7 +5,7 @@
 ## APP细节
 - APP的API
     - 音乐部分，是在网络上收集的网易云音乐的API。用了挺散的， 比如 ： https://github.com/javaSwing/MusicAPI
-    - 知乎日报，https://github.com/izzyleung/ZhihuDailyPurify/wiki/%E7%9F%A5%E4%B9%8E%E6%97%A5%E6%8A%A5-API-%E5%88%86%E6%9E%90
+    - 知乎日报， https://github.com/izzyleung/ZhihuDailyPurify/wiki/%E7%9F%A5%E4%B9%8E%E6%97%A5%E6%8A%A5-API-%E5%88%86%E6%9E%90
     - 段子、图片， API市场
 - 对于第三方开源库的使用
     - 基础库： RxJava, Retrofit, fresco, eventbus
@@ -16,6 +16,8 @@
 - github
     - https://github.com/SusionSuc/Boring
     - 当然还是希望可以给一个star的... 谢谢
+    
+- 接下来应该还是慢慢优化，因为最近应该比较闲
 
 
 ## APP截图
