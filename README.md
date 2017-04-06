@@ -20,14 +20,14 @@
 
 ##APP截图
 
-![screenshot](./screenshot/mainpage1.jpg)
-![screenshot](./screenshot/mainpage2.jpg)
-![screenshot](./screenshot/musicdetail.jpg)
-![screenshot](./screenshot/palylist.jpg)
-![screenshot](./screenshot/readingpage.jpg)
-![screenshot](./screenshot/essaydetail.jpg)
-![screenshot](./screenshot/drawerpage.jpg)
-![screenshot](./screenshot/joke.jpg)
-![screenshot](./screenshot/imagepage.jpg)
-![screenshot](./screenshot/changepage.jpg)
+![screenshot](./screenshot/mainpage1.jpg =70x120)
+![screenshot](./screenshot/mainpage2.jpg =70x120)
+![screenshot](./screenshot/musicdetail.jpg =70x120)
+![screenshot](./screenshot/palylist.jpg =70x120)
+![screenshot](./screenshot/readingpage.jpg =70x120)
+![screenshot](./screenshot/essaydetail.jpg =70x120)
+![screenshot](./screenshot/drawerpage.jpg =70x120)
+![screenshot](./screenshot/joke.jpg =70x120)
+![screenshot](./screenshot/imagepage.jpg =70x120)
+![screenshot](./screenshot/changepage.jpg =70x120)
 
