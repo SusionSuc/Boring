@@ -16,8 +16,8 @@
 - github
     - https://github.com/SusionSuc/Boring
     - 当然还是希望可以给一个star的... 谢谢
-    
-- 接下来应该还是慢慢优化，因为最近应该比较闲
+
+- 接下来事情不是很多，对整个APP还会慢慢优化。
 
 
 ## APP截图
