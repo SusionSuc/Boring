@@ -23,7 +23,7 @@
 <img src="./screenshot/mainpage1.jpg" width = "210" height = "375" alt="图片名称" align=center />
 <img src="./screenshot/mainpage2.jpg " width = "210" height = "375" alt="图片名称" align=center />
 <img src="./screenshot/musicdetail.jpg" width = "210" height = "375" alt="图片名称" align=center />
-<img src="./screenshot/palylist.jpg" width = "210" height = "375" alt="图片名称" align=center />
+<img src="./screenshot/playlist.jpg" width = "210" height = "375" alt="图片名称" align=center />
 <img src="./screenshot/readingpage.jpg" width = "210" height = "375" alt="图片名称" align=center />
 <img src="./screenshot/essaydetail.jpg" width = "210" height = "375" alt="图片名称" align=center />
 <img src="./screenshot/drawerpage.jpg" width = "210" height = "375" alt="图片名称" align=center />
