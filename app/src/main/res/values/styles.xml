@@ -21,7 +21,7 @@
         <attr name="maxProgress" format="integer|reference" />
         <attr name="progressWidth" format="dimension|reference" />
         <attr name="customThumb" format="reference" />
-        <attr name="canClickProgress" format="boolean" />
+        <attr name="canOperator" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="SToolBar">

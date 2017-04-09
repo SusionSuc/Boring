@@ -3,71 +3,55 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/transparent"
-    android:orientation="vertical">
+    android:orientation="horizontal">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
+
+    <ImageView
+        android:id="@+id/view_music_player_pre"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="15dp"
+        android:layout_weight="1"
+        android:background="@drawable/bg_ripple"
+        android:padding="10dp"
+        android:src="@mipmap/ic_music_player_pre" />
+
+
+    <FrameLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp">
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/gradient_circle">
+
+        <ImageView
+            android:id="@+id/view_music_player_start_or_stop"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="center"
+            android:src="@mipmap/ic_music_player_stop"
+            android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/view_music_player_iv_loading"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="center"
+            android:src="@mipmap/ic_music_loading"
+            android:visibility="invisible" />
+    </FrameLayout>
 
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="70dp"
-            android:layout_marginRight="70dp">
-
-
-            <ImageView
-                android:background="@drawable/bg_ripple"
-                android:id="@+id/view_music_player_pre"
-                android:padding="10dp"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
-                android:src="@mipmap/ic_music_player_pre" />
-
-
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:background="@drawable/gradient_circle">
-
-                <ImageView
-                    android:id="@+id/view_music_player_start_or_stop"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:scaleType="center"
-                    android:src="@mipmap/ic_music_player_stop"
-                    android:visibility="visible" />
-
-                <ImageView
-                    android:id="@+id/view_music_player_iv_loading"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:scaleType="center"
-                    android:src="@mipmap/ic_music_loading"
-                    android:visibility="invisible" />
-            </FrameLayout>
-
-
-            <ImageView
-                android:background="@drawable/bg_ripple"
-                android:id="@+id/view_music_player_next"
-                android:padding="10dp"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="15dp"
-                android:src="@mipmap/ic_music_player_next" />
-
-        </RelativeLayout>
-
-    </RelativeLayout>
+    <ImageView
+        android:id="@+id/view_music_player_next"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="15dp"
+        android:layout_weight="1"
+        android:background="@drawable/bg_ripple"
+        android:padding="10dp"
+        android:src="@mipmap/ic_music_player_next" />
 
 
 </LinearLayout>

@@ -20,6 +20,7 @@ android {
             keyPassword SIGN_KEY_PASSWORD
         }
     }
+
     buildTypes {
 
         debug {

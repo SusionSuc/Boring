@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.Pair;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
@@ -29,7 +28,6 @@ import com.susion.boring.music.mvp.contract.MusicServiceContract;
 import com.susion.boring.music.mvp.model.SimpleSong;
 import com.susion.boring.music.mvp.model.Song;
 import com.susion.boring.music.mvp.presenter.ClientReceiverPresenter;
-import com.susion.boring.music.service.MusicServiceInstruction;
 import com.susion.boring.music.service.action.ClientPlayControlCommand;
 import com.susion.boring.music.service.action.ClientPlayModeCommand;
 import com.susion.boring.music.service.action.ClientPlayQueueControlCommand;
@@ -39,7 +37,6 @@ import com.susion.boring.music.view.MusicPlayControlView;
 import com.susion.boring.music.view.PlayControlDialog;
 import com.susion.boring.music.view.PlayOperatorView;
 import com.susion.boring.utils.AlbumUtils;
-import com.susion.boring.utils.BroadcastUtils;
 import com.susion.boring.utils.TimeUtils;
 import com.susion.boring.utils.ToastUtils;
 import com.susion.boring.utils.TransitionHelper;
@@ -66,7 +63,7 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
 
     private Song mSong;
     private boolean mIsFromLittlePanel;
-    private boolean isLoading;
+    private boolean mIsLoading;
 
     private MusicDbOperator mDbOperator;
     private MediaPlayerContract.ClientPlayControlCommand mPlayControlCommand;
@@ -284,10 +281,11 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
 
     @Override
     public void preparedPlay(int duration) {
-        if (isLoading) {
+        if (mIsLoading) {
             mPlayControlView.endLoadingAnimationAndPlay();
             mPlayControlView.setIsPlay(true);
-            isLoading = false;
+            mIsLoading = false;
+            mSeekBar.setCanOperator(true);
         }
 
         mSeekBar.setCurrentProgress(0);
@@ -308,7 +306,7 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
 
     @Override
     public void updatePlayProgressForSetMax(int curPos, int left) {
-        if (!isLoading) {
+        if (!mIsLoading) {
             mSeekBar.setMaxProgress(left);
             mSeekBar.setCurrentProgress(curPos);
             mTvPlayedTime.setText(TimeUtils.getDurationString(curPos, false));
@@ -341,7 +339,8 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
         mTvPlayedTime.setText("00:00");
         mTvLeftTime.setText("--:--");
         mSeekBar.setCurrentProgress(0);
-        isLoading = true;
+        mIsLoading = true;
+        mSeekBar.setCanOperator(false);
         mPlayControlView.startLoadingAnimation();
     }
 
@@ -357,7 +356,8 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
     @Override
     public void showNoMoreMusic() {
         ToastUtils.showShort("播放列表没有音乐了哦");
-        isLoading = false;
+        mIsLoading = false;
+        mSeekBar.setCanOperator(true);
         mPlayControlView.endLoadingAnimationAndPlay();
     }
 

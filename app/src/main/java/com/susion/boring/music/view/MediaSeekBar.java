@@ -58,7 +58,7 @@ public class MediaSeekBar extends View {
     private static final int CLICK_PROGRESS = 6;
     private boolean isStartDrawThumb = false;
     private int PROGRESS_CLICK_RANGE = 15;
-    private boolean canClickProgress = false;
+    private boolean canOperator = false;
 
 
     public MediaSeekBar(Context context) {
@@ -104,7 +104,7 @@ public class MediaSeekBar extends View {
             originBackgroundColor = ta.getColor(R.styleable.MediaSeekBar_originBackgroundColor, originBackgroundColor);
             maxProgress = ta.getInt(R.styleable.MediaSeekBar_maxProgress, maxProgress);
             progressLineWidth = ta.getDimensionPixelOffset(R.styleable.MediaSeekBar_progressWidth, progressLineWidth);
-            canClickProgress = ta.getBoolean(R.styleable.MediaSeekBar_canClickProgress, true);
+            canOperator = ta.getBoolean(R.styleable.MediaSeekBar_canOperator, true);
 
             Drawable tempDrawable = ta.getDrawable(R.styleable.MediaSeekBar_customThumb);
             if (tempDrawable != null) {
@@ -177,6 +177,9 @@ public class MediaSeekBar extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if (!canOperator) {
+            return false;
+        }
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -187,12 +190,11 @@ public class MediaSeekBar extends View {
                     currentTouchState = CLICK_THUMB;
                 }
 
-                if (canClickProgress) {
-                    if (isClickProgress(x, y) && currentTouchState != CLICK_THUMB) {
-                        currentTouchState = CLICK_PROGRESS;
-                        setCurrentProgress(translateXtoProgress(x));
-                    }
+                if (isClickProgress(x, y) && currentTouchState != CLICK_THUMB) {
+                    currentTouchState = CLICK_PROGRESS;
+                    setCurrentProgress(translateXtoProgress(x));
                 }
+
 
                 break;
 
@@ -403,12 +405,12 @@ public class MediaSeekBar extends View {
         return hasBufferProgress;
     }
 
-    public boolean isCanClickProgress() {
-        return canClickProgress;
+    public boolean isCanOperator() {
+        return canOperator;
     }
 
-    public void setCanClickProgress(boolean canClickProgress) {
-        this.canClickProgress = canClickProgress;
+    public void setCanOperator(boolean canOperator) {
+        this.canOperator = canOperator;
     }
 
     public int getMaxProgress() {
