@@ -4,7 +4,7 @@
 
 ## APP细节
 
-###API
+### API
 - APP的API
     - 音乐部分，是在网络上收集的网易云音乐的API。用了挺散的， 比如 ： https://github.com/javaSwing/MusicAPI
     - 知乎日报， https://github.com/izzyleung/ZhihuDailyPurify/wiki/%E7%9F%A5%E4%B9%8E%E6%97%A5%E6%8A%A5-API-%E5%88%86%E6%9E%90
@@ -19,7 +19,7 @@
     - https://github.com/SusionSuc/Boring
     - 当然还是希望可以给一个star的... 谢谢
 
-###模块设计架构
+### 模块设计架构
 - 音乐播放模块的大体架构
     - MusicServie负责维护音乐播放
         - 管理 MediaPlayer
