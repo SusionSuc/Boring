@@ -2,6 +2,7 @@ package com.susion.boring.base.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -9,22 +10,25 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.susion.boring.R;
-import com.susion.boring.base.ui.mainui.FragmentFactory;
 
 /**
  * Created by susion on 17/1/17.
+ * custom toolbar: 主要用于主页协调ViewPager, 和普通的ToolBar标题展示作用
  */
 public class SToolBar extends RelativeLayout implements View.OnClickListener {
 
     public static final int HIDDEN_LEFT_ICON_RES = -1;
+    public static final int ITEM_MUSIC = 0;
+    public static final int ITEM_INTERESTING = 1;
 
     private Context mContext;
     private ImageView mLeftIcon;
     private ImageView mRightIcon;
     private TextView mTvInteresting;
     private TextView mTvMusic;
+    private ViewPager mViewPager;
 
-    private int mCurrentSelectItem = 0;
+    private int mCurrentSelectItem = ITEM_MUSIC;
     private boolean isMainPage = false;
 
     private OnItemClickListener listener;
@@ -45,9 +49,8 @@ public class SToolBar extends RelativeLayout implements View.OnClickListener {
         super(context, attrs, defStyleAttr);
         init();
     }
-    
-    public void setContext(Activity activity)
-    {
+
+    public void setContext(Activity activity) {
         mContext = activity;
     }
 
@@ -55,7 +58,6 @@ public class SToolBar extends RelativeLayout implements View.OnClickListener {
         mContext = getContext();
         View.inflate(mContext, R.layout.view_tool_bar, this);
         findView();
-        setSelectedItem(mCurrentSelectItem);
         setBackgroundColor(mContext.getResources().getColor(R.color.colorPrimary));
     }
 
@@ -64,7 +66,7 @@ public class SToolBar extends RelativeLayout implements View.OnClickListener {
         mRightIcon = (ImageView) findViewById(R.id.toolbar_right_icon);
         mTvTitle = (TextView) findViewById(R.id.toolbar_title);
         mTvMusic = (TextView) findViewById(R.id.toolbar_tv_music);
-        mTvInteresting = (TextView) findViewById(R.id.toolbar_tv_interesting);
+        mTvInteresting = (TextView) findViewById(R.id.toolbar_tv_read);
 
         mRightIcon.setOnClickListener(this);
         mLeftIcon.setOnClickListener(this);
@@ -88,43 +90,30 @@ public class SToolBar extends RelativeLayout implements View.OnClickListener {
                 }
                 break;
             case R.id.toolbar_tv_music:
-                mCurrentSelectItem = FragmentFactory.ITEM_MUSIC;
+                mCurrentSelectItem = ITEM_MUSIC;
                 break;
 
-            case R.id.toolbar_tv_interesting:
-                mCurrentSelectItem = FragmentFactory.ITEM_INTERESTING;
+            case R.id.toolbar_tv_read:
+                mCurrentSelectItem = ITEM_INTERESTING;
                 break;
             case R.id.toolbar_right_icon:
                 if (rightIconClickListener != null) {
                     rightIconClickListener.onRightIconClick();
                 }
         }
-
-        setSelectedItem(mCurrentSelectItem);
-        notifyListener(clickId, view);
-    }
-
-    private void notifyListener(int clickId, View view) {
-        if (listener != null && isMainPage) {
-            switch (clickId) {
-                case R.id.toolbar_tv_music:
-                    listener.onMusicItemClick(view);
-                    break;
-
-                case R.id.toolbar_tv_interesting:
-                    listener.onInterestingItemClick(view);
-                    break;
-            }
+        if (isMainPage) {
+            setSelectedItem();
         }
     }
 
-    public void setSelectedItem(int selectedItem) {
+    private void setSelectedItem() {
+        mViewPager.setCurrentItem(mCurrentSelectItem);
         clearSelectItem();
-        switch (selectedItem) {
-            case FragmentFactory.ITEM_MUSIC:
+        switch (mCurrentSelectItem) {
+            case ITEM_MUSIC:
                 mTvMusic.setTextColor(getResources().getColor(R.color.white));
                 break;
-            case FragmentFactory.ITEM_INTERESTING:
+            case ITEM_INTERESTING:
                 mTvInteresting.setTextColor(getResources().getColor(R.color.white));
                 break;
         }
@@ -161,10 +150,29 @@ public class SToolBar extends RelativeLayout implements View.OnClickListener {
         this.rightIconClickListener = rightIconClickListener;
     }
 
-    public void setMainPage(boolean mainPage) {
+    public void setMainPage(boolean mainPage, ViewPager viewPager) {
         isMainPage = mainPage;
+        mViewPager = viewPager;
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mCurrentSelectItem = position;
+                setSelectedItem();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
+    //have title, can't be main page
     public void setTitle(String title) {
         isMainPage = false;
         mTvTitle.setText(title);
@@ -176,12 +184,12 @@ public class SToolBar extends RelativeLayout implements View.OnClickListener {
         mTvTitle.setTextColor(getResources().getColor(res));
     }
 
+    public void showCurrentSelectedFragment() {
+        setSelectedItem();
+    }
+
     public interface OnItemClickListener {
         void onMenuItemClick(View v);
-
-        void onMusicItemClick(View v);
-
-        void onInterestingItemClick(View v);
     }
 
     public interface OnRightIconClickListener {

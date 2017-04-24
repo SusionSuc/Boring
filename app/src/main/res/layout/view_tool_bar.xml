@@ -50,7 +50,7 @@
                 android:background="@drawable/bg_ripple_toolbar"
                 android:paddingRight="14dp"
                 android:paddingLeft="14dp"
-                android:id="@+id/toolbar_tv_interesting"
+                android:id="@+id/toolbar_tv_read"
                 android:layout_gravity="center_vertical"
                 android:gravity="center"
                 android:text="阅读"

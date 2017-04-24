@@ -149,7 +149,7 @@ public class LocalMusicPresenter implements LocalMusicContract.Presenter, Loader
         File songFile = new File(realPath);
         SimpleSong song;
         if (songFile.exists()) {
-            song = FileUtils.fileToMusic(songFile);
+            song = FileUtils.fileToSong(songFile);
             if (song != null) {
                 return song;
             }

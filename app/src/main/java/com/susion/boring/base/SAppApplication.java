@@ -38,9 +38,5 @@ public class SAppApplication extends Application {
         return sContext;
     }
 
-    @Override
-    public void onTerminate() {
-        super.onTerminate();
-        stopService(new Intent(BaseService.SERVICE_ACTION));
-    }
+
 }

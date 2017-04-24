@@ -67,7 +67,7 @@ public class FileUtils {
         return false;
     }
 
-    public static SimpleSong fileToMusic(File file) {
+    public static SimpleSong fileToSong(File file) {
         if (file.length() == 0) return null;
 
         MediaMetadataRetriever metadataRetriever = new MediaMetadataRetriever();
@@ -177,7 +177,6 @@ public class FileUtils {
         if (byteOS == null) {
             return null;
         }
-
         return byteOS.toString();
     }
 }
