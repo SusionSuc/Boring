@@ -34,7 +34,7 @@ import com.susion.boring.music.service.action.ClientPlayQueueControlCommand;
 import com.susion.boring.music.view.LyricView;
 import com.susion.boring.music.view.MediaSeekBar;
 import com.susion.boring.music.view.MusicPlayControlView;
-import com.susion.boring.music.view.PlayControlDialog;
+import com.susion.boring.music.view.MusicPlayQueueWindow;
 import com.susion.boring.music.view.PlayOperatorView;
 import com.susion.boring.utils.AlbumUtils;
 import com.susion.boring.utils.TimeUtils;
@@ -47,6 +47,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
+//音乐播放界面, MVP, 只控制UI的显示, 和UI交互事件的通知
 public class PlayMusicActivity extends BaseActivity implements MediaPlayerContract.PlayView {
     private static final String TO_PLAY_MUSIC_INFO = "played_music";
     private static final String FROM_LITTLE_PANEL = "from_little_panel";
@@ -70,7 +71,7 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
     private MediaPlayerContract.ClientPlayModeCommand mPlayModeCommand;
     private MediaPlayerContract.ClientReceiverPresenter mClientReceiver;
     private MediaPlayerContract.ClientPlayQueueControlCommand mPlayQueueCommand;
-    private PlayControlDialog mDialog;
+    private MusicPlayQueueWindow mDialog;
     private boolean mIsLove;
 
     public static void start(Context context, Song song, boolean needLoad) {
@@ -239,7 +240,7 @@ public class PlayMusicActivity extends BaseActivity implements MediaPlayerContra
 
             @Override
             public void onMusicListClick() {
-                mDialog = new PlayControlDialog(PlayMusicActivity.this);
+                mDialog = new MusicPlayQueueWindow(PlayMusicActivity.this);
                 mDialog.show();
                 mPlayQueueCommand.getPlayQueue();
                 mDialog.startLoadingAnimation();

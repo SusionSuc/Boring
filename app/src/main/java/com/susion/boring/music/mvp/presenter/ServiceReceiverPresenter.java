@@ -15,6 +15,7 @@ import com.susion.boring.music.service.MusicServiceInstruction;
 /**
  * Created by susion on 17/2/24.
  * Service Receiver
+ * 接收客户端的Action,做出相应的反应
  */
 public class ServiceReceiverPresenter implements BaseServiceContract.ReceiverPresenter {
 

@@ -14,6 +14,8 @@ import java.util.List;
 
 /**
  * Created by susion on 17/1/18.
+ * <p/>
+ * 侧滑菜单UI控制常量
  */
 public class DrawerData {
 

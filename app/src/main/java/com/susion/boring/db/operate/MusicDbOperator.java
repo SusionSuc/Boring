@@ -19,6 +19,7 @@ import rx.schedulers.Schedulers;
 
 /**
  * Created by susion on 17/2/23.
+ * 对于音乐的 喜欢与不喜欢, 是使用更改数据库中POJ的字段来实现的
  */
 public class MusicDbOperator extends DbBaseOperate<SimpleSong> implements DataBaseOperateContract.MusicOperator {
 

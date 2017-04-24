@@ -28,6 +28,11 @@ import java.util.List;
 
 /**
  * Created by susion on 17/2/13.
+ * 音乐播放服务, 本身并不是一个服务
+ * 主要管理音乐的播放控制, 音乐队列, 具体控制委托给 PlayMusicControlPresenter、PlayQueueControlPresenter
+ * 通知client有关音乐UI的改变
+ * <p/>
+ * 接下来的refactor: 把通知客户端UI改变的Action也抽取到一个单独的类中
  */
 public class MusicPlayerService implements MediaPlayerContract.MediaPlayerRefreshView, MusicServiceContract.Service, BaseServiceContract {
 

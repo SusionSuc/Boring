@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * Created by susion on 17/3/14.
+ * 管理各个Service, 原想多次采用service-client模式做一些业务逻辑, 于是就抽取了出来。
  */
 public class BaseService extends Service {
 

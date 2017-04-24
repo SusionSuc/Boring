@@ -20,6 +20,7 @@ import com.susion.boring.R;
 
 /**
  * Created by susion on 16/11/10.
+ * 自定义的SeekBar
  */
 public class MediaSeekBar extends View {
 

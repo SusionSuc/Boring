@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * Created by susion on 17/3/9.
+ * 主要负责加载文章
  */
 public class ZhiHuDailyNewsPresenter implements ZhiHuDailyContract.Presenter {
 

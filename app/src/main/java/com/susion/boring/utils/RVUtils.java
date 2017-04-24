@@ -95,6 +95,7 @@ public class RVUtils {
         }
     }
 
+    //sticker title header
     private static class ZhiHuDailyNewsDecoration extends RecyclerView.ItemDecoration {
         private ZhiHuDailyContract.DailyNewsStickHeader stickHeader;
         private TextPaint textPaint;
@@ -226,6 +227,7 @@ public class RVUtils {
         });
     }
 
+    //不画最后一条线
     public static class NoLastDividerDecoration extends RecyclerView.ItemDecoration {
         public Paint mDividerPaint;
         int mDividerHeight;

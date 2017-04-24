@@ -32,15 +32,17 @@ import java.util.List;
 
 /**
  * Created by susion on 17/3/3.
+ * 这里使用的继承, 改成装饰也是不错的选择
+ * 上弹显示音乐队列
  */
-public class PlayControlDialog extends Dialog {
+public class MusicPlayQueueWindow extends Dialog {
 
     private RecyclerView mRV;
     private List<Object> mDialogData = new ArrayList<>();
     private ImageView mIvLoading;
     private Context mContext;
 
-    public PlayControlDialog(Context context) {
+    public MusicPlayQueueWindow(Context context) {
         super(context);
         mContext = context;
         initView();
@@ -60,7 +62,7 @@ public class PlayControlDialog extends Dialog {
         mIvLoading = (ImageView) findViewById(R.id.loading);
 
         Window dialogWindow = getWindow();
-        dialogWindow.setBackgroundDrawableResource(R.drawable.bg_dialog);
+        dialogWindow.setBackgroundDrawableResource(R.drawable.bg_dialog); // 想要完全匹配父窗口, 必须设置背景
         dialogWindow.setGravity(Gravity.BOTTOM);
         this.setCancelable(true);
         setCanceledOnTouchOutside(true);
@@ -79,7 +81,6 @@ public class PlayControlDialog extends Dialog {
         mRV.addItemDecoration(new RVUtils.NoLastDividerDecoration(getContext(), R.color.divider, 1, new Rect(UIUtils.dp2Px(15), 0, 0, 0)));
         mRV.setAdapter(new BaseRVAdapter((Activity) mContext, mDialogData) {
             final int TYPE_MUSIC = 1;
-
             @Override
             protected void initHandlers() {
                 registerItemHandler(TYPE_MUSIC, new ItemHandlerFactory() {

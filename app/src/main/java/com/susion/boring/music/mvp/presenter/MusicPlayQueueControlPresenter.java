@@ -21,6 +21,7 @@ import rx.schedulers.Schedulers;
 
 /**
  * Created by susion on 17/2/24.
+ * 维护一个简单的音乐播放队列
  */
 public class MusicPlayQueueControlPresenter implements MusicServiceContract.PlayQueueControlPresenter {
 

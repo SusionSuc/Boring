@@ -14,6 +14,8 @@ import rx.Subscriber;
 
 /**
  * Created by susion on 17/2/20.
+ * 数据库操作的基类
+ * 运用关系型数据库: lite-orm-1.9.2
  */
 public class DbBaseOperate<T> implements DataBaseOperateContract.BaseOperate<T> {
 
